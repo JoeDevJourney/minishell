@@ -6,7 +6,7 @@
 #    By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/18 13:57:10 by jbrandt           #+#    #+#              #
-#    Updated: 2025/01/18 13:58:47 by jbrandt          ###   ########.fr        #
+#    Updated: 2025/01/18 16:56:57 by jbrandt          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,3 +49,4 @@ fclean: clean
 re: fclean all
 
 # dude stop traumatizing a 6-yo boy..
+# never, i shall torment him
