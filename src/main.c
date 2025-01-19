@@ -22,8 +22,13 @@ int main(void)
 		if (cmd && *cmd)
 		{
 			add_history(cmd);
-			if (!ft_strncmp(cmd, "a", ft_strlen(cmd)))
+			if (!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
 				printf("%s\n", getenv("PWD"));
+			// else if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+			// else if (!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+			// else if (!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+			// else if (!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+			// else if (!ft_strncmp(cmd, "$?", ft_strlen(cmd)))
 		}
 	}
 }
