@@ -1,51 +1,49 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/01/18 13:57:10 by jbrandt           #+#    #+#              #
-#    Updated: 2025/01/18 13:58:47 by jbrandt          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME = minishell
-
+#
+#
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -I./include
-FLAGS = -O3 -g3 -L -lft
+CFLAGS = -g -Wall -Werror -Wextra -I$(INCDIR) -I$(LIBFTDIR)/include
+MAKEFLAGS += -s
 
-LIBFT = ./libft
-LIBS = /include
+SRCDIR = ./src
+OBJDIR = ./obj
+INCDIR = ./include
+LIBFTDIR = ./include/libft
 
-RM = rm -f
-FILES = 
+SRCS = $(SRCDIR)/main.c\
 
-OBJ_DIR = build
-
-OBJS = $(addprefix $(OBJ_DIR)/, $(FILES:.c=.o))
+OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+LIBFT = $(LIBFTDIR)/libft.a
+NAME = minishell
 
 all: $(NAME)
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -I.$(LIBS) -c $< -o $@
+$(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
+	@echo "\033[33mCompilating $(NAME)...\033[0m"
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFTDIR) -lft
+	@echo "$(NAME) compiled \033[32msuccessful\033[0m!:"
 
-$(NAME): $(OBJS)
-	make -C $(LIBFT)
-	$(CC) $(OBJS) $(CFLAGS) $(LIBFT)/libft.a $(FLAGS) -o $(NAME)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+$(LIBFT):
+	$(MAKE) -C $(LIBFTDIR)
 
 clean:
-	make clean -C $(LIBFT)
-	$(RM) $(OBJ_DIR)/*.o
+	@echo "\033[33mRemoving project build and library build...\033[0m"
+	rm -f $(OBJDIR)/*.o
+	rm -rf $(OBJDIR)
+	$(MAKE) -C $(LIBFTDIR) clean
+	@echo "All build files removed \033[32msuccessfully\033[0m!"
 
 fclean: clean
-	make fclean -C $(LIBFT)
-	$(RM) $(NAME)
-
+	@echo "\033[33mRemoving executable and static libraries...\033[0m"
+	rm -f $(NAME)
+	$(MAKE) -C $(LIBFTDIR) fclean
+	@echo "Executable and static libraries removed \033[32msuccessfully\033[0m!"
+	
 re: fclean all
 
-# dude stop traumatizing a 6-yo boy..
+.PHONY: all clean fclean re
