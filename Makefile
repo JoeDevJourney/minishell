@@ -1,7 +1,7 @@
 #
 #
 CC = cc
-CFLAGS = -g -Wall -Werror -Wextra -I$(INCDIR) -I$(LIBFTDIR)/include
+CFLAGS = -g -Wall -Werror -Wextra -I$(LIBFTDIR)/include -I$(INCDIR)
 MAKEFLAGS += -s
 
 SRCDIR = ./src
@@ -19,7 +19,7 @@ all: $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "\033[33mCompilating $(NAME)...\033[0m"
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFTDIR) -lft
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFTDIR) -lft -lreadline
 	@echo "$(NAME) compiled \033[32msuccessful\033[0m!:"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)

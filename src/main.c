@@ -14,5 +14,16 @@
 
 int main(void)
 {
-	printf("Welcome");
+	char	*cmd;
+
+	printf("Welcome\n");
+	while ((cmd = readline("Enter command: ")))
+	{
+		if (cmd && *cmd)
+		{
+			add_history(cmd);
+			if (!ft_strncmp(cmd, "a", ft_strlen(cmd)))
+				printf("%s\n", getenv("PWD"));
+		}
+	}
 }

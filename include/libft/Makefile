@@ -23,9 +23,9 @@ NAME = libft.a
 all: $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJS)
-	@echo "\033[33mCompilating libft static library...\033[0m"
+	@echo "\033[33mCompilating $(NAME) static library...\033[0m"
 	ar rcs $(NAME) $(OBJS)
-	@echo "libft.a created \033[32msuccessfully\033[0m!"
+	@echo "$(NAME) created \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -40,9 +40,9 @@ clean:
 	@echo "libft build removed \033[32msuccessfully\033[0m!"
 
 fclean: clean
-	@echo "\033[33mRemoving libft executable...\033[0m"
+	@echo "\033[33mRemoving $(NAME)...\033[0m"
 	rm -f $(NAME)
-	@echo "libft executable removed \033[32msuccessfully\033[0m!"
+	@echo "$(NAME) removed \033[32msuccessfully\033[0m!"
 
 re: fclean all
 
