@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/20 15:52:22 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/01/22 17:55:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 void execute_command(char *cmd, char *argv[], char *envp[])
 {
@@ -50,7 +49,7 @@ int main(void)
 				printf("%s\n", getenv("PWD"));
 			else if (!ft_strncmp(cmd, "ls", ft_strlen(cmd)))
 			{
-				char *argv[] = {"/bin/ls", NULL, NULL};
+				char *argv[] = {"/bin/ls", "-l", "-a", NULL};
 				char *envp[] = {NULL};
 				execute_command("/bin/ls", argv, envp);
 			}
