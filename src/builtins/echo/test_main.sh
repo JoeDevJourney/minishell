@@ -2,214 +2,187 @@
 
 cc echo.c ../../../include/libft/src/ft_split.c ../../../include/libft/src/ft_strlen.c ../../../include/libft/src/ft_strlcpy.c ../../../include/libft/src/ft_strjoin.c ../../../include/libft/src/ft_strncmp.c ../../../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
 echo
+args=("Hello World" " " "")
 
-echo -ne "Test 1: echo Hello World\t\t"
-RES1=$(echo Hello World | cat -e)
-RES2=$(./a.out "echo" "Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+for arg in "${args[@]}"
+do
+	echo "arg= \"$arg\""
+	echo -------------------------------------
+	echo -ne "Test 1: echo $arg\t\t"
+	if [ "$(echo $arg | cat -e)" = "$(./a.out "echo" "$arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo $arg | cat -e)"
+		echo "$(./a.out "echo" "$arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 2: echo -n Hello World\t\t"
-RES1=$(echo -n Hello World | cat -e)
-RES2=$(./a.out "echo" "-n Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 2: echo -n $arg\t\t"
+	if [ "$(echo -n $arg | cat -e)" = "$(./a.out "echo" "-n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -n $arg | cat -e)"
+		echo "$(./a.out "echo" "-n $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 3: echo -n -n Hello World\t\t"
-RES1=$(echo -n -n Hello World | cat -e)
-RES2=$(./a.out "echo" "-n -n Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 3: echo -n -n $arg\t\t"
+	if [ "$(echo -n -n $arg | cat -e)" = "$(./a.out "echo" "-n -n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -n -n $arg | cat -e)"
+		echo "$(./a.out "echo" "-n -n $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 4: echo -nn Hello World\t\t"
-RES1=$(echo -nn Hello World | cat -e)
-RES2=$(./a.out "echo" "-nn Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 4: echo -nn $arg\t\t"
+	if [ "$(echo -nn $arg | cat -e)" = "$(./a.out "echo" "-nn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -nn $arg | cat -e)"
+		echo "$(./a.out "echo" "-nn $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 5: echo -nn -nn Hello World\t"
-RES1=$(echo -nn -nn Hello World | cat -e)
-RES2=$(./a.out "echo" "-nn -nn Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 5: echo -nn -nn $arg\t"
+	if [ "$(echo -nn -nn $arg | cat -e)" = "$(./a.out "echo" "-nn -nn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -nn -nn $arg | cat -e)"
+		echo "$(./a.out "echo" "-nn -nn $arg" | cat -e)"
+		echo
+	fi
 
-RES1=$(echo -x Hello World | cat -e)
-RES2=$(./a.out "echo" "-x Hello World" | cat -e)
-echo -ne "Test 6: echo -x Hello World\t\t"
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 6: echo -x $arg\t\t"
+	if [ "$(echo -x $arg | cat -e)" = "$(./a.out "echo" "-x $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -x $arg | cat -e)"
+		echo "$(./a.out "echo" "-x $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 7: echo -x -n Hello World\t\t"
-RES1=$(echo -x -n Hello World | cat -e)
-RES2=$(./a.out "echo" "-x -n Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 7: echo -x -n $arg\t\t"
+	if [ "$(echo -x -n $arg | cat -e)" = "$(./a.out "echo" "-x -n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -x -n $arg | cat -e)"
+		echo "$(./a.out "echo" "-x -n $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 8: echo -xn Hello World\t\t"
-RES1=$(echo -xn Hello World | cat -e)
-RES2=$(./a.out "echo" "-xn Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
-echo
-echo "-------------------------------------------"
-echo
-RES1=$(echo Hello World | cat -e)
-RES2=$(./a.out "Echo" "Hello World" | cat -e)
-echo -ne "Test 9: Echo Hello World\t\t"
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 8: echo -xn $arg\t\t"
+	if [ "$(echo -xn $arg | cat -e)" = "$(./a.out "echo" "-xn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -xn $arg | cat -e)"
+		echo "$(./a.out "echo" "-xn $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 10: Echo -n Hello World\t\t"
-RES1=$(echo -n Hello World | cat -e);
-RES2=$(./a.out "Echo" "-n Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 9: Echo $arg\t\t"
+	if [ "$(echo $arg | cat -e)" = "$(./a.out "Echo" "$arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo $arg | cat -e)"
+		echo "$(./a.out "Echo" "$arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 11: Echo -n -n Hello World\t\t"
-RES1=$(echo -n "-n Hello World" | cat -e);
-RES2=$(./a.out "Echo" "-n -n Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"	
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 10: Echo -n $arg\t\t"
+	if [ "$(echo -n $arg | cat -e)" = "$(./a.out "Echo" "-n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -n $arg | cat -e)"
+		echo "$(./a.out "Echo" "-n $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 12: Echo -nn Hello World\t\t"
-RES1=$(echo "-nn Hello World" | cat -e)
-RES2=$(./a.out "Echo" "-nn Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 11: Echo -n -n $arg\t\t"
+	if [ "$(echo -n "-n $arg" | cat -e)" = "$(./a.out "Echo" "-n -n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"	
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -n "-n $arg" | cat -e)"
+		echo "$(./a.out "Echo" "-n -n $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 13: Echo -nn -nn Hello World\t"
-RES1=$(echo "-nn -nn Hello World" | cat -e)
-RES2=$(./a.out "Echo" "-nn -nn Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 12: Echo -nn $arg\t\t"
+	if [ "$(echo "-nn $arg" | cat -e)" = "$(./a.out "Echo" "-nn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo "-nn $arg" | cat -e)"
+		echo "$(./a.out "Echo" "-nn $arg" | cat -e)"
+		echo
+	fi
 
-echo -ne "Test 14: Echo -x Hello World\t\t"
-RES1=$(echo -x Hello World | cat -e)
-RES2=$(./a.out "Echo" "-x Hello World" | cat -e)
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 13: Echo -nn -nn $arg\t"
+	if [ "$(echo "-nn -nn $arg" | cat -e)" = "$(./a.out "Echo" "-nn -nn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo "-nn -nn $arg" | cat -e)"
+		echo "$(./a.out "Echo" "-nn -nn $arg" | cat -e)"
+		echo
+	fi
 
-RES1=$(echo "-x -n Hello World" | cat -e)
-RES2=$(./a.out "Echo" "-x -n Hello World" | cat -e)
-echo -ne "Test 15: Echo -x -n Hello World\t\t"
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
-	echo
-	echo "$RES1"
-	echo "$RES2"
-	echo
-fi
+	echo -ne "Test 14: Echo -x $arg\t\t"
+	if [ "$(echo -x $arg | cat -e)" = "$(./a.out "Echo" "-x $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo -x $arg | cat -e)"
+		echo "$(./a.out "Echo" "-x $arg" | cat -e)"
+		echo
+	fi
 
-RES1=$(echo "-xn Hello World" | cat -e)
-RES2=$(./a.out "Echo" "-xn Hello World" | cat -e)
-echo -ne "Test 16: Echo -xn Hello World\t\t"
-if [ "$RES1" = "$RES2" ]; then
-	echo -e "\033[42mOK\033[0m"
-else
-	echo -e "\033[41mKO\033[0m"
+	echo -ne "Test 15: Echo -x -n $arg\t\t"
+	if [ "$(echo "-x -n $arg" | cat -e)" = "$(./a.out "Echo" "-x -n $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\033[41mKO\033[0m"
+		echo
+		echo "$(echo "-x -n $arg" | cat -e)"
+		echo "$(./a.out "Echo" "-x -n $arg" | cat -e)"
+		echo
+	fi
+
+	echo -ne "Test 16: Echo -xn $arg\t\t"
+	if [ "$(echo "-xn $arg" | cat -e)" = "$(./a.out "Echo" "-xn $arg" | cat -e)" ]; then
+		echo -e "\033[42mOK\033[0m"
+	else
+		echo -e "\b \033[41mKO\033[0m"
+		echo
+		echo "$(echo "-xn $arg" | cat -e)"
+		echo "$(./a.out "Echo" "-xn $arg" | cat -e)"
+		echo
+	fi
 	echo
-	echo "$RES1"
-	echo "$RES2"
 	echo
-fi
-echo
+done

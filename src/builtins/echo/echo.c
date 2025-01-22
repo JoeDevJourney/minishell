@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/21 20:14:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:06:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,11 @@ static int	join_n_print(char **arr, bool newline)
 	int		res;
 
 	if (!arr || !*arr)
+	{
+		if (newline)
+			printf("\n");
 		return (0);
+	}
 	line = *arr++;
 	while (*arr)
 	{
@@ -43,6 +47,11 @@ static int	join_n_print(char **arr, bool newline)
 
 int	echo(char **str, bool upper)
 {
+	if (!str || !*str)
+	{
+		printf("\n");
+		return (0);
+	}
 	if (**str == '-')
 	{
 		if (!ft_strncmp(*str, "-n", ft_strlen(*str)))
@@ -51,7 +60,7 @@ int	echo(char **str, bool upper)
 				return (join_n_print(++str, 0));
 			else
 			{
-				while (!ft_strncmp(*str, "-n", ft_strlen(*str)))
+				while (*str && !ft_strncmp(*str, "-n", ft_strlen(*str)))
 					str++;
 				return (join_n_print(str, 0));
 			}
@@ -62,7 +71,7 @@ int	echo(char **str, bool upper)
 				return (join_n_print(str, 1));
 			else
 			{
-				while (!ft_strncmp(*str, "-nn", ft_strlen(*str)))
+				while (*str && !ft_strncmp(*str, "-nn", ft_strlen(*str)))
 					str++;
 				return (join_n_print(str, 0));
 			}
@@ -80,7 +89,7 @@ int	main(int argc, char **argv)
 	token = ft_split(argv[2], ' ');
 	if (!ft_strncmp(argv[1], "echo", ft_strlen(argv[1])))
 		echo(token, false);
-	if (!ft_strncmp(argv[1], "Echo", ft_strlen(argv[1])))
+	else if (!ft_strncmp(argv[1], "Echo", ft_strlen(argv[1])))
 		echo(token, true);
 }
 
