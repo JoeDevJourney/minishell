@@ -1,58 +1,94 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls.c                                               :+:      :+:    :+:   */
+/*   externals.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/22 19:06:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:24:43 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
-static void	execute_command(char *cmd, char *argv[], char *envp[])
+static int	execute_command(char *cmd, char *argv[], char *envp[])
 {
 	pid_t	pid;
+	int		res;
 
 	pid = fork();
+	res = 0;
 	if (pid == 0)
 	{
-		execve(cmd, argv, envp);
-		perror("execve");
+		res = execve(cmd, argv, envp);
+		strerror(res);
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
 		wait(NULL);
 	else
 		perror("fork");
+	return (res);
+}
+
+static char	*join_cmd(char **arr)
+{
+	char	*temp;
+	char	*line;
+	char	*newline;
+
+	temp = NULL;
+	newline = NULL;
+	line = NULL;
+	while (*arr)
+	{
+		temp = ft_strjoin(*arr++, " ");
+		newline = ft_strjoin(line, temp);
+		free(temp);
+		free (line);
+		line = newline;
+	}
+	return (line);
+}
+
+static void	free_array(char **arr)
+{
+	char	**temp;
+
+	temp = arr;
+	while (*temp)
+	{
+		free(*temp);
+		temp++;
+	}
+	free (arr);
 }
 
 static int	externals(char **str)
 {
 	char	**input;
-	char	**ptr;
 	char	*cmd;
+	int		res;
 
-	ptr = str;
-	while (*ptr)
-		cmd = ft_strjoin(cmd, ft_strjoin(*ptr++, " "));
+	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
-	free(*input);
+	free(input[0]);
 	*input = ft_strjoin("/bin/", *str);
-	execute_command(*input, input, NULL);
-	// free(cmd);
-	// while (*input)
-	// 	free(*input);
-	// free(input);
-	return (0);
+	res = execute_command(*input, input, NULL);
+	printf("%d\n", res);
+	free_array (input);
+	free (cmd);
+	return (res);
 }
 
 int	main(int argc, char **argv)
 {
+	int	res;
+
+	res = 0;
 	(void)argc;
-	externals(++argv);
+	res = externals(++argv);
 }
 
-// cc ls.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strjoin.c ../../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
+	// cc externals.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
