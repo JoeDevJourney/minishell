@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/23 16:42:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:56:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,16 @@ void	execute_command(char *cmd, char *argv[], char *envp[])
 int	main(void)
 {
 	char	*cmd;
-	// char **list = external commands 
 
 	printf("Welcome\n");
 	cmd = readline("Enter command: ");
-	// tokenize
+
+	//operators = [&&, |, <, <<, >, >>]
+	// search cmd for operators
+
+	// if pipe
+
+	// else search for redir operators
 
 	while (strncmp(cmd, "exit", ft_strlen(cmd)))
 	{
@@ -52,4 +57,5 @@ int	main(void)
 	return (5);
 }
 
-// ls -l | grep ".c" > output.txt
+// ls -l | grep "\.c" > output.txt
+// cat input.txt | grep "pattern" > med.txt && sort med.txt >> output.txt
