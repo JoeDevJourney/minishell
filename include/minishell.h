@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/20 12:09:57 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/01/23 15:40:30 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,9 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <string.h>
+# include <sys/wait.h>
+# include <errno.h>
+
+int	externals(char **str);
 
 #endif

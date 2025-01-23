@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/23 15:24:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:40:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ static int	execute_command(char *cmd, char *argv[], char *envp[])
 	if (pid == 0)
 	{
 		res = execve(cmd, argv, envp);
-		strerror(res);
-		exit(EXIT_FAILURE);
+		exit(errno);
 	}
 	else if (pid > 0)
 		wait(NULL);
 	else
-		perror("fork");
+		perror("Fork failure");
 	return (res);
 }
 
@@ -65,7 +64,7 @@ static void	free_array(char **arr)
 	free (arr);
 }
 
-static int	externals(char **str)
+int	externals(char **str)
 {
 	char	**input;
 	char	*cmd;
@@ -80,15 +79,6 @@ static int	externals(char **str)
 	free_array (input);
 	free (cmd);
 	return (res);
-}
-
-int	main(int argc, char **argv)
-{
-	int	res;
-
-	res = 0;
-	(void)argc;
-	res = externals(++argv);
 }
 
 	// cc externals.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra

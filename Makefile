@@ -9,7 +9,7 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c\
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/externals.c
 
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a
