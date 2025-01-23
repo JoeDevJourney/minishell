@@ -6,16 +6,17 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/23 15:42:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:42:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-void execute_command(char *cmd, char *argv[], char *envp[])
+void	execute_command(char *cmd, char *argv[], char *envp[])
 {
 	pid_t	pid;
+
 	pid = fork();
 	if (pid == 0)
 	{
@@ -50,3 +51,5 @@ int	main(void)
 	}
 	return (5);
 }
+
+// ls -l | grep ".c" > output.txt
