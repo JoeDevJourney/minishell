@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/23 15:40:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/23 16:42:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-int	externals(char **str);
+// int	externals(char **str);
 
 #endif
