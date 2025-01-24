@@ -37,6 +37,10 @@ size_t count_substr(const char *s, const char *delim)
     return count + 1;
 }
 
+/**
+ * @brief Works in the same way as the original split, with the diff now being
+ * that the delimeter is a char* instead of a char.
+ */
 char **ft_split2(const char *s, const char *delim)
 {
     char **result;

@@ -31,19 +31,26 @@ int	main(void)
 			while (*inp.pipe.cmd)
 			{
 				inp.final = redir_oper(&inp, inp.pipe.cmd);		// prototype will prob need modif cause I dont know what input do pipes take
-				while (*inp.final)
-					printf("\'%s\'\n", *inp.final++);
+				
+				// this is the part I lack knowledge about, because at this point
+				// the initial mixed commmand is broken down in the simplest form
+				// and we have a char **inp.pipe.cmd that contains all the commands
+				// to be piped (it could be more than 2). So, in theory, from now on
+				// we have all we need to execute pipex (which I am still not quite
+				// familiar with)
+				
 				// if (inp.pipe.num_cmd != 1)
 				//	 pipe()
 				// else
 				// 	execute()
+				inp.pipe.cmd++;
 			}								//successful pipe returns 0??
 			// if (!inp.pipe.ret_code)
 			// {
 			// 	inp.or.ret_code = ? (!= 0)
 			// 	break ;
 			// }
-			pause();
+			inp.or.cmd++;
 		}
 		// if (inp.or.ret_code)
 		// 	break ;
