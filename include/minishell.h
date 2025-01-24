@@ -22,7 +22,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>
-# include <string.h>
+# include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
 
@@ -43,9 +43,11 @@ typedef struct s_data
 	t_oper	dir_output;
 	t_oper	dir_app;
 	t_oper	heredoc;
+	char	*final;
 }			t_data;
 
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
+void		externals(char **str);
 
 #endif
