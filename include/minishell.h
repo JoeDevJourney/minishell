@@ -39,10 +39,10 @@ typedef struct s_data
 	t_oper	pipe;
 	t_oper	and;
 	t_oper	or;
-	t_oper	dir_input;
-	t_oper	dir_output;
-	t_oper	dir_app;
-	t_oper	heredoc;
+	t_oper	dir_input;			//
+	t_oper	dir_output;			//
+	t_oper	dir_app;			//
+	t_oper	heredoc;			// could prob summarize all dir oper into one
 	char	*final;
 }			t_data;
 

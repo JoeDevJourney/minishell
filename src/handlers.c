@@ -57,7 +57,7 @@ void	redir_oper(t_data *cmd, char *str)
 		cmd->dir_app.cmd = ft_split2(str, ">>");
 		cmd->dir_app.num_cmd = 2;
 	}
-	else if (count_substr(str, "<<") == 1)
+	else
 	{
 		cmd->heredoc.cmd = ft_split2(str, "<<");
 		cmd->heredoc.num_cmd = 2;

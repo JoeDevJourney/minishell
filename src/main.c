@@ -12,23 +12,6 @@
 
 #include "../include/minishell.h"
 
-// void	execute_command(char *cmd, char *argv[], char *envp[])
-// {
-// 	pid_t	pid;
-
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		execve(cmd, argv, envp);
-// 		perror("execve");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	else if (pid > 0)
-// 		wait(NULL);
-// 	else
-// 		perror("fork");
-// }
-
 int	main(void)
 {
 	t_data	inp;
@@ -47,18 +30,23 @@ int	main(void)
 			inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 			while (*inp.pipe.cmd)
 			{
-				// cmd = redir_oper(*pipe_cmd);
-				// pipe()
+				inp.final = redir_oper(&inp, inp.pipe.cmd);		// prototype will prob need modif cause I dont know what input do pipes take
+				while (*inp.final)
+					printf("\'%s\'\n", *inp.final++);
+				// if (inp.pipe.num_cmd != 1)
+				//	 pipe()
+				// else
+				// 	execute()
 			}								//successful pipe returns 0??
-			if (!inp.pipe.ret_code)
-			{
-				// inp.or.ret_code = (!= 0)
-				break ;
-			}
+			// if (!inp.pipe.ret_code)
+			// {
+			// 	inp.or.ret_code = ? (!= 0)
+			// 	break ;
+			// }
 			pause();
 		}
-		if (inp.or.ret_code)
-			break ;
+		// if (inp.or.ret_code)
+		// 	break ;
 		inp.and.cmd++;
 	}
 	// while (strncmp(cmd, "exit", ft_strlen(cmd)))
