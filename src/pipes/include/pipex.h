@@ -22,17 +22,7 @@
 # include <sys/stat.h>
 # include "libft/include/libft.h"
 
-int			ft_strcmp(char *s1, char *s2);
-void		exit_handler(int n_exit);
-int			open_file(char *file, int in_or_out);
-void		free_tab(char **tab);
-char		*own_getenv(char *name, char **env);
-char		*find_path(char **allpath, char *cmd);
-char		*get_path(char *cmd, char **env);
-void		exec(char *cmd, char **env);
-void		child(char *argv, int *p_fd);
-void		parent(char *argv, int *p_fd);
-int			main(int argc, char **argv, char **env);
-void		create_child_process(char **argv, int *p_fd);
+int			main(int argc, char **argv);
+int			exec_pipe(char **argv);
 void		externals(char **str);
 #endif

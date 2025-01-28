@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/pipex.h"
 
 static void	child(char *cmd, int *p_fd)
 {
@@ -66,13 +66,11 @@ int	exec_pipe(char **argv)
 	return (0);
 }
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	int		p_fd[2];
-
-// 	(void)argc;
-// 	create_child_process(++argv, p_fd);
-// 	close(p_fd[0]);
-// 	close(p_fd[1]);
-// 	return (0);
-// }
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	exec_pipe(++argv);
+	return (0);
+}
+// ./pipex "ls -1" "cat -n"
+// ./pipex "echo This is a text" "cat -n"

@@ -52,6 +52,7 @@ int	main(void)
 		}
 		inp.str = readline("Enter command: ");
 	}
+	// safe_free()
 	return (0);
 }
 
