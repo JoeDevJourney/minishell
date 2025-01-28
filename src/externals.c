@@ -15,20 +15,28 @@
 static int	execute_command(char *cmd, char *argv[], char *envp[])
 {
 	pid_t	pid;
-	int		res;
+	int		status;
 
 	pid = fork();
-	res = 0;
 	if (pid == 0)
 	{
-		res = execve(cmd, argv, envp);
-		exit(errno);
+		if (execve(cmd, argv, envp) == -1)
+		{
+			perror("execve failed");
+			return (errno);
+		}
 	}
 	else if (pid > 0)
-		wait(NULL);
+	{
+		wait(&status);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (-1);
+	}
 	else
 		perror("Fork failure");
-	return (res);
+	return (0);
 }
 
 static char	*join_cmd(char **arr)
@@ -70,17 +78,20 @@ static void	free_array(char **arr)
  * 
  * @paragraph str command to be executed, broken down in tokens.
  */
-void	externals(char **str)
+int	externals(char **str)
 {
 	char	**input;
 	char	*cmd;
+	int		res;
 
+	res = 0;
 	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
 	*input = ft_strjoin("/bin/", *input);
-	execute_command(*input, input, NULL);
+	res = execute_command(*input, input, NULL);
 	free_array (input);
 	free (cmd);
+	return (res);
 }
 
 // int	main(int argc, char **argv)

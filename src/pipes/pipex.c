@@ -38,7 +38,7 @@ static void	parent(char *cmd, int *p_fd)
 	exit(0);
 }
 
-void	exec_pipe(char **argv)
+int	exec_pipe(char **argv)
 {
 	pid_t	pid1;
 	pid_t	pid2;
@@ -63,6 +63,7 @@ void	exec_pipe(char **argv)
 	close(p_fd[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
+	return (0);
 }
 
 // int	main(int argc, char **argv, char **env)

@@ -41,13 +41,13 @@ typedef struct s_data
 	t_oper	or;
 	t_oper	dir_input;			//
 	t_oper	dir_output;			//
-	t_oper	dir_app;			//
 	t_oper	heredoc;			// could prob summarize all dir oper into one
+	t_oper	dir_app;			//
 }			t_data;
 
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
-void	externals(char **str);
-void	exec_pipe(char **argv);
+int		externals(char **str);
+int		exec_pipe(char **argv);
 
 #endif
