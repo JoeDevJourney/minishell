@@ -9,7 +9,8 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/handlers.c
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c
+# $(SRCDIR)/handlers.c
 
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a

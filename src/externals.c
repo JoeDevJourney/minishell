@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 11:19:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:00:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ static char	*join_cmd(char **arr)
 	line = NULL;
 	while (*arr)
 	{
-		temp = ft_strjoin(*arr++, " ");
+		temp = ft_strjoin(*arr, " ");
 		newline = ft_strjoin(line, temp);
 		free(temp);
 		free (line);
 		line = newline;
+		arr++;
 	}
 	return (line);
 }
@@ -76,8 +77,7 @@ void	externals(char **str)
 
 	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
-	free(input[0]);
-	*input = ft_strjoin("/bin/", *str);
+	*input = ft_strjoin("/bin/", *input);
 	execute_command(*input, input, NULL);
 	free_array (input);
 	free (cmd);
@@ -89,4 +89,6 @@ void	externals(char **str)
 // 	externals(++argv);
 // }
 
-	// cc externals.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
+	// cc externals.c -o externals ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
+	// ./a.out ls -l
+	// ./externals echo "This is a text"

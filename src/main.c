@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 11:20:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 19:20:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ int	main(void)
 		{
 			inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 			inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
-			while (*inp.pipe.cmd)
-			{
-				inp.final = redir_oper(&inp, inp.pipe.cmd);		// prototype will prob need modif cause I dont know what input do pipes take
+			exec_pipe(inp.pipe.cmd);
+			// while (*inp.pipe.cmd)
+			// {
+			// 	redir_oper(&inp, inp.pipe.cmd);		// prototype will prob need modif cause I dont know what input do pipes take
 				
 				// this is the part I lack knowledge about, because at this point
 				// the initial mixed commmand is broken down in the simplest form
@@ -43,8 +44,8 @@ int	main(void)
 				//	 pipe()
 				// else
 				// 	execute()
-				inp.pipe.cmd++;
-			}								//successful pipe returns 0??
+			// 	inp.pipe.cmd++;
+			// }								//successful pipe returns 0??
 			// if (!inp.pipe.ret_code)
 			// {
 			// 	inp.or.ret_code = ? (!= 0)
