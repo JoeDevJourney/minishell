@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 12:40:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:19:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,30 @@ static char	*substr_dup(const char *start, size_t len)
 	if (!substr)
 		return (NULL);
 	ft_strlcpy(substr, start, len);
-	substr[len] = '\0';
 	return (substr);
 }
 
 size_t	count_substr(const char *s, const char *delim)
 {
 	size_t		count;
-	const char	*tmp = s;
+	const char	*tmp;
 	size_t		delim_len;
 
+	if (!s || !delim || *delim == '\0')
+		return (0);
 	count = 0;
-	delim_len = strlen(delim);
+	tmp = s;
+	delim_len = ft_strlen(delim);
 	tmp = ft_strnstr(tmp, delim, ft_strlen(tmp));
 	while (tmp)
 	{
 		count++;
 		tmp += delim_len;
+		tmp = ft_strnstr(tmp, delim, ft_strlen(tmp));
 	}
-	return (count + 1);
+	if (*s != '\0')
+		count++;
+	return (count);
 }
 
 /**
@@ -66,6 +71,7 @@ char	**ft_split2(const char *s, const char *delim)
 	{
 		result[i++] = substr_dup(start, end - start);
 		start = end + delim_len;
+		end = ft_strnstr(start, delim, ft_strlen(start));
 	}
 	result[i++] = ft_strdup(start);
 	result[i] = NULL;

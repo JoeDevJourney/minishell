@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 19:20:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:21:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,14 @@ int	main(void)
 	t_data	inp;
 
 	printf("Welcome\n");
-	inp.str = readline("Enter command: ");
+	// inp.str = readline("Enter command: ");
+	inp.str = "ls -1 | cat -n";
 	inp.and.cmd = ft_split2(inp.str, "&&");
+	if (!inp.and.cmd)
+	{
+		printf("Error: Failed to parse command\n");
+		exit (1);
+	}
 	inp.and.num_cmd = count_substr(inp.str, "&&");
 	while (*inp.and.cmd)
 	{

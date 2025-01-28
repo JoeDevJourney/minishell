@@ -21,7 +21,7 @@ all: $(NAME)
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "\033[33mCompilating $(NAME)...\033[0m"
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFTDIR) -lft -lreadline
-	@echo "$(NAME) compiled \033[32msuccessful\033[0m!:"
+	@echo "$(NAME) compiled \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
