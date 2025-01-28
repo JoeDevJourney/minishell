@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 20:21:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:27:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(void)
 
 	printf("Welcome\n");
 	// inp.str = readline("Enter command: ");
-	inp.str = "ls -1 | cat -n";
+	inp.str = "ls -l | cat -n | cat -e";
 	inp.and.cmd = ft_split2(inp.str, "&&");
 	if (!inp.and.cmd)
 	{
@@ -34,24 +34,8 @@ int	main(void)
 		{
 			inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 			inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
-			exec_pipe(inp.pipe.cmd);
-			// while (*inp.pipe.cmd)
-			// {
-			// 	redir_oper(&inp, inp.pipe.cmd);		// prototype will prob need modif cause I dont know what input do pipes take
-				
-				// this is the part I lack knowledge about, because at this point
-				// the initial mixed commmand is broken down in the simplest form
-				// and we have a char **inp.pipe.cmd that contains all the commands
-				// to be piped (it could be more than 2). So, in theory, from now on
-				// we have all we need to execute pipex (which I am still not quite
-				// familiar with)
-				
-				// if (inp.pipe.num_cmd != 1)
-				//	 pipe()
-				// else
-				// 	execute()
-			// 	inp.pipe.cmd++;
-			// }								//successful pipe returns 0??
+			printf("%d\n", inp.pipe.num_cmd);
+			exec_pipe(inp.pipe.cmd);							//successful pipe returns 0??
 			// if (!inp.pipe.ret_code)
 			// {
 			// 	inp.or.ret_code = ? (!= 0)
