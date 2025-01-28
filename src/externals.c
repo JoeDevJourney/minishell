@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/23 16:41:37 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:19:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,29 @@ static void	free_array(char **arr)
 	free (arr);
 }
 
-static int	externals(char **str)
+/**
+ * @brief Executes all external commands (executables located at /bin/)
+ * 
+ * @paragraph str command to be executed, broken down in tokens.
+ */
+void	externals(char **str)
 {
 	char	**input;
 	char	*cmd;
-	int		res;
 
 	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
 	free(input[0]);
 	*input = ft_strjoin("/bin/", *str);
-	res = execute_command(*input, input, NULL);
-	printf("%d\n", res);
+	execute_command(*input, input, NULL);
 	free_array (input);
 	free (cmd);
-	return (res);
 }
 
-int	main(int argc, char **argv)
-{
-	int	res;
-
-	res = 0;
-	(void)argc;
-	res = externals(++argv);
-}
+// int	main(int argc, char **argv)
+// {
+// 	(void)argc;
+// 	externals(++argv);
+// }
 
 	// cc externals.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
