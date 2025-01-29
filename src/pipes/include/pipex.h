@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 14:45:24 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/28 15:11:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:34:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <sys/stat.h>
 # include "libft/include/libft.h"
 
-int			main(int argc, char **argv);
-int			exec_pipe(char **argv);
-void		externals(char **str);
+int		main(int argc, char **argv);
+int		exec_pipe(int num, char **cmd);
+void	externals(char **str);
 #endif
