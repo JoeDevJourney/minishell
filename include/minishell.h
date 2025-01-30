@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 16:46:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:55:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
 int		externals(char **str);
 int		exec_pipes(int num, char **cmd);
+void	*safe_malloc(size_t size);
 
 #endif

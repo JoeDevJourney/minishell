@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 16:46:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:09:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	main(void)
 
 	printf("Welcome\n");
 	// inp.str = readline("Enter command: ");
-	inp.str = "cat infile || pwd";
-	while (strncmp(inp.str, "exit", ft_strlen(inp.str)))
+	inp.str = "cat src/pipes/infile || pwd";
+	while (strncmp(inp.str, "exit", 4))
 	{
 		add_history(inp.str);
 		inp.and.cmd = ft_split2(inp.str, "&&");
@@ -38,7 +38,7 @@ int	main(void)
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_code = exec_pipes(inp.pipe.cmd);			//successful pipe returns 0??
+					inp.pipe.ret_code = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);			//successful pipe returns 0??
 				else
 					inp.pipe.ret_code = externals(inp.pipe.cmd);
 				inp.or.ret_code = inp.pipe.ret_code;
@@ -51,6 +51,8 @@ int	main(void)
 			inp.and.cmd++;
 		}
 		inp.str = readline("Enter command: ");
+		while (!*inp.str)
+			inp.str = readline("Enter command: ");
 	}
 	// safe_free()
 	return (0);

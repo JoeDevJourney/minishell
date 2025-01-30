@@ -6,11 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 17:03:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:54:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/minishell.h"
 
 static void	process(char *cmd, int *old_fd, int *new_fd)
 {
@@ -76,11 +76,12 @@ static void	fork_pr(pid_t pid, char *cmd, int *old_fd, int *new_fd)
 static void	wait_n_free(int n, pid_t *pid, int **pfd)
 {
 	int	i;
+	int	status;
 
 	i = -1;
 	while (++i < n)
 	{
-		if (waitpid(pid[i], NULL, 0) == -1)
+		if (waitpid(pid[i], &status, 0) == -1)
 		{
 			perror("Waiting child process failed");
 			exit(EXIT_FAILURE);
@@ -92,7 +93,12 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
 	free(pid);
 	free(pfd);
 }
-
+/**
+ * @brief Executes pipes when given the cmds stored as an array of str.
+ * 
+ * @param num Number of commands
+ * @param cmd Commands broken down in an array of str
+ */
 int	exec_pipes(int num, char **cmd)
 {
 	pid_t	*pid;
