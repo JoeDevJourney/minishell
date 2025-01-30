@@ -21,9 +21,10 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include "libft/include/libft.h"
+# include <errno.h>
 
 int		main(int argc, char **argv);
-// int		exec_pipe(int num, char **cmd);
-int		exec_pipe(char *cmds[], int num_cmds);
+int		exec_pipe(int num, char **cmd);
+// int		exec_pipe(char *cmds[], int num_cmds);
 int		externals(char **str);
 #endif

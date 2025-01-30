@@ -48,6 +48,6 @@ typedef struct s_data
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
 int		externals(char **str);
-int		exec_pipe(char **argv);
+int		exec_pipe(int num, char **cmd);
 
 #endif
