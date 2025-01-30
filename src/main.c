@@ -17,9 +17,8 @@ int	main(void)
 	t_data	inp;
 
 	printf("Welcome\n");
-	// printf("%s @ %s % ", getenv("USER"), relative_wd(getenv("PWD")));
-	// inp.str = readline("Enter command: ");
-	inp.str = "cat src/pipes/infile || pwd";
+	printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
+	inp.str = readline("");
 	while (strncmp(inp.str, "exit", 4))
 	{
 		add_history(inp.str);
@@ -51,11 +50,11 @@ int	main(void)
 				break ;
 			inp.and.cmd++;
 		}
-		printf("%s @ %s %% ", getenv("USER"), relative_wd(getenv("PWD")));
+		printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
 		inp.str = readline("");
 		while (!*inp.str)
 		{
-			printf("%s @ %s %% ", getenv("USER"), relative_wd(getenv("PWD")));
+			printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
 			inp.str = readline("Enter command: ");
 		}
 	}

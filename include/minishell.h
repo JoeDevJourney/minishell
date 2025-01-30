@@ -14,6 +14,11 @@
 # define MINISHELL_H
 
 # define WHITESPACE " /t/n/v/f/r"
+# define RED "\033[31m"
+# define GRN "\033[32m"
+# define YEL "\033[33m"
+# define BLUE "\033[34m"
+# define RST "\033[0m"
 
 # include "libft/include/libft.h"
 
