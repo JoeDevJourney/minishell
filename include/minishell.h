@@ -56,5 +56,6 @@ int		externals(char **str);
 int		exec_pipes(int num, char **cmd);
 void	*safe_malloc(size_t size);
 char	*relative_wd(char *dir);
+void	expansion_oper(char **arr);
 
 #endif

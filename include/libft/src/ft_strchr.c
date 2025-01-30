@@ -12,6 +12,10 @@
 
 #include "../include/libft.h"
 
+/**
+ * @brief Searches for a char in a str and if found, it returns a pointer to
+ * the first occurence
+ */
 char	*ft_strchr(const char *s, int c)
 {
 	while (*s)

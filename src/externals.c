@@ -86,7 +86,9 @@ int	externals(char **str)
 	res = 0;
 	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
-	*input = ft_strjoin("/bin/", *input);
+	*input = ft_strjoin("/bin/", *input);			//Replace with env (?)
+	// TODO: double quotes handling
+	expansion_oper(input);
 	res = execute_command(*input, input, NULL);
 	free_array (input);
 	free (cmd);
