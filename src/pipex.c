@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 17:54:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:25:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
 	free(pid);
 	free(pfd);
 }
+
 /**
  * @brief Executes pipes when given the cmds stored as an array of str.
  * 
