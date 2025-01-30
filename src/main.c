@@ -12,22 +12,30 @@
 
 #include "../include/minishell.h"
 
+static char *read_input()
+{
+	char	*str;
+
+	printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
+	str = readline("");
+	while (!*str)
+	{
+		printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
+		str = readline("");
+	}
+	add_history(str);
+	return(str);
+}
+
 int	main(void)
 {
 	t_data	inp;
 
 	printf("Welcome\n");
-	printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
-	inp.str = readline("");
+	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
 	{
-		add_history(inp.str);
 		inp.and.cmd = ft_split2(inp.str, "&&");
-		if (!inp.and.cmd)
-		{
-			printf("Error: Failed to parse command\n");
-			exit (1);
-		}
 		inp.and.num_cmd = count_substr(inp.str, "&&");
 		while (*inp.and.cmd)
 		{
@@ -38,25 +46,20 @@ int	main(void)
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_code = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);			//successful pipe returns 0??
+					inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);			//successful pipe returns 0??
 				else
-					inp.pipe.ret_code = externals(inp.pipe.cmd);
-				inp.or.ret_code = inp.pipe.ret_code;
-				if (!inp.or.ret_code)
+					inp.pipe.ret_val = externals(inp.pipe.cmd);
+				inp.or.ret_val = inp.pipe.ret_val;
+				if (!inp.or.ret_val)
 					break ;
 				inp.or.cmd++;
 			}
-			if (inp.or.ret_code)
+			inp.and.ret_val = inp.or.ret_val;
+			if (inp.or.ret_val)
 				break ;
 			inp.and.cmd++;
 		}
-		printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
-		inp.str = readline("");
-		while (!*inp.str)
-		{
-			printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
-			inp.str = readline("Enter command: ");
-		}
+		inp.str = read_input();
 	}
 	// safe_free()
 	return (0);

@@ -35,7 +35,7 @@ typedef struct s_oper
 {
 	char	**cmd;
 	int		num_cmd;
-	int		ret_code;
+	int		ret_val;
 }			t_oper;
 
 typedef struct s_data

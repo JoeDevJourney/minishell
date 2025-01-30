@@ -23,6 +23,10 @@ static char	*substr_dup(const char *start, size_t len)
 	return (substr);
 }
 
+/**
+ * @brief Counts the number of words in a str based on the number of occurences
+ * of the delimeter
+ */
 size_t	count_substr(const char *s, const char *delim)
 {
 	size_t		count;
