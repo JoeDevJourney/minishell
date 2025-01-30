@@ -6,11 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 16:19:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:51:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/pipex.h"
 
 static void	mid_process(char *cmd, int *old_fd, int *new_fd)
 {

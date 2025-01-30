@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 14:25:01 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:25:21 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static char	*join_cmd(char **arr)
 		line = newline;
 		arr++;
 	}
+	temp = NULL;
 	return (line);
 }
 
@@ -66,11 +67,9 @@ static void	free_array(char **arr)
 
 	temp = arr;
 	while (*temp)
-	{
-		free(*temp);
-		temp++;
-	}
+		free(*temp++);
 	free (arr);
+	arr = NULL;
 }
 
 /**

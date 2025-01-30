@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 20:27:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:46:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(void)
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_code = exec_pipe(inp.pipe.cmd);			//successful pipe returns 0??
+					inp.pipe.ret_code = exec_pipes(inp.pipe.cmd);			//successful pipe returns 0??
 				else
 					inp.pipe.ret_code = externals(inp.pipe.cmd);
 				inp.or.ret_code = inp.pipe.ret_code;

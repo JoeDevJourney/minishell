@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:02:02 by dchrysov          #+#    #+#             */
-/*   Updated: 2024/12/21 14:07:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 17:42:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,3 +91,16 @@ char	**ft_split(char const *s, char c)
 	res[word_count] = NULL;
 	return (res);
 }
+
+// #include <stdio.h>
+// int main()
+// {
+// 	char *s = "Hello re malaka";
+// 	char **res = ft_split(s, ' ');
+// 	int i = 0;
+
+// 	while (res[i])
+// 		printf("%s\n", res[i++]);
+// 	free_split(res, str_count(s, ' '));
+// }
+// cc ft_split.c ft_strlcpy.c ft_strlen.c -g -Wall -Werror -Wextra
