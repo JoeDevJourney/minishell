@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 18:09:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:57:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	main(void)
 	t_data	inp;
 
 	printf("Welcome\n");
+	// printf("%s @ %s % ", getenv("USER"), relative_wd(getenv("PWD")));
 	// inp.str = readline("Enter command: ");
 	inp.str = "cat src/pipes/infile || pwd";
 	while (strncmp(inp.str, "exit", 4))
@@ -50,9 +51,13 @@ int	main(void)
 				break ;
 			inp.and.cmd++;
 		}
-		inp.str = readline("Enter command: ");
+		printf("%s @ %s %% ", getenv("USER"), relative_wd(getenv("PWD")));
+		inp.str = readline("");
 		while (!*inp.str)
+		{
+			printf("%s @ %s %% ", getenv("USER"), relative_wd(getenv("PWD")));
 			inp.str = readline("Enter command: ");
+		}
 	}
 	// safe_free()
 	return (0);
