@@ -8,7 +8,7 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/pipex.c ../externals.c
+SRCS = $(SRCDIR)/pipex.c ../externals.c $(SRCDIR)/functions.c
 
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a

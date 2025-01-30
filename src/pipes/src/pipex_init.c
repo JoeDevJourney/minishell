@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/29 17:29:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:19:30 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/minishell.h"
 
 static void	mid_process(char *cmd, int *old_fd, int *new_fd)
 {
@@ -87,7 +87,7 @@ int	exec_pipe(int num, char **cmd)
 			exit(EXIT_FAILURE);
 		if (pid[i] == 0)
 			mid_process(cmd[i], p_fd[i - 1], p_fd[i]);
-		close(p_fd[i - 1][i - 1]);
+		close(p_fd[i - 1][0]);
 	}
 	close(p_fd[i - 1][1]);
 	pid[i] = fork();
