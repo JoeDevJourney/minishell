@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   externals.c                                        :+:      :+:    :+:   */
+/*   expansion_oper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 17:25:21 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:41:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void expansion_oper(char **arr)
+void	expansion_oper(char **arr)
 {
-	char **ptr;
-	char *val;
+	char	**ptr;
+	char	*val;
 
 	ptr = arr;
 	while (*ptr)
@@ -33,18 +33,21 @@ void expansion_oper(char **arr)
 	}
 }
 
-// int main()
+// int	main(int argc, char **argv, char **env)
 // {
-// 	char **arr;
-// 	char **ptr;
+// 	char	**arr;
+// 	char	**ptr;
 
+// 	(void)argc;
+// 	(void)argv;
+// 	(void)env;
 // 	arr = malloc (5 * sizeof(char *));
 // 	if (!arr)
 // 		return (0);
 // 	arr[0] = ft_strdup("ls");
 // 	arr[1] = ft_strdup("-l");
-// 	arr[2] = ft_strdup("$PWD1");
-// 	arr[3] = ft_strdup("$USER");
+// 	arr[2] = ft_strdup("$PWD");
+// 	arr[3] = ft_strdup("$USER1");
 // 	arr[4] = NULL;
 // 	expansion_oper(arr);
 // 	ptr = arr;

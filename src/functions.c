@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 18:57:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:39:50 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ void	*safe_malloc(size_t size)
 	return (ptr);
 }
 
-char	*relative_wd(char *dir)
+/**
+ * @brief Returns the relative working directory
+ * 
+ * @note Used when printing the terminal prompt
+ */
+char	*rwd(char *dir)
 {
 	char	*ptr;
 

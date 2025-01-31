@@ -9,7 +9,8 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c\
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c $(SRCDIR)/functions.c\
+		$(SRCDIR)/expansion_oper.c
 
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a
@@ -20,7 +21,7 @@ all: $(NAME)
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "\033[33mCompilating $(NAME)...\033[0m"
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L$(LIBFTDIR) -lft -lreadline
-	@echo "$(NAME) compiled \033[32msuccessful\033[0m!:"
+	@echo "$(NAME) compiled \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@

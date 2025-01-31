@@ -6,25 +6,25 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 15:26:50 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:39:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char *read_input()
+static char	*read_input(void)
 {
 	char	*str;
 
-	printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
+	printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
 	str = readline("");
 	while (!*str)
 	{
-		printf("%s%s@%s %s%% ", GRN, getenv("USER"), relative_wd(getenv("PWD")), RST);
+		printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
 		str = readline("");
 	}
 	add_history(str);
-	return(str);
+	return (str);
 }
 
 int	main(int argc, char **argv, char **env)
