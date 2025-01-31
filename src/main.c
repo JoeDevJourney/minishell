@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 16:28:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:05:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	inp.env = env;
+	while (*inp.env)
+		*inp.env++ = ft_strdup(*env);									// Needs freeing
 	printf("Welcome\n");
 	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
@@ -51,7 +52,7 @@ int	main(int argc, char **argv, char **env)
 				if (inp.pipe.num_cmd != 1)
 					inp.pipe.ret_val = exec_pipes(inp);
 				else
-					inp.pipe.ret_val = execute_command(inp.pipe.cmd, env);
+					inp.pipe.ret_val = exec_command(inp.pipe.cmd, env);
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;

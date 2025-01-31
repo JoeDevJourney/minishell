@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 16:31:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:12:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	execute_external(char *cmd, char *argv[], char *envp[])
+static int	exec_external(char *cmd, char *argv[], char *envp[])
 {
 	pid_t	pid;
 	int		status;
@@ -77,28 +77,36 @@ static void	free_array(char **arr)
  * @param str command to be executed, broken down in tokens.
  * @note It can handle the command being a str or an array of str.
  */
-int	execute_command(char **str, char **env)
+int	exec_command(char **str, char **env)
 {
 	char	**input;
 	char	*cmd;
 	int		res;
 
 	// TODO: double quotes handling
+	res = 0;
 	cmd = join_cmd(str);
 	input = ft_split(cmd, ' ');
-	*input = ft_strjoin("/bin/", *input);
-	expansion_oper(input);
-	res = execute_external(*input, input, env);
-	free_array (input);
-	free (cmd);
+	// res = exec_builtins(input)
+	// or res = exec_external()
+	if (!strncmp(*input, "env", 3))
+		exec_env(env);
+	else
+	{
+		expansion_oper(input);							// This should go in the handling functions for extern and built 
+		*input = ft_strjoin("/bin/", *input);
+		res = exec_external(*input, input, env);
+		free_array (input);
+		free (cmd);
+	}
 	return (res);
 }
 
 // int	main(int argc, char **argv, char **env)
 // {
 // 	(void)argc;
-// 	execute_command(++argv, env);
+// 	exec_command(++argv, env);
 // }
 // cc commands.c -o commands ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c -g -Wall -Werror -Wextra
 // ./a.out ls -l
-// ./execute_command echo "This is a text"
+// ./exec_command echo "This is a text"
