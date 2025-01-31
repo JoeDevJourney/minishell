@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 18:53:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:08:21 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <string.h>
+# include <limits.h>
 
 typedef struct s_oper
 {
@@ -57,5 +59,15 @@ int		exec_pipes(int num, char **cmd);
 void	*safe_malloc(size_t size);
 char	*relative_wd(char *dir);
 void	expansion_oper(char **arr);
+int		ft_strcmp(const char *s1, const char *s2);
+void	ft_write_error(const char *msg);
+char	*get_home_dir(void);
+char	*get_oldpwd_dir(void);
+char	*get_target_dir(char **args);
+char	*ft_strcpy(char *dest, const char *src);
+char	*ft_strcat(char *dest, const char *src);
+int		update_env_var(const char *name, const char *value);
+int		update_pwd_vars(const char *oldpwd);
+
 
 #endif
