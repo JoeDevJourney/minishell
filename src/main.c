@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 18:05:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:22:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,25 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	while (*inp.env)
-		*inp.env++ = ft_strdup(*env);									// Needs freeing
+	int count = 0;
+	while (env[count])
+		count++;
+	inp.env = malloc((count + 1) * sizeof(char *));								// Needs freeing
+	if (!inp.env)
+		return (0);
+	for (int i = 0; i < count; i++)
+	{
+		inp.env[i] = ft_strdup(env[i]);
+		if (!inp.env[i])
+		{
+			return (0);
+			while (i > 0)
+				free(inp.env[--i]);
+			free(inp.env);
+			return (0);
+		}
+	}
+	inp.env[count] = NULL;
 	printf("Welcome\n");
 	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
@@ -52,7 +69,7 @@ int	main(int argc, char **argv, char **env)
 				if (inp.pipe.num_cmd != 1)
 					inp.pipe.ret_val = exec_pipes(inp);
 				else
-					inp.pipe.ret_val = exec_command(inp.pipe.cmd, env);
+					inp.pipe.ret_val = exec_command(inp.pipe.cmd, inp.env);
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;
