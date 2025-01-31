@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 16:11:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:16:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <dirent.h>
 
 typedef struct s_oper
 {
@@ -53,10 +54,11 @@ typedef struct s_data
 
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
-int		execute_command(char **str, char **env);
+int		exec_command(char **str, char **env);
 int		exec_pipes(t_data inp);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 void	expansion_oper(char **arr);
+void	exec_env(char **env);
 
 #endif
