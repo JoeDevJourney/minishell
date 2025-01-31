@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 11:20:00 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:51:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	output(char **cmd, const char *file)
 		}
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		externals(cmd);
+		execute_command(cmd);
 	}
 	else
 		wait(NULL);
@@ -73,4 +73,4 @@ void	redir_oper(t_data *cmd, char *str)
 //     return 0;
 // }
 
-// cc handlers.c externals.c parsing.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_memmove.c -g -Wall -Werror -Wextra
+// cc handlers.c execute_command.c parsing.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_memmove.c -g -Wall -Werror -Wextra

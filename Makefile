@@ -9,7 +9,7 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c $(SRCDIR)/functions.c\
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/commands.c $(SRCDIR)/functions.c\
 		$(SRCDIR)/expansion_oper.c
 # $(SRCDIR)/handlers.c
 

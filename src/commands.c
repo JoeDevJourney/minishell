@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   externals.c                                        :+:      :+:    :+:   */
+/*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 14:52:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:52:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	execute_command(char *cmd, char *argv[], char *envp[])
+static int	execute_external(char *cmd, char *argv[], char *envp[])
 {
 	pid_t	pid;
 	int		status;
@@ -79,7 +79,7 @@ static void	free_array(char **arr)
  * 
  * @note It can handle the command being a str or an array of str.
  */
-int	externals(char **str)
+int	execute_command(char **str)
 {
 	char	**input;
 	char	*cmd;
@@ -90,7 +90,7 @@ int	externals(char **str)
 	input = ft_split(cmd, ' ');						//	These will go to the function that will handle all execution.
 	*input = ft_strjoin("/bin/", *input);
 	expansion_oper(input);
-	res = execute_command(*input, input, NULL);		//Replace NULL <-> env (?)
+	res = execute_external(*input, input, NULL);		//Replace NULL <-> env (?)
 	free_array (input);
 	free (cmd);
 	return (res);
@@ -99,9 +99,9 @@ int	externals(char **str)
 // int	main(int argc, char **argv)
 // {
 // 	(void)argc;
-// 	externals(++argv);
+// 	execute_command(++argv);
 // }
 
-	// cc externals.c -o externals ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
+	// cc execute_command.c -o execute_command ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
 	// ./a.out ls -l
-	// ./externals echo "This is a text"
+	// ./execute_command echo "This is a text"

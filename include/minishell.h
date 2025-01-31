@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 18:53:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:50:38 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ typedef struct s_data
 
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
-int		externals(char **str);
+int		execute_command(char **str);
 int		exec_pipes(int num, char **cmd);
 void	*safe_malloc(size_t size);
-char	*relative_wd(char *dir);
+char	*rwd(char *dir);
 void	expansion_oper(char **arr);
 
 #endif
