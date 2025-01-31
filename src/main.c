@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 13:42:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 15:26:50 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ static char *read_input()
 	return(str);
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
 
+	(void)argc;
+	(void)argv;
+	(void)env;
 	printf("Welcome\n");
 	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
