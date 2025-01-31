@@ -56,9 +56,11 @@ char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
 int		exec_command(char **str, char **env);
 int		exec_pipes(t_data inp);
+void	free_array(char **arr);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 void	expansion_oper(char **arr);
 void	exec_env(char **env);
+int		fork_command(char **cmd, char **env);
 
 #endif

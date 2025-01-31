@@ -69,7 +69,7 @@ int	main(int argc, char **argv, char **env)
 				if (inp.pipe.num_cmd != 1)
 					inp.pipe.ret_val = exec_pipes(inp);
 				else
-					inp.pipe.ret_val = exec_command(inp.pipe.cmd, inp.env);
+					inp.pipe.ret_val = fork_command(inp.pipe.cmd, inp.env);
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;

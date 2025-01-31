@@ -25,6 +25,17 @@ void	*safe_malloc(size_t size)
 	return (ptr);
 }
 
+void	free_array(char **arr)
+{
+	char	**temp;
+
+	temp = arr;
+	while (*temp)
+		free(*temp++);
+	free (arr);
+	arr = NULL;
+}
+
 /**
  * @brief Returns the relative wd
  * @note Used when printing the terminal prompt.

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static void	process(t_data inp, int *old_fd, int *new_fd)
+static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
 {
 	char	*tok[2];
 
@@ -64,13 +64,13 @@ static int	**init_pipes(int n)
 	return (fd);
 }
 
-static void	fork_process(pid_t pid, t_data inp, int *old_fd, int *new_fd)
+static void	fork_pipe(pid_t pid, t_data inp, int *old_fd, int *new_fd)
 {
 	pid = fork();
 	if (pid == -1)
 		exit (EXIT_FAILURE);
 	if (pid == 0)
-		process(inp, old_fd, new_fd);
+		process_pipe(inp, old_fd, new_fd);
 }
 
 static void	wait_n_free(int n, pid_t *pid, int **pfd)
@@ -112,18 +112,18 @@ int	exec_pipes(t_data inp)
 	p_fd = init_pipes(inp.pipe.num_cmd);
 	i = 0;
 	ptr_fd = STDOUT_FILENO;
-	fork_process(pid[i], inp, p_fd[i], &ptr_fd);
+	fork_pipe(pid[i], inp, p_fd[i], &ptr_fd);
 	while (++i < inp.pipe.num_cmd - 1)
 	{
 		close(p_fd[i - 1][1]);
 		inp.pipe.cmd++;
-		fork_process(pid[i], inp, p_fd[i - 1], p_fd[i]);
+		fork_pipe(pid[i], inp, p_fd[i - 1], p_fd[i]);
 		close(p_fd[i - 1][i - 1]);
 	}
 	close(p_fd[i - 1][1]);
 	inp.pipe.cmd++;
 	ptr_fd = STDIN_FILENO;
-	fork_process(pid[i], inp, p_fd[i - 1], &ptr_fd);
+	fork_pipe(pid[i], inp, p_fd[i - 1], &ptr_fd);
 	close(p_fd[i - 1][0]);
 	wait_n_free(inp.pipe.num_cmd, pid, p_fd);
 	return (0);
