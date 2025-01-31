@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 15:50:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:11:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ typedef struct s_data
 	t_oper	dir_output;			//
 	t_oper	heredoc;			// could prob summarize all dir oper into one
 	t_oper	dir_app;			//
+	char	**env;
 }			t_data;
 
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
-int		execute_command(char **str);
-int		exec_pipes(int num, char **cmd);
+int		execute_command(char **str, char **env);
+int		exec_pipes(t_data inp);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 void	expansion_oper(char **arr);

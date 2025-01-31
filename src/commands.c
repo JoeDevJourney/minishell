@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 15:52:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:22:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,35 +73,32 @@ static void	free_array(char **arr)
 }
 
 /**
- * @brief Executes all external commands (executables located at /bin/)
- * 
+ * @brief Handles all execution, both externals and builtins
  * @param str command to be executed, broken down in tokens.
- * 
  * @note It can handle the command being a str or an array of str.
  */
-int	execute_command(char **str)
+int	execute_command(char **str, char **env)
 {
 	char	**input;
 	char	*cmd;
 	int		res;
 
-	// TODO: double quotes handling					//
-	cmd = join_cmd(str);							//
-	input = ft_split(cmd, ' ');						//	These will go to the function that will handle all execution.
+	// TODO: double quotes handling
+	cmd = join_cmd(str);
+	input = ft_split(cmd, ' ');
 	*input = ft_strjoin("/bin/", *input);
 	expansion_oper(input);
-	res = execute_external(*input, input, NULL);		//Replace NULL <-> env (?)
+	res = execute_external(*input, input, env);
 	free_array (input);
 	free (cmd);
 	return (res);
 }
 
-// int	main(int argc, char **argv)
+// int	main(int argc, char **argv, char **env)
 // {
 // 	(void)argc;
-// 	execute_command(++argv);
+// 	execute_command(++argv, env);
 // }
-
-	// cc execute_command.c -o execute_command ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
-	// ./a.out ls -l
-	// ./execute_command echo "This is a text"
+// cc commands.c -o commands ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c -g -Wall -Werror -Wextra
+// ./a.out ls -l
+// ./execute_command echo "This is a text"

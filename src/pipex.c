@@ -6,17 +6,17 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 15:51:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:17:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	process(char *cmd, int *old_fd, int *new_fd)
+static void	process(t_data inp, int *old_fd, int *new_fd)
 {
 	char	*tok[2];
 
-	tok[0] = cmd;
+	tok[0] = *inp.pipe.cmd;
 	tok[1] = NULL;
 	if (*new_fd == STDOUT_FILENO)
 	{
@@ -36,7 +36,7 @@ static void	process(char *cmd, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	execute_command(tok);
+	execute_command(tok, inp.env);
 	exit(0);
 }
 
@@ -64,13 +64,13 @@ static int	**init_pipes(int n)
 	return (fd);
 }
 
-static void	fork_pr(pid_t pid, char *cmd, int *old_fd, int *new_fd)
+static void	fork_pr(pid_t pid, t_data inp, int *old_fd, int *new_fd)
 {
 	pid = fork();
 	if (pid == -1)
 		exit (EXIT_FAILURE);
 	if (pid == 0)
-		process(cmd, old_fd, new_fd);
+		process(inp, old_fd, new_fd);
 }
 
 static void	wait_n_free(int n, pid_t *pid, int **pfd)
@@ -100,29 +100,32 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
  * @param num Number of commands
  * @param cmd Commands broken down in an array of str
  */
-int	exec_pipes(int num, char **cmd)
+// int	exec_pipes(int num, char **cmd)
+int	exec_pipes(t_data inp)
 {
 	pid_t	*pid;
 	int		**p_fd;
 	int		ptr_fd;
 	int		i;
 
-	pid = (pid_t *)safe_malloc(num * sizeof(pid_t));
-	p_fd = init_pipes(num);
+	pid = (pid_t *)safe_malloc(inp.pipe.num_cmd * sizeof(pid_t));
+	p_fd = init_pipes(inp.pipe.num_cmd);
 	i = 0;
 	ptr_fd = STDOUT_FILENO;
-	fork_pr(pid[i], cmd[i], p_fd[i], &ptr_fd);
-	while (++i < num - 1)
+	fork_pr(pid[i], inp, p_fd[i], &ptr_fd);
+	while (++i < inp.pipe.num_cmd - 1)
 	{
 		close(p_fd[i - 1][1]);
-		fork_pr(pid[i], cmd[i], p_fd[i - 1], p_fd[i]);
+		inp.pipe.cmd++;
+		fork_pr(pid[i], inp, p_fd[i - 1], p_fd[i]);
 		close(p_fd[i - 1][i - 1]);
 	}
 	close(p_fd[i - 1][1]);
+	inp.pipe.cmd++;
 	ptr_fd = STDIN_FILENO;
-	fork_pr(pid[i], cmd[i], p_fd[i - 1], &ptr_fd);
+	fork_pr(pid[i], inp, p_fd[i - 1], &ptr_fd);
 	close(p_fd[i - 1][0]);
-	wait_n_free(num, pid, p_fd);
+	wait_n_free(inp.pipe.num_cmd, pid, p_fd);
 	return (0);
 }
 

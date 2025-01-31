@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 15:51:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:12:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	(void)env;
+	inp.env = env;
 	printf("Welcome\n");
 	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
@@ -49,9 +49,9 @@ int	main(int argc, char **argv, char **env)
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);
+					inp.pipe.ret_val = exec_pipes(inp);
 				else
-					inp.pipe.ret_val = execute_command(inp.pipe.cmd);
+					inp.pipe.ret_val = execute_command(inp.pipe.cmd, env);
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;
