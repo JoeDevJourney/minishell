@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 17:12:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:30:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 static int	exec_external(char *cmd, char *argv[], char *envp[])
 {
-	pid_t	pid;
-	int		status;
+	// pid_t	pid;
+	// int		status;
 
-	pid = fork();
-	if (pid == 0)
-	{
+	// pid = fork();
+	// if (pid == 0)
+	// {
 		if (execve(cmd, argv, envp) == -1)
 		{
 			perror("execve failed");
 			return (errno);
 		}
-	}
-	else if (pid > 0)
-	{
-		wait(&status);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (-1);
-	}
-	else
-		perror("Fork failure");
+	// }
+	// else if (pid > 0)
+	// {
+	// 	wait(&status);
+	// 	if (WIFEXITED(status))
+	// 		return (WEXITSTATUS(status));
+	// 	else
+	// 		return (-1);
+	// }
+	// else
+	// 	perror("Fork failure");
 	return (0);
 }
 
