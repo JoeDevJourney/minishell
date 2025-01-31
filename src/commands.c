@@ -14,28 +14,11 @@
 
 static int	exec_external(char *cmd, char *argv[], char *envp[])
 {
-	// pid_t	pid;
-	// int		status;
-
-	// pid = fork();
-	// if (pid == 0)
-	// {
-		if (execve(cmd, argv, envp) == -1)
-		{
-			perror("execve failed");
-			return (errno);
-		}
-	// }
-	// else if (pid > 0)
-	// {
-	// 	wait(&status);
-	// 	if (WIFEXITED(status))
-	// 		return (WEXITSTATUS(status));
-	// 	else
-	// 		return (-1);
-	// }
-	// else
-	// 	perror("Fork failure");
+	if (execve(cmd, argv, envp) == -1)
+	{
+		perror("execve failed");
+		return (errno);
+	}
 	return (0);
 }
 
@@ -59,17 +42,6 @@ static char	*join_cmd(char **arr)
 	}
 	temp = NULL;
 	return (line);
-}
-
-static void	free_array(char **arr)
-{
-	char	**temp;
-
-	temp = arr;
-	while (*temp)
-		free(*temp++);
-	free (arr);
-	arr = NULL;
 }
 
 /**
@@ -100,6 +72,31 @@ int	exec_command(char **str, char **env)
 		free (cmd);
 	}
 	return (res);
+}
+
+int	fork_command(char **cmd, char **env)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		exec_command(cmd, env);
+		perror("exec_command failed");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid > 0)
+	{
+		wait(&status);
+		if(WIFEXITED(status))
+			return(WEXITSTATUS(status));
+		else
+			return (-1);
+	}
+	else
+		perror("Fork failed");
+	return (0);
 }
 
 // int	main(int argc, char **argv, char **env)
