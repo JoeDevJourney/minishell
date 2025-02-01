@@ -9,10 +9,13 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/commands.c $(SRCDIR)/functions.c \
-		$(SRCDIR)/expansion_oper.c $(SRCDIR)/env.c
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c \
+		$(SRCDIR)/commands.c $(SRCDIR)/functions.c \
+		$(SRCDIR)/expansion_oper.c\
+		$(SRCDIR)/builtins/env.c
 
-OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
+# OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a
 NAME = minishell
 
@@ -24,6 +27,9 @@ $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "$(NAME) compiled \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/builtins/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):

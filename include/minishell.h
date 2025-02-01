@@ -60,7 +60,7 @@ void	free_array(char **arr);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 void	expansion_oper(char **arr);
-void	exec_env(char **env);
+int		exec_env(char **env);
 int		fork_command(char **cmd, char **env);
 
 #endif

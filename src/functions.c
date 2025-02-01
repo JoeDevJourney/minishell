@@ -50,3 +50,28 @@ char	*rwd(char *dir)
 		ptr--;
 	return (++ptr);
 }
+
+/**
+ * @brief Searches the **arr for the '$' to replace the environmental key
+ * with its corresponding value
+ */
+void	expansion_oper(char **arr)
+{
+	char	**ptr;
+	char	*val;
+
+	ptr = arr;
+	while (*ptr)
+	{
+		if (ft_strchr(*ptr, '$'))
+		{
+			val = getenv(ft_strchr(*ptr, '$') + 1);
+			free(*ptr);
+			if (val)
+				*ptr = ft_strdup(val);
+			else
+				*ptr = NULL;
+		}
+		ptr++;
+	}
+}

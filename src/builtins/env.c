@@ -12,13 +12,14 @@
 
 #include "../include/minishell.h"
 
-void	exec_env(char **env)
+int	exec_env(char **env)
 {
 	char	**ptr;
 
 	ptr = env;
 	while (*ptr)
 		printf("%s\n", *ptr++);
+	return (0);
 }
 
 // int main(int argc, char **argv, char **env)
