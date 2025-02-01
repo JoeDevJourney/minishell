@@ -15,14 +15,22 @@
 static char	*read_input(void)
 {
 	char	*str;
+	char	*prompt;
+	char	*temp;
 
-	printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
-	str = readline(NULL);
-	while (!*str)
-	{
-		printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
-		str = readline(NULL);
-	}
+	temp = ft_strjoin(GRN, getenv("USER"));
+	prompt = ft_strdup(temp);
+	free(temp);
+	temp = ft_strjoin(prompt, "@");
+	free(prompt);
+	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
+	free(temp);
+	temp = ft_strjoin(prompt, RST);
+	free(prompt);
+	prompt = ft_strjoin(temp, " % ");
+	str = readline(prompt);
+	while (!str)
+		str = readline(prompt);
 	add_history(str);
 	return (str);
 }
