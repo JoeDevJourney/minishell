@@ -62,5 +62,6 @@ char	*rwd(char *dir);
 void	expansion_oper(char **arr);
 int		exec_env(char **env);
 int		fork_command(char **cmd, char **env);
+int		search_builtins(char **cmd, char **env);
 
 #endif

@@ -17,11 +17,11 @@ static char	*read_input(void)
 	char	*str;
 
 	printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
-	str = readline("");
+	str = readline(NULL);
 	while (!*str)
 	{
 		printf("%s%s@%s %s%% ", GRN, getenv("USER"), rwd(getenv("PWD")), RST);
-		str = readline("");
+		str = readline(NULL);
 	}
 	add_history(str);
 	return (str);
@@ -33,25 +33,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	int count = 0;
-	while (env[count])
-		count++;
-	inp.env = malloc((count + 1) * sizeof(char *));								// Needs freeing
-	if (!inp.env)
-		return (0);
-	for (int i = 0; i < count; i++)
-	{
-		inp.env[i] = ft_strdup(env[i]);
-		if (!inp.env[i])
-		{
-			return (0);
-			while (i > 0)
-				free(inp.env[--i]);
-			free(inp.env);
-			return (0);
-		}
-	}
-	inp.env[count] = NULL;
+	inp.env = env;
 	printf("Welcome\n");
 	inp.str = read_input();
 	while (strncmp(inp.str, "exit", 4))
@@ -92,3 +74,24 @@ int	main(int argc, char **argv, char **env)
 // ls -1 | cat -n
 // echo This is a text | cat -n
 // cat src/pipes/infile | cat -e
+
+
+// In case duplicating env is needed
+// int count = 0;
+// while (env[count])
+// 	count++;
+// inp.env = malloc((count + 1) * sizeof(char *));				// Needs freeing
+// if (!inp.env)
+// 	return (0);
+// for (int i = 0; i < count; i++)
+// {
+// 	inp.env[i] = ft_strdup(env[i]);
+// 	if (!inp.env[i])
+// 	{
+// 		return (0);
+// 		while (i > 0)
+// 			free(inp.env[--i]);
+// 		free(inp.env);
+// 		return (0);
+// 	}
+// }

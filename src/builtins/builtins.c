@@ -10,9 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	execute_builtins()
+static int	exec_builtin(char **cmd, char **env)
 {
-	
+	if (!ft_strncmp(*cmd, "env", 3))
+		exec_env(env);
+	return (0);
+}
+
+int	search_builtins(char **cmd, char **env)
+{
+	struct dirent	*entry;
+	DIR				*builtins_dir;
+	char 			*obj;
+	char 			*path;
+
+	obj = ft_strjoin(*cmd, ".o");
+	path = ft_strjoin(getenv("PWD"), "/obj/");
+	builtins_dir = opendir(path);
+	if (!builtins_dir)
+	{
+		perror("Builtins failed\n");
+		return (errno);
+	}
+	entry = readdir(builtins_dir);
+	while (entry)
+	{
+		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*cmd)))
+			return(exec_builtin(cmd, env));
+		entry = readdir(builtins_dir);
+	}
+	closedir(builtins_dir);
+	return (-2);
 }

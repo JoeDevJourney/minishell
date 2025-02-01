@@ -9,10 +9,9 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c \
-		$(SRCDIR)/commands.c $(SRCDIR)/functions.c \
-		$(SRCDIR)/expansion_oper.c\
-		$(SRCDIR)/builtins/env.c
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/functions.c \
+		$(SRCDIR)/commands.c $(SRCDIR)/expansion_oper.c\
+		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 # OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

@@ -12,56 +12,60 @@
 
 #include "../include/minishell.h"
 
-static char	*path_to_exec(char *name)
-{
-	struct dirent	*entry;
-	DIR				*dir;
-	char			**path;
+// static char	*path_to_exec(char *name)
+// {
+// 	struct dirent	*entry;
+// 	DIR				*dir;
+// 	char			**path;
 
-	path = ft_split(getenv("PATH"), ':');
-	if (!path)
-	{
-		printf("$PATH not set\n");
-		return (NULL);
-	}
-	while (*path)
-	{
-		dir = opendir(*path);
-		if (!dir)
-			perror("opendir");
-		else
-		{
-			entry = readdir(dir);
-			while (entry)
-			{
-				if (!ft_strncmp(name, entry->d_name, ft_strlen(name)))
-					return (*path);
-				entry = readdir(dir);
-			}
-			closedir(dir);
-		}
-		path++;
-	}
-	// free
-	return (NULL);
-}
+// 	path = ft_split(getenv("PATH"), ':');
+// 	if (!path)
+// 	{
+// 		printf("$PATH not set\n");
+// 		return (NULL);
+// 	}
+// 	while (*path)
+// 	{
+// 		dir = opendir(*path);
+// 		if (!dir)
+// 			perror("opendir");
+// 		else
+// 		{
+// 			entry = readdir(dir);
+// 			while (entry)
+// 			{
+// 				if (!ft_strncmp(name, entry->d_name, ft_strlen(name)))
+// 					return (*path);
+// 				entry = readdir(dir);
+// 			}
+// 			closedir(dir);
+// 		}
+// 		path++;
+// 	}
+// 	// free
+// 	return (NULL);
+// }
 
 static int	exec_external(char **argv, char **envp)
 {
-	char	*exec;
+	// char	*exec;
 	char	*temp;
 
 	expansion_oper(argv);
-	exec = ft_strjoin(path_to_exec(*argv), "/");
-	temp = ft_strjoin(exec, *argv);
+	// exec = ft_strjoin(path_to_exec(*argv), "/");
+	// temp = ft_strjoin(exec, *argv);
+	// free(*argv);
+	// *argv = ft_strdup(temp);
+	temp = ft_strdup(*argv);
 	free(*argv);
-	*argv = ft_strdup(temp);
+	*argv = ft_strjoin("/bin/", temp);
 	if (execve(*argv, argv, envp) == -1)
 	{
 		perror("execve failed");
 		return (errno);
 	}
-	return (free(exec), free(temp), 0);
+	// return(free(temp), free(exec), 0);
+	return (0);
 }
 
 static char	*join_cmd(char **arr)
@@ -83,6 +87,7 @@ static char	*join_cmd(char **arr)
 		arr++;
 	}
 	temp = NULL;
+	// free(newline);	(?)
 	return (line);
 }
 
@@ -93,21 +98,18 @@ static char	*join_cmd(char **arr)
  */
 int	exec_command(char **str, char **env)
 {
-	char	**input;
-	char	*cmd;
+	char	**cmd;
+	char	*input;
 	int		res;
 
 	// TODO: double quotes handling
-	cmd = join_cmd(str);
-	input = ft_split(cmd, ' ');
-	if (!strncmp(*input, "env", 3))
-		// res = exec_builtins(input)
-		res = exec_env(env);
-	else
-		// or res = exec_external()
-		res = exec_external(input, env);
-	free_array (input);
-	free (cmd);
+	input = join_cmd(str);
+	cmd = ft_split(input, ' ');
+	res = search_builtins(cmd, env);  				//(cmd, env) ??
+	if (res == -2)
+		res = exec_external(cmd, env);
+	free_array (cmd);
+	free (input);
 	return (res);
 }
 
@@ -118,7 +120,10 @@ int	fork_command(char **cmd, char **env)
 
 	pid = fork();
 	if (pid == 0)
+	{
 		exec_command(cmd, env);
+		exit (0);
+	}
 	else if (pid > 0)
 	{
 		wait(&status);
@@ -137,6 +142,6 @@ int	fork_command(char **cmd, char **env)
 // 	(void)argc;
 // 	exec_command(++argv, env);
 // }
-// cc commands.c -o commands ../include/libft/src/ft_strlen.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c -g -Wall -Werror -Wextra
-// ./a.out ls -l
-// ./exec_command echo "This is a text"
+// cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c builtins/builtins.c -g -Wall -Werror -Wextra
+// ./commands ls -l
+// ./commands echo "This is a text"
