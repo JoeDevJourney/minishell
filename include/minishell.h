@@ -52,16 +52,24 @@ typedef struct s_data
 	char	**env;
 }			t_data;
 
-char	**ft_split2(const char *s, const char *delim);
-size_t	count_substr(const char *s, const char *delim);
+//	Execution
 int		exec_command(char **str, char **env);
 int		exec_pipes(t_data inp);
+int		fork_command(char **cmd, char **env);
+
+//	Operators
+void	expansion_oper(char **arr);
+
+//	Builtins
+int		search_builtins(char **cmd, char **env);
+int		exec_env(char **env);
+int		exec_pwd(char **cmd);
+
+//	Utilities
+char	**ft_split2(const char *s, const char *delim);
+size_t	count_substr(const char *s, const char *delim);
 void	free_array(char **arr);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
-void	expansion_oper(char **arr);
-int		exec_env(char **env);
-int		fork_command(char **cmd, char **env);
-int		search_builtins(char **cmd, char **env);
 
 #endif

@@ -43,7 +43,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	inp.env = env;
 	printf("Welcome\n");
-	inp.str = read_input();
+	inp.str = read_input();											// Needs freeing
 	while (strncmp(inp.str, "exit", 4))
 	{
 		inp.and.cmd = ft_split2(inp.str, "&&");
