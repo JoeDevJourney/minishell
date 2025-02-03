@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 13:07:26 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:11:28 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,9 @@ int		update_pwd_vars(const char *oldpwd);
 int		ft_cd(char **args);
 int		ft_strcmp(const char *s1, const char *s2);
 int		add_env_var(char *new_entry);
+void	safe_free(void *ptr);
+int		is_builtin(char *cmd);
+int		execute_builtin(char **args);
+int		ft_exit(char **args);
 
 #endif

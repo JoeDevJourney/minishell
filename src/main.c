@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 14:14:52 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:19:25 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,27 +45,24 @@ int	main(void)
 			{
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
-				if (inp.pipe.num_cmd == 1 && ft_strcmp(inp.pipe.cmd[0], "cd") == 0)
-					inp.pipe.ret_val = ft_cd(inp.pipe.cmd);
+				if (is_builtin(inp.pipe.cmd[0]))
+					inp.pipe.ret_val = execute_builtin(inp.pipe.cmd);
 				else
-				{
-					if (inp.pipe.num_cmd != 1)
-						inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);
-					else
-						inp.pipe.ret_val = externals(inp.pipe.cmd);
-				}
+					inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);
+				safe_free(inp.pipe.cmd);
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;
 				inp.or.cmd++;
 			}
+			safe_free(inp.or.cmd);
 			inp.and.ret_val = inp.or.ret_val;
 			if (inp.and.ret_val)
 				break ;
 			inp.and.cmd++;
 		}
-		free(inp.str);
-		inp.str = read_input();
+		safe_free(inp.and.cmd);
+		safe_free(inp.str);
 	}
 	// safe_free()
 	return (0);

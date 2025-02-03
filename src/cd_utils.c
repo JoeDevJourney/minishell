@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 14:15:28 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:44:46 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ char	*get_home_dir(void)
 
 	home = getenv("HOME");
 	if (home == NULL)
-		home = "/";
+	{
+		ft_write_error("cd: HOME not set\n");
+		return (NULL);
+	}
 	return (home);
 }
 
@@ -50,6 +53,7 @@ char	*get_oldpwd_dir(void)
 char	*get_target_dir(char **args)
 {
 	char	*dir;
+	char	*home;
 
 	if (args[1] != NULL && args[2] != NULL)
 		return (NULL);

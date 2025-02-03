@@ -1,7 +1,7 @@
 #
 #
 CC = cc
-CFLAGS = -g -Wall -Werror -Wextra -I$(LIBFTDIR)/include -I$(INCDIR)
+CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address -I$(LIBFTDIR)/include -I$(INCDIR)
 MAKEFLAGS += -s
 
 SRCDIR = ./src
@@ -10,7 +10,8 @@ INCDIR = ./include
 LIBFTDIR = ./include/libft
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c $(SRCDIR)/functions.c\
-		$(SRCDIR)/expansion_oper.c $(SRCDIR)/cd_main.c $(SRCDIR)/cd_utils.c $(SRCDIR)/cd_utils2.c
+		$(SRCDIR)/expansion_oper.c $(SRCDIR)/cd_main.c $(SRCDIR)/cd_utils.c $(SRCDIR)/cd_utils2.c\
+		$(SRCDIR)/cd_utils3.c 
 # $(SRCDIR)/handlers.c
 
 

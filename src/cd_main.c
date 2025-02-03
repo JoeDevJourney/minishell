@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 14:30:49 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 18:32:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,93 @@ int	ft_cd(char **args)
 	if (!dir)
 		return (1);
 	if (chdir(dir) != 0)
+	{
+		perror("cd");
 		return (1);
+	}
 	if (update_pwd_vars(oldpwd) != 0)
 		return (1);
 	return (0);
 }
+
+
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <unistd.h>
+// #include <string.h>
+
+// // Füge die Header-Deklarationen deiner Funktionen hier ein
+// extern char **environ;
+// int ft_cd(char **args);
+// void print_env_vars();
+
+// int main(void) {
+//     char input[256];
+//     char *args[10];
+//     char *token;
+//     int i;
+
+//     printf("=== Test-Suite für cd ===\n");
+
+//     // Testfall 1: cd ohne Argument (sollte HOME verwenden)
+//     printf("\nTest 1: cd (kein Argument)\n");
+//     char *test1[] = {"cd", NULL};
+//     ft_cd(test1);
+//     printf("Aktuelles Verzeichnis: %s\n", getcwd(NULL, 0));
+//     print_env_vars();
+
+//     // Testfall 2: cd mit gültigem Verzeichnis
+//     printf("\nTest 2: cd include/\n");
+//     char *test2[] = {"cd", "include", NULL};
+//     ft_cd(test2);
+//     printf("Aktuelles Verzeichnis: %s\n", getcwd(NULL, 0));
+//     print_env_vars();
+
+//     // Testfall 3: cd - (zurück zu OLDPWD)
+//     printf("\nTest 3: cd -\n");
+//     char *test3[] = {"cd", "-", NULL};
+//     ft_cd(test3);
+//     printf("Aktuelles Verzeichnis: %s\n", getcwd(NULL, 0));
+//     print_env_vars();
+
+//     // Testfall 4: cd mit ungültigem Verzeichnis
+//     printf("\nTest 4: cd invalid_dir/\n");
+//     char *test4[] = {"cd", "invalid_dir", NULL};
+//     ft_cd(test4);
+//     printf("Aktuelles Verzeichnis: %s\n", getcwd(NULL, 0));
+//     print_env_vars();
+
+//     // Interaktiver Modus
+//     printf("\n=== Interaktiver Modus (exit zum Beenden) ===\n");
+//     while (1) {
+//         printf("\nminishell-test> ");
+//         fgets(input, sizeof(input), stdin);
+//         input[strcspn(input, "\n")] = 0; // Newline entfernen
+
+//         if (strcmp(input, "exit") == 0) break;
+
+//         // Parse Eingabe in Argumente
+//         i = 0;
+//         token = strtok(input, " ");
+//         while (token != NULL && i < 9) {
+//             args[i++] = token;
+//             token = strtok(NULL, " ");
+//         }
+//         args[i] = NULL;
+
+//         // Führe cd aus
+//         int result = ft_cd(args);
+//         printf("Return-Code: %d\n", result);
+//         printf("Aktuelles Verzeichnis: %s\n", getcwd(NULL, 0));
+//         print_env_vars();
+//     }
+
+//     return 0;
+// }
+
+// void print_env_vars() {
+//     printf("Umgebungsvariablen:\n");
+//     printf("PWD:    %s\n", getenv("PWD"));
+//     printf("OLDPWD: %s\n", getenv("OLDPWD"));
+//     printf("----------------------------\n");
+// }

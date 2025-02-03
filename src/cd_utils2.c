@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 14:27:23 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 17:11:31 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,13 @@ int	add_env_var(char *new_entry)
 	new_environ[i + 1] = NULL;
 	environ = new_environ;
 	return (0);
+}
+
+void	safe_free(void *ptr)
+{
+	if (ptr)
+	{
+		free(ptr);
+		ptr = NULL;
+	}
 }
