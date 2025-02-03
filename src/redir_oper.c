@@ -1,22 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_oper.c                                   :+:      :+:    :+:   */
+/*   redir_oper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 19:12:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:21:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	inp_oper(char **cmd, char **env)
+static void	rm_redir_oper(char **arr, char *oper)
 {
-	int		new_fd;
+	int	read;
+	int	write;
+
+	read = 0;
+	write = 0;
+	if (!arr || !oper)
+		return ;
+	while (arr[read] != NULL)
+	{
+		if (strcmp(arr[read], oper) == 0)
+		{
+			free(arr[read]);
+			arr[read] = NULL;
+		}
+		else
+		{
+			arr[write] = arr[read];
+			write++;
+		}
+		read++;
+	}
+	arr[write] = NULL;
+}
+
+static int	*inp_oper(char **cmd)
+{
+	int		*fd;
+	char	*filename;
 	char	**ptr;
-	
+
 	ptr = cmd;
 	while (*ptr)
 	{
@@ -24,22 +51,28 @@ static void	inp_oper(char **cmd, char **env)
 			break ;
 		ptr++;
 	}
-	new_fd = open(*++ptr, O_RDONLY);
-	printf("%s opened\n", *ptr);
-	dup2(new_fd, STDIN_FILENO);
-	fork_command(cmd, env);
-	dup2(STDIN_FILENO, new_fd);
+	filename = ft_strdup(*++ptr);
+	rm_redir_oper(cmd, "<");
+	fd = malloc(2 * sizeof(int));
+	if (!fd)
+		return (NULL);
+	fd[0] = open(filename, O_RDONLY);
+	if (fd[0] == -1)
+		return (perror("Error opening the file"), &errno);
+	fd[1] = STDIN_FILENO;
+	dup2(fd[0], fd[1]);
+	return (fd);
 }
 
-static void	search_redir_oper(char **cmd, char **env)
+int	*search_redir_oper(char **cmd)
 {
 	char	**ptr;
 
 	ptr = cmd;
-	while (++ptr)
+	while (*++ptr)
 	{
 		if (!ft_strncmp(*ptr, "<", ft_strlen(*ptr)))
-			inp_oper(cmd, env);
+			return (inp_oper(cmd));
 		// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
 		// 	out_oper();
 		// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
@@ -47,15 +80,22 @@ static void	search_redir_oper(char **cmd, char **env)
 		// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
 		// 	app_oper();
 	}
+	return (NULL);			// (??????)
 }
 
-int main(int argc, char **argv, char **env)
-{
-	char *cmd[5] = {"cat", "-e", "<", "main.c", NULL};
-
-	(void)argc;
-	(void)argv;
-	search_redir_oper(cmd, env);
-}
+// int	main(int argc, char **argv, char **env)
+	// {
+	// 	char	**cmd;
+	//
+	// 	(void)argc;
+	// 	(void)argv;
+	// 	cmd = malloc(5 * sizeof(char *));
+	// 	cmd[0] = ft_strdup("cat");
+	// 	cmd[1] = ft_strdup("-e");
+	// 	cmd[2] = ft_strdup("<");
+	// 	cmd[3] = ft_strdup("parsing.c");
+	// 	cmd[4] = NULL;
+	// 	search_redir_oper(cmd, env);
+	// }
 
 // cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextra

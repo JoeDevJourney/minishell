@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 19:04:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:24:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	exec_command(tok, inp.env);
+	exec_command(tok, inp);
 	exit(0);
 }
 

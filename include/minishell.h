@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 18:16:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:28:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,20 @@ typedef struct s_data
 	t_oper	heredoc;			// could prob summarize all dir oper into one
 	t_oper	dir_app;			//
 	char	**env;
+	char	*home_dir;
 }			t_data;
 
 //	Execution
-int		exec_command(char **str, char **env);
+int		exec_command(char **str, t_data inp);
 int		exec_pipes(t_data inp);
-int		fork_command(char **cmd, char **env);
+int		fork_command(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);
+int		*search_redir_oper(char **cmd);
 
 //	Builtins
-int		search_builtins(char **cmd, char **env);
+int		search_builtins(char **cmd, t_data inp);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
 

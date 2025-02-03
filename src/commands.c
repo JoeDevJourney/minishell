@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 19:30:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:28:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 // 	struct dirent	*entry;
 // 	DIR				*dir;
 // 	char			**path;
-
+//
 // 	path = ft_split(getenv("PATH"), ':');
 // 	if (!path)
 // 	{
@@ -96,24 +96,31 @@ static char	*join_cmd(char **arr)
  * @param str command to be executed, broken down in tokens.
  * @note It can handle the command being a str or an array of str.
  */
-int	exec_command(char **str, char **env)
+int	exec_command(char **str, t_data inp)
 {
 	char	**cmd;
 	char	*input;
 	int		res;
+	int		*fd;
 
 	// TODO: double quotes handling
 	input = join_cmd(str);
 	cmd = ft_split(input, ' ');
-	res = search_builtins(cmd, env);  				//(cmd, env) ??
+	fd = search_redir_oper(cmd);
+	res = search_builtins(cmd, inp);
 	if (res == -2)
-		res = exec_external(cmd, env);
+		res = exec_external(cmd, inp.env);
 	free_array (cmd);
 	free (input);
+	dup2(fd[1], fd[0]);
+	close(fd[0]);
 	return (res);
 }
 
-int	fork_command(char **cmd, char **env)
+/**
+ * @brief Creates the child process for a single command
+ */
+int	fork_command(t_data inp)
 {
 	pid_t	pid;
 	int		status;
@@ -121,14 +128,14 @@ int	fork_command(char **cmd, char **env)
 	pid = fork();
 	if (pid == 0)
 	{
-		exec_command(cmd, env);
+		exec_command(inp.pipe.cmd, inp);
 		exit (0);
 	}
 	else if (pid > 0)
 	{
 		wait(&status);
-		if(WIFEXITED(status))
-			return(WEXITSTATUS(status));
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
 		else
 			return (-1);
 	}

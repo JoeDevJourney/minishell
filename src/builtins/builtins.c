@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 17:06:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 17:30:32 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,23 @@ static int	exec_builtin(char **cmd, char **env)
 	return (0);
 }
 
-int	search_builtins(char **cmd, char **env)
+int	search_builtins(char **cmd, t_data inp)
 {
 	struct dirent	*entry;
 	DIR				*builtins_dir;
-	char 			*obj;
-	char 			*path;
+	char			*obj;
+	char			*path;
 
 	obj = ft_strjoin(*cmd, ".o");
-	path = ft_strjoin(getenv("PWD"), "/obj/");			// This won't work when exec a builtin from a
-	builtins_dir = opendir(path);						// dir different than the project's home.
+	path = ft_strjoin(inp.home_dir, "/obj/");
+	builtins_dir = opendir(path);
 	if (!builtins_dir)
-	{
-		perror("Builtins failed\n");
-		return (errno);
-	}
+		return (perror("Builtins failed\n"), errno);
 	entry = readdir(builtins_dir);
 	while (entry)
 	{
 		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*cmd)))
-			return(exec_builtin(cmd, env));
+			return (exec_builtin(cmd, inp.env));
 		entry = readdir(builtins_dir);
 	}
 	closedir(builtins_dir);
