@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 17:28:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:37:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,19 @@
 static int	exec_external(char **argv, char **envp)
 {
 	// char	*exec;
-	char	*temp;
 
 	expansion_oper(argv);
+
 	// exec = ft_strjoin(path_to_exec(*argv), "/");
 	// temp = ft_strjoin(exec, *argv);
 	// free(*argv);
 	// *argv = ft_strdup(temp);
+
+	char	*temp;
 	temp = ft_strdup(*argv);
 	free(*argv);
 	*argv = ft_strjoin("/bin/", temp);
+
 	if (execve(*argv, argv, envp) == -1)
 	{
 		perror("execve failed");
@@ -68,7 +71,7 @@ static int	exec_external(char **argv, char **envp)
 	return (0);
 }
 
-static char	*join_cmd(char **arr)
+char	*join_cmd(char **arr)
 {
 	char	*temp;
 	char	*line;
@@ -106,7 +109,13 @@ int	exec_command(char **str, t_data inp)
 	// TODO: double quotes handling
 	input = join_cmd(str);
 	cmd = ft_split(input, ' ');
+
+	// split2("<")
+
 	fd = search_redir_oper(cmd);
+	// while (*cmd)
+	// 	printf("cmd: \'%s\'\n", *cmd++);
+	// pause();
 	res = search_builtins(cmd, inp);
 	if (res == -2)
 		res = exec_external(cmd, inp.env);
@@ -114,6 +123,7 @@ int	exec_command(char **str, t_data inp)
 	free (input);
 	dup2(fd[1], fd[0]);
 	close(fd[0]);
+	free(fd);
 	return (res);
 }
 

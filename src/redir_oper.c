@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 17:21:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:39:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,10 @@ static int	*inp_oper(char **cmd)
 	char	*filename;
 	char	**ptr;
 
-	ptr = cmd;
-	while (*ptr)
-	{
-		if (!ft_strncmp(*ptr, "<", ft_strlen(*ptr)))
-			break ;
-		ptr++;
-	}
-	filename = ft_strdup(*++ptr);
+	filename = join_cmd(cmd);
+	ptr = ft_split2(filename, "<");
+	free(filename);
+	filename = ft_strdup(ptr[1]);
 	rm_redir_oper(cmd, "<");
 	fd = malloc(2 * sizeof(int));
 	if (!fd)
@@ -61,18 +57,21 @@ static int	*inp_oper(char **cmd)
 		return (perror("Error opening the file"), &errno);
 	fd[1] = STDIN_FILENO;
 	dup2(fd[0], fd[1]);
+	free(ptr);
 	return (fd);
 }
 
 int	*search_redir_oper(char **cmd)
 {
 	char	**ptr;
+	int		*fd;
 
 	ptr = cmd;
+	fd = NULL;
 	while (*++ptr)
 	{
 		if (!ft_strncmp(*ptr, "<", ft_strlen(*ptr)))
-			return (inp_oper(cmd));
+			fd = inp_oper(cmd);
 		// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
 		// 	out_oper();
 		// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
@@ -80,7 +79,7 @@ int	*search_redir_oper(char **cmd)
 		// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
 		// 	app_oper();
 	}
-	return (NULL);			// (??????)
+	return (fd);			// (??????)
 }
 
 // int	main(int argc, char **argv, char **env)

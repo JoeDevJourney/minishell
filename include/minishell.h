@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 17:28:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:05:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int		exec_pwd(char **cmd);
 //	Utilities
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
+char	*join_cmd(char **arr);
 void	free_array(char **arr);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
