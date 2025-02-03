@@ -10,12 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	exec_pwd(char **cmd)
 {
-	// if (!ft_strncmp(cmd[1],"-L", 2))				(?)
-	// else if (!ft_strncmp(cmd[1],"-P", 2))
+	(void)cmd;
+	// if (!ft_strncmp(cmd[1],"-L", ft_strlen(cmd[1])))				(?)
+	// else if (!ft_strncmp(cmd[1],"-P", ft_strlen(cmd[1])))
 	// else
 	printf("%s\n", getenv("PWD"));
 	return (0);

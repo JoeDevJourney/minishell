@@ -14,10 +14,10 @@
 
 static int	exec_builtin(char **cmd, char **env)
 {
-	if (!ft_strncmp(*cmd, "env", 3))
+	if (!ft_strncmp(*cmd, "env", ft_strlen(*cmd)))
 		return (exec_env(env));
-	else if (!ft_strncmp(*cmd, "pwd", 3))
-		return (exec_pwd(cmd, env));
+	else if (!ft_strncmp(*cmd, "pwd", ft_strlen(*cmd)))
+		return (exec_pwd(cmd));
 	return (0);
 }
 
