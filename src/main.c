@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 13:42:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:14:52 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(void)
 
 	printf("Welcome\n");
 	inp.str = read_input();
-	while (strncmp(inp.str, "exit", 4))
+	while (strncmp(inp.str, "exit", 4) != 0)
 	{
 		inp.and.cmd = ft_split2(inp.str, "&&");
 		inp.and.num_cmd = count_substr(inp.str, "&&");
@@ -45,10 +45,15 @@ int	main(void)
 			{
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
-				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);
+				if (inp.pipe.num_cmd == 1 && ft_strcmp(inp.pipe.cmd[0], "cd") == 0)
+					inp.pipe.ret_val = ft_cd(inp.pipe.cmd);
 				else
-					inp.pipe.ret_val = externals(inp.pipe.cmd);
+				{
+					if (inp.pipe.num_cmd != 1)
+						inp.pipe.ret_val = exec_pipes(inp.pipe.num_cmd, inp.pipe.cmd);
+					else
+						inp.pipe.ret_val = externals(inp.pipe.cmd);
+				}
 				inp.or.ret_val = inp.pipe.ret_val;
 				if (!inp.or.ret_val)
 					break ;
@@ -59,6 +64,7 @@ int	main(void)
 				break ;
 			inp.and.cmd++;
 		}
+		free(inp.str);
 		inp.str = read_input();
 	}
 	// safe_free()

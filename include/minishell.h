@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 18:08:21 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 13:07:26 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strcat(char *dest, const char *src);
 int		update_env_var(const char *name, const char *value);
 int		update_pwd_vars(const char *oldpwd);
-
+int		ft_cd(char **args);
+int		ft_strcmp(const char *s1, const char *s2);
+int		add_env_var(char *new_entry);
 
 #endif

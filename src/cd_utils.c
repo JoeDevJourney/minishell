@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/31 17:06:16 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/03 14:15:28 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../include/minishell.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
@@ -58,9 +58,9 @@ char	*get_target_dir(char **args)
 	else if (ft_strcmp(args[1], "-") == 0)
 	{
 		dir = get_oldpwd_dir();
-		if (dir == NULL)
+		if (!dir)
 			return (NULL);
-		printf("s\n", dir);
+		printf("%s\n", dir);
 	}
 	else
 	{
