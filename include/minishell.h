@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 17:11:28 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 13:08:52 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,6 @@ void	safe_free(void *ptr);
 int		is_builtin(char *cmd);
 int		execute_builtin(char **args);
 int		ft_exit(char **args);
+char	*get_target_dir(char **args);
 
 #endif

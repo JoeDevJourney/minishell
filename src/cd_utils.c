@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 18:44:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 13:01:43 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,4 @@ char	*get_oldpwd_dir(void)
 	if (oldpwd == NULL)
 		ft_write_error("cd: OLDPWD not set\n");
 	return (oldpwd);
-}
-
-char	*get_target_dir(char **args)
-{
-	char	*dir;
-	char	*home;
-
-	if (args[1] != NULL && args[2] != NULL)
-		return (NULL);
-	if (args[1] == NULL)
-		dir = get_home_dir();
-	else if (ft_strcmp(args[1], "-") == 0)
-	{
-		dir = get_oldpwd_dir();
-		if (!dir)
-			return (NULL);
-		printf("%s\n", dir);
-	}
-	else
-	{
-		dir = args[1];
-		if (dir[0] == '\0')
-			return (NULL);
-	}
-	return (dir);
 }
