@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 14:00:37 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 14:50:11 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ char	*create_env_entry(const char *name, const char *value)
 	new_entry = malloc(len);
 	if (!new_entry)
 	{
-		ft_write_error("cd: malloc failed\n");
-		return (NULL);
+		perror("cd: malloc failed\n");
+		exit (EXIT_FAILURE);
 	}
 	ft_strcpy(new_entry, name);
 	ft_strcat(new_entry, "=");
@@ -34,12 +34,13 @@ char	*create_env_entry(const char *name, const char *value)
 
 int	replace_env_var(const char *name, char *new_entry)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (environ[i] != NULL)
 	{
-		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 && environ[i][ft_strlen(name)] == '=')
+		if (ft_strncmp(environ[i], name, ft_strlen(name)) == 0 \
+			&& environ[i][ft_strlen(name)] == '=')
 		{
 			environ[i] = new_entry;
 			return (0);
@@ -70,13 +71,8 @@ int	ft_cd(char **args)
 
 	oldpwd = getenv("PWD");
 	dir = get_target_dir(args);
-	if (!dir)
-		return (1);
-	if (chdir(dir) != 0)
-	{
-		perror("cd");
-		return (1);
-	}
+	if (!dir || chdir(dir) != 0)
+		return (perror("cd failed"), 1);
 	if (update_pwd_vars(oldpwd) != 0)
 		return (1);
 	return (0);
