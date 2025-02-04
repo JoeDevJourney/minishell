@@ -6,14 +6,14 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 13:58:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:43:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /**
- * @note **path needs freeing!  <---------------
+ * @note **path needs freeing!(?)  <---------------
  */
 static char	*path_to_exec(char *name)
 {
@@ -42,17 +42,17 @@ static char	*path_to_exec(char *name)
 	return (NULL);
 }
 
-static int	exec_external(char **argv, char **envp)
+static int	exec_external(t_data inp)
 {
 	char	*direct;
 	char	*full_path;
 
 	// expansion_oper(argv);
-	direct = ft_strjoin(path_to_exec(*argv), "/");
-	full_path = ft_strjoin(direct, *argv);
-	free(*argv);
-	*argv = ft_strdup(full_path);
-	if (execve(*argv, argv, envp) == -1)
+	direct = ft_strjoin(path_to_exec(*inp.redir.cmd), "/");
+	full_path = ft_strjoin(direct, *inp.redir.cmd);
+	free(*inp.redir.cmd);
+	*inp.redir.cmd = ft_strdup(full_path);
+	if (execve(*inp.redir.cmd, inp.redir.cmd, inp.env) == -1)
 		return (perror("execve failed"), errno);
 	return (free(full_path), free(direct), 0);
 }
@@ -95,15 +95,10 @@ int	exec_command(char **str, t_data inp)
 	// TODO: double quotes handling
 	input = join_cmd(str);
 	cmd = ft_split(input, ' ');
-
-	while (*cmd)
-		printf("'%s'\n", *cmd++);
-	pause();
-
-	fd = search_redir_oper(cmd);
-	res = search_builtins(cmd, inp);
+	fd = search_redir_oper(cmd, &inp);
+	res = search_builtins(inp);
 	if (res == -2)
-		res = exec_external(cmd, inp.env);
+		res = exec_external(inp);
 	free_array (cmd);
 	free (input);
 	dup2(fd[1], fd[0]);
@@ -139,6 +134,21 @@ int	handle_command(t_data inp)
 	return (0);
 }
 
-// cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c builtins/builtins.c -g -Wall -Werror -Wextra
-// ./commands ls -l
-// ./commands echo "This is a text"
+int	main(int argc, char **argv, char **env)
+{
+	t_data	inp;
+
+	(void)argc;
+	(void)argv;
+	inp.env = env;
+	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
+	inp.pipe.cmd = malloc(2 * sizeof(char *));
+	inp.pipe.cmd[0] = ft_strdup("cat -e < main.c");
+	inp.pipe.cmd[1] = NULL;
+	exec_command(inp.pipe.cmd, inp);
+	// handle_command(inp);
+	free_array(inp.pipe.cmd);
+	free(inp.home_dir);
+}
+
+// cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c redir_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c ../include/libft/src/ft_strtrim.c builtins/*.c -g -Wall -Werror -Wextra

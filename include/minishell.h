@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 13:46:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:16:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,7 @@ typedef struct s_data
 	t_oper	pipe;
 	t_oper	and;
 	t_oper	or;
-	t_oper	dir_input;			//
-	t_oper	dir_output;			//
-	t_oper	heredoc;			// could prob summarize all dir oper into one
-	t_oper	dir_app;			//
+	t_oper	redir;
 	char	**env;
 	char	*home_dir;
 }			t_data;
@@ -60,10 +57,10 @@ int		handle_command(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);
-int		*search_redir_oper(char **cmd);
+int		*search_redir_oper(char **cmd, t_data *inp);
 
 //	Builtins
-int		search_builtins(char **cmd, t_data inp);
+int		search_builtins(t_data inp);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
 

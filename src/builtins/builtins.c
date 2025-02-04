@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 17:30:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 16:21:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@ static int	exec_builtin(char **cmd, char **env)
 	return (0);
 }
 
-int	search_builtins(char **cmd, t_data inp)
+int	search_builtins(t_data inp)
 {
 	struct dirent	*entry;
 	DIR				*builtins_dir;
 	char			*obj;
 	char			*path;
 
-	obj = ft_strjoin(*cmd, ".o");
+	obj = ft_strjoin(*inp.redir.cmd, ".o");
 	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
 	if (!builtins_dir)
-		return (perror("Builtins failed\n"), errno);
+		return (perror("Builtins failed"), errno);
 	entry = readdir(builtins_dir);
 	while (entry)
 	{
-		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*cmd)))
-			return (exec_builtin(cmd, inp.env));
+		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.redir.cmd)))
+			return (exec_builtin(inp.redir.cmd, inp.env));
 		entry = readdir(builtins_dir);
 	}
 	closedir(builtins_dir);
