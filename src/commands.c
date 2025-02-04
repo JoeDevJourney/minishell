@@ -6,69 +6,53 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 19:37:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:30:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// static char	*path_to_exec(char *name)
-// {
-// 	struct dirent	*entry;
-// 	DIR				*dir;
-// 	char			**path;
-//
-// 	path = ft_split(getenv("PATH"), ':');
-// 	if (!path)
-// 	{
-// 		printf("$PATH not set\n");
-// 		return (NULL);
-// 	}
-// 	while (*path)
-// 	{
-// 		dir = opendir(*path);
-// 		if (!dir)
-// 			perror("opendir");
-// 		else
-// 		{
-// 			entry = readdir(dir);
-// 			while (entry)
-// 			{
-// 				if (!ft_strncmp(name, entry->d_name, ft_strlen(name)))
-// 					return (*path);
-// 				entry = readdir(dir);
-// 			}
-// 			closedir(dir);
-// 		}
-// 		path++;
-// 	}
-// 	// free
-// 	return (NULL);
-// }
+static char	*path_to_exec(char *name)
+{
+	struct dirent	*entry;
+	DIR				*dir;
+	char			**path;
+
+	path = ft_split(getenv("PATH"), ':');
+	if (!path)
+		return (printf("$PATH not set\n"), NULL);
+	while (*path)
+	{
+		dir = opendir(*path);
+		if (!dir)
+			return (perror("opendir failed"), NULL);
+		entry = readdir(dir);
+		while (entry)
+		{
+			if (!ft_strncmp(name, entry->d_name, ft_strlen(entry->d_name)))
+				return (closedir(dir), *path);
+			entry = readdir(dir);
+		}
+		closedir(dir);
+		path++;
+	}
+	// free()
+	return (NULL);
+}
 
 static int	exec_external(char **argv, char **envp)
 {
-	// char	*exec;
+	char	*direct;
+	char	*full_path;
 
-	expansion_oper(argv);
-
-	// exec = ft_strjoin(path_to_exec(*argv), "/");
-	// temp = ft_strjoin(exec, *argv);
-	// free(*argv);
-	// *argv = ft_strdup(temp);
-
-	char	*temp;
-	temp = ft_strdup(*argv);
+	// expansion_oper(argv);
+	direct = ft_strjoin(path_to_exec(*argv), "/");
+	full_path = ft_strjoin(direct, *argv);
 	free(*argv);
-	*argv = ft_strjoin("/bin/", temp);
-
+	*argv = ft_strdup(full_path);
 	if (execve(*argv, argv, envp) == -1)
-	{
-		perror("execve failed");
-		return (errno);
-	}
-	// return(free(temp), free(exec), 0);
-	return (0);
+		return (perror("execve failed"), errno);
+	return(free(full_path), free(direct), 0);
 }
 
 char	*join_cmd(char **arr)
@@ -154,11 +138,6 @@ int	fork_command(t_data inp)
 	return (0);
 }
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	exec_command(++argv, env);
-// }
 // cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c expansion_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c builtins/builtins.c -g -Wall -Werror -Wextra
 // ./commands ls -l
 // ./commands echo "This is a text"
