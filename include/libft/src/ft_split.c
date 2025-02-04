@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:02:02 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 17:42:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:54:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-static size_t	str_count(char const *s, char c)
+size_t	str_count(char const *s, char c)
 {
 	size_t	res;
 	int		in_word;

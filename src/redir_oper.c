@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 19:39:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:53:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,11 @@ static int	*inp_oper(char **cmd)
 	char	**ptr;
 
 	filename = join_cmd(cmd);
-	ptr = ft_split2(filename, "<");
+	ptr = ft_split(filename, '<');
 	free(filename);
 	filename = ft_strdup(ptr[1]);
 	rm_redir_oper(cmd, "<");
-	fd = malloc(2 * sizeof(int));
-	if (!fd)
-		return (NULL);
+	fd = safe_malloc(2 * sizeof(int));
 	fd[0] = open(filename, O_RDONLY);
 	if (fd[0] == -1)
 		return (perror("Error opening the file"), &errno);

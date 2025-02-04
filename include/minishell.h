@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 19:05:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:46:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ typedef struct s_data
 
 //	Execution
 int		exec_command(char **str, t_data inp);
-int		exec_pipes(t_data inp);
-int		fork_command(t_data inp);
+int		handle_pipes(t_data inp);
+int		handle_command(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);

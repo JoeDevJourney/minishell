@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 19:32:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:46:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
  * @param num Number of commands
  * @param cmd Commands broken down in an array of str
  */
-// int	exec_pipes(int num, char **cmd)
-int	exec_pipes(t_data inp)
+// int	handle_pipes(int num, char **cmd)
+int	handle_pipes(t_data inp)
 {
 	pid_t	*pid;
 	int		**p_fd;
@@ -131,7 +131,7 @@ int	exec_pipes(t_data inp)
 
 // int	main(int argc, char **argv)
 // {
-// 	exec_pipes(--argc, ++argv);
+// 	handle_pipes(--argc, ++argv);
 // 	return (0);
 // }
 // ./pipex "ls -1" "cat -n"

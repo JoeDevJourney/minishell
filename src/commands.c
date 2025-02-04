@@ -6,12 +6,15 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 13:30:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:58:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+/**
+ * @note **path needs freeing!  <---------------
+ */
 static char	*path_to_exec(char *name)
 {
 	struct dirent	*entry;
@@ -33,10 +36,9 @@ static char	*path_to_exec(char *name)
 				return (closedir(dir), *path);
 			entry = readdir(dir);
 		}
-		closedir(dir);
+		closedir (dir);
 		path++;
 	}
-	// free()
 	return (NULL);
 }
 
@@ -52,7 +54,7 @@ static int	exec_external(char **argv, char **envp)
 	*argv = ft_strdup(full_path);
 	if (execve(*argv, argv, envp) == -1)
 		return (perror("execve failed"), errno);
-	return(free(full_path), free(direct), 0);
+	return (free(full_path), free(direct), 0);
 }
 
 char	*join_cmd(char **arr)
@@ -94,12 +96,11 @@ int	exec_command(char **str, t_data inp)
 	input = join_cmd(str);
 	cmd = ft_split(input, ' ');
 
-	// split2("<")
+	while (*cmd)
+		printf("'%s'\n", *cmd++);
+	pause();
 
 	fd = search_redir_oper(cmd);
-	// while (*cmd)
-	// 	printf("cmd: \'%s\'\n", *cmd++);
-	// pause();
 	res = search_builtins(cmd, inp);
 	if (res == -2)
 		res = exec_external(cmd, inp.env);
@@ -114,7 +115,7 @@ int	exec_command(char **str, t_data inp)
 /**
  * @brief Creates the child process for a single command
  */
-int	fork_command(t_data inp)
+int	handle_command(t_data inp)
 {
 	pid_t	pid;
 	int		status;
