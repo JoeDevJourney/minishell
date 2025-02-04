@@ -6,13 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/03 17:11:31 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 17:53:42 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-extern char	**environ;
 
 char	*ft_strcpy(char *dest, const char *src)
 {
@@ -46,27 +44,27 @@ char	*ft_strcat(char *dest, const char *src)
 	return (dest);
 }
 
-int	update_pwd_vars(const char *oldpwd)
+int	update_pwd_vars(char **env, const char *oldpwd)
 {
 	char	cwd[PATH_MAX];
 
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (1);
-	if (update_env_var("PWD", cwd) != 0)
+	if (update_env_var(env, "PWD", cwd) != 0)
 		return (1);
-	if (oldpwd != NULL && update_env_var("OLDPWD", oldpwd) != 0)
+	if (oldpwd != NULL && update_env_var(env, "OLDPWD", oldpwd) != 0)
 		return (1);
 	return (0);
 }
 
-int	add_env_var(char *new_entry)
+int	add_env_var(char **env, char *new_entry)
 {
 	int		i;
 	int		j;
 	char	**new_environ;
 
 	i = 0;
-	while (environ[i] != NULL)
+	while (env[i] != NULL)
 		i++;
 	new_environ = malloc((i + 2) * sizeof(char *));
 	if (!new_environ)
@@ -78,12 +76,12 @@ int	add_env_var(char *new_entry)
 	j = 0;
 	while (j < i)
 	{
-		new_environ[j] = environ[j];
+		new_environ[j] = env[j];
 		j++;
 	}
 	new_environ[i] = new_entry;
 	new_environ[i + 1] = NULL;
-	environ = new_environ;
+	env = new_environ;
 	return (0);
 }
 

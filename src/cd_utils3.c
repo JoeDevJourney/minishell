@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:10:49 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 13:24:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 18:28:53 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	execute_builtin(char **args)
+int	execute_builtin(char **env, char **args)
 {
 	char	*builtins[3];
 	int		i;
@@ -43,7 +43,7 @@ int	execute_builtin(char **args)
 		i++;
 	}
 	if (ft_strcmp(builtins[i], "cd") == 0)
-		return (ft_cd(args));
+		return (ft_cd(env, args));
 	else if (ft_strcmp(builtins[i], "exit") == 0)
 		return (ft_exit(args));
 	return (127);

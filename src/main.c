@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 13:55:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 18:19:11 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,42 +104,42 @@ void print_env_vars(void) {
     printf("----------------------------\n");
 }
 
-int main(void) {
-    char *input;
-    char *args[10]; // Array für Argumente
-    char *token;
-    int i;
+// int main(void) {
+//     char *input;
+//     char *args[10]; // Array für Argumente
+//     char *token;
+//     int i;
 
-    printf("=== Test-Suite für cd ===\n");
+//     printf("=== Test-Suite für cd ===\n");
 
-    while (1) {
-        input = read_input();
-        if (!input || strcmp(input, "exit") == 0) {
-            safe_free(input);
-            break;
-        }
+//     while (1) {
+//         input = read_input();
+//         if (!input || strcmp(input, "exit") == 0) {
+//             safe_free(input);
+//             break;
+//         }
 
-        // Parse die Eingabe in Argumente
-        i = 0;
-        token = strtok(input, " ");
-        while (token != NULL && i < 9) {
-            args[i++] = token;
-            token = strtok(NULL, " ");
-        }
-        args[i] = NULL;
+//         // Parse die Eingabe in Argumente
+//         i = 0;
+//         token = strtok(input, " ");
+//         while (token != NULL && i < 9) {
+//             args[i++] = token;
+//             token = strtok(NULL, " ");
+//         }
+//         args[i] = NULL;
 
-        // Führe cd aus
-        if (args[0] && strcmp(args[0], "cd") == 0) {
-            int ret = ft_cd(args);
-            printf("Return-Code: %d\n", ret);
-            print_env_vars();
-        } else {
-            printf("Unbekannter Befehl: %s\n", args[0]);
-        }
+//         // Führe cd aus
+//         if (args[0] && strcmp(args[0], "cd") == 0) {
+//             int ret = ft_cd(args);
+//             printf("Return-Code: %d\n", ret);
+//             print_env_vars();
+//         } else {
+//             printf("Unbekannter Befehl: %s\n", args[0]);
+//         }
 
-        safe_free(input);
-    }
+//         safe_free(input);
+//     }
 
-    printf("Test beendet.\n");
-    return 0;
-}
+//     printf("Test beendet.\n");
+//     return 0;
+// }

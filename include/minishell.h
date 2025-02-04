@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 13:08:52 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/04 18:29:07 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,14 @@ char	*get_oldpwd_dir(void);
 char	*get_target_dir(char **args);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strcat(char *dest, const char *src);
-int		update_env_var(const char *name, const char *value);
-int		update_pwd_vars(const char *oldpwd);
-int		ft_cd(char **args);
+int		update_env_var(char **env, const char *name, const char *value);
+int		update_pwd_vars(char **env, const char *oldpwd);
+int		ft_cd(char **env, char **args);
 int		ft_strcmp(const char *s1, const char *s2);
-int		add_env_var(char *new_entry);
+int		add_env_var(char **env, char *new_entry);
 void	safe_free(void *ptr);
 int		is_builtin(char *cmd);
-int		execute_builtin(char **args);
+int		execute_builtin(char **env, char **args);
 int		ft_exit(char **args);
 char	*get_target_dir(char **args);
 
