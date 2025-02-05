@@ -6,32 +6,44 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 15:07:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:43:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+static int	*out_oper(t_data *inp)
+{
+	int		*fd;
+	char	**tok;
+
+	tok = ft_split(*inp->pipe.cmd, '>');
+	inp->redir.cmd = ft_split(*tok, ' ');
+	inp->redir.num_cmd = str_count(*tok, ' ');
+	fd = safe_malloc(2 * sizeof(int));
+	fd[0] = open(tok[str_count(*inp->pipe.cmd, '>') - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd[0] == -1)
+		return (perror("Error opening the file"), &errno);
+	fd[1] = STDOUT_FILENO;
+	dup2(fd[0], fd[1]);
+	return (free_array(tok), fd);
+}
+
 static int	*inp_oper(t_data *inp)
 {
 	int		*fd;
-	// char	*temp;
-	char	*filename;
 	char	**ptr;
 
-	fd = NULL;
-	// temp = join_cmd(cmd);
 	ptr = ft_split(*inp->pipe.cmd, '<');
-	filename = ft_strjoin(ptr[0], ptr[str_count(*inp->pipe.cmd, '<') - 1]);
-	inp->redir.cmd = ft_split(filename, ' ');
-	inp->redir.num_cmd = str_count(filename, ' ');
+	inp->redir.cmd = ft_split(*ptr, ' ');
+	inp->redir.num_cmd = str_count(*ptr, ' ');
 	fd = safe_malloc(2 * sizeof(int));
-	fd[0] = open(inp->redir.cmd[inp->redir.num_cmd - 1], O_RDONLY);
+	fd[0] = open(ft_strtrim(ptr[str_count(*inp->pipe.cmd, '<') - 1], " "), O_RDONLY);
 	if (fd[0] == -1)
 		return (perror("Error opening the file"), &errno);
 	fd[1] = STDIN_FILENO;
 	dup2(fd[0], fd[1]);
-	return (free(filename), free_array(ptr), fd);
+	return (free_array(ptr), fd);
 }
 
 int	*search_redir_oper(t_data *inp)
@@ -40,8 +52,8 @@ int	*search_redir_oper(t_data *inp)
 
 	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
 		fd = inp_oper(inp);
-	// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
-	// 	out_oper();
+	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
+		fd = out_oper(inp);
 	// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
 	// 	heredoc_oper();
 	// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
