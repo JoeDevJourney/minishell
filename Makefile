@@ -11,7 +11,7 @@ LIBFTDIR = ./include/libft
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c $(SRCDIR)/functions.c\
 		$(SRCDIR)/expansion_oper.c $(SRCDIR)/cd_main.c $(SRCDIR)/cd_utils.c $(SRCDIR)/cd_utils2.c\
-		$(SRCDIR)/cd_utils3.c 
+		$(SRCDIR)/cd_utils3.c
 # $(SRCDIR)/handlers.c
 
 

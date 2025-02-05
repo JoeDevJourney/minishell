@@ -6,50 +6,40 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 18:53:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 12:37:08 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	is_valid_env_name(const char *name)
-{
-	if (!name || !(*name == '_' || ft_isalpha(*name)))
-		return (0);
-	while (*name && *name != '=')
-	{
-		if (!ft_isalnum(*name) && *name != '_')
-			return (0);
-		name++;
-	}
-	return (1);
-}
+// static int	is_valid_env_name(const char *name)
+// {
+// 	int	i;
 
-static void	print_exported_vars(char **env)
-{
-	int	i;
+// 	if (!name || !*name || (ft_isdigit(*name) && *name != '_'))
+// 		return (0);
+// 	i = 0;
+// 	while (name[i] && name[i] != '=')
+// 	{
+// 		if (!ft_isalnum(name[i]) && name[i] != '_')
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
-	i = 0;
-	while (env[i])
-	{
-		printf("declare -x %s\n", env[i]);
-		i++;
-	}
-}
+// static void	print_sorted_env(char **env)
+// {
+// 	char	**copy;
+// 	int		i;
+// 	int		size;
 
-int	ft_export(char **env, char **args)
-{
-	int		status;
-	char	*arg;
-	char	*name;
-	int		i;
-
-	status = 0;
-	if (args[1])
-		return (print_exported_vars(env), 0);
-	i = 1;
-	while ((arg = args[i++]))
-	{
-		name = ft_substr(arg, 0, ft_strchr(arg, '='))
-	}
-}
+// 	size = 0;
+// 	while (env[size])
+// 		size++;
+// 	copy = malloc((size + 1) * sizeof(char *));
+// 	if (!copy)
+// 		return (perror("malloc error"));
+// 	i = -1;
+	
+// }
