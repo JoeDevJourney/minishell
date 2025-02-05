@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 17:43:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:28:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,33 @@ static int	*inp_oper(char **cmd, t_data *inp)
 	return (free(filename), free_array(ptr), free(temp), fd);
 }
 
+static char	**dupl_arr(char **arr)
+{
+	char	**new_arr;
+	int		i;
+	int		count;
+
+	count = 0;
+	while (arr[count])
+		count++;
+	new_arr = safe_malloc((count + 1) * sizeof(char *));
+	i = 0;
+	while (i < count)
+	{
+		new_arr[i] = strdup(arr[i]);
+		if (!new_arr[i])
+		{
+			while (--i >= 0)
+				free(new_arr[i]);
+			free(new_arr);
+			return (NULL);
+		}
+		i++;
+	}
+	new_arr[i] = NULL;
+	return (new_arr);
+}
+
 int	*search_redir_oper(char **cmd, t_data *inp)
 {
 	char	**ptr;
@@ -48,14 +75,6 @@ int	*search_redir_oper(char **cmd, t_data *inp)
 			fd = inp_oper(cmd, inp);
 			break ;
 		}
-		// else
-		// {
-		// 	while (*cmd)
-		// 	{
-		// 		*inp->redir.cmd = *cmd;
-		// 		inp->redir.cmd
-		// 	}
-
 		// }
 		// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
 		// 	out_oper();
@@ -63,6 +82,8 @@ int	*search_redir_oper(char **cmd, t_data *inp)
 		// 	heredoc_oper();
 		// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
 		// 	app_oper();
+		else
+			inp->redir.cmd = dupl_arr(cmd);
 	}
 	return (fd);			// (??????)
 }

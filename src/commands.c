@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 17:43:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:31:34 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,21 +134,20 @@ int	handle_command(t_data inp)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **env)
-{
-	t_data	inp;
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_data	inp;
 
-	(void)argc;
-	(void)argv;
-	inp.env = env;
-	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
-	inp.pipe.cmd = malloc(2 * sizeof(char *));
-	inp.pipe.cmd[0] = ft_strdup("cat -e < main.c");
-	inp.pipe.cmd[1] = NULL;
-	exec_command(inp.pipe.cmd, inp);
-	// handle_command(inp);
-	free_array(inp.pipe.cmd);
-	free(inp.home_dir);
-}
-
+// 	(void)argc;
+// 	(void)argv;
+// 	inp.env = env;
+// 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
+// 	inp.pipe.cmd = malloc(2 * sizeof(char *));
+// 	inp.pipe.cmd[0] = ft_strdup("cat -e main.c");
+// 	inp.pipe.cmd[1] = NULL;
+// 	exec_command(inp.pipe.cmd, inp);
+// 	// handle_command(inp);
+// 	free_array(inp.pipe.cmd);
+// 	free(inp.home_dir);
+// }
 // cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c redir_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c ../include/libft/src/ft_strtrim.c builtins/*.c -g -Wall -Werror -Wextra
