@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 18:43:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 20:04:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,24 @@ static int	*out_oper(t_data *inp)
 {
 	int		*fd;
 	char	**tok;
+	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '>');
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
-	fd = safe_malloc(2 * sizeof(int));
-	fd[0] = open(tok[str_count(*inp->pipe.cmd, '>') - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd[0] == -1)
-		return (perror("Error opening the file"), &errno);
-	fd[1] = STDOUT_FILENO;
-	dup2(fd[0], fd[1]);
+	fd = safe_malloc(str_count(*inp->pipe.cmd, '>') * sizeof(int));
+	i = -1;
+	while (++i < (int)str_count(*inp->pipe.cmd, '>') - 1)
+	{
+		fd[i] = open(ft_strtrim(tok[i + 1], " "),
+				O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd[i] == -1)
+			return (perror("Error opening the file"), &errno);
+		if (i < (int)str_count(*inp->pipe.cmd, '>') - 2)
+			close(fd[i]);
+	}
+	fd[i] = STDOUT_FILENO;
+	dup2(fd[i - 1], fd[i]);
 	return (free_array(tok), fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 16:19:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 20:16:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	exec_command(t_data inp)
 {
 	int	res;
 	int	*fd;
+	int	i;
 
 	// input = join_cmd(str);				//
 	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
@@ -97,8 +98,11 @@ int	exec_command(t_data inp)
 	res = search_builtins(inp);
 	if (res == -2)
 		res = exec_external(inp);
-	dup2(fd[1], fd[0]);
-	close(fd[0]);
+	i = 0;
+	while (fd[i])
+		i++;
+	dup2(fd[i], fd[i - 1]);
+	close(fd[i - 1]);
 	free(fd);
 	return (res);
 }
@@ -139,10 +143,10 @@ int	handle_command(t_data inp)
 // 	inp.env = env;
 // 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
 // 	inp.pipe.cmd = malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("cat -e main.c ../Makefile");
+// 	inp.pipe.cmd[0] = ft_strdup("ls -l > ../out > ../out1");
 // 	inp.pipe.cmd[1] = NULL;
-// 	exec_command(inp);
-// 	// handle_command(inp);
+// 	// exec_command(inp);
+// 	handle_command(inp);
 // 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);
 // }
