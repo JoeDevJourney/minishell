@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 18:29:07 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:30:20 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <errno.h>
 # include <string.h>
 # include <limits.h>
+# include <dirent.h>
 
 typedef struct s_oper
 {
@@ -42,23 +43,37 @@ typedef struct s_oper
 
 typedef struct s_data
 {
+	char	*home_dir;
+	char	**env;
 	char	*str;
-	t_oper	pipe;
 	t_oper	and;
 	t_oper	or;
-	t_oper	dir_input;			//
-	t_oper	dir_output;			//
-	t_oper	heredoc;			// could prob summarize all dir oper into one
-	t_oper	dir_app;			//
+	t_oper	pipe;
+	t_oper	redir;		
 }			t_data;
 
+//	Execution
+int		exec_command(t_data inp);
+int		handle_pipes(t_data inp);
+int		handle_command(t_data inp);
+
+//	Operators
+void	expansion_oper(char **arr);
+int		*search_redir_oper(t_data *inp);
+
+//	Builtins
+int		search_builtins(t_data inp);
+int		exec_env(char **env);
+int		exec_pwd(char **cmd);
+
+//	Utilities
 char	**ft_split2(const char *s, const char *delim);
 size_t	count_substr(const char *s, const char *delim);
-int		externals(char **str);
-int		exec_pipes(int num, char **cmd);
+char	*join_cmd(char **arr);
+void	free_array(char **arr);
 void	*safe_malloc(size_t size);
-char	*relative_wd(char *dir);
-void	expansion_oper(char **arr);
+char	*rwd(char *dir);
+
 int		ft_strcmp(const char *s1, const char *s2);
 void	ft_write_error(const char *msg);
 char	*get_home_dir(void);

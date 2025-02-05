@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 17:54:26 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:57:46 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	*create_env_entry(const char *name, const char *value)
 {

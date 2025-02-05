@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 13:01:43 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:57:52 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/30 18:57:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:22:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,22 @@ void	*safe_malloc(size_t size)
 	return (ptr);
 }
 
-char	*relative_wd(char *dir)
+void	free_array(char **arr)
+{
+	char	**temp;
+
+	temp = arr;
+	while (*temp)
+		free(*temp++);
+	free (arr);
+	arr = NULL;
+}
+
+/**
+ * @brief Returns the relative wd
+ * @note Used when printing the terminal prompt.
+ */
+char	*rwd(char *dir)
 {
 	char	*ptr;
 
@@ -34,4 +49,29 @@ char	*relative_wd(char *dir)
 	while (ptr-- && *ptr != '/')
 		ptr--;
 	return (++ptr);
+}
+
+/**
+ * @brief Searches the **arr for the '$' to replace the environmental key
+ * with its corresponding value
+ */
+void	expansion_oper(char **arr)
+{
+	char	**ptr;
+	char	*val;
+
+	ptr = arr;
+	while (*ptr)
+	{
+		if (ft_strchr(*ptr, '$'))
+		{
+			val = getenv(ft_strchr(*ptr, '$') + 1);
+			free(*ptr);
+			if (val)
+				*ptr = ft_strdup(val);
+			else
+				*ptr = NULL;
+		}
+		ptr++;
+	}
 }

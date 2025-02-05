@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 15:43:18 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 17:09:36 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static int	is_valid_env_name(const char *name)
 {
@@ -56,17 +56,45 @@ static void	print_sorted_env(char **env)
 	free(copy);
 }
 
-int	ft_export(char **env, char **args)
+int	process_export_argument(char **env, char *arg)
 {
 	char	*name;
 	char	*value;
-	int		i;
 
+	value = ft_strchr(arg, '=');
+	if (value)
+	{
+		name = ft_substr(arg, 0, value - arg);
+		value++;
+	}
+	else
+	{
+		name = ft_strdup(arg);
+		value = "";
+	}
+	if (update_env_var(env, name, value) != 0)
+	{
+		free(name);
+		return (1);
+	}
+	free(name);
+	return (0);
+}
+
+int	ft_export(char **env, char **args)
+{
+	int	i;
+
+	i = 1;
 	if (!args[1])
 		return (print_sorted_env(env), 0);
-	i = 1;
 	while (args[i])
 	{
-		if (!is_valid_env_name(args))
+		if (!is_valid_env_name(args[i]))
+			return (ft_write_error("export error"), 1);
+		if (process_export_argument(env, args[i]) != 0)
+			return (1);
+		i++;
 	}
+	return (0);
 }

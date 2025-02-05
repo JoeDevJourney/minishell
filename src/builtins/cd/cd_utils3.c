@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 15:10:49 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 11:28:44 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:58:05 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	is_builtin(char *cmd)
 {

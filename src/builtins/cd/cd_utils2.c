@@ -6,11 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 12:35:47 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 16:57:59 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	*ft_strcpy(char *dest, const char *src)
 {
