@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 13:46:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:02:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
 {
-	char	*tok[2];
-
-	tok[0] = *inp.pipe.cmd;
-	tok[1] = NULL;
 	if (*new_fd == STDOUT_FILENO)
 	{
 		dup2(old_fd[1], *new_fd);
@@ -36,7 +32,7 @@ static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	exec_command(tok, inp);
+	exec_command(inp);
 	exit(0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/04 16:16:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:26:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ typedef struct s_oper
 
 typedef struct s_data
 {
+	char	*home_dir;
+	char	**env;
 	char	*str;
-	t_oper	pipe;
 	t_oper	and;
 	t_oper	or;
+	t_oper	pipe;
 	t_oper	redir;
-	char	**env;
-	char	*home_dir;
 }			t_data;
 
 //	Execution
-int		exec_command(char **str, t_data inp);
+int		exec_command(t_data inp);
 int		handle_pipes(t_data inp);
 int		handle_command(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);
-int		*search_redir_oper(char **cmd, t_data *inp);
+int		*search_redir_oper(t_data *inp);
 
 //	Builtins
 int		search_builtins(t_data inp);

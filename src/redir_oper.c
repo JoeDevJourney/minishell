@@ -6,23 +6,23 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 13:28:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:07:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	*inp_oper(char **cmd, t_data *inp)
+static int	*inp_oper(t_data *inp)
 {
 	int		*fd;
-	char	*temp;
+	// char	*temp;
 	char	*filename;
 	char	**ptr;
 
 	fd = NULL;
-	temp = join_cmd(cmd);
-	ptr = ft_split(temp, '<');
-	filename = ft_strjoin(ptr[0], ptr[str_count(temp, '<') - 1]);
+	// temp = join_cmd(cmd);
+	ptr = ft_split(*inp->pipe.cmd, '<');
+	filename = ft_strjoin(ptr[0], ptr[str_count(*inp->pipe.cmd, '<') - 1]);
 	inp->redir.cmd = ft_split(filename, ' ');
 	inp->redir.num_cmd = str_count(filename, ' ');
 	fd = safe_malloc(2 * sizeof(int));
@@ -31,61 +31,28 @@ static int	*inp_oper(char **cmd, t_data *inp)
 		return (perror("Error opening the file"), &errno);
 	fd[1] = STDIN_FILENO;
 	dup2(fd[0], fd[1]);
-	return (free(filename), free_array(ptr), free(temp), fd);
+	return (free(filename), free_array(ptr), fd);
 }
 
-static char	**dupl_arr(char **arr)
+int	*search_redir_oper(t_data *inp)
 {
-	char	**new_arr;
-	int		i;
-	int		count;
-
-	count = 0;
-	while (arr[count])
-		count++;
-	new_arr = safe_malloc((count + 1) * sizeof(char *));
-	i = 0;
-	while (i < count)
-	{
-		new_arr[i] = strdup(arr[i]);
-		if (!new_arr[i])
-		{
-			while (--i >= 0)
-				free(new_arr[i]);
-			free(new_arr);
-			return (NULL);
-		}
-		i++;
-	}
-	new_arr[i] = NULL;
-	return (new_arr);
-}
-
-int	*search_redir_oper(char **cmd, t_data *inp)
-{
-	char	**ptr;
 	int		*fd;
 
-	ptr = cmd;
-	fd = NULL;
-	while (*++ptr)
+	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
+		fd = inp_oper(inp);
+	// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
+	// 	out_oper();
+	// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
+	// 	heredoc_oper();
+	// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
+	// 	app_oper();
+	else
 	{
-		if (!ft_strncmp(*ptr, "<", ft_strlen(*ptr)))
-		{
-			fd = inp_oper(cmd, inp);
-			break ;
-		}
-		// }
-		// else if (!ft_strncmp(*ptr, ">", ft_strlen(*ptr)))
-		// 	out_oper();
-		// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
-		// 	heredoc_oper();
-		// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
-		// 	app_oper();
-		else
-			inp->redir.cmd = dupl_arr(cmd);
+		fd = NULL;
+		inp->redir.cmd = ft_split(*inp->pipe.cmd, ' ');
+		inp->redir.num_cmd = str_count(*inp->pipe.cmd, ' ');
 	}
-	return (fd);			// (??????)
+	return (fd);
 }
 
 // int	main(int argc, char **argv, char **env)
