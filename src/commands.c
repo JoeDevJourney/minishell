@@ -82,28 +82,18 @@ char	*join_cmd(char **arr)
 
 /**
  * @brief Handles all execution, both externals and builtins
- * @param str command to be executed, broken down in tokens.
- * @note It can handle the command being a str or an array of str.
  */
 int	exec_command(t_data inp)
 {
 	int	res;
-	int	*fd;
-	int	i;
 
 	// input = join_cmd(str);				//
 	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
-
-	fd = search_redir_oper(&inp);
+	search_redir_oper(&inp);
 	res = search_builtins(inp);
 	if (res == -2)
 		res = exec_external(inp);
-	i = 0;
-	while (fd[i])
-		i++;
-	dup2(fd[i], fd[i - 1]);
-	close(fd[i - 1]);
-	free(fd);
+	free_array(inp.redir.cmd);		// for custom main freeing
 	return (res);
 }
 
@@ -143,11 +133,17 @@ int	handle_command(t_data inp)
 // 	inp.env = env;
 // 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
 // 	inp.pipe.cmd = malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("ls -l > ../out > ../out1");
+// 	if (!inp.pipe.cmd)
+// 		return(0);
+// 	inp.pipe.cmd[0] = ft_strdup("env");
 // 	inp.pipe.cmd[1] = NULL;
 // 	// exec_command(inp);
 // 	handle_command(inp);
-// 	free_array(inp.pipe.cmd);
+// 	free(inp.pipe.cmd[0]);
+// 	inp.pipe.cmd[0] = NULL;
+// 	free(inp.pipe.cmd);
+// 	inp.pipe.cmd = NULL;
 // 	free(inp.home_dir);
+// 	inp.home_dir = NULL;
 // }
 // cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c redir_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c ../include/libft/src/ft_strtrim.c builtins/*.c ../include/libft/src/ft_strnstr.c -g -Wall -Werror -Wextra

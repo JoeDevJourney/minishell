@@ -37,9 +37,8 @@ int	search_builtins(t_data inp)
 	while (entry)
 	{
 		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.redir.cmd)))
-			return (exec_builtin(inp.redir.cmd, inp.env));
+			return (free(obj), free(path), closedir(builtins_dir), exec_builtin(inp.redir.cmd, inp.env));
 		entry = readdir(builtins_dir);
 	}
-	closedir(builtins_dir);
-	return (-2);
+	return (closedir(builtins_dir), free(obj), free(path), -2);
 }

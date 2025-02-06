@@ -12,22 +12,14 @@
 
 #include "../include/libft.h"
 
-unsigned long	ft_strlen(const char str[])
+unsigned long	ft_strlen(const char *str)
 {
-	const char		*ptr;
 	unsigned long	len;
 
 	if (!str)
 		return (0);
-	ptr = str;
 	len = 0;
-	if (str)
-	{
-		while (*ptr)
-		{
-			len++;
-			ptr++;
-		}
-	}
+	while (*str++)
+		len++;
 	return (len);
 }

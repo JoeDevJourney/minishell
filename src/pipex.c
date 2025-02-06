@@ -12,28 +12,25 @@
 
 #include "../include/minishell.h"
 
-static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
+static void	wait_n_free(int n, pid_t *pid, int **pfd)
 {
-	if (*new_fd == STDOUT_FILENO)
+	int	i;
+	int	status;
+
+	i = -1;
+	while (++i < n)
 	{
-		dup2(old_fd[1], *new_fd);
-		close (old_fd[1]);
+		if (waitpid(pid[i], &status, 0) == -1)
+		{
+			perror("Waiting child process failed");
+			exit(EXIT_FAILURE);
+		}
 	}
-	else if (*new_fd == STDIN_FILENO)
-	{
-		dup2(old_fd[0], *new_fd);
-		close (old_fd[1]);
-	}
-	else
-	{
-		close(new_fd[0]);
-		dup2(old_fd[0], STDIN_FILENO);
-		dup2(new_fd[1], STDOUT_FILENO);
-		close(new_fd[1]);
-	}
-	close(old_fd[0]);
-	exec_command(inp);
-	exit(0);
+	i = -1;
+	while (++i < n - 1)
+		free(pfd[i]);
+	free(pid);
+	free(pfd);
 }
 
 static int	**init_pipes(int n)
@@ -60,33 +57,36 @@ static int	**init_pipes(int n)
 	return (fd);
 }
 
+static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
+{
+	if (*new_fd == STDOUT_FILENO)
+	{
+		dup2(old_fd[1], *new_fd);
+		close (old_fd[1]);
+	}
+	else if (*new_fd == STDIN_FILENO)
+	{
+		dup2(old_fd[0], *new_fd);
+		close (old_fd[1]);
+	}
+	else
+	{
+		close(new_fd[0]);
+		dup2(old_fd[0], STDIN_FILENO);
+		dup2(new_fd[1], STDOUT_FILENO);
+		close(new_fd[1]);
+	}
+	close(old_fd[0]);
+	exec_command(inp);
+	exit(0);
+}
+
 static int	fork_pipe(pid_t pid, t_data inp, int *old_fd, int *new_fd)
 {
 	pid = fork();
 	if (pid == 0)
 		process_pipe(inp, old_fd, new_fd);
 	return (0);
-}
-
-static void	wait_n_free(int n, pid_t *pid, int **pfd)
-{
-	int	i;
-	int	status;
-
-	i = -1;
-	while (++i < n)
-	{
-		if (waitpid(pid[i], &status, 0) == -1)
-		{
-			perror("Waiting child process failed");
-			exit(EXIT_FAILURE);
-		}
-	}
-	i = -1;
-	while (++i < n - 1)
-		free(pfd[i]);
-	free(pid);
-	free(pfd);
 }
 
 /**

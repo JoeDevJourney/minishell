@@ -21,37 +21,44 @@ static int	*out_oper(t_data *inp)
 	tok = ft_split(*inp->pipe.cmd, '>');
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
-	fd = safe_malloc(str_count(*inp->pipe.cmd, '>') * sizeof(int));
-	i = -1;
-	while (++i < (int)str_count(*inp->pipe.cmd, '>') - 1)
+	fd = safe_malloc(2 * sizeof(int));
+	fd[0] = STDOUT_FILENO;
+	i = 0;
+	while (tok[++i])
 	{
-		fd[i] = open(ft_strtrim(tok[i + 1], " "),
+		fd[1] = open(ft_strtrim(tok[i], " "),
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd[i] == -1)
+		if (fd[1] == -1)
 			return (perror("Error opening the file"), &errno);
-		if (i < (int)str_count(*inp->pipe.cmd, '>') - 2)
-			close(fd[i]);
+		if (!tok[i + 1])
+			dup2(fd[1], fd[0]);
+		close(fd[1]);
 	}
-	fd[i] = STDOUT_FILENO;
-	dup2(fd[i - 1], fd[i]);
 	return (free_array(tok), fd);
 }
 
 static int	*inp_oper(t_data *inp)
 {
 	int		*fd;
-	char	**ptr;
+	char	**tok;
+	int		i;
 
-	ptr = ft_split(*inp->pipe.cmd, '<');
-	inp->redir.cmd = ft_split(*ptr, ' ');
-	inp->redir.num_cmd = str_count(*ptr, ' ');
+	tok = ft_split(*inp->pipe.cmd, '<');
+	inp->redir.cmd = ft_split(*tok, ' ');
+	inp->redir.num_cmd = str_count(*tok, ' ');
 	fd = safe_malloc(2 * sizeof(int));
-	fd[0] = open(ft_strtrim(ptr[str_count(*inp->pipe.cmd, '<') - 1], " "), O_RDONLY);
-	if (fd[0] == -1)
-		return (perror("Error opening the file"), &errno);
-	fd[1] = STDIN_FILENO;
-	dup2(fd[0], fd[1]);
-	return (free_array(ptr), fd);
+	fd[0] = STDIN_FILENO;
+	i = 0;
+	while (tok[++i])
+	{
+		fd[1] = open(ft_strtrim(tok[i], " "), O_RDONLY);
+		if (fd[1] == -1)
+			return (perror("Error opening the file"), &errno);
+		if (!tok[i + 1])
+			dup2(fd[1], fd[0]);
+		close(fd[1]);
+	}
+	return (free_array(tok), fd);
 }
 
 int	*search_redir_oper(t_data *inp)
