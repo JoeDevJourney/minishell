@@ -75,3 +75,26 @@ void	expansion_oper(char **arr)
 		ptr++;
 	}
 }
+
+char	*join_cmd(char **arr)
+{
+	char	*temp;
+	char	*line;
+	char	*newline;
+
+	temp = NULL;
+	newline = NULL;
+	line = NULL;
+	while (*arr)
+	{
+		temp = ft_strjoin(*arr, " ");
+		newline = ft_strjoin(line, temp);
+		free(temp);
+		free (line);
+		line = newline;
+		arr++;
+	}
+	temp = NULL;
+	// free(newline);	(?)
+	return (line);
+}

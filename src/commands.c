@@ -44,40 +44,22 @@ static char	*path_to_exec(char *name)
 
 static int	exec_external(t_data inp)
 {
-	char	*direct;
+	char	*dir;
 	char	*full_path;
 
 	// expansion_oper(argv);
-	direct = ft_strjoin(path_to_exec(*inp.redir.cmd), "/");
-	full_path = ft_strjoin(direct, *inp.redir.cmd);
+	dir = ft_strjoin(path_to_exec(*inp.redir.cmd), "/");
+	full_path = ft_strjoin(dir, *inp.redir.cmd);
 	free(*inp.redir.cmd);
 	*inp.redir.cmd = ft_strdup(full_path);
+	free(full_path);
+	free(dir);
 	if (execve(*inp.redir.cmd, inp.redir.cmd, inp.env) == -1)
-		return (perror("execve failed"), errno);
-	return (free(full_path), free(direct), 0);
-}
-
-char	*join_cmd(char **arr)
-{
-	char	*temp;
-	char	*line;
-	char	*newline;
-
-	temp = NULL;
-	newline = NULL;
-	line = NULL;
-	while (*arr)
 	{
-		temp = ft_strjoin(*arr, " ");
-		newline = ft_strjoin(line, temp);
-		free(temp);
-		free (line);
-		line = newline;
-		arr++;
+		perror("execve failed");
+		exit(errno);
 	}
-	temp = NULL;
-	// free(newline);	(?)
-	return (line);
+	return (0);
 }
 
 /**
@@ -93,7 +75,7 @@ int	exec_command(t_data inp)
 	res = search_builtins(inp);
 	if (res == -2)
 		res = exec_external(inp);
-	free_array(inp.redir.cmd);		// for custom main freeing
+	// free_array(inp.redir.cmd);		// for custom main freeing
 	return (res);
 }
 
@@ -107,10 +89,7 @@ int	handle_command(t_data inp)
 
 	pid = fork();
 	if (pid == 0)
-	{
 		exec_command(inp);
-		exit (0);
-	}
 	else if (pid > 0)
 	{
 		wait(&status);
@@ -135,15 +114,11 @@ int	handle_command(t_data inp)
 // 	inp.pipe.cmd = malloc(2 * sizeof(char *));
 // 	if (!inp.pipe.cmd)
 // 		return(0);
-// 	inp.pipe.cmd[0] = ft_strdup("env");
+// 	inp.pipe.cmd[0] = ft_strdup("cat < main");
 // 	inp.pipe.cmd[1] = NULL;
-// 	// exec_command(inp);
-// 	handle_command(inp);
-// 	free(inp.pipe.cmd[0]);
-// 	inp.pipe.cmd[0] = NULL;
-// 	free(inp.pipe.cmd);
-// 	inp.pipe.cmd = NULL;
+// 	exec_command(inp);
+// 	// handle_command(inp);
+// 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);
-// 	inp.home_dir = NULL;
 // }
 // cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c redir_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c ../include/libft/src/ft_strtrim.c builtins/*.c ../include/libft/src/ft_strnstr.c -g -Wall -Werror -Wextra

@@ -58,16 +58,15 @@ int	main(int argc, char **argv, char **env)
 				inp.pipe.cmd = ft_split2(*inp.or.cmd, "|");
 				inp.pipe.num_cmd = count_substr(*inp.or.cmd, "|");
 				if (inp.pipe.num_cmd != 1)
-					inp.pipe.ret_val = handle_pipes(inp);
+					inp.ret_val = handle_pipes(inp);
 				else
-					inp.pipe.ret_val = handle_command(inp);
-				inp.or.ret_val = inp.pipe.ret_val;
-				if (!inp.or.ret_val)
+					inp.ret_val = handle_command(inp);
+				printf("\nret_val: %d\n\n", inp.ret_val);
+				if (!inp.ret_val)
 					break ;
 				inp.or.cmd++;
 			}
-			inp.and.ret_val = inp.or.ret_val;
-			if (inp.and.ret_val)
+			if (inp.ret_val)
 				break ;
 			inp.and.cmd++;
 		}

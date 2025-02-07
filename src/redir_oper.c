@@ -29,7 +29,10 @@ static int	*out_oper(t_data *inp)
 		fd[1] = open(ft_strtrim(tok[i], " "),
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd[1] == -1)
-			return (perror("Error opening the file"), &errno);
+		{
+			fd[1] = STDOUT_FILENO;
+			break ;
+		}
 		if (!tok[i + 1])
 			dup2(fd[1], fd[0]);
 		close(fd[1]);
@@ -53,7 +56,11 @@ static int	*inp_oper(t_data *inp)
 	{
 		fd[1] = open(ft_strtrim(tok[i], " "), O_RDONLY);
 		if (fd[1] == -1)
-			return (perror("Error opening the file"), &errno);
+		{
+			perror(ft_strtrim(tok[i], " "));
+			fd[1] = STDIN_FILENO;
+			break ;
+		}
 		if (!tok[i + 1])
 			dup2(fd[1], fd[0]);
 		close(fd[1]);

@@ -48,6 +48,7 @@ typedef struct s_data
 	t_oper	or;
 	t_oper	pipe;
 	t_oper	redir;
+	int		ret_val;
 }			t_data;
 
 //	Execution
