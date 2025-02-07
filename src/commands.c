@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 14:26:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:42:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,11 @@ int	handle_command(t_data inp)
 // 	(void)argv;
 // 	inp.env = env;
 // 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
-// 	inp.pipe.cmd = malloc(2 * sizeof(char *));
-// 	if (!inp.pipe.cmd)
-// 		return (0);
+// 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
 // 	inp.pipe.cmd[0] = ft_strdup("cat < main.c");
 // 	inp.pipe.cmd[1] = NULL;
-// 	// exec_command(inp);
-// 	handle_command(inp);
+// 	exec_command(inp);
+// 	// handle_command(inp);
 // 	// printf("ret: %d\n", handle_command(inp));
 // 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);

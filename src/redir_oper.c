@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 14:54:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:22:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,38 +95,45 @@ static void	app_oper(t_data *inp)
 	free_array(tok);
 }
 
+static void	hdoc_oper(t_data *inp)
+{
+	char	**tok;
+	char	*input;
+	int		fd[2];
+
+	tok = ft_split2(*inp->pipe.cmd, "<<");
+	inp->redir.cmd = ft_split(*tok, ' ');
+	inp->redir.num_cmd = str_count(*tok, ' ');
+	fd[0] = STDIN_FILENO;
+	fd[1] = open("heredoc", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	while (1)
+	{
+		input = readline("heredoc> ");
+		if (*input != '\0'
+			&& !ft_strncmp(input, ft_strtrim(tok[1], " "), ft_strlen(input)))
+			break ;
+		ft_putendl_fd(input, fd[1]);
+	}
+	dup2(fd[1], fd[0]);
+	close(fd[1]);
+	free_array(tok);
+}
+
 void	search_redir_oper(t_data *inp)
 {
-	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
+	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
+		hdoc_oper(inp);
+	else if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
 		inp_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
 		app_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
 		out_oper(inp);
-	// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
-	// 	heredoc_oper();
-	// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
-	// 	app_oper();
 	else
 	{
 		inp->redir.cmd = ft_split(*inp->pipe.cmd, ' ');
 		inp->redir.num_cmd = str_count(*inp->pipe.cmd, ' ');
 	}
 }
-
-// int	main(int argc, char **argv, char **env)
-// {
-// 	char	**cmd;
-//
-// 	(void)argc;
-// 	(void)argv;
-// 	cmd = malloc(5 * sizeof(char *));
-// 	cmd[0] = ft_strdup("cat");
-// 	cmd[1] = ft_strdup("-e");
-// 	cmd[2] = ft_strdup("<");
-// 	cmd[3] = ft_strdup("parsing.c");
-// 	cmd[4] = NULL;
-// 	search_redir_oper(cmd, env);
-// }
 
 // cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextra
