@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 16:42:00 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:46:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ int	handle_command(t_data inp)
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
+		// if (unlink(ft_strjoin(inp.home_dir, "/src/heredoc")) == -1)
+		// 	printf("wrong\n");
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else
@@ -109,10 +111,10 @@ int	handle_command(t_data inp)
 // 	inp.env = env;
 // 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
 // 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("cat < main.c");
+// 	inp.pipe.cmd[0] = ft_strdup("cat -e << EOF");
 // 	inp.pipe.cmd[1] = NULL;
-// 	exec_command(inp);
-// 	// handle_command(inp);
+// 	// exec_command(inp);
+// 	handle_command(inp);
 // 	// printf("ret: %d\n", handle_command(inp));
 // 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);
