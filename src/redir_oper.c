@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 13:50:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:54:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	out_oper(t_data *inp)
 {
-	int		fd[2];
 	char	**tok;
+	int		fd[2];
 	int		i;
 
-	tok = ft_split(*inp->pipe.cmd, '>');
+	tok = ft_split2(*inp->pipe.cmd, ">");
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
 	fd[0] = STDOUT_FILENO;
@@ -42,8 +42,8 @@ static void	out_oper(t_data *inp)
 
 static void	inp_oper(t_data *inp)
 {
-	int		fd[2];
 	char	**tok;
+	int		fd[2];
 	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '<');
@@ -67,10 +67,40 @@ static void	inp_oper(t_data *inp)
 	free_array(tok);
 }
 
+static void	app_oper(t_data *inp)
+{
+	char	**tok;
+	int		fd[2];
+	int		i;
+
+	tok = ft_split2(*inp->pipe.cmd, ">>");
+	inp->redir.cmd = ft_split(*tok, ' ');
+	inp->redir.num_cmd = str_count(*tok, ' ');
+	fd[0] = STDOUT_FILENO;
+	i = 0;
+	while (tok[++i])
+	{
+		fd[1] = open(ft_strtrim(tok[i], " "),
+				O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd[1] == -1)
+		{
+			perror(ft_strtrim(tok[i], " "));
+			free_array(tok);
+			exit(1);
+		}
+		if (!tok[i + 1])
+			dup2(fd[1], fd[0]);
+		close(fd[1]);
+	}
+	free_array(tok);
+}
+
 void	search_redir_oper(t_data *inp)
 {
 	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
 		inp_oper(inp);
+	else if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
+		app_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
 		out_oper(inp);
 	// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
