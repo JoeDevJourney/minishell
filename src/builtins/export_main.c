@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 17:09:36 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/05 17:54:50 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,20 @@ static int	is_valid_env_name(const char *name)
 		if (!ft_isalnum(name[i]) && name[i] != '_')
 			return (0);
 		i++;
+	}
+	return (1);
+}
+
+int	is_valid_identifier(const char *str)
+{
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	while (*++str)
+	{
+		if (isalnum(*str) && *str != '_')
+			return (0);
 	}
 	return (1);
 }
@@ -90,7 +104,7 @@ int	ft_export(char **env, char **args)
 		return (print_sorted_env(env), 0);
 	while (args[i])
 	{
-		if (!is_valid_env_name(args[i]))
+		if (!is_valid_identifier(args[i]))
 			return (ft_write_error("export error"), 1);
 		if (process_export_argument(env, args[i]) != 0)
 			return (1);
