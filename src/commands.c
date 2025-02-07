@@ -6,41 +6,41 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 14:01:37 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:26:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-/**
- * @note **path needs freeing!(?)  <---------------
- */
 static char	*path_to_exec(char *name)
 {
 	struct dirent	*entry;
 	DIR				*dir;
 	char			**path;
+	char			**ptr;
 
 	path = ft_split(getenv("PATH"), ':');
 	if (!path)
-		return (printf("$PATH not set\n"), NULL);
-	while (*path)
+		return (perror("$PATH not set"), NULL);
+	ptr = path;
+	while (*ptr)
 	{
-		dir = opendir(*path);
+		dir = opendir(*ptr);
 		if (!dir)
-			return (perror("opendir failed"), NULL);
+			return (perror(*ptr), NULL);
 		entry = readdir(dir);
 		while (entry)
 		{
 			if (!ft_strncmp(name, entry->d_name, ft_strlen(entry->d_name)))
-				return (closedir(dir), *path);
+				return (closedir(dir), *ptr);
 			entry = readdir(dir);
 		}
 		closedir (dir);
-		path++;
+		ptr++;
 	}
+	free_array(path);
 	perror(name);
-	exit(errno);
+	exit(127);
 }
 
 static void	exec_external(t_data inp)

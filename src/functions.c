@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/31 16:22:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:17:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ void	expansion_oper(char **arr)
 	}
 }
 
+/**
+ * @brief Joins together a char **array, creating one single char *str.
+ */
 char	*join_cmd(char **arr)
 {
 	char	*temp;
