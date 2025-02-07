@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 16:30:20 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/07 16:30:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ char	*join_cmd(char **arr);
 void	free_array(char **arr);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
-
 int		ft_strcmp(const char *s1, const char *s2);
 void	ft_write_error(const char *msg);
 char	*get_home_dir(void);
@@ -91,5 +90,9 @@ int		is_builtin(char *cmd);
 int		execute_builtin(char **env, char **args);
 int		ft_exit(char **args);
 char	*get_target_dir(char **args);
+int		is_valid_identifier(const char *str);
+void	ft_arrfree(char **arr);
+char	**ft_arrdup(char **arr, int size);
+void	ft_swap(void *a, void *b, size_t size);
 
 #endif

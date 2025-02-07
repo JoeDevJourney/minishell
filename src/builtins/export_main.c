@@ -6,74 +6,68 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 17:54:50 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/07 17:17:09 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_valid_env_name(const char *name)
+static void	sort_env_copy(char **copy, int size)
+{
+	int	i;
+	int	swapped;
+
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		i = -1;
+		while (++i < size - 1)
+		{
+			if (ft_strcmp(copy[i], copy[i + 1]) > 0)
+			{
+				ft_swap(&copy[i], &copy[i + 1], sizeof(char *));
+				swapped = 1;
+			}
+		}
+	}
+}
+
+static void	print_env_copy(char **copy)
 {
 	int	i;
 
-	if (!name || !*name || (ft_isdigit(*name) && *name != '_'))
-		return (0);
-	i = 0;
-	while (name[i] && name[i] != '=')
+	i = -1;
+	while (copy[++i])
 	{
-		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return (0);
-		i++;
+		printf("declare -x %s", copy[i]);
+		if (ft_strchr(copy[i], '='))
+			printf("\"%s\"", ft_strchr(copy[i], '=') + 1);
+		printf("\n");
 	}
-	return (1);
-}
-
-int	is_valid_identifier(const char *str)
-{
-	if (!str || !*str)
-		return (0);
-	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
-	while (*++str)
-	{
-		if (isalnum(*str) && *str != '_')
-			return (0);
-	}
-	return (1);
 }
 
 static void	print_sorted_env(char **env)
 {
 	char	**copy;
-	int		i;
 	int		size;
 
 	size = 0;
 	while (env[size])
 		size++;
-	copy = malloc((size + 1) * sizeof(char *));
+	copy = ft_arrdup(env, size + 1);
 	if (!copy)
 		return (perror("malloc error"));
-	i = -1;
-	while (++i < size)
-		copy[i] = env[i];
-	copy[size] = NULL;
-	i = -1;
-	while (++i < size)
-	{
-		if (ft_strcmp(copy[i], copy[i + 1]) > 0 && (copy[i + 1]))
-			ft_swap(&copy[i], &copy[i + 1], sizeof(char *));
-	}
-	i = -1;
-	while (copy[++i])
-		printf("declare -x %s\n", copy[i]);
-	free(copy);
+	sort_env_copy(copy, size);
+	print_env_copy(copy);
+	ft_arrfree(copy);
 }
 
-int	process_export_argument(char **env, char *arg)
+static int	handle_export_arg(char **env, char *arg)
 {
 	char	*name;
 	char	*value;
+	int		result;
 
 	value = ft_strchr(arg, '=');
 	if (value)
@@ -83,32 +77,33 @@ int	process_export_argument(char **env, char *arg)
 	}
 	else
 	{
-		name = ft_strdup(arg);
+		name = ft_strdub(arg);
 		value = "";
 	}
-	if (update_env_var(env, name, value) != 0)
-	{
-		free(name);
-		return (1);
-	}
+	result = update_env_var(env, name, value);
 	free(name);
-	return (0);
+	return (result);
 }
 
 int	ft_export(char **env, char **args)
 {
 	int	i;
+	int	ret;
 
-	i = 1;
 	if (!args[1])
 		return (print_sorted_env(env), 0);
+	ret = 0;
+	i = 1;
 	while (args[i])
 	{
 		if (!is_valid_identifier(args[i]))
-			return (ft_write_error("export error"), 1);
-		if (process_export_argument(env, args[i]) != 0)
-			return (1);
+		{
+			ft_write_error("export: invalid identifier\n");
+			ret = 1;
+		}
+		else if (handle_export_arg(env, args[i]) != 0)
+			ret = 1;
 		i++;
 	}
-	return (0);
+	return (ret);
 }

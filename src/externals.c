@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/03 15:33:19 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/07 15:31:12 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	execute_command(char *cmd, char *argv[], char *envp[])
 	return (0);
 }
 
-static char	*join_cmd(char **arr)
+char	*join_cmd(char **arr)
 {
 	char	*temp;
 	char	*line;
@@ -61,7 +61,7 @@ static char	*join_cmd(char **arr)
 	return (line);
 }
 
-static void	free_array(char **arr)
+void	free_array(char **arr)
 {
 	char	**temp;
 
