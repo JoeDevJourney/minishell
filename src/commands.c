@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 20:16:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 14:01:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ static char	*path_to_exec(char *name)
 		closedir (dir);
 		path++;
 	}
-	return (NULL);
+	perror(name);
+	exit(errno);
 }
 
-static int	exec_external(t_data inp)
+static void	exec_external(t_data inp)
 {
 	char	*dir;
 	char	*full_path;
@@ -56,27 +57,23 @@ static int	exec_external(t_data inp)
 	free(dir);
 	if (execve(*inp.redir.cmd, inp.redir.cmd, inp.env) == -1)
 	{
-		perror("execve failed");
+		perror(*inp.redir.cmd);
 		exit(errno);
 	}
-	return (0);
 }
 
 /**
  * @brief Handles all execution, both externals and builtins
  */
-int	exec_command(t_data inp)
+void	exec_command(t_data inp)
 {
-	int	res;
-
 	// input = join_cmd(str);				//
 	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
 	search_redir_oper(&inp);
-	res = search_builtins(inp);
-	if (res == -2)
-		res = exec_external(inp);
+	search_builtins(inp);
+	exec_external(inp);
 	// free_array(inp.redir.cmd);		// for custom main freeing
-	return (res);
+	exit(1);
 }
 
 /**
@@ -92,7 +89,7 @@ int	handle_command(t_data inp)
 		exec_command(inp);
 	else if (pid > 0)
 	{
-		wait(&status);
+		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else
@@ -113,11 +110,12 @@ int	handle_command(t_data inp)
 // 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
 // 	inp.pipe.cmd = malloc(2 * sizeof(char *));
 // 	if (!inp.pipe.cmd)
-// 		return(0);
-// 	inp.pipe.cmd[0] = ft_strdup("cat < main");
+// 		return (0);
+// 	inp.pipe.cmd[0] = ft_strdup("cat < main.c");
 // 	inp.pipe.cmd[1] = NULL;
-// 	exec_command(inp);
-// 	// handle_command(inp);
+// 	// exec_command(inp);
+// 	handle_command(inp);
+// 	// printf("ret: %d\n", handle_command(inp));
 // 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);
 // }

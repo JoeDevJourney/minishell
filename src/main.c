@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 14:07:14 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:53:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	inp.env = env;
-	inp.home_dir = ft_strdup(getenv("PWD"));
+	inp.home_dir = ft_strdup(getenv("PWD"));						// Needs freeing
 	printf("Welcome\n");
 	inp.str = read_input();											// Needs freeing
 	while (strncmp(inp.str, "exit", 4))
@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **env)
 					inp.ret_val = handle_pipes(inp);
 				else
 					inp.ret_val = handle_command(inp);
-				printf("\nret_val: %d\n\n", inp.ret_val);
+				printf("________________________\nret_val: %d\n", inp.ret_val);
 				if (!inp.ret_val)
 					break ;
 				inp.or.cmd++;

@@ -6,22 +6,22 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 16:21:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:32:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	exec_builtin(char **cmd, char **env)
+static void	exec_builtin(char **cmd, char **env)
 {
 	if (!ft_strncmp(*cmd, "env", ft_strlen(*cmd)))
-		return (exec_env(env));
+		exec_env(env);
 	else if (!ft_strncmp(*cmd, "pwd", ft_strlen(*cmd)))
-		return (exec_pwd(cmd));
-	return (0);
+		exec_pwd(cmd);
+	exit (0);
 }
 
-int	search_builtins(t_data inp)
+void	search_builtins(t_data inp)
 {
 	struct dirent	*entry;
 	DIR				*builtins_dir;
@@ -32,13 +32,16 @@ int	search_builtins(t_data inp)
 	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
 	if (!builtins_dir)
-		return (perror("Builtins failed"), errno);
+	{
+		perror("Builtins failed");
+		exit (errno);
+	}
 	entry = readdir(builtins_dir);
 	while (entry)
 	{
 		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.redir.cmd)))
-			return (free(obj), free(path), closedir(builtins_dir), exec_builtin(inp.redir.cmd, inp.env));
+			return (closedir(builtins_dir), free(obj), free(path), exec_builtin(inp.redir.cmd, inp.env));
 		entry = readdir(builtins_dir);
 	}
-	return (closedir(builtins_dir), free(obj), free(path), -2);
+	return (closedir(builtins_dir), free(obj), free(path));
 }

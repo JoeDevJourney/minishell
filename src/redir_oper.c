@@ -6,22 +6,21 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 20:04:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/07 13:50:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	*out_oper(t_data *inp)
+static void	out_oper(t_data *inp)
 {
-	int		*fd;
+	int		fd[2];
 	char	**tok;
 	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '>');
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
-	fd = safe_malloc(2 * sizeof(int));
 	fd[0] = STDOUT_FILENO;
 	i = 0;
 	while (tok[++i])
@@ -30,26 +29,26 @@ static int	*out_oper(t_data *inp)
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd[1] == -1)
 		{
-			fd[1] = STDOUT_FILENO;
-			break ;
+			perror(ft_strtrim(tok[i], " "));
+			free_array(tok);
+			exit(1);
 		}
 		if (!tok[i + 1])
 			dup2(fd[1], fd[0]);
 		close(fd[1]);
 	}
-	return (free_array(tok), fd);
+	free_array(tok);
 }
 
-static int	*inp_oper(t_data *inp)
+static void	inp_oper(t_data *inp)
 {
-	int		*fd;
+	int		fd[2];
 	char	**tok;
 	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '<');
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
-	fd = safe_malloc(2 * sizeof(int));
 	fd[0] = STDIN_FILENO;
 	i = 0;
 	while (tok[++i])
@@ -58,35 +57,31 @@ static int	*inp_oper(t_data *inp)
 		if (fd[1] == -1)
 		{
 			perror(ft_strtrim(tok[i], " "));
-			fd[1] = STDIN_FILENO;
-			break ;
+			free_array(tok);
+			exit(1);
 		}
 		if (!tok[i + 1])
 			dup2(fd[1], fd[0]);
 		close(fd[1]);
 	}
-	return (free_array(tok), fd);
+	free_array(tok);
 }
 
-int	*search_redir_oper(t_data *inp)
+void	search_redir_oper(t_data *inp)
 {
-	int		*fd;
-
 	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
-		fd = inp_oper(inp);
+		inp_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
-		fd = out_oper(inp);
+		out_oper(inp);
 	// else if (!ft_strncmp(*ptr, "<<", ft_strlen(*ptr)))
 	// 	heredoc_oper();
 	// else if (!ft_strncmp(*ptr, ">>", ft_strlen(*ptr)))
 	// 	app_oper();
 	else
 	{
-		fd = NULL;
 		inp->redir.cmd = ft_split(*inp->pipe.cmd, ' ');
 		inp->redir.num_cmd = str_count(*inp->pipe.cmd, ' ');
 	}
-	return (fd);
 }
 
 // int	main(int argc, char **argv, char **env)
