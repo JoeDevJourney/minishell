@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 13:53:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:13:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv, char **env)
 	inp.home_dir = ft_strdup(getenv("PWD"));						// Needs freeing
 	printf("Welcome\n");
 	inp.str = read_input();											// Needs freeing
-	while (strncmp(inp.str, "exit", 4))
+	while (ft_strncmp(inp.str, "exit", ft_strlen(inp.str)))
 	{
 		inp.and.cmd = ft_split2(inp.str, "&&");
 		inp.and.num_cmd = count_substr(inp.str, "&&");
