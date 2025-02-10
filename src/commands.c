@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 15:24:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:33:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,14 @@ void	exec_command(t_data inp)
 /**
  * @brief Creates the child process for a single command
  */
-int	handle_command(t_data inp)
+int	handle_command(t_data *inp)
 {
 	pid_t	pid;
 	int		status;
 
 	pid = fork();
 	if (pid == 0)
-		exec_command(inp);
+		exec_command(*inp);
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)

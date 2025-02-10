@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/10 15:14:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:59:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ typedef struct s_data
 
 //	Execution
 void	exec_command(t_data inp);
-int		handle_pipes(t_data inp);
-int		handle_command(t_data inp);
+int		handle_pipes(t_data *inp);
+int		handle_command(t_data *inp);
 
 //	Operators
 void	expansion_oper(char **arr);
