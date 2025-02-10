@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir_oper.c                                       :+:      :+:    :+:   */
+/*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 12:31:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:19:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,8 @@ static void	out_oper(t_data *inp)
 				O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 		{
-			perror(ft_strtrim(tok[i], " "));
 			free_array(tok);
-			exit(1);
+			exit_with_error(ft_strtrim(tok[i], " "), 1);
 		}
 		if (!tok[i + 1])
 			dup2(fd, STDOUT_FILENO);
@@ -54,9 +53,8 @@ static void	inp_oper(t_data *inp)
 		fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
 		if (fd == -1)
 		{
-			perror(ft_strtrim(tok[i], " "));
 			free_array(tok);
-			exit(1);
+			exit_with_error(ft_strtrim(tok[i], " "), 1);
 		}
 		if (!tok[i + 1])
 			dup2(fd, STDIN_FILENO);
@@ -81,9 +79,8 @@ static void	app_oper(t_data *inp)
 				O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 		{
-			perror(ft_strtrim(tok[i], " "));
 			free_array(tok);
-			exit(1);
+			exit_with_error(ft_strtrim(tok[i], " "), 1);
 		}
 		if (!tok[i + 1])
 			dup2(fd, STDOUT_FILENO);

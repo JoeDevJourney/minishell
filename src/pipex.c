@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 15:02:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:16:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
 	while (++i < n)
 	{
 		if (waitpid(pid[i], &status, 0) == -1)
-		{
-			perror("Waiting child process failed");
-			exit(EXIT_FAILURE);
-		}
+			exit_with_error("Waiting child process failed", EXIT_FAILURE);
 	}
 	i = -1;
 	while (++i < n - 1)
@@ -47,11 +44,10 @@ static int	**init_pipes(int n)
 	{
 		if (pipe(fd[i]) == -1)
 		{
-			ft_putstr_fd("pipex: pipe creation failed\n", 2);
 			while (i > 0)
 				free(fd[--i]);
 			free(fd);
-			exit(EXIT_FAILURE);
+			exit_with_error("Pipe creation failed", EXIT_FAILURE);
 		}
 	}
 	return (fd);

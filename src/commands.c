@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 13:04:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:20:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ static void	exec_external(t_data inp)
 	free(full_path);
 	free(dir);
 	if (execve(*inp.redir.cmd, inp.redir.cmd, inp.env) == -1)
-	{
-		perror(*inp.redir.cmd);
-		exit(errno);
-	}
+		exit_with_error(*inp.redir.cmd, errno);
 }
 
 /**
