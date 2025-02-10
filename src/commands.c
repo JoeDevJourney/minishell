@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 15:20:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:24:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int	handle_command(t_data inp)
 		exec_command(inp);
 	else if (pid > 0)
 	{
-		waitpid(pid, &status, 0);
+		if (waitpid(pid, &status, 0) == -1)
+			exit_with_error("Child process failed", EXIT_FAILURE);
 		// if (unlink(ft_strjoin(inp.home_dir, "/src/heredoc")) == -1)
 		// 	printf("wrong\n");
 		if (WIFEXITED(status))
