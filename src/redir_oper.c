@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 18:37:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:31:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,29 +95,27 @@ static void	app_oper(t_data *inp)
 static void	hdoc_oper(t_data *inp)
 {
 	char	**tok;
-	// char	*input;
+	char	*input;
 	int		fd;
 
 	tok = ft_split2(*inp->pipe.cmd, "<<");
 	inp->redir.cmd = ft_split(*tok, ' ');
 	inp->redir.num_cmd = str_count(*tok, ' ');
 	fd = open(ft_strjoin(inp->home_dir, "/src/heredoc"),
-			O_RDWR | O_CREAT | O_TRUNC, 0644);
-	ft_putendl_fd("1", fd);
-	ft_putendl_fd("2", fd);
-	ft_putendl_fd("3", fd);
-	ft_putendl_fd("4", fd);
-	// while (1)
-	// {
-	// 	input = readline("heredoc> ");
-	// 	if (*input != '\0'
-	// 		&& !ft_strncmp(input, ft_strtrim(tok[1], " "), ft_strlen(input)))
-	// 		break ;
-	// 	ft_putendl_fd(input, fd);
-	// }
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	while (1)
+	{
+		input = readline("heredoc> ");
+		if (*input != '\0'
+			&& !ft_strncmp(input, ft_strtrim(tok[1], " "), ft_strlen(input)))
+			break ;
+		ft_putendl_fd(input, fd);
+		free(input);
+	}
+	close(fd);
+	fd = open(ft_strjoin(inp->home_dir, "/src/heredoc"), O_RDONLY);
 	dup2(fd, STDIN_FILENO);
-	// free(input),
-	return (close(fd),  free_array(tok));
+	return (free(input), close(fd), free_array(tok));
 }
 
 void	search_redir_oper(t_data *inp)

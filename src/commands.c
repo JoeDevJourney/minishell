@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/07 18:46:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:12:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,7 @@ int	handle_command(t_data inp)
 // 	inp.pipe.cmd[1] = NULL;
 // 	// exec_command(inp);
 // 	handle_command(inp);
-// 	// printf("ret: %d\n", handle_command(inp));
 // 	free_array(inp.pipe.cmd);
 // 	free(inp.home_dir);
 // }
-// cc commands.c -o commands functions.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlcat.c redir_oper.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_memmove.c ../include/libft/src/ft_strtrim.c builtins/*.c ../include/libft/src/ft_strnstr.c -g -Wall -Werror -Wextra
+// cc commands.c -o commands redir_oper.c parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c -Wall -Werror -Wextra
