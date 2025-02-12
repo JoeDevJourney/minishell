@@ -92,9 +92,10 @@ int	fork_command(t_data *inp)
 void	handle_command(t_data *inp)
 {
 	int	fd;
-	// input = join_cmd(str);				//
-	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
+	int	sstdin;
 
+	fd = -1;
+	sstdin = dup(STDIN_FILENO);
 	search_redir_oper(inp, &fd);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = handle_pipes(inp);
@@ -102,7 +103,12 @@ void	handle_command(t_data *inp)
 		if (!search_builtins(*inp))
 			inp->ret_val = fork_command(inp);
 			// exec_external(*inp);
-	dup2(STDIN_FILENO, fd);
+	if (fd != -1)
+	{
+		dup2(sstdin, STDIN_FILENO);
+		close(fd);
+	}
+	close(sstdin);
 }
 
 // int	main(int argc, char **argv, char **env)
