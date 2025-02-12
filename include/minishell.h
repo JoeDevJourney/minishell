@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/07 16:30:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:31:28 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,16 @@ typedef struct s_data
 	t_oper	redir;		
 }			t_data;
 
+typedef struct s_split_state
+{
+	bool	sq;
+	bool	dq;
+	bool	escape;
+	char	*start;
+	char	*ptr;
+}	t_split_state;
+
+
 //	Execution
 int		exec_command(t_data inp);
 int		handle_pipes(t_data inp);
@@ -65,6 +75,7 @@ int		*search_redir_oper(t_data *inp);
 int		search_builtins(t_data inp);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
+int		ft_export(char **env, char **args);
 
 //	Utilities
 char	**ft_split2(const char *s, const char *delim);
@@ -94,5 +105,17 @@ int		is_valid_identifier(const char *str);
 void	ft_arrfree(char **arr);
 char	**ft_arrdup(char **arr, int size);
 void	ft_swap(void *a, void *b, size_t size);
+char	*create_env_entry(const char *name, const char *value);
+int		replace_env_var(char **env, const char *name, char *new_entry);
+// Quotes Utils
+void	handle_escape(char **input, char **dst, bool sq, bool dq);
+void	update_quote_state(char c, bool *sq, bool *dq, bool escape);
+char	*ft_strndub(const char *s, size_t n);
+size_t	ft_strnlen(const char *s, size_t maxlen);
+// Quotes
+bool	check_quotes(const char *input);
+char	*process_quotes(char *input);
+void	update_split_state(char c, bool *sq, bool *dq, bool *escape);
+char	**split_pipes(char *str);
 
 #endif
