@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 15:48:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:58:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	search_builtins(t_data inp)
 	char			*path;
 
 	obj = ft_strjoin(*inp.redir.cmd, ".o");
-	path = ft_strjoin(inp.home_dir, "/../obj/");
+	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
 	if (!builtins_dir)
 		exit_with_error("Builtin failed", errno);
@@ -36,12 +36,8 @@ bool	search_builtins(t_data inp)
 	while (entry)
 	{
 		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.redir.cmd)))
-		{
-			free(obj);
-			obj = NULL;
 			return (closedir(builtins_dir), free(obj), free(path),
 				exec_builtin(inp.redir.cmd, inp.env), 1);
-		}
 		entry = readdir(builtins_dir);
 	}
 	return (closedir(builtins_dir), free(obj), free(path), 0);

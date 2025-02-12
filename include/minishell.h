@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 15:30:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:45:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	**ft_split2(const char *s, const char *delim);
 char	*join_cmd(char **arr);
 void	exit_with_error(char *msg, int ret_val);
 void	free_array(char **arr);
-void	free_input(t_data inp);
+void	free_input(t_data *inp);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 

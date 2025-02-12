@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 12:06:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:38:34 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	free_array(char **arr)
 	while (*temp)
 		free(*temp++);
 	free (arr);
-	arr = NULL;
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 16:01:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:56:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,21 @@ int	handle_command(t_data *inp)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **env)
-{
-	t_data	inp;
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_data	inp;
 
-	(void)argc;
-	(void)argv;
-	inp.env = env;
-	inp.home_dir = getenv("PWD");
-	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-	inp.pipe.cmd[0] = "env";
-	inp.pipe.cmd[1] = NULL;
-	exec_command(&inp);
-	// free_array(inp.pipe.cmd);
-	free(inp.pipe.cmd);
-	free_array(inp.redir.cmd);
-	// while (*inp.pipe.cmd)
-	// 	printf("'%s'\n", *inp.pipe.cmd++);
-	// pause();
-	// handle_command(&inp);
-}
+// 	(void)argc;
+// 	(void)argv;
+// 	inp.env = env;
+// 	inp.home_dir = getenv("PWD");
+// 	inp.and.cmd = NULL;
+// 	inp.or.cmd = NULL;
+// 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
+// 	inp.pipe.cmd[0] = ft_strdup("env");
+// 	inp.pipe.cmd[1] = NULL;
+// 	exec_command(&inp);
+// 	// handle_command(&inp);
+// 	free_input(&inp);
+// }
 // cc commands.c -o commands redirection.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline
