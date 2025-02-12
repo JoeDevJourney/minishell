@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 16:56:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:06:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*path_to_exec(char *name)
 	exit(127);
 }
 
-static void	exec_external(t_data inp)
+void	exec_external(t_data inp)
 {
 	char	*dir;
 	char	*full_path;
@@ -60,31 +60,16 @@ static void	exec_external(t_data inp)
 }
 
 /**
- * @brief Handles all execution, both externals and builtins
- */
-void	exec_command(t_data *inp)
-{
-	// input = join_cmd(str);				//
-	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
-	search_redir_oper(inp);
-	if (!search_builtins(*inp))
-		exec_external(*inp);
-}
-
-/**
  * @brief Creates the child process for a single command
  */
-int	handle_command(t_data *inp)
+int	fork_command(t_data *inp)
 {
 	pid_t	pid;
 	int		status;
 
 	pid = fork();
 	if (pid == 0)
-	{
-		exec_command(inp);
-		exit(1);
-	}
+		exec_external(*inp);
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
@@ -101,6 +86,25 @@ int	handle_command(t_data *inp)
 	return (0);
 }
 
+/**
+ * @brief Handles all execution, both externals and builtins
+ */
+void	handle_command(t_data *inp)
+{
+	int	fd;
+	// input = join_cmd(str);				//
+	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
+
+	search_redir_oper(inp, &fd);
+	if (inp->pipe.num_cmd != 1)
+		inp->ret_val = handle_pipes(inp);
+	else
+		if (!search_builtins(*inp))
+			inp->ret_val = fork_command(inp);
+			// exec_external(*inp);
+	dup2(STDIN_FILENO, fd);
+}
+
 // int	main(int argc, char **argv, char **env)
 // {
 // 	t_data	inp;
@@ -112,10 +116,10 @@ int	handle_command(t_data *inp)
 // 	inp.and.cmd = NULL;
 // 	inp.or.cmd = NULL;
 // 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("env");
+// 	inp.pipe.cmd[0] = ft_strdup("cat -e < ../Makefile");
 // 	inp.pipe.cmd[1] = NULL;
-// 	exec_command(&inp);
-// 	// handle_command(&inp);
+// 	search_redir_oper(&inp);
+// 	exec_external(inp);
 // 	free_input(&inp);
 // }
 // cc commands.c -o commands redirection.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline

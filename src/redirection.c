@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 16:38:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:48:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,9 @@ static void	out_oper(t_data *inp)
 	free_array(tok);
 }
 
-static void	inp_oper(t_data *inp)
+static void	inp_oper(t_data *inp, int *fd)
 {
 	char	**tok;
-	int		fd;
 	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '<');
@@ -50,15 +49,15 @@ static void	inp_oper(t_data *inp)
 	i = 0;
 	while (tok[++i])
 	{
-		fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
-		if (fd == -1)
+		*fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
+		if (*fd == -1)
 		{
 			free_array(tok);
 			exit_with_error(ft_strtrim(tok[i], " "), 1);
 		}
 		if (!tok[i + 1])
-			dup2(fd, STDIN_FILENO);
-		close(fd);
+			dup2(*fd, STDIN_FILENO);
+		// close(*fd);
 	}
 	free_array(tok);
 }
@@ -115,12 +114,12 @@ static void	hdoc_oper(t_data *inp)
 	return (free(input), close(fd), free_array(tok));
 }
 
-void	search_redir_oper(t_data *inp)
+void	search_redir_oper(t_data *inp, int *fd)
 {
 	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
 		hdoc_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
-		inp_oper(inp);
+		inp_oper(inp, fd);
 	else if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
 		app_oper(inp);
 	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))

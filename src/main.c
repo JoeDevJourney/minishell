@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 14:38:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 19:16:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ static char	*read_input(void)
 	free(prompt);
 	prompt = ft_strjoin(temp, " % ");
 	str = readline(prompt);
-	while (!str)
-		str = readline(prompt);
+	// while (!str)
+	// 	str = readline(prompt);
 	add_history(str);
-	return (str);
+	return (free(temp), free(prompt), str);
 }
 
 static void	parse_command(t_data *inp)
@@ -45,17 +45,14 @@ static void	parse_command(t_data *inp)
 	and_cmd = inp->and.cmd;
 	while (*and_cmd)
 	{
-		inp->or.cmd = ft_split2(*inp->and.cmd, "||");
-		inp->or.num_cmd = count_substr(*inp->and.cmd, "||");
+		inp->or.cmd = ft_split2(*and_cmd, "||");
+		inp->or.num_cmd = count_substr(*and_cmd, "||");
 		or_cmd = inp->or.cmd;
 		while (*or_cmd)
 		{
-			inp->pipe.cmd = ft_split2(*inp->or.cmd, "|");
-			inp->pipe.num_cmd = count_substr(*inp->or.cmd, "|");
-			if (inp->pipe.num_cmd != 1)
-				inp->ret_val = handle_pipes(inp);
-			else
-				inp->ret_val = handle_command(inp);
+			inp->pipe.cmd = ft_split2(*or_cmd, "|");
+			inp->pipe.num_cmd = count_substr(*or_cmd, "|");
+			handle_command(inp);
 			if (!inp->ret_val)
 				break ;
 			or_cmd++;
@@ -64,7 +61,7 @@ static void	parse_command(t_data *inp)
 			break ;
 		and_cmd++;
 	}
-	(void)free_input(inp);
+	// (void)free_input(inp);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -76,6 +73,15 @@ int	main(int argc, char **argv, char **env)
 	inp.env = env;
 	inp.home_dir = ft_strdup(getenv("PWD"));
 	printf("Welcome\n");
+	// inp.str = read_input();
+	// inp.str = ft_strdup("cat < Makefile");
+	// parse_command(&inp);
+	// free_input(&inp);
+	// while (*inp.redir.cmd)
+	// 	printf("'%s'\n", *inp.redir.cmd++);
+	// pause();
+	// inp.str = read_input();
+	// parse_command(&inp);
 	while (1)
 	{
 		inp.str = read_input();
@@ -83,8 +89,6 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		parse_command(&inp);
 	}
-	// free(inp.home_dir);
-	// free(inp.str);
 	return (0);
 }
 

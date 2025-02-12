@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 16:45:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:42:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ typedef struct s_data
 //	Execution
 void	exec_command(t_data *inp);
 int		handle_pipes(t_data *inp);
-int		handle_command(t_data *inp);
+void	handle_command(t_data *inp);
+void	exec_external(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);
-void	search_redir_oper(t_data *inp);
+void	search_redir_oper(t_data *inp, int *fd);
 
 //	Builtins
 bool	search_builtins(t_data inp);

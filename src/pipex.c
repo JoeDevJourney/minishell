@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 16:57:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:54:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ static void	process_pipe(t_data inp, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	exec_command(&inp);
+	if (!search_builtins(inp))
+		exec_external(inp);
+	// exec_command(&inp);
 	exit(0);
 }
 
@@ -97,8 +99,8 @@ int	handle_pipes(t_data *inp)
 	pid_t	*pid;
 	int		**p_fd;
 	int		ptr_fd;
-	int		res;
 	int		i;
+	int		res;
 
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	p_fd = init_pipes(inp->pipe.num_cmd);
