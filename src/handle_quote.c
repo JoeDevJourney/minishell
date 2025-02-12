@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:36:03 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:37:47 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:55:02 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,29 @@ void	update_split_state(char c, t_split_state *state)
 		state->escape = true;
 		return ;
 	}
+	if (c == '\'' && !state->dq)
+		state->sq = !state->sq;
+	if (c == '"' && !state->sq)
+		state->dq = !state->dq;
 }
 
 char	**split_pipes(char *str)
 {
+	char			**arr;
+	t_split_state	state;
+	int				i;
 
+	arr = malloc(64 * sizeof(char *));
+	i = 0;
+	init_split_state(&state, str);
+	while (*state.ptr)
+	{
+		update_split_state(*state.ptr, &state);
+		if (*state.ptr == '|' && !state.sq && !state.dq && !state.escape)
+			add_command(arr, &i, &state);
+		state.ptr++;
+	}
+	add_command(arr, &i, &state);
+	arr[i] = NULL;
+	return (arr);
 }

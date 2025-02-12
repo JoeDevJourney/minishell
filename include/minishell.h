@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:31:28 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:49:39 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,12 @@ void	handle_escape(char **input, char **dst, bool sq, bool dq);
 void	update_quote_state(char c, bool *sq, bool *dq, bool escape);
 char	*ft_strndub(const char *s, size_t n);
 size_t	ft_strnlen(const char *s, size_t maxlen);
+void	add_command(char **arr, int *i, t_split_state *state);
+void	init_split_state(t_split_state *state, char *str);
 // Quotes
 bool	check_quotes(const char *input);
 char	*process_quotes(char *input);
-void	update_split_state(char c, bool *sq, bool *dq, bool *escape);
+void	update_split_state(char c, t_split_state *state);
 char	**split_pipes(char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:59:52 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:13:34 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:49:27 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,13 @@ char	*ft_strndub(const char *s, size_t n)
 		return (NULL);
 	result[len] = '\0';
 	return (ft_memcpy(result, s, len));
+}
+
+void	init_split_state(t_split_state *state, char *str)
+{
+	state->sq = false;
+	state->dq = false;
+	state->escape = false;
+	state->start = str;
+	state->ptr = str;
 }

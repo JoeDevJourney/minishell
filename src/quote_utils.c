@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:15:04 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:45:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ void	update_quote_state(char c, bool *sq, bool *dq, bool escape)
 		*dq = !*dq;
 }
 
-void	add_command(char **arr, int *i, char **start, char *current)
+void	add_command(char **arr, int *i, t_split_state *state)
 {
-	if (*start && current > *start)
+	if (state->ptr > state->start)
 	{
-		arr[*i] = ft_strndub(*start, current - *start);
+		arr[*i] = ft_strndub(state->start, state->ptr = state->start);
 		(*i)++;
-		*start = current + 1;
+		state->start = state->ptr + 1;
 	}
 }
