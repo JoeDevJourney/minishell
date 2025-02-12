@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 20:16:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 14:38:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,20 @@ static char	*read_input(void)
 	return (str);
 }
 
-static void	free_input(t_data *inp)
-{
-	free_array(inp->or.cmd);
-	free_array(inp->pipe.cmd);
-}
-
 static void	parse_command(t_data *inp)
 {
-	t_data	*ptr;
+	char	**and_cmd;
+	char	**or_cmd;
 
 	inp->and.cmd = ft_split2(inp->str, "&&");
 	inp->and.num_cmd = count_substr(inp->str, "&&");
-	ptr = inp;
-	while (*ptr->and.cmd)
+	and_cmd = inp->and.cmd;
+	while (*and_cmd)
 	{
 		inp->or.cmd = ft_split2(*inp->and.cmd, "||");
 		inp->or.num_cmd = count_substr(*inp->and.cmd, "||");
-		while (*ptr->or.cmd)
+		or_cmd = inp->or.cmd;
+		while (*or_cmd)
 		{
 			inp->pipe.cmd = ft_split2(*inp->or.cmd, "|");
 			inp->pipe.num_cmd = count_substr(*inp->or.cmd, "|");
@@ -62,13 +58,13 @@ static void	parse_command(t_data *inp)
 				inp->ret_val = handle_command(inp);
 			if (!inp->ret_val)
 				break ;
-			ptr->or.cmd++;
+			or_cmd++;
 		}
 		if (inp->ret_val)
 			break ;
-		ptr->and.cmd++;
+		and_cmd++;
 	}
-	free_input(ptr);
+	(void)free_input(inp);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -80,18 +76,15 @@ int	main(int argc, char **argv, char **env)
 	inp.env = env;
 	inp.home_dir = ft_strdup(getenv("PWD"));
 	printf("Welcome\n");
-	inp.str = read_input();
-	// inp.str = ft_strdup("cat -e < Makefile");
-	while (ft_strncmp(inp.str, "exit", ft_strlen(inp.str)))
+	while (1)
 	{
-		parse_command(&inp);
-		free(inp.str);
-		// inp.str = ft_strdup("exit");
 		inp.str = read_input();
+		if (!ft_strncmp(inp.str, "exit", ft_strlen(inp.str)))
+			break ;
+		parse_command(&inp);
 	}
-	// safe_free()
-	free(inp.home_dir);
-	free(inp.str);
+	// free(inp.home_dir);
+	// free(inp.str);
 	return (0);
 }
 

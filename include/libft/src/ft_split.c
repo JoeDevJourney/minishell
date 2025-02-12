@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:02:02 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/04 13:54:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:53:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*ft_next_word(char const **s, char c)
 	while (**s && **s != c)
 		(*s)++;
 	len = *s - start;
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	str = malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
 	ft_strlcpy(str, start, len + 1);
@@ -74,7 +74,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = str_count(s, c);
-	res = (char **)malloc(sizeof(char *) * (word_count + 1));
+	res = malloc(sizeof(char *) * (word_count + 1));
 	if (!res)
 		return (NULL);
 	i = 0;

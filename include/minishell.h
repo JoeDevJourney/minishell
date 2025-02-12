@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/10 19:59:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:30:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_data
 }			t_data;
 
 //	Execution
-void	exec_command(t_data inp);
+void	exec_command(t_data *inp);
 int		handle_pipes(t_data *inp);
 int		handle_command(t_data *inp);
 
@@ -61,7 +61,7 @@ void	expansion_oper(char **arr);
 void	search_redir_oper(t_data *inp);
 
 //	Builtins
-void	search_builtins(t_data inp);
+bool	search_builtins(t_data inp);
 void	exec_env(char **env);
 void	exec_pwd(char **cmd);
 
@@ -71,6 +71,7 @@ char	**ft_split2(const char *s, const char *delim);
 char	*join_cmd(char **arr);
 void	exit_with_error(char *msg, int ret_val);
 void	free_array(char **arr);
+void	free_input(t_data inp);
 void	*safe_malloc(size_t size);
 char	*rwd(char *dir);
 

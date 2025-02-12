@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/10 17:33:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:48:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ static int	**init_pipes(int n)
 	int	i;
 	int	**fd;
 
-	fd = (int **)safe_malloc((n - 1) * sizeof(int *));
+	fd = safe_malloc((n - 1) * sizeof(int *));
 	i = -1;
 	while (++i < n - 1)
-		fd[i] = (int *)safe_malloc((2 * sizeof(int)));
+		fd[i] = safe_malloc((2 * sizeof(int)));
 	i = -1;
 	while (++i < n - 1)
 	{

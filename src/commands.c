@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/10 17:33:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:01:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,13 @@ static void	exec_external(t_data inp)
 /**
  * @brief Handles all execution, both externals and builtins
  */
-void	exec_command(t_data inp)
+void	exec_command(t_data *inp)
 {
 	// input = join_cmd(str);				//
 	// cmd = ft_split(input, ' ');			// TODO: double quotes handling
-	search_redir_oper(&inp);
-	search_builtins(inp);
-	exec_external(inp);
-	// free_array(inp.redir.cmd);		// for custom main freeing
-	exit(1);
+	search_redir_oper(inp);
+	if (!search_builtins(*inp))
+		exec_external(*inp);
 }
 
 /**
@@ -83,7 +81,10 @@ int	handle_command(t_data *inp)
 
 	pid = fork();
 	if (pid == 0)
-		exec_command(*inp);
+	{
+		exec_command(inp);
+		exit(1);
+	}
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
@@ -100,20 +101,24 @@ int	handle_command(t_data *inp)
 	return (0);
 }
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_data	inp;
+int	main(int argc, char **argv, char **env)
+{
+	t_data	inp;
 
-// 	(void)argc;
-// 	(void)argv;
-// 	inp.env = env;
-// 	inp.home_dir = ft_strjoin(getenv("PWD"), "/..");
-// 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("cat -e << EOF");
-// 	inp.pipe.cmd[1] = NULL;
-// 	// exec_command(inp);
-// 	handle_command(inp);
-// 	free_array(inp.pipe.cmd);
-// 	free(inp.home_dir);
-// }
-// cc commands.c -o commands redir_oper.c parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c -Wall -Werror -Wextra
+	(void)argc;
+	(void)argv;
+	inp.env = env;
+	inp.home_dir = getenv("PWD");
+	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
+	inp.pipe.cmd[0] = "env";
+	inp.pipe.cmd[1] = NULL;
+	exec_command(&inp);
+	// free_array(inp.pipe.cmd);
+	free(inp.pipe.cmd);
+	free_array(inp.redir.cmd);
+	// while (*inp.pipe.cmd)
+	// 	printf("'%s'\n", *inp.pipe.cmd++);
+	// pause();
+	// handle_command(&inp);
+}
+// cc commands.c -o commands redirection.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline

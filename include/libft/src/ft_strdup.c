@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/13 12:15:16 by dchrysov          #+#    #+#             */
-/*   Updated: 2024/12/12 14:13:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:49:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,16 @@
 char	*ft_strdup(const char *s)
 {
 	char	*ptr;
+	int		len;
+	int		i;
 
-	ptr = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	len = ft_strlen(s);
+	ptr = malloc(sizeof(char) * (len + 1));
 	if (!ptr)
 		return (NULL);
-	ft_memmove(ptr, s, (size_t)ft_strlen(s) + 1);
+	i = -1;
+	while (s[++i])
+		ptr[i] = s[i];
+	ptr[i] = '\0';
 	return (ptr);
 }
