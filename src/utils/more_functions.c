@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 19:13:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:55:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	free_input(t_data *inp)
 		free_array(inp->or.cmd);
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 		free_array(inp->pipe.cmd);
-	if (inp->redir.cmd && *inp->redir.cmd)
-		free_array(inp->redir.cmd);
-	// free(inp->str);
+	// if (inp->redir.cmd && *inp->redir.cmd)
+	// 	free_array(inp->redir.cmd);
+	free(inp->input);
 }

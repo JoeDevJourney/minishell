@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 18:42:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 14:17:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,33 @@
 # include <errno.h>
 # include <dirent.h>
 
-typedef struct s_oper
+typedef struct s_logical_op
 {
 	char	**cmd;
 	int		num_cmd;
-	int		ret_val;
-}			t_oper;
+}			t_logical_op;
+
+typedef struct s_redir_op
+{
+	char	**cmd;
+	int		num_cmd;
+	int		fd[2];
+}			t_redir_op;
 
 typedef struct s_data
 {
-	char	*home_dir;
-	char	**env;
-	char	*str;
-	t_oper	and;
-	t_oper	or;
-	t_oper	pipe;
-	t_oper	redir;
-	int		ret_val;
+	char			*home_dir;
+	char			**env;
+	char			*input;
+	char			**command;
+	t_logical_op	and;
+	t_logical_op	or;
+	t_redir_op		pipe;
+	t_redir_op		inp_op;
+	t_redir_op		out_op;
+	t_redir_op		app_op;
+	t_redir_op		hdoc_op;
+	int				ret_val;
 }			t_data;
 
 //	Execution
@@ -59,7 +69,8 @@ void	exec_external(t_data inp);
 
 //	Operators
 void	expansion_oper(char **arr);
-void	search_redir_oper(t_data *inp, int *fd);
+void	process_fds(t_data *inp);
+void	parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
@@ -69,11 +80,12 @@ void	exec_pwd(char **cmd);
 //	Utilities
 size_t	count_substr(const char *s, const char *delim);
 char	**ft_split2(const char *s, const char *delim);
+char	**add_to_array(char **arr, char *new_str);
 char	*join_cmd(char **arr);
+char	*rwd(char *dir);
 void	exit_with_error(char *msg, int ret_val);
 void	free_array(char **arr);
 void	free_input(t_data *inp);
 void	*safe_malloc(size_t size);
-char	*rwd(char *dir);
 
 #endif

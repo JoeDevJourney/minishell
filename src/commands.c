@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 19:06:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:57:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,14 @@ void	exec_external(t_data inp)
 	char	*dir;
 	char	*full_path;
 
-	// expansion_oper(argv);
-	dir = ft_strjoin(path_to_exec(*inp.redir.cmd), "/");
-	full_path = ft_strjoin(dir, *inp.redir.cmd);
-	free(*inp.redir.cmd);
-	*inp.redir.cmd = ft_strdup(full_path);
+	dir = ft_strjoin(path_to_exec(*inp.command), "/");
+	full_path = ft_strjoin(dir, *inp.command);
+	free(*inp.command);
+	*inp.command = ft_strdup(full_path);
 	free(full_path);
 	free(dir);
-	if (execve(*inp.redir.cmd, inp.redir.cmd, inp.env) == -1)
-		exit_with_error(*inp.redir.cmd, errno);
+	if (execve(*inp.command, inp.command, inp.env) == -1)
+		exit_with_error(*inp.command, errno);
 }
 
 /**
@@ -96,13 +95,12 @@ void	handle_command(t_data *inp)
 
 	fd = -1;
 	sstdin = dup(STDIN_FILENO);
-	search_redir_oper(inp, &fd);
+	// search_redir_oper(inp, &fd);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = handle_pipes(inp);
 	else
 		if (!search_builtins(*inp))
 			inp->ret_val = fork_command(inp);
-			// exec_external(*inp);
 	if (fd != -1)
 	{
 		dup2(sstdin, STDIN_FILENO);
@@ -124,8 +122,26 @@ void	handle_command(t_data *inp)
 // 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
 // 	inp.pipe.cmd[0] = ft_strdup("cat -e < ../Makefile");
 // 	inp.pipe.cmd[1] = NULL;
-// 	search_redir_oper(&inp);
-// 	exec_external(inp);
-// 	free_input(&inp);
 // }
-// cc commands.c -o commands redirection.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline
+// cc commands.c -o commands redirection.c pipex.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline 
+
+	// printf("pipes: [");
+	// while (inp.pipe.cmd && *inp.pipe.cmd)
+	// 	printf("'%s', ", *inp.pipe.cmd++);
+	// printf("]\n");
+	// printf("inp: [");
+	// while (inp.inp_op.cmd && *inp.inp_op.cmd)
+	// 	printf("'%s', ", *inp.inp_op.cmd++);
+	// printf("]\n");
+	// printf("out: [");
+	// while (inp.out_op.cmd && *inp.out_op.cmd)
+	// 	printf("'%s', ", *inp.out_op.cmd++);
+	// printf("]\n");
+	// printf("app: [");
+	// while (inp.app_op.cmd && *inp.app_op.cmd)
+	// 	printf("'%s', ", *inp.app_op.cmd++);
+	// printf("]\n");
+	// printf("hdoc: [");
+	// if (!inp.hdoc_op.cmd)
+	// 	printf("(null)\n");
+	// printf("]\n");

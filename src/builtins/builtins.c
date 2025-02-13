@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 18:18:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 14:04:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool	search_builtins(t_data inp)
 	char			*obj;
 	char			*path;
 
-	obj = ft_strjoin(*inp.redir.cmd, ".o");
+	obj = ft_strjoin(*inp.command, ".o");
 	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
 	if (!builtins_dir)
@@ -35,9 +35,9 @@ bool	search_builtins(t_data inp)
 	entry = readdir(builtins_dir);
 	while (entry)
 	{
-		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.redir.cmd)))
+		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.command)))
 			return (closedir(builtins_dir), free(obj), free(path),
-				exec_builtin(inp.redir.cmd, inp.env), 1);
+				exec_builtin(inp.command, inp.env), 1);
 		entry = readdir(builtins_dir);
 	}
 	return (closedir(builtins_dir), free(obj), free(path), 0);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 18:48:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 20:58:30 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static void	out_oper(t_data *inp)
 	int		i;
 
 	tok = ft_split2(*inp->pipe.cmd, ">");
-	inp->redir.cmd = ft_split(*tok, ' ');
-	inp->redir.num_cmd = str_count(*tok, ' ');
+	inp->out_op.cmd = ft_split(*tok, ' ');
+	inp->out_op.num_cmd = str_count(*tok, ' ');
 	i = 0;
 	while (tok[++i])
 	{
@@ -38,26 +38,26 @@ static void	out_oper(t_data *inp)
 	free_array(tok);
 }
 
-static void	inp_oper(t_data *inp, int *fd)
+static void	inp_oper(t_data *inp)
 {
 	char	**tok;
+	int		fd;
 	int		i;
 
 	tok = ft_split(*inp->pipe.cmd, '<');
-	inp->redir.cmd = ft_split(*tok, ' ');
-	inp->redir.num_cmd = str_count(*tok, ' ');
+	inp->inp_op.cmd = ft_split(*tok, ' ');
+	inp->inp_op.num_cmd = str_count(*tok, ' ');
 	i = 0;
 	while (tok[++i])
 	{
-		*fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
-		if (*fd == -1)
+		fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
+		if (fd == -1)
 		{
 			free_array(tok);
 			exit_with_error(ft_strtrim(tok[i], " "), 1);
 		}
 		if (!tok[i + 1])
-			dup2(*fd, STDIN_FILENO);
-		// close(*fd);
+			dup2(fd, STDIN_FILENO);
 	}
 	free_array(tok);
 }
@@ -69,8 +69,8 @@ static void	app_oper(t_data *inp)
 	int		i;
 
 	tok = ft_split2(*inp->pipe.cmd, ">>");
-	inp->redir.cmd = ft_split(*tok, ' ');
-	inp->redir.num_cmd = str_count(*tok, ' ');
+	inp->app_op.cmd = ft_split(*tok, ' ');
+	inp->app_op.num_cmd = str_count(*tok, ' ');
 	i = 0;
 	while (tok[++i])
 	{
@@ -95,8 +95,8 @@ static void	hdoc_oper(t_data *inp)
 	int		fd;
 
 	tok = ft_split2(*inp->pipe.cmd, "<<");
-	inp->redir.cmd = ft_split(*tok, ' ');
-	inp->redir.num_cmd = str_count(*tok, ' ');
+	inp->hdoc_op.cmd = ft_split(*tok, ' ');
+	inp->hdoc_op.num_cmd = str_count(*tok, ' ');
 	fd = open(ft_strjoin(inp->home_dir, "/src/heredoc"),
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	while (1)
@@ -114,21 +114,19 @@ static void	hdoc_oper(t_data *inp)
 	return (free(input), close(fd), free_array(tok));
 }
 
-void	search_redir_oper(t_data *inp, int *fd)
-{
-	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
-		hdoc_oper(inp);
-	else if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
-		inp_oper(inp, fd);
-	else if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
-		app_oper(inp);
-	else if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
-		out_oper(inp);
-	else
-	{
-		inp->redir.cmd = ft_split(*inp->pipe.cmd, ' ');
-		inp->redir.num_cmd = str_count(*inp->pipe.cmd, ' ');
-	}
-}
+// void	process_fds(t_data *inp)
+// {
+// 	parse_redir(inp);
+// 	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
+// 		hdoc_oper(inp);
+// 	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
+// 		inp_oper(inp);
+// 	if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
+// 		app_oper(inp);
+// 	if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
+// 		out_oper(inp);
+// 	else
+// 		inp->command = ft_split(*inp->pipe.cmd, ' ');
+// }
 
-// cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextraz
+// cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextra

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 19:16:36 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 13:55:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static char	*read_input(void)
 	free(prompt);
 	prompt = ft_strjoin(temp, " % ");
 	str = readline(prompt);
-	// while (!str)
-	// 	str = readline(prompt);
+	while (!*str)
+		str = readline(prompt);
 	add_history(str);
 	return (free(temp), free(prompt), str);
 }
@@ -40,8 +40,8 @@ static void	parse_command(t_data *inp)
 	char	**and_cmd;
 	char	**or_cmd;
 
-	inp->and.cmd = ft_split2(inp->str, "&&");
-	inp->and.num_cmd = count_substr(inp->str, "&&");
+	inp->and.cmd = ft_split2(inp->input, "&&");
+	inp->and.num_cmd = count_substr(inp->input, "&&");
 	and_cmd = inp->and.cmd;
 	while (*and_cmd)
 	{
@@ -73,19 +73,10 @@ int	main(int argc, char **argv, char **env)
 	inp.env = env;
 	inp.home_dir = ft_strdup(getenv("PWD"));
 	printf("Welcome\n");
-	// inp.str = read_input();
-	// inp.str = ft_strdup("cat < Makefile");
-	// parse_command(&inp);
-	// free_input(&inp);
-	// while (*inp.redir.cmd)
-	// 	printf("'%s'\n", *inp.redir.cmd++);
-	// pause();
-	// inp.str = read_input();
-	// parse_command(&inp);
 	while (1)
 	{
-		inp.str = read_input();
-		if (!ft_strncmp(inp.str, "exit", ft_strlen(inp.str)))
+		inp.input = read_input();
+		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
 			break ;
 		parse_command(&inp);
 	}
