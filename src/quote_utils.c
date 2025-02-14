@@ -6,50 +6,38 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:45:37 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:33:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	cleanup_env(char **env)
+void	free_list(t_list *head)
 {
-	int	i;
+	t_list	*temp;
 
+	while (head)
+	{
+		temp = head;
+		head = head->next;
+		free(temp->str);
+		free(temp);
+	}
+}
+
+t_list	*copy_env_list(char **env)
+{
+	t_list	*env_list;
+	int		i;
+
+	env_list = NULL;
 	i = 0;
 	while (env[i])
 	{
-		free(env[i]);
+		add_node(&env_list, env[i]);
 		i++;
 	}
-	free(env);
-}
-
-char	**copy_env(char **env)
-{
-	int		i;
-	int		size;
-	char	**env_copy;
-
-	i = 0;
-	size = 0;
-	while (env[size])
-		size++;
-	env_copy = malloc((size + 1) * sizeof(char *));
-	if (!env_copy)
-	{
-		perror("malloc error");
-		exit(EXIT_FAILURE);
-	}
-	while (i < size)
-	{
-		env_copy[i] = strdup(env[i]);
-		if (!env_copy[i])
-			exit(EXIT_FAILURE);
-		i++;
-	}
-	env_copy[size] = NULL;
-	return (env_copy);
+	retyrb (env_list);
 }
 
 void	handle_escape(char **input, char **dst, bool sq, bool dq)
@@ -73,12 +61,15 @@ void	update_quote_state(char c, bool *sq, bool *dq, bool escape)
 		*dq = !*dq;
 }
 
-void	add_command(char **arr, int *i, t_split_state *state)
+void	add_command(t_list **list, t_split_state *state)
 {
+	char	*command;
+
 	if (state->ptr > state->start)
 	{
-		arr[*i] = ft_strndub(state->start, state->ptr = state->start);
-		(*i)++;
+		command = ft_strndub(state->start, state->ptr - state->start);
+		add_node(list, command);
+		free(command);
 		state->start = state->ptr + 1;
 	}
 }

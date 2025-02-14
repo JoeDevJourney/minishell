@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:36:03 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:55:02 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:35:11 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*process_quotes(char *input)
 	escape = false;
 	while (*input)
 	{
-		handle_escape(&input, &dst, sq, dq);
+		handle_escape(&input, &dst, sq);
 		update_quote_state(*input, &sq, &dq, escape);
 		if (!((sq || dq) && (*input == '\'' || *input == '"')))
 			*dst++ = *input;
@@ -87,21 +87,18 @@ void	update_split_state(char c, t_split_state *state)
 
 char	**split_pipes(char *str)
 {
-	char			**arr;
+	t_list			*list;
 	t_split_state	state;
-	int				i;
 
-	arr = malloc(64 * sizeof(char *));
-	i = 0;
+	list = NULL;
 	init_split_state(&state, str);
 	while (*state.ptr)
 	{
 		update_split_state(*state.ptr, &state);
 		if (*state.ptr == '|' && !state.sq && !state.dq && !state.escape)
-			add_command(arr, &i, &state);
+			add_command(&list, &state);
 		state.ptr++;
 	}
-	add_command(arr, &i, &state);
-	arr[i] = NULL;
-	return (arr);
+	add_command(&list, &state);
+	return (list);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/05 15:02:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:45:36 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	exec_command(t_data inp)
 /**
  * @brief Creates the child process for a single command
  */
-int	handle_command(t_data inp)
+int	 handle_command(t_data inp)
 {
 	pid_t	pid;
 	int		status;

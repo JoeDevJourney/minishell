@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/12 17:49:39 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:34:48 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ typedef struct s_split_state
 	char	*ptr;
 }	t_split_state;
 
+typedef struct s_list
+{
+	char			*str;
+	struct s_list	*next;
+}	t_list;
 
 //	Execution
 int		exec_command(t_data inp);
@@ -108,16 +113,24 @@ void	ft_swap(void *a, void *b, size_t size);
 char	*create_env_entry(const char *name, const char *value);
 int		replace_env_var(char **env, const char *name, char *new_entry);
 // Quotes Utils
-void	handle_escape(char **input, char **dst, bool sq, bool dq);
-void	update_quote_state(char c, bool *sq, bool *dq, bool escape);
-char	*ft_strndub(const char *s, size_t n);
 size_t	ft_strnlen(const char *s, size_t maxlen);
-void	add_command(char **arr, int *i, t_split_state *state);
+char	*ft_strndub(const char *s, size_t n);
 void	init_split_state(t_split_state *state, char *str);
+void	add_node(t_list **head, const char *str);
+void	free_list(t_list *head);
+t_list	*copy_env_list(char **env);
+void	handle_escape(char **input, char **dst, bool sq);
+void	update_quote_state(char c, bool *sq, bool *dq, bool escape);
+void	add_command(t_list **list, t_split_state *state);
 // Quotes
 bool	check_quotes(const char *input);
 char	*process_quotes(char *input);
 void	update_split_state(char c, t_split_state *state);
-char	**split_pipes(char *str);
+t_list	*split_pipes(char *str);
+
 
 #endif
+
+// search for the $ sign in getenv and parse the word to it to the getenv and process it.
+// look up if the quote is closed or not.
+// search for the quotes and find out if its double or single and if there is a dollar sign inside.
