@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/13 18:10:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:35:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,56 +81,3 @@ char	**ft_split2(const char *s, const char *delim)
 	result[i] = NULL;
 	return (result);
 }
-
-/**
- * @brief Adds elements to an already existing array of strings 
- */
-char	**add_to_array(char **arr, char *new_str)
-{
-	int		i;
-	char	**new_arr;
-
-	i = 0;
-	while (arr && arr[i])
-		i++;
-	new_arr = safe_malloc((i + 2) * sizeof(char *));
-	i = 0;
-	while (arr && arr[i])
-	{
-		new_arr[i] = arr[i];
-		i++;
-	}
-	new_arr[i] = new_str;
-	new_arr[i + 1] = NULL;
-	free(arr);
-	return (new_arr);
-}
-
-/**
- * @brief Scans the input for every redirection operator and stores the fd
- * in the appropriate array.
- */
-// void	parse_redir(t_data *inp)
-// {
-// 	char	**tok;
-// 	int		i;
-
-// 	tok = ft_split(*inp->pipe.cmd, ' ');
-// 	inp->out_op.cmd = NULL;
-// 	inp->inp_op.cmd = NULL;
-// 	inp->app_op.cmd = NULL;
-// 	inp->hdoc_op.cmd = NULL;
-// 	i = -1;
-// 	while (tok[++i])
-// 	{
-// 		if (!ft_strncmp(tok[i], "<", ft_strlen(tok[i])) && tok[i + 1])
-// 			inp->inp_op.cmd = add_to_array(inp->inp_op.cmd, tok[i + 1]);
-// 		else if (!ft_strncmp(tok[i], ">", ft_strlen(tok[i])) && tok[i + 1])
-// 			inp->out_op.cmd = add_to_array(inp->out_op.cmd, tok[i + 1]);
-// 		else if (!ft_strncmp(tok[i], ">>", ft_strlen(tok[i])) && tok[i + 1])
-// 			inp->app_op.cmd = add_to_array(inp->app_op.cmd, tok[i + 1]);
-// 		else if (!ft_strncmp(tok[i], "<<", ft_strlen(tok[i])) && tok[i + 1])
-// 			inp->hdoc_op.cmd = add_to_array(inp->hdoc_op.cmd, tok[i + 1]);
-// 	}
-// 	free_array(tok);
-// }
