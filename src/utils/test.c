@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/14 13:56:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:31:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,35 +62,31 @@ static void	split_and_store(char **str, char ***rest, char *del)
 	free_array(split_arr);
 }
 
-// void	init_lists(t_data *inp, char ****lists, char ***delimiters)
-// {
-// 	static char	**local_lists[4];
-// 	static char	*local_del[4];
-
-// 	local_del[0] = "<<";
-// 	local_del[1] = ">>";
-// 	local_del[0] = "<";
-// 	local_del[0] = ">";
-// 	local_lists[0] = &inp->hdoc_op.cmd;
-// 	local_lists[1] = &inp->app_op.cmd;
-// 	local_lists[2] = &inp->inp_op.cmd;
-// 	local_lists[3] = &inp->out_op.cmd;
-// 	*lists = local_lists;
-// 	*delimiters = local_del;
-// }
-
-void	parse_redirection(t_data *inp)
+static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 {
-	char	***lists[] = {&inp->hdoc_op.cmd, &inp->app_op.cmd, &inp->inp_op.cmd, &inp->out_op.cmd};
-	char	*del[] = {"<<", ">>", "<", ">"};
-	char	**ptr;
-	int		i;
-	int		j;
-
+	del[0] = "<<";
+	del[1] = ">>";
+	del[2] = "<";
+	del[3] = ">";
 	inp->inp_op.cmd = NULL;
 	inp->app_op.cmd = NULL;
 	inp->out_op.cmd = NULL;
 	inp->hdoc_op.cmd = NULL;
+	lists[0] = &(inp->hdoc_op.cmd);
+	lists[1] = &(inp->app_op.cmd);
+	lists[2] = &(inp->inp_op.cmd);
+	lists[3] = &(inp->out_op.cmd);
+}
+
+void	parse_redirection(t_data *inp)
+{
+	char	***lists[4];
+	char	*del[4];
+	char	**ptr;
+	int		i;
+	int		j;
+
+	init_lists_and_del(inp, lists, del);
 	i = -1;
 	while (++i < 4)
 		split_and_store(&inp->input, lists[i], del[i]);
@@ -108,29 +104,29 @@ void	parse_redirection(t_data *inp)
 	}
 }
 
-int main()
-{
-	t_data inp;
+// int main()
+// {
+// 	t_data inp;
 
-	inp.input = ft_strdup("ls > out1 << doc1 < in1 >> app1 < in2 > out3 << doc2");
-	parse_redirection(&inp);
-	printf("'%s'\n", inp.input);
-	printf("hdoc: [");
-	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
-		printf("'%s', ", *inp.hdoc_op.cmd++);
-	printf("]\n");
-	printf("inp: [");
-	while (inp.inp_op.cmd && *inp.inp_op.cmd)
-		printf("'%s', ", *inp.inp_op.cmd++);
-	printf("]\n");
-	printf("out: [");
-	while (inp.out_op.cmd && *inp.out_op.cmd)
-		printf("'%s', ", *inp.out_op.cmd++);
-	printf("]\n");
-	printf("app: [");
-	while (inp.app_op.cmd && *inp.app_op.cmd)
-		printf("'%s', ", *inp.app_op.cmd++);
-	printf("]\n");
-}
+// 	inp.input = ft_strdup("cat << hdoc1 < infile1 > outfile1 << hdoc2 >> append1 < infile2");
+// 	parse_redirection(&inp);
+// 	printf("'%s'\n", inp.input);
+// 	printf("hdoc: [");
+// 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
+// 		printf("'%s', ", *inp.hdoc_op.cmd++);
+// 	printf("]\n");
+// 	printf("inp: [");
+// 	while (inp.inp_op.cmd && *inp.inp_op.cmd)
+// 		printf("'%s', ", *inp.inp_op.cmd++);
+// 	printf("]\n");
+// 	printf("out: [");
+// 	while (inp.out_op.cmd && *inp.out_op.cmd)
+// 		printf("'%s', ", *inp.out_op.cmd++);
+// 	printf("]\n");
+// 	printf("app: [");
+// 	while (inp.app_op.cmd && *inp.app_op.cmd)
+// 		printf("'%s', ", *inp.app_op.cmd++);
+// 	printf("]\n");
+// }
 
 // cc test.c functions.c ../../include/libft/src/ft_strchr.c ../../include/libft/src/ft_strjoin.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strlcat.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strdup.c parsing.c more_functions.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strncmp.c -o test -g -Wall -Werror -Wextra
