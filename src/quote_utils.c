@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 11:33:37 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 12:31:08 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,29 @@ t_list	*copy_env_list(char **env)
 		add_node(&env_list, env[i]);
 		i++;
 	}
-	retyrb (env_list);
+	return (env_list);
 }
 
-void	handle_escape(char **input, char **dst, bool sq, bool dq)
-{
-	if (!sq && (**input == '\\') && (*(*input + 1) == '"' \
-		|| *(*input + 1) == '$' || *(*input + 1) == '\\' \
-		|| *(*input + 1) == '`' || *(*input + 1) == '\n'))
-	{
-		(*input)++;
-		*(*dst)++ = **input;
-	}
-}
+// void	handle_escape(char **input, char **dst, bool sq)
+// {
+// 	if (!sq && (**input == '\\') && (*(*input + 1) == '"' \
+// 		|| *(*input + 1) == '$' || *(*input + 1) == '\\' \
+// 		|| *(*input + 1) == '`' || *(*input + 1) == '\n'))
+// 	{
+// 		(*input)++;
+// 		*(*dst)++ = **input;
+// 	}
+// }
 
-void	update_quote_state(char c, bool *sq, bool *dq, bool escape)
-{
-	if (escape)
-		return ;
-	if (c == '\'' && !*dq)
-		*sq = !*sq;
-	else if (c == '"' && !*sq)
-		*dq = !*dq;
-}
+// void	update_quote_state(char c, bool *sq, bool *dq, bool escape)
+// {
+// 	if (escape)
+// 		return ;
+// 	if (c == '\'' && !*dq)
+// 		*sq = !*sq;
+// 	else if (c == '"' && !*sq)
+// 		*dq = !*dq;
+// }
 
 void	add_command(t_list **list, t_split_state *state)
 {

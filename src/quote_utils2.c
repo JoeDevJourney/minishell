@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:59:52 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 11:34:02 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 15:42:48 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,71 @@ void	add_node(t_list **head, const char *str)
 			temp = temp->next;
 		temp->next = new_node;
 	}
+}
+
+t_quote_state	init_quote_state(void)
+{
+	t_quote_state	state;
+
+	state.sq = false;
+	state.dq = false;
+	state.escape = false;
+	return (state);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char		*d;
+	const unsigned char	*s;
+	size_t				i;
+
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	i = 0;
+	if (d == NULL && s == NULL)
+		return (NULL);
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dest);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*ptr;
+
+	ptr = malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (ptr == NULL)
+		return (NULL);
+	ft_memmove(ptr, s, (size_t)ft_strlen(s) + 1);
+	return (ptr);
+}
+
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	unsigned char			*d;
+	const unsigned char		*s;
+	size_t					i;
+
+	i = 0;
+	s = (const unsigned char *)src;
+	d = (unsigned char *)dst;
+	if (d == NULL && s == NULL)
+		return (NULL);
+	while (i < len)
+	{
+		if (d < s)
+		{
+			d[i] = s[i];
+			i++;
+		}
+		else
+		{
+			d[len - i - 1] = s[len - i - 1];
+			i ++;
+		}
+	}
+	return (dst);
 }

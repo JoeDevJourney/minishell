@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 11:34:48 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/14 15:45:01 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ typedef struct s_split_state
 	char	*ptr;
 }	t_split_state;
 
+typedef struct s_quote_state
+{
+	bool	sq;
+	bool	dq;
+	bool	escape;
+}	t_quote_state;
+
 typedef struct s_list
 {
 	char			*str;
@@ -68,60 +75,62 @@ typedef struct s_list
 }	t_list;
 
 //	Execution
-int		exec_command(t_data inp);
-int		handle_pipes(t_data inp);
-int		handle_command(t_data inp);
+int				exec_command(t_data inp);
+int				handle_pipes(t_data inp);
+int				handle_command(t_data inp);
 
 //	Operators
-void	expansion_oper(char **arr);
-int		*search_redir_oper(t_data *inp);
+void			expansion_oper(char **arr);
+int				*search_redir_oper(t_data *inp);
 
 //	Builtins
-int		search_builtins(t_data inp);
-int		exec_env(char **env);
-int		exec_pwd(char **cmd);
-int		ft_export(char **env, char **args);
+int				search_builtins(t_data inp);
+int				exec_env(char **env);
+int				exec_pwd(char **cmd);
+int				ft_export(char **env, char **args);
 
 //	Utilities
-char	**ft_split2(const char *s, const char *delim);
-size_t	count_substr(const char *s, const char *delim);
-char	*join_cmd(char **arr);
-void	free_array(char **arr);
-void	*safe_malloc(size_t size);
-char	*rwd(char *dir);
-int		ft_strcmp(const char *s1, const char *s2);
-void	ft_write_error(const char *msg);
-char	*get_home_dir(void);
-char	*get_oldpwd_dir(void);
-char	*get_target_dir(char **args);
-char	*ft_strcpy(char *dest, const char *src);
-char	*ft_strcat(char *dest, const char *src);
-int		update_env_var(char **env, const char *name, const char *value);
-int		update_pwd_vars(char **env, const char *oldpwd);
-int		ft_cd(char **env, char **args);
-int		ft_strcmp(const char *s1, const char *s2);
-int		add_env_var(char **env, char *new_entry);
-void	safe_free(void *ptr);
-int		is_builtin(char *cmd);
-int		execute_builtin(char **env, char **args);
-int		ft_exit(char **args);
-char	*get_target_dir(char **args);
-int		is_valid_identifier(const char *str);
-void	ft_arrfree(char **arr);
-char	**ft_arrdup(char **arr, int size);
-void	ft_swap(void *a, void *b, size_t size);
-char	*create_env_entry(const char *name, const char *value);
-int		replace_env_var(char **env, const char *name, char *new_entry);
+char			**ft_split2(const char *s, const char *delim);
+size_t			count_substr(const char *s, const char *delim);
+char			*join_cmd(char **arr);
+void			free_array(char **arr);
+void			*safe_malloc(size_t size);
+char			*rwd(char *dir);
+int				ft_strcmp(const char *s1, const char *s2);
+void			ft_write_error(const char *msg);
+char			*get_home_dir(void);
+char			*get_oldpwd_dir(void);
+char			*get_target_dir(char **args);
+char			*ft_strcpy(char *dest, const char *src);
+char			*ft_strcat(char *dest, const char *src);
+int				update_env_var(char **env, const char *name, const char *value);
+int				update_pwd_vars(char **env, const char *oldpwd);
+int				ft_cd(char **env, char **args);
+int				ft_strcmp(const char *s1, const char *s2);
+int				add_env_var(char **env, char *new_entry);
+void			safe_free(void *ptr);
+int				is_builtin(char *cmd);
+int				execute_builtin(char **env, char **args);
+int				ft_exit(char **args);
+char			*get_target_dir(char **args);
+int				is_valid_identifier(const char *str);
+void			ft_arrfree(char **arr);
+char			**ft_arrdup(char **arr, int size);
+void			ft_swap(void *a, void *b, size_t size);
+char			*create_env_entry(const char *name, const char *value);
+int				replace_env_var(char **env, const char *name, char *new_entry);
 // Quotes Utils
-size_t	ft_strnlen(const char *s, size_t maxlen);
-char	*ft_strndub(const char *s, size_t n);
-void	init_split_state(t_split_state *state, char *str);
-void	add_node(t_list **head, const char *str);
-void	free_list(t_list *head);
-t_list	*copy_env_list(char **env);
-void	handle_escape(char **input, char **dst, bool sq);
-void	update_quote_state(char c, bool *sq, bool *dq, bool escape);
-void	add_command(t_list **list, t_split_state *state);
+size_t			ft_strnlen(const char *s, size_t maxlen);
+char			*ft_strndub(const char *s, size_t n);
+void			init_split_state(t_split_state *state, char *str);
+void			add_node(t_list **head, const char *str);
+void			free_list(t_list *head);
+t_list			*copy_env_list(char **env);
+void			handle_escape(char **input, char **dst, bool sq);
+void			update_quote_state(char c, bool *sq, bool *dq, bool escape);
+void			add_command(t_list **list, t_split_state *state);
+t_quote_state	init_quote_state(void);
+
 // Quotes
 bool	check_quotes(const char *input);
 char	*process_quotes(char *input);
