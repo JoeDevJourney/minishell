@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
 static size_t	count_array_size(char **arr)
 {
@@ -104,29 +104,29 @@ void	parse_redirection(t_data *inp)
 	}
 }
 
-// int main()
-// {
-// 	t_data inp;
+int main()
+{
+	t_data inp;
 
-// 	inp.input = ft_strdup("cat << hdoc1 < infile1 > outfile1 << hdoc2 >> append1 < infile2");
-// 	parse_redirection(&inp);
-// 	printf("'%s'\n", inp.input);
-// 	printf("hdoc: [");
-// 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
-// 		printf("'%s', ", *inp.hdoc_op.cmd++);
-// 	printf("]\n");
-// 	printf("inp: [");
-// 	while (inp.inp_op.cmd && *inp.inp_op.cmd)
-// 		printf("'%s', ", *inp.inp_op.cmd++);
-// 	printf("]\n");
-// 	printf("out: [");
-// 	while (inp.out_op.cmd && *inp.out_op.cmd)
-// 		printf("'%s', ", *inp.out_op.cmd++);
-// 	printf("]\n");
-// 	printf("app: [");
-// 	while (inp.app_op.cmd && *inp.app_op.cmd)
-// 		printf("'%s', ", *inp.app_op.cmd++);
-// 	printf("]\n");
-// }
+	inp.input = ft_strdup("cat << hdoc1 < infile1 > outfile1 << hdoc2 >> append1 < infile2");
+	parse_redirection(&inp);
+	printf("'%s'\n", inp.input);
+	printf("hdoc: [");
+	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
+		printf("'%s', ", *inp.hdoc_op.cmd++);
+	printf("]\n");
+	printf("inp: [");
+	while (inp.inp_op.cmd && *inp.inp_op.cmd)
+		printf("'%s', ", *inp.inp_op.cmd++);
+	printf("]\n");
+	printf("out: [");
+	while (inp.out_op.cmd && *inp.out_op.cmd)
+		printf("'%s', ", *inp.out_op.cmd++);
+	printf("]\n");
+	printf("app: [");
+	while (inp.app_op.cmd && *inp.app_op.cmd)
+		printf("'%s', ", *inp.app_op.cmd++);
+	printf("]\n");
+}
 
-// cc test.c functions.c ../../include/libft/src/ft_strchr.c ../../include/libft/src/ft_strjoin.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strlcat.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strdup.c parsing.c more_functions.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strncmp.c -o test -g -Wall -Werror -Wextra
+// cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra
