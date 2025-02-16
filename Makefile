@@ -12,7 +12,8 @@ LIBFTDIR = ./include/libft
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
 		$(SRCDIR)/commands.c $(SRCDIR)/redirection.c \
 		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c \
-		$(SRCDIR)/utils/parsing.c $(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c
+		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c
+
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 # OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

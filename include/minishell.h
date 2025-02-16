@@ -78,6 +78,7 @@ void	exec_env(char **env);
 void	exec_pwd(char **cmd);
 
 //	Utilities
+size_t	count_array_size(char **arr);
 size_t	count_substr(const char *s, const char *delim);
 char	**ft_split2(const char *s, const char *delim);
 char	**add_to_array(char **arr, char *new_str);

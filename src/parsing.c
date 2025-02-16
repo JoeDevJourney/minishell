@@ -12,16 +12,6 @@
 
 #include "../include/minishell.h"
 
-static size_t	count_array_size(char **arr)
-{
-	size_t	len;
-
-	len = 0;
-	while (arr && arr[len])
-		len++;
-	return (len);
-}
-
 static void	merge_rest(char ***rest, char **split_arr, size_t new_count)
 {
 	size_t	old_count;
@@ -72,10 +62,39 @@ static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 	inp->app_op.cmd = NULL;
 	inp->out_op.cmd = NULL;
 	inp->hdoc_op.cmd = NULL;
+	inp->command = NULL;
 	lists[0] = &(inp->hdoc_op.cmd);
 	lists[1] = &(inp->app_op.cmd);
 	lists[2] = &(inp->inp_op.cmd);
 	lists[3] = &(inp->out_op.cmd);
+}
+
+static void trim_spaces(t_data *inp)
+{
+	char	**arr[4];
+    char	*trimmed;
+    size_t	size;
+	size_t	i;
+
+	arr[0] = inp->inp_op.cmd;
+	arr[1] = inp->out_op.cmd;
+	arr[2] = inp->app_op.cmd;
+	arr[3] = inp->hdoc_op.cmd;
+	i = -1;
+	while (++i < 4)
+	{
+		size = count_array_size(arr[i]);
+		while (size > 0)
+		{
+			trimmed = ft_strtrim(arr[i][size - 1], " ");
+			if (trimmed)
+			{
+				free(arr[i][size - 1]);
+				arr[i][size - 1] = trimmed;
+			}
+			size--;
+		}
+	}
 }
 
 void	parse_redirection(t_data *inp)
@@ -102,15 +121,20 @@ void	parse_redirection(t_data *inp)
 			ptr++;
 		}
 	}
+	trim_spaces(inp);
+	inp->command = ft_split(inp->input, ' ');
 }
 
 int main()
 {
 	t_data inp;
 
-	inp.input = ft_strdup("cat << hdoc1 < infile1 > outfile1 << hdoc2 >> append1 < infile2");
+	inp.input = ft_strdup("cat -e << doc1 < in1 > out1 << doc2 >> app1 < in2");
 	parse_redirection(&inp);
-	printf("'%s'\n", inp.input);
+	printf("command: [");
+	while (inp.command && *inp.command)
+		printf("'%s', ", *inp.command++);
+	printf("]\n");
 	printf("hdoc: [");
 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
 		printf("'%s', ", *inp.hdoc_op.cmd++);
@@ -129,4 +153,4 @@ int main()
 	printf("]\n");
 }
 
-// cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra
+// cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c utils/even_more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra
