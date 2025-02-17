@@ -109,25 +109,27 @@ void	handle_command(t_data *inp)
 	close(sstdin);
 }
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_data	inp;
+int	main(int argc, char **argv, char **env)
+{
+	t_data	inp;
 
-// 	(void)argc;
-// 	(void)argv;
-// 	inp.env = env;
-// 	inp.home_dir = getenv("PWD");
-// 	inp.and.cmd = NULL;
-// 	inp.or.cmd = NULL;
-// 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-// 	inp.pipe.cmd[0] = ft_strdup("cat -e < ../Makefile");
-// 	inp.pipe.cmd[1] = NULL;
-// }
-// cc commands.c -o commands redirection.c pipex.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline 
+	(void)argc;
+	(void)argv;
+	inp.env = env;
+	inp.home_dir = getenv("PWD");
+	inp.and.cmd = NULL;
+	inp.or.cmd = NULL;
+	inp.input = ft_strdup("cat -e << doc1 < in1 > out1 << doc2 >> app1 < in2");
+	handle_command(&inp);
+}
 
-	// printf("pipes: [");
-	// while (inp.pipe.cmd && *inp.pipe.cmd)
-	// 	printf("'%s', ", *inp.pipe.cmd++);
+	// printf("command: [");
+	// while (inp.command && *inp.command)
+	// 	printf("'%s', ", *inp.command++);
+	// printf("]\n");
+	// printf("hdoc: [");
+	// while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
+	// 	printf("'%s', ", *inp.hdoc_op.cmd++);
 	// printf("]\n");
 	// printf("inp: [");
 	// while (inp.inp_op.cmd && *inp.inp_op.cmd)
@@ -141,7 +143,4 @@ void	handle_command(t_data *inp)
 	// while (inp.app_op.cmd && *inp.app_op.cmd)
 	// 	printf("'%s', ", *inp.app_op.cmd++);
 	// printf("]\n");
-	// printf("hdoc: [");
-	// if (!inp.hdoc_op.cmd)
-	// 	printf("(null)\n");
-	// printf("]\n");
+// cc commands.c -o commands redirection.c pipex.c utils/parsing.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c utils/functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c ../include/libft/src/ft_putendl_fd.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strtrim.c utils/more_functions.c -Wall -Werror -Wextra -g -lreadline 

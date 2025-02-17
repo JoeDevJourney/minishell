@@ -125,32 +125,32 @@ void	parse_redirection(t_data *inp)
 	inp->command = ft_split(inp->input, ' ');
 }
 
-int main()
-{
-	t_data inp;
+// int main()
+// {
+// 	t_data inp;
 
-	inp.input = ft_strdup("cat -e << doc1 < in1 > out1 << doc2 >> app1 < in2");
-	parse_redirection(&inp);
-	printf("command: [");
-	while (inp.command && *inp.command)
-		printf("'%s', ", *inp.command++);
-	printf("]\n");
-	printf("hdoc: [");
-	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
-		printf("'%s', ", *inp.hdoc_op.cmd++);
-	printf("]\n");
-	printf("inp: [");
-	while (inp.inp_op.cmd && *inp.inp_op.cmd)
-		printf("'%s', ", *inp.inp_op.cmd++);
-	printf("]\n");
-	printf("out: [");
-	while (inp.out_op.cmd && *inp.out_op.cmd)
-		printf("'%s', ", *inp.out_op.cmd++);
-	printf("]\n");
-	printf("app: [");
-	while (inp.app_op.cmd && *inp.app_op.cmd)
-		printf("'%s', ", *inp.app_op.cmd++);
-	printf("]\n");
-}
+// 	inp.input = ft_strdup("cat -e << doc1 < in1 > out1 << doc2 >> app1 < in2");
+// 	parse_redirection(&inp);
+// 	printf("command: [");
+// 	while (inp.command && *inp.command)
+// 		printf("'%s', ", *inp.command++);
+// 	printf("]\n");
+// 	printf("hdoc: [");
+// 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
+// 		printf("'%s', ", *inp.hdoc_op.cmd++);
+// 	printf("]\n");
+// 	printf("inp: [");
+// 	while (inp.inp_op.cmd && *inp.inp_op.cmd)
+// 		printf("'%s', ", *inp.inp_op.cmd++);
+// 	printf("]\n");
+// 	printf("out: [");
+// 	while (inp.out_op.cmd && *inp.out_op.cmd)
+// 		printf("'%s', ", *inp.out_op.cmd++);
+// 	printf("]\n");
+// 	printf("app: [");
+// 	while (inp.app_op.cmd && *inp.app_op.cmd)
+// 		printf("'%s', ", *inp.app_op.cmd++);
+// 	printf("]\n");
+// }
 
 // cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c utils/even_more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra

@@ -114,19 +114,18 @@ static void	hdoc_oper(t_data *inp)
 	return (free(input), close(fd), free_array(tok));
 }
 
-// void	process_fds(t_data *inp)
-// {
-// 	parse_redir(inp);
-// 	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
-// 		hdoc_oper(inp);
-// 	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
-// 		inp_oper(inp);
-// 	if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
-// 		app_oper(inp);
-// 	if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
-// 		out_oper(inp);
-// 	else
-// 		inp->command = ft_split(*inp->pipe.cmd, ' ');
-// }
+void	process_fds(t_data *inp)
+{
+	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
+		hdoc_oper(inp);
+	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
+		inp_oper(inp);
+	if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
+		app_oper(inp);
+	if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
+		out_oper(inp);
+	else
+		inp->command = ft_split(*inp->pipe.cmd, ' ');
+}
 
 // cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextra

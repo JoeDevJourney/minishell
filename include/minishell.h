@@ -70,7 +70,7 @@ void	exec_external(t_data inp);
 //	Operators
 void	expansion_oper(char **arr);
 void	process_fds(t_data *inp);
-void	parse_redir(t_data *inp);
+void	parse_redirection(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
