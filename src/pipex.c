@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/13 14:22:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:05:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int	handle_pipes(t_data *inp)
 	int		i;
 	int		res;
 
+	print_data(*inp);
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	p_fd = init_pipes(inp->pipe.num_cmd);
 	i = 0;

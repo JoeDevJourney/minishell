@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 18:21:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:03:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,5 @@ void	print_data(t_data inp)
 	while (inp.command && *inp.command)
 		printf("'%s', ", *inp.command++);
 	printf("]\n");
-	// pause();
+	pause();
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 19:42:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:04:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ static void	init_data(t_data *inp)
 {
 	inp->inp_op.cmd = NULL;
 	inp->inp_op.num_cmd = 0;
-	inp->inp_op.fd = -1;
+	inp->inp_op.fd[1] = -1;
 	inp->app_op.cmd = NULL;
 	inp->app_op.num_cmd = 0;
-	inp->app_op.fd = -1;
+	inp->app_op.fd[1] = -1;
 	inp->out_op.cmd = NULL;
 	inp->out_op.num_cmd = 0;
-	inp->out_op.fd = -1;
+	inp->out_op.fd[1] = -1;
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	inp->hdoc_op.fd = -1;
+	inp->hdoc_op.fd[1] = -1;
 	inp->command = NULL;
 	errno = 0;
 }
@@ -105,7 +105,7 @@ int	main(int argc, char **argv, char **env)
 	// 		break ;
 	// 	parse_command(&inp);
 	// }
-	inp.input = ft_strdup("cat -e < Makefile && ls -l");
+	inp.input = ft_strdup("ls -1 | cat -n && pwd");
 	parse_command(&inp);
 	return (0);
 }
