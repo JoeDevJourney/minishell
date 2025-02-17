@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 19:26:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:42:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ static void	parse_command(t_data *inp)
 		if (errno)
 			break ;
 	}
-	// (void)free_input(inp);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -106,7 +105,7 @@ int	main(int argc, char **argv, char **env)
 	// 		break ;
 	// 	parse_command(&inp);
 	// }
-	inp.input = ft_strdup("cat -e <Makefile || ls -l");
+	inp.input = ft_strdup("cat -e < Makefile && ls -l");
 	parse_command(&inp);
 	return (0);
 }

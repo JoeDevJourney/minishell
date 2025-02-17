@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 19:21:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:35:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ static void	hdoc_oper(t_data *inp)
 	if (!*++inp->hdoc_op.cmd)
 		dup2(inp->hdoc_op.fd, STDIN_FILENO);
 	close(inp->hdoc_op.fd);
+	free(input);
+	free(hdoc);
 }
 
 void	parse_redir(t_data *inp)
