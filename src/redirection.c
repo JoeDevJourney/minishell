@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 20:01:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:31:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,46 @@
 
 static void	out_oper(t_data *inp)
 {
-	inp->out_op.fd[0] = STDOUT_FILENO;
-	inp->out_op.fd[1] = open(*inp->out_op.cmd,
+	inp->out_op.fd = safe_malloc(sizeof(int [2]));
+	inp->out_op.fd[0] = safe_malloc(sizeof(int));
+	inp->out_op.fd[1] = safe_malloc(sizeof(int));
+	*inp->out_op.fd[0] = STDOUT_FILENO;
+	*inp->out_op.fd[1] = open(*inp->out_op.cmd,
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (inp->out_op.fd[1] == -1)
+	if (*inp->out_op.fd[1] == -1)
 		perror(*inp->out_op.cmd);
 	if (!*++inp->out_op.cmd)
-		dup2(inp->out_op.fd[1], inp->out_op.fd[0]);
-	close(inp->out_op.fd[1]);
+		dup2(*inp->out_op.fd[1], *inp->out_op.fd[0]);
+	close(*inp->out_op.fd[1]);
 }
 
 static void	inp_oper(t_data *inp)
 {
-	inp->inp_op.fd[0] = STDIN_FILENO;
-	inp->inp_op.fd[1] = open(*inp->inp_op.cmd, O_RDONLY);
-	if (inp->inp_op.fd[1] == -1)
+	inp->inp_op.fd = safe_malloc(sizeof(int [2]));
+	inp->inp_op.fd[0] = safe_malloc(sizeof(int));
+	inp->inp_op.fd[1] = safe_malloc(sizeof(int));
+	*inp->inp_op.fd[0] = STDIN_FILENO;
+	*inp->inp_op.fd[1] = open(*inp->inp_op.cmd, O_RDONLY);
+	if (*inp->inp_op.fd[1] == -1)
 		perror(*inp->inp_op.cmd);
 	if (!*++inp->inp_op.cmd)
-		dup2(inp->inp_op.fd[1], inp->inp_op.fd[0]);
-	close(inp->inp_op.fd[1]);
+		dup2(*inp->inp_op.fd[1], *inp->inp_op.fd[0]);
+	close(*inp->inp_op.fd[1]);
 }
 
 static void	app_oper(t_data *inp)
 {
-	inp->app_op.fd[0] = STDOUT_FILENO;
-	inp->app_op.fd[1] = open(*inp->app_op.cmd,
+	inp->app_op.fd = safe_malloc(sizeof(int [2]));
+	inp->app_op.fd[0] = safe_malloc(sizeof(int));
+	inp->app_op.fd[1] = safe_malloc(sizeof(int));
+	*inp->app_op.fd[0] = STDOUT_FILENO;
+	*inp->app_op.fd[1] = open(*inp->app_op.cmd,
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (inp->app_op.fd[1] == -1)
+	if (*inp->app_op.fd[1] == -1)
 		perror(*inp->app_op.cmd);
 	if (!*++inp->app_op.cmd)
-		dup2(inp->app_op.fd[1], inp->app_op.fd[0]);
-	close(inp->app_op.fd[1]);
+		dup2(*inp->app_op.fd[1], *inp->app_op.fd[0]);
+	close(*inp->app_op.fd[1]);
 }
 
 static void	hdoc_oper(t_data *inp)
@@ -53,9 +62,12 @@ static void	hdoc_oper(t_data *inp)
 	char	*hdoc;
 
 	hdoc = ft_strjoin(inp->home_dir, "/src/heredoc");
-	inp->hdoc_op.fd[0] = STDIN_FILENO;
-	inp->hdoc_op.fd[1] = open(hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (inp->hdoc_op.fd[1] == -1)
+	inp->app_op.fd = safe_malloc(sizeof(int [2]));
+	inp->app_op.fd[0] = safe_malloc(sizeof(int));
+	inp->app_op.fd[1] = safe_malloc(sizeof(int));
+	*inp->hdoc_op.fd[0] = STDIN_FILENO;
+	*inp->hdoc_op.fd[1] = open(hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (*inp->hdoc_op.fd[1] == -1)
 		perror(*inp->hdoc_op.cmd);
 	while (1)
 	{
@@ -63,14 +75,14 @@ static void	hdoc_oper(t_data *inp)
 		if (*input != '\0'
 			&& !ft_strncmp(input, *inp->hdoc_op.cmd, ft_strlen(inp->input)))
 			break ;
-		ft_putendl_fd(input, inp->hdoc_op.fd[1]);
+		ft_putendl_fd(input, *inp->hdoc_op.fd[1]);
 		free(input);
 	}
-	close(inp->hdoc_op.fd[1]);
-	inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
+	close(*inp->hdoc_op.fd[1]);
+	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	if (!*++inp->hdoc_op.cmd)
-		dup2(inp->hdoc_op.fd[1], inp->hdoc_op.fd[0]);
-	close(inp->hdoc_op.fd[1]);
+		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
+	close(*inp->hdoc_op.fd[1]);
 	free(input);
 	free(hdoc);
 }

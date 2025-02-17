@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/17 20:05:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:37:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,22 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
 	free(pfd);
 }
 
-static int	**init_pipes(int n)
+static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
-	int	**fd;
 
-	fd = safe_malloc((n - 1) * sizeof(int *));
+	oper->fd = safe_malloc(oper->num_cmd * sizeof(int [2]));
 	i = -1;
-	while (++i < n - 1)
-		fd[i] = safe_malloc((2 * sizeof(int)));
-	i = -1;
-	while (++i < n - 1)
+	while (++i < oper->num_cmd)
 	{
-		if (pipe(fd[i]) == -1)
+		if (pipe(oper->fd) == -1)
 		{
 			while (i > 0)
-				free(fd[--i]);
-			free(fd);
+				free(oper->fd[--i]);
+			free(oper->fd);
 			exit_with_error("Pipe creation failed", EXIT_FAILURE);
 		}
 	}
-	return (fd);
 }
 
 static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
@@ -95,17 +90,16 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 int	handle_pipes(t_data *inp)
 {
 	pid_t	*pid;
-	int		**p_fd;
-	int		ptr_fd;
+	int		std_fd;
 	int		i;
 	int		res;
 
 	print_data(*inp);
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
-	p_fd = init_pipes(inp->pipe.num_cmd);
+	init_pipes(&inp->pipe);
 	i = 0;
-	ptr_fd = STDOUT_FILENO;
-	res = fork_pipe(pid[i], inp, p_fd[i], &ptr_fd);
+	std_fd = STDOUT_FILENO;
+	res = fork_pipe(pid[i], inp, p_fd[i], &std_fd);
 	while (++i < inp->pipe.num_cmd - 1)
 	{
 		close(p_fd[i - 1][1]);
@@ -115,8 +109,8 @@ int	handle_pipes(t_data *inp)
 	}
 	close(p_fd[i - 1][1]);
 	inp->pipe.cmd++;
-	ptr_fd = STDIN_FILENO;
-	res = fork_pipe(pid[i], inp, p_fd[i - 1], &ptr_fd);
+	std_fd = STDIN_FILENO;
+	res = fork_pipe(pid[i], inp, p_fd[i - 1], &std_fd);
 	close(p_fd[i - 1][0]);
 	wait_n_free(inp->pipe.num_cmd, pid, p_fd);
 	return (res);
