@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/13 20:58:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:56:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,13 @@ static void	out_oper(t_data *inp)
 
 static void	inp_oper(t_data *inp)
 {
-	char	**tok;
-	int		fd;
-	int		i;
-
-	tok = ft_split(*inp->pipe.cmd, '<');
-	inp->inp_op.cmd = ft_split(*tok, ' ');
-	inp->inp_op.num_cmd = str_count(*tok, ' ');
-	i = 0;
-	while (tok[++i])
-	{
-		fd = open(ft_strtrim(tok[i], " "), O_RDONLY);
-		if (fd == -1)
-		{
-			free_array(tok);
-			exit_with_error(ft_strtrim(tok[i], " "), 1);
-		}
-		if (!tok[i + 1])
-			dup2(fd, STDIN_FILENO);
-	}
-	free_array(tok);
+	inp->inp_op.fd[0] = STDIN_FILENO;
+	inp->inp_op.fd[1] = open(*inp->inp_op.cmd++, O_RDONLY);
+	if (inp->inp_op.fd[1] == -1)
+		perror(*inp->inp_op.cmd);
+	if (!*inp->inp_op.cmd)
+		dup2(inp->inp_op.fd[1], inp->inp_op.fd[0]);
+	close(inp->inp_op.fd[1]);
 }
 
 static void	app_oper(t_data *inp)
@@ -114,18 +101,28 @@ static void	hdoc_oper(t_data *inp)
 	return (free(input), close(fd), free_array(tok));
 }
 
-void	process_fds(t_data *inp)
+void	parse_redir(t_data *inp)
 {
-	if (ft_strnstr(*inp->pipe.cmd, "<<", ft_strlen(*inp->pipe.cmd)))
-		hdoc_oper(inp);
-	if (ft_strnstr(*inp->pipe.cmd, "<", ft_strlen(*inp->pipe.cmd)))
-		inp_oper(inp);
-	if (ft_strnstr(*inp->pipe.cmd, ">>", ft_strlen(*inp->pipe.cmd)))
-		app_oper(inp);
-	if (ft_strnstr(*inp->pipe.cmd, ">", ft_strlen(*inp->pipe.cmd)))
-		out_oper(inp);
-	else
-		inp->command = ft_split(*inp->pipe.cmd, ' ');
+	process_fds(inp);
+	// print_data(*inp);
+	while (*inp->input)
+	{
+		if (*inp->input == '<')
+		{
+			if (++*inp->input == '<')
+				hdoc_oper(inp);
+			else
+				inp_oper(inp);
+		}
+		else if (*inp->input == '>')
+		{
+			if (++*inp->input == '>')
+				app_oper(inp);
+			else
+				out_oper(inp);
+		}
+		inp->input++;
+	}
 }
 
 // cc redir_oper.c -o redir_oper commands.c ../include/libft/src/ft_strncmp.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strdup.c ../include/libft/src/ft_strjoin.c functions.c ../include/libft/src/ft_memmove.c builtins/builtins.c ../include/libft/src/ft_split.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strlcpy.c builtins/env.c builtins/pwd.c -Wall -Werror -Wextra

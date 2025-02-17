@@ -6,60 +6,79 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/13 13:55:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:57:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*read_input(void)
-{
-	char	*str;
-	char	*prompt;
-	char	*temp;
+// static char	*read_input(void)
+// {
+// 	char	*str;
+// 	char	*prompt;
+// 	char	*temp;
+//
+// 	temp = ft_strjoin(GRN, getenv("USER"));
+// 	prompt = ft_strdup(temp);
+// 	free(temp);
+// 	temp = ft_strjoin(prompt, "@");
+// 	free(prompt);
+// 	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
+// 	free(temp);
+// 	temp = ft_strjoin(prompt, RST);
+// 	free(prompt);
+// 	prompt = ft_strjoin(temp, " % ");
+// 	str = readline(prompt);
+// 	while (!*str)
+// 		str = readline(prompt);
+// 	add_history(str);
+// 	return (free(temp), free(prompt), str);
+// }
 
-	temp = ft_strjoin(GRN, getenv("USER"));
-	prompt = ft_strdup(temp);
-	free(temp);
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-	free(temp);
-	temp = ft_strjoin(prompt, RST);
-	free(prompt);
-	prompt = ft_strjoin(temp, " % ");
-	str = readline(prompt);
-	while (!*str)
-		str = readline(prompt);
-	add_history(str);
-	return (free(temp), free(prompt), str);
+static void	init_data(t_data *inp)
+{
+	inp->inp_op.cmd = NULL;
+	inp->inp_op.num_cmd = 0;
+	inp->inp_op.fd[1] = -1;
+	inp->app_op.cmd = NULL;
+	inp->app_op.num_cmd = 0;
+	inp->app_op.fd[1] = -1;
+	inp->out_op.cmd = NULL;
+	inp->out_op.num_cmd = 0;
+	inp->out_op.fd[1] = -1;
+	inp->hdoc_op.cmd = NULL;
+	inp->hdoc_op.num_cmd = 0;
+	inp->hdoc_op.fd[1] = -1;
+	inp->command = NULL;
+	errno = 0;
 }
 
 static void	parse_command(t_data *inp)
 {
-	char	**and_cmd;
-	char	**or_cmd;
+	int	i;
+	int	j;
 
 	inp->and.cmd = ft_split2(inp->input, "&&");
 	inp->and.num_cmd = count_substr(inp->input, "&&");
-	and_cmd = inp->and.cmd;
-	while (*and_cmd)
+	free(inp->input);
+	i = -1;
+	while (++i < inp->and.num_cmd)
 	{
-		inp->or.cmd = ft_split2(*and_cmd, "||");
-		inp->or.num_cmd = count_substr(*and_cmd, "||");
-		or_cmd = inp->or.cmd;
-		while (*or_cmd)
+		inp->or.cmd = ft_split2(inp->and.cmd[i], "||");
+		inp->or.num_cmd = count_substr(inp->and.cmd[i], "||");
+		j = -1;
+		while (++j < inp->or.num_cmd)
 		{
-			inp->pipe.cmd = ft_split2(*or_cmd, "|");
-			inp->pipe.num_cmd = count_substr(*or_cmd, "|");
+			init_data(inp);
+			inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
+			inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
 			handle_command(inp);
-			if (!inp->ret_val)
+			if (!errno)
 				break ;
-			or_cmd++;
 		}
-		if (inp->ret_val)
+		free_array(inp->or.cmd);
+		if (errno)
 			break ;
-		and_cmd++;
 	}
 	// (void)free_input(inp);
 }
@@ -72,14 +91,23 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	inp.env = env;
 	inp.home_dir = ft_strdup(getenv("PWD"));
-	printf("Welcome\n");
-	while (1)
-	{
-		inp.input = read_input();
-		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
-			break ;
-		parse_command(&inp);
-	}
+	inp.and.cmd = NULL;
+	inp.and.num_cmd = 0;
+	inp.or.cmd = NULL;
+	inp.or.num_cmd = 0;
+	inp.pipe.cmd = NULL;
+	inp.pipe.num_cmd = 0;
+	init_data(&inp);
+	// printf("Welcome\n");
+	// while (1)
+	// {
+	// 	inp.input = read_input();
+	// 	if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+	// 		break ;
+	// 	parse_command(&inp);
+	// }	inp->and.cmd = NULL;
+	inp.input = ft_strdup("ls -l || pwd && env");
+	parse_command(&inp);
 	return (0);
 }
 

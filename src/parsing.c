@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/14 14:31:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:55:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,28 +58,25 @@ static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 	del[1] = ">>";
 	del[2] = "<";
 	del[3] = ">";
-	inp->inp_op.cmd = NULL;
-	inp->app_op.cmd = NULL;
-	inp->out_op.cmd = NULL;
-	inp->hdoc_op.cmd = NULL;
-	inp->command = NULL;
-	lists[0] = &(inp->hdoc_op.cmd);
-	lists[1] = &(inp->app_op.cmd);
-	lists[2] = &(inp->inp_op.cmd);
-	lists[3] = &(inp->out_op.cmd);
+	lists[0] = &(inp->pipe.cmd);
+	lists[1] = &(inp->hdoc_op.cmd);
+	lists[2] = &(inp->app_op.cmd);
+	lists[3] = &(inp->inp_op.cmd);
+	lists[4] = &(inp->out_op.cmd);
 }
 
-static void trim_spaces(t_data *inp)
+static void	trim_spaces(t_data *inp)
 {
-	char	**arr[4];
-    char	*trimmed;
-    size_t	size;
+	char	**arr[5];
+	char	*trimmed;
+	size_t	size;
 	size_t	i;
 
-	arr[0] = inp->inp_op.cmd;
-	arr[1] = inp->out_op.cmd;
-	arr[2] = inp->app_op.cmd;
-	arr[3] = inp->hdoc_op.cmd;
+	arr[0] = inp->pipe.cmd;
+	arr[1] = inp->inp_op.cmd;
+	arr[2] = inp->out_op.cmd;
+	arr[3] = inp->app_op.cmd;
+	arr[4] = inp->hdoc_op.cmd;
 	i = -1;
 	while (++i < 4)
 	{
@@ -97,60 +94,30 @@ static void trim_spaces(t_data *inp)
 	}
 }
 
-void	parse_redirection(t_data *inp)
+void	process_fds(t_data *inp)
 {
-	char	***lists[4];
+	char	***lists[5];
 	char	*del[4];
 	char	**ptr;
 	int		i;
 	int		j;
 
+	inp->input = ft_strdup(*inp->pipe.cmd);
 	init_lists_and_del(inp, lists, del);
 	i = -1;
-	while (++i < 4)
-		split_and_store(&inp->input, lists[i], del[i]);
-	i = -1;
-	while (++i < 4)
+	while (++i < 5)
 	{
 		ptr = *lists[i];
 		while (ptr && *ptr)
 		{
 			j = -1;
 			while (++j < 4)
-				split_and_store(ptr, lists[j], del[j]);
+				split_and_store(ptr, lists[j + 1], del[j]);
 			ptr++;
 		}
 	}
 	trim_spaces(inp);
-	inp->command = ft_split(inp->input, ' ');
+	inp->command = ft_split(*inp->pipe.cmd, ' ');
 }
-
-// int main()
-// {
-// 	t_data inp;
-
-// 	inp.input = ft_strdup("cat -e << doc1 < in1 > out1 << doc2 >> app1 < in2");
-// 	parse_redirection(&inp);
-// 	printf("command: [");
-// 	while (inp.command && *inp.command)
-// 		printf("'%s', ", *inp.command++);
-// 	printf("]\n");
-// 	printf("hdoc: [");
-// 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
-// 		printf("'%s', ", *inp.hdoc_op.cmd++);
-// 	printf("]\n");
-// 	printf("inp: [");
-// 	while (inp.inp_op.cmd && *inp.inp_op.cmd)
-// 		printf("'%s', ", *inp.inp_op.cmd++);
-// 	printf("]\n");
-// 	printf("out: [");
-// 	while (inp.out_op.cmd && *inp.out_op.cmd)
-// 		printf("'%s', ", *inp.out_op.cmd++);
-// 	printf("]\n");
-// 	printf("app: [");
-// 	while (inp.app_op.cmd && *inp.app_op.cmd)
-// 		printf("'%s', ", *inp.app_op.cmd++);
-// 	printf("]\n");
-// }
 
 // cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c utils/even_more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra

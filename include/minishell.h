@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/13 14:17:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:10:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	exec_external(t_data inp);
 //	Operators
 void	expansion_oper(char **arr);
 void	process_fds(t_data *inp);
-void	parse_redirection(t_data *inp);
+void	parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
@@ -88,5 +88,7 @@ void	exit_with_error(char *msg, int ret_val);
 void	free_array(char **arr);
 void	free_input(t_data *inp);
 void	*safe_malloc(size_t size);
+
+void	print_data(t_data inp);
 
 #endif
