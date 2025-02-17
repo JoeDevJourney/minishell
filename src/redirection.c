@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 17:56:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:21:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,91 +14,59 @@
 
 static void	out_oper(t_data *inp)
 {
-	char	**tok;
-	int		fd;
-	int		i;
-
-	tok = ft_split2(*inp->pipe.cmd, ">");
-	inp->out_op.cmd = ft_split(*tok, ' ');
-	inp->out_op.num_cmd = str_count(*tok, ' ');
-	i = 0;
-	while (tok[++i])
-	{
-		fd = open(ft_strtrim(tok[i], " "),
-				O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			free_array(tok);
-			exit_with_error(ft_strtrim(tok[i], " "), 1);
-		}
-		if (!tok[i + 1])
-			dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	free_array(tok);
+	inp->out_op.fd = open(*inp->out_op.cmd,
+			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (inp->out_op.fd == -1)
+		perror(*inp->out_op.cmd);
+	if (!*++inp->out_op.cmd)
+		dup2(inp->out_op.fd, STDOUT_FILENO);
+	close(inp->out_op.fd);
 }
 
 static void	inp_oper(t_data *inp)
 {
-	inp->inp_op.fd[0] = STDIN_FILENO;
-	inp->inp_op.fd[1] = open(*inp->inp_op.cmd++, O_RDONLY);
-	if (inp->inp_op.fd[1] == -1)
+	inp->inp_op.fd = open(*inp->inp_op.cmd, O_RDONLY);
+	if (inp->inp_op.fd == -1)
 		perror(*inp->inp_op.cmd);
-	if (!*inp->inp_op.cmd)
-		dup2(inp->inp_op.fd[1], inp->inp_op.fd[0]);
-	close(inp->inp_op.fd[1]);
+	if (!*++inp->inp_op.cmd)
+		dup2(inp->inp_op.fd, STDIN_FILENO);
+	close(inp->inp_op.fd);
 }
 
 static void	app_oper(t_data *inp)
 {
-	char	**tok;
-	int		fd;
-	int		i;
-
-	tok = ft_split2(*inp->pipe.cmd, ">>");
-	inp->app_op.cmd = ft_split(*tok, ' ');
-	inp->app_op.num_cmd = str_count(*tok, ' ');
-	i = 0;
-	while (tok[++i])
-	{
-		fd = open(ft_strtrim(tok[i], " "),
-				O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			free_array(tok);
-			exit_with_error(ft_strtrim(tok[i], " "), 1);
-		}
-		if (!tok[i + 1])
-			dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
-	free_array(tok);
+	inp->app_op.fd = open(*inp->app_op.cmd,
+			O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (inp->app_op.fd == -1)
+		perror(*inp->app_op.cmd);
+	if (!*++inp->app_op.cmd)
+		dup2(inp->app_op.fd, STDOUT_FILENO);
+	close(inp->app_op.fd);
 }
 
 static void	hdoc_oper(t_data *inp)
 {
-	char	**tok;
 	char	*input;
-	int		fd;
+	char	*hdoc;
 
-	tok = ft_split2(*inp->pipe.cmd, "<<");
-	inp->hdoc_op.cmd = ft_split(*tok, ' ');
-	inp->hdoc_op.num_cmd = str_count(*tok, ' ');
-	fd = open(ft_strjoin(inp->home_dir, "/src/heredoc"),
-			O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	hdoc = ft_strjoin(inp->home_dir, "/src/heredoc");
+	inp->hdoc_op.fd = open(hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (inp->hdoc_op.fd == -1)
+		perror(*inp->hdoc_op.cmd);
 	while (1)
 	{
 		input = readline("heredoc> ");
 		if (*input != '\0'
-			&& !ft_strncmp(input, ft_strtrim(tok[1], " "), ft_strlen(input)))
+			&& !ft_strncmp(input, *inp->hdoc_op.cmd, ft_strlen(inp->input)))
 			break ;
-		ft_putendl_fd(input, fd);
+		ft_putendl_fd(input, inp->hdoc_op.fd);
 		free(input);
 	}
-	close(fd);
-	fd = open(ft_strjoin(inp->home_dir, "/src/heredoc"), O_RDONLY);
-	dup2(fd, STDIN_FILENO);
-	return (free(input), close(fd), free_array(tok));
+	close(inp->hdoc_op.fd);
+	inp->hdoc_op.fd = open(hdoc, O_RDONLY);
+	if (!*++inp->hdoc_op.cmd)
+		dup2(inp->hdoc_op.fd, STDIN_FILENO);
+	close(inp->hdoc_op.fd);
 }
 
 void	parse_redir(t_data *inp)
@@ -109,14 +77,14 @@ void	parse_redir(t_data *inp)
 	{
 		if (*inp->input == '<')
 		{
-			if (++*inp->input == '<')
+			if (*(++inp->input) == '<')
 				hdoc_oper(inp);
 			else
 				inp_oper(inp);
 		}
 		else if (*inp->input == '>')
 		{
-			if (++*inp->input == '>')
+			if (*(++inp->input) == '>')
 				app_oper(inp);
 			else
 				out_oper(inp);

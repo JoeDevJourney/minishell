@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 17:57:35 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:26:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ static void	init_data(t_data *inp)
 {
 	inp->inp_op.cmd = NULL;
 	inp->inp_op.num_cmd = 0;
-	inp->inp_op.fd[1] = -1;
+	inp->inp_op.fd = -1;
 	inp->app_op.cmd = NULL;
 	inp->app_op.num_cmd = 0;
-	inp->app_op.fd[1] = -1;
+	inp->app_op.fd = -1;
 	inp->out_op.cmd = NULL;
 	inp->out_op.num_cmd = 0;
-	inp->out_op.fd[1] = -1;
+	inp->out_op.fd = -1;
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	inp->hdoc_op.fd[1] = -1;
+	inp->hdoc_op.fd = -1;
 	inp->command = NULL;
 	errno = 0;
 }
@@ -105,8 +105,8 @@ int	main(int argc, char **argv, char **env)
 	// 	if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
 	// 		break ;
 	// 	parse_command(&inp);
-	// }	inp->and.cmd = NULL;
-	inp.input = ft_strdup("ls -l || pwd && env");
+	// }
+	inp.input = ft_strdup("cat -e <Makefile || ls -l");
 	parse_command(&inp);
 	return (0);
 }

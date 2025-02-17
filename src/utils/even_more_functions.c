@@ -6,12 +6,15 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 17:58:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:21:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Returns the size of an array of strings 
+ */
 size_t	count_array_size(char **arr)
 {
 	size_t	len;

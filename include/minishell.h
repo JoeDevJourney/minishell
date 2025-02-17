@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/17 17:10:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:04:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ typedef struct s_redir_op
 {
 	char	**cmd;
 	int		num_cmd;
-	int		fd[2];
+	int		fd;
 }			t_redir_op;
 
 typedef struct s_data

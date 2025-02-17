@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 17:39:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:21:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,13 @@ void	handle_command(t_data *inp)
 			if (!search_builtins(*inp))
 				inp->ret_val = fork_command(inp);
 	}
-	if (inp->inp_op.fd[1] != -1)
+	if (inp->inp_op.fd != -1 || inp->hdoc_op.fd != -1)
 		dup2(sfd[0], STDIN_FILENO);
+	if (inp->out_op.fd != -1 || inp->app_op.fd != -1)
+		dup2(sfd[0], STDOUT_FILENO);
 	close(sfd[0]);
+	close(sfd[1]);
+	// close(inp->inp_op.fd);
 }
 
 // int	main(int argc, char **argv, char **env)

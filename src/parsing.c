@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 17:55:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:50:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	trim_spaces(t_data *inp)
 	arr[3] = inp->app_op.cmd;
 	arr[4] = inp->hdoc_op.cmd;
 	i = -1;
-	while (++i < 4)
+	while (++i < 5)
 	{
 		size = count_array_size(arr[i]);
 		while (size > 0)
