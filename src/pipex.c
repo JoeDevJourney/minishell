@@ -76,6 +76,8 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	close(old_fd[0]);
 	if (!search_builtins(*inp))
 		exec_external(*inp);
+	else
+		exec_builtin(inp->command, inp->env);
 	exit(0);
 }
 
@@ -87,12 +89,14 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
 	int	status;
 
+	if (inp->command && *inp->command)
+		free_array(inp->command);
+	if (inp->input && *inp->input)
+		free(inp->input);
 	parse_redir(inp);
 	pid = fork();
 	if (pid == 0)
-	{
 		process_pipe_fds(inp, old_fd, new_fd);
-	}
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
@@ -113,32 +117,39 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
  * @param num Number of commands
  * @param cmd Commands broken down in an array of str
  */
-int	handle_pipes(t_data *inp)
+void	handle_pipes(t_data *inp)
 {
+	t_data	inp_cpy;
 	pid_t	*pid;
 	int		fd;
 	int		i;
-	int		res;
 
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
+	inp_cpy = *inp;
 	i = 0;
 	fd = STDOUT_FILENO;
-	res = fork_pipe(pid[i], inp, inp->pipe.fd[i], &fd);
-	while (++i < inp->pipe.num_cmd - 1)
+	fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i], &fd);
+	while (++i < inp_cpy.pipe.num_cmd - 1)
 	{
 		close(inp->pipe.fd[i - 1][1]);
-		inp->pipe.cmd++;
-		res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
+		inp_cpy.pipe.cmd++;
+		fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
 		close(inp->pipe.fd[i - 1][0]);
 	}
 	close(inp->pipe.fd[i - 1][1]);
-	inp->pipe.cmd++;
+	inp_cpy.pipe.cmd++;
 	fd = STDIN_FILENO;
-	res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], &fd);
+	inp->ret_val = fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], &fd);
 	close(inp->pipe.fd[i - 1][0]);
-	// wait_n_free(inp->pipe.num_cmd, pid, inp->pipe.fd);
-	return (res);
+	free(pid);
+	i = -1;
+	while (++i < inp->pipe.num_cmd - 1)
+		free(inp->pipe.fd[i]);
+	free(inp->pipe.fd);
+	free_array(inp->pipe.cmd);
+	free(inp->input);
+	// free_array(inp->command);
 }
 
 // int	main(int argc, char **argv)

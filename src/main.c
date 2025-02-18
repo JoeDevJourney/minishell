@@ -73,7 +73,6 @@ static void	parse_command(t_data *inp)
 			inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 			inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
 			handle_command(inp);
-			free_data(inp);
 			if (!inp->ret_val)
 				break ;
 		}
@@ -99,7 +98,7 @@ int	main(int argc, char **argv, char **env)
 	inp.pipe.num_cmd = 0;
 	init_data(&inp);
 	printf("Welcome\n");
-	inp.input = ft_strdup("pwd || ls -l");
+	inp.input = ft_strdup("ls -1 | cat -e");
 	parse_command(&inp);
 	free_array(inp.and.cmd);
 	free(inp.home_dir);

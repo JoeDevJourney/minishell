@@ -99,7 +99,7 @@ void	handle_command(t_data *inp)
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
 	if (inp->pipe.num_cmd != 1)
-		inp->ret_val = handle_pipes(inp);
+		handle_pipes(inp);
 	else
 	{
 		parse_redir(inp);
@@ -109,6 +109,7 @@ void	handle_command(t_data *inp)
 				inp->ret_val = exec_builtin(inp->command, inp->env);
 			else
 				inp->ret_val = fork_command(inp);
+			free_data(inp);						// <---- pipes leaks
 		}
 		else
 			inp->ret_val = 1;
