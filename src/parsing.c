@@ -6,12 +6,22 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 19:45:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:58:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Merges two array of strings together
+ * 
+ * @param rest The src array to be expanded after merging
+ * @param split_arr The dest array to be merged with src
+ * @param new_count The size of the dest array
+ * 
+ * @note If src is NULL it will still merge it with dest, resulting
+ * to its duplication
+ */
 static void	merge_rest(char ***rest, char **split_arr, size_t new_count)
 {
 	size_t	old_count;
@@ -34,6 +44,14 @@ static void	merge_rest(char ***rest, char **split_arr, size_t new_count)
 	*rest = new_rest;
 }
 
+/**
+ * @brief Scans an array of strings for operators, and stores the according
+ * commands in the appropriate places.
+ * 
+ * @param str The array to be searched for operators and splitted if necessary
+ * @param rest Array of arrays of strings where the found cmds would be stored
+ * @param split_arr Contains the tokens obtained from splitting
+ */
 static void	split_and_store(char **str, char ***rest, char *del)
 {
 	char	**split_arr;
@@ -52,6 +70,10 @@ static void	split_and_store(char **str, char ***rest, char *del)
 	free_array(split_arr);
 }
 
+/**
+ * @brief Init an array with the redir oper symbols and groups all the according
+ * arrays to one single array of arrays of strings.
+ */
 static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 {
 	del[0] = "<<";
@@ -65,6 +87,9 @@ static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 	lists[4] = &(inp->out_op.cmd);
 }
 
+/**
+ * @brief Trims all the redirection oper arrays of any leading or ending spaces 
+ */
 static void	trim_spaces(t_data *inp)
 {
 	char	**arr[5];
@@ -94,6 +119,10 @@ static void	trim_spaces(t_data *inp)
 	}
 }
 
+/**
+ * @brief Scans the input for any redirerction operators and saves them in the
+ * appropriate array
+ */
 void	process_fds(t_data *inp)
 {
 	char	***lists[5];
@@ -119,5 +148,3 @@ void	process_fds(t_data *inp)
 	trim_spaces(inp);
 	inp->command = ft_split(*inp->pipe.cmd, ' ');
 }
-
-// cc parsing.c utils/functions.c ../include/libft/src/ft_strchr.c ../include/libft/src/ft_strjoin.c ../include/libft/src/ft_strlen.c ../include/libft/src/ft_strlcat.c ../include/libft/src/ft_strlcpy.c ../include/libft/src/ft_strdup.c utils/more_functions.c utils/even_more_functions.c ../include/libft/src/ft_strnstr.c ../include/libft/src/ft_strncmp.c -o parsing -g -Wall -Werror -Wextra

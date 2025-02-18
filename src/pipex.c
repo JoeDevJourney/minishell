@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 10:11:00 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:01:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ static void	init_pipes(t_redir_op *oper)
 	}
 }
 
+/**
+ * @brief Redirection of the pipes' fds
+ */
 static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 {
 	if (*new_fd == STDOUT_FILENO)
@@ -76,6 +79,10 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	exit(0);
 }
 
+/**
+ * @brief Creates the child process for executing the command and makes
+ * the parent wait for it to finish, before returning its value
+ */
 static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
 	int	status;
