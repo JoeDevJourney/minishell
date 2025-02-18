@@ -6,70 +6,71 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 12:31:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/18 17:10:06 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	free_list(t_list *head)
+void	free_list(t_list *list)
 {
+	t_list	*tmp;
+
+	while (list)
+	{
+		tmp = list;
+		list = list->next;
+		free(tmp->str);
+		free(tmp);
+	}
+}
+
+void	add_command(t_list **list, const char *start, const char *end)
+{
+	t_list	*new_cmd;
+	size_t	len;
 	t_list	*temp;
 
-	while (head)
+	new_cmd = malloc(sizeof(t_list));
+	len = end - start;
+	new_cmd->str = malloc(len + 1);
+	ft_strncpy(new_cmd->str, start, len);
+	new_cmd->str[len] = '\0';
+	new_cmd->next = NULL;
+	if (*list == NULL)
+		*list = new_cmd;
+	else
 	{
-		temp = head;
-		head = head->next;
-		free(temp->str);
-		free(temp);
+		temp = list;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new_cmd;
 	}
 }
 
-t_list	*copy_env_list(char **env)
+t_quote_state	init_quote_state(void)
 {
-	t_list	*env_list;
-	int		i;
+	t_quote_state	state;
 
-	env_list = NULL;
-	i = 0;
-	while (env[i])
-	{
-		add_node(&env_list, env[i]);
-		i++;
-	}
-	return (env_list);
+	state.sq = false;
+	state.dq = false;
+	state.escape = false;
+	return (state);
 }
 
-// void	handle_escape(char **input, char **dst, bool sq)
-// {
-// 	if (!sq && (**input == '\\') && (*(*input + 1) == '"' \
-// 		|| *(*input + 1) == '$' || *(*input + 1) == '\\' \
-// 		|| *(*input + 1) == '`' || *(*input + 1) == '\n'))
-// 	{
-// 		(*input)++;
-// 		*(*dst)++ = **input;
-// 	}
-// }
-
-// void	update_quote_state(char c, bool *sq, bool *dq, bool escape)
-// {
-// 	if (escape)
-// 		return ;
-// 	if (c == '\'' && !*dq)
-// 		*sq = !*sq;
-// 	else if (c == '"' && !*sq)
-// 		*dq = !*dq;
-// }
-
-void	add_command(t_list **list, t_split_state *state)
+unsigned long	ft_strlen(const char str[])
 {
-	char	*command;
+	const char		*ptr;
+	unsigned long	len;
 
-	if (state->ptr > state->start)
+	if (!str)
+		return (0);
+	ptr = str;
+	len = 0;
+	while (*ptr)
 	{
-		command = ft_strndub(state->start, state->ptr - state->start);
-		add_node(list, command);
-		free(command);
-		state->start = state->ptr + 1;
+		len++;
+		ptr++;
 	}
+	return (len);
 }

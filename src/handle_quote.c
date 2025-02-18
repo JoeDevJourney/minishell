@@ -6,260 +6,107 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:36:03 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 15:54:22 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/18 18:57:57 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-bool	check_quotes(const char *input)
-{
-	bool	sq;
-	bool	dq;
-	bool	escape;
-
-	sq = false;
-	dq = false;
-	escape = false;
-	while (*input)
-	{
-		
-	}
-	return (sq || dq);
-}
-
-char	*process_quotes(char *input)
-{
-    char			*res;
-    char			*dst;
-    t_quote_state	state;
-
-	res = malloc(ft_strlen(input) + 1);
-	dst = res;
-	state = init_quote_state();
-	while (*input)
-	{
-		if (!state.sq && *input == '\\' && !state.escape)
-		{
-			if (state.dq || (!state.dq && !state.sq))
-			{
-				state.escape = true;
-				input++;
-				continue ;
-			}
-		}
-		if (!state.escape)
-		{
-			if (*input == '\'' && !state.dq)
-				state.sq = !state.sq;
-			else if (*input == '"' && !state.sq)
-				state.dq = !state.dq;
-		}
-		if ((state.sq && *input == '\\') || state.escape)
-		{
-			*dst++ = '\\';
-			state.escape = false;
-		}
-		if (!((state.sq || state.dq) && (*input == '\'' || *input == '"')))
-			*dst++ = *input;
-		state.escape = (*input == '\\' && !state.escape && state.dq);
-		input++;
-	}
-	*dst = '\0';
-	return (res);
-}
-
-void	update_split_state(char c, t_split_state *state)
+void	update_split_state(char c, t_quote_state *state)
 {
 	if (state->escape)
 	{
 		state->escape = false;
 		return ;
 	}
-	if (c == '\\' && !state->sq)
+	if (c == '\\')
 	{
 		state->escape = true;
 		return ;
 	}
 	if (c == '\'' && !state->dq)
 		state->sq = !state->sq;
-	if (c == '"' && !state->sq)
+	else if (c == '"' && !state->sq)
 		state->dq = !state->dq;
 }
 
-t_list	*split_pipes(char *str)
+bool	check_quotes(const char *input)
 {
-	t_list			*list;
-	t_split_state	state;
+	t_quote_state	state;
 
-	list = NULL;
-	init_split_state(&state, str);
-	while (*state.ptr)
+	state = init_quote_state();
+	while (*input)
 	{
-		update_split_state(*state.ptr, &state);
-		if (*state.ptr == '|' && !state.sq && !state.dq && !state.escape)
-			add_command(&list, &state);
-		state.ptr++;
+		update_split_state(*input, &state);
+		input++;
 	}
-	add_command(&list, &state);
-	return (list);
+	return (state.sq || state.dq);
 }
 
-unsigned long	ft_strlen(const char str[])
+void	update_quote_state(char **input, char **dst, t_quote_state *state)
 {
-	const char		*ptr;
-	unsigned long	len;
-
-	if (!str)
-		return (0);
-	ptr = str;
-	len = 0;
-	if (str)
+	if (state->escape)
 	{
-		while (*ptr)
-		{
-			len++;
-			ptr++;
-		}
+		
 	}
-	return (len);
+}
+
+char	*process_quotes(char *input)
+{
+	char			*res;
+	char			*dst;
+	t_quote_state	state;
+
+	res = malloc(ft_strlen(input) + 1);
+	dst = res;
+	state = init_quote_state();
+	while (*input)
+	{
+		update_quote_state(&input, &state);
+	}
+	*dst = '\0';
+	return (res);
 }
 
 
-// int main() {
-//     const char *input1 = "echo 'Hello World'";
-//     const char *input2 = "echo \"Hello $USER\"";
-//     const char *input3 = "echo 'This is a \\ test'";
-//     const char *input4 = "echo \"This is a \\\" test\"";
-//     const char *input5 = "echo \"Hello; World\"";
-//     const char *input6 = "echo 'Unclosed quote";
-//     const char *input7 = "echo \"Unclosed quote";
+int main() {
+    const char *input1 = "echo 'Hello World'";
+    const char *input2 = "echo \"Hello $USER\"";
+    const char *input3 = "echo 'This is a \\ test'";
+    const char *input4 = "echo \"This is a \\\" test\"";
+    const char *input5 = "echo \"Hello; World\"";
+    const char *input6 = "echo 'Unclosed quote";
+    const char *input7 = "echo \"Unclosed quote";
+    const char *input8 = "echo \"This is a \\ backslash\"";
+    const char *input9 = "echo 'This is a \\ backslash'";
+    const char *input10 = "echo \"Unclosed quote with escape \\\"";
+    const char *input11 = "echo 'Unclosed quote with escape \\'";
+    const char *input12 = "echo \"Part1\" | echo \"Part2\"";
+    const char *input13 = "echo 'Part1' | echo 'Part2'";
+    const char *input14 = "echo \"Outer \\\"Inner\\\"\"";
+    const char *input15 = "echo 'Outer \\'Inner\\''";
 
-//     // Test 1
-//     printf("Input: %s\n", input1);
-//     if (check_quotes(input1)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input1);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
+    const char *inputs[] = {input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15};
+    size_t input_count = sizeof(inputs) / sizeof(inputs[0]);
 
-//     // Test 2
-//     printf("Input: %s\n", input2);
-//     if (check_quotes(input2)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input2);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
+    for (size_t i = 0; i < input_count; i++) {
+        printf("Input: %s\n", inputs[i]);
+        if (check_quotes(inputs[i])) {
+            printf("Error: Unclosed quotes detected.\n");
+        } else {
+            char *processed_input = process_quotes((char *)inputs[i]);
+            printf("Processed: %s\n", processed_input);
+            t_list *commands_list = split_pipes(processed_input);
+            t_list *tmp = commands_list;
+            while (tmp) {
+                printf("Command: %s\n", tmp->str);
+                tmp = tmp->next;
+            }
+            free(processed_input);
+            free_list(commands_list);
+        }
+        printf("\n");
+    }
 
-//     // Test 3
-//     printf("Input: %s\n", input3);
-//     if (check_quotes(input3)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input3);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
-
-//     // Test 4
-//     printf("Input: %s\n", input4);
-//     if (check_quotes(input4)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input4);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
-
-//     // Test 5
-//     printf("Input: %s\n", input5);
-//     if (check_quotes(input5)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input5);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
-
-//     // Test 6
-//     printf("Input: %s\n", input6);
-//     if (check_quotes(input6)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input6);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
-
-//     // Test 7
-//     printf("Input: %s\n", input7);
-//     if (check_quotes(input7)) {
-//         printf("Error: Unclosed quotes detected.\n");
-//     } else {
-//         char *processed_input = process_quotes((char *)input7);
-//         printf("Processed: %s\n", processed_input);
-//         t_list *commands_list = split_pipes(processed_input);
-//         t_list *tmp = commands_list;
-//         while (tmp) {
-//             printf("Command: %s\n", tmp->str);
-//             tmp = tmp->next;
-//         }
-//         free(processed_input);
-//         free_list(commands_list);
-//     }
-//     printf("\n");
-
-//     return 0;
-// }
+    return 0;
+}

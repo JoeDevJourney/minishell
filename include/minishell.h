@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/14 15:45:01 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/18 18:57:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,22 @@ typedef struct s_data
 	t_oper	redir;		
 }			t_data;
 
-typedef struct s_split_state
-{
-	bool	sq;
-	bool	dq;
-	bool	escape;
-	char	*start;
-	char	*ptr;
-}	t_split_state;
-
 typedef struct s_quote_state
 {
 	bool	sq;
 	bool	dq;
 	bool	escape;
 }	t_quote_state;
+
+typedef struct s_split_state
+{
+	bool			sq;
+	bool			dq;
+	bool			escape;
+	char			*start;
+	char			*ptr;
+	t_quote_state	quotes;
+}	t_split_state;
 
 typedef struct s_list
 {
@@ -120,22 +121,16 @@ void			ft_swap(void *a, void *b, size_t size);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
 // Quotes Utils
-size_t			ft_strnlen(const char *s, size_t maxlen);
-char			*ft_strndub(const char *s, size_t n);
-void			init_split_state(t_split_state *state, char *str);
-void			add_node(t_list **head, const char *str);
-void			free_list(t_list *head);
-t_list			*copy_env_list(char **env);
-void			handle_escape(char **input, char **dst, bool sq);
-void			update_quote_state(char c, bool *sq, bool *dq, bool escape);
-void			add_command(t_list **list, t_split_state *state);
+void			free_list(t_list *list);
+void			add_command(t_list **list, const char *start, const char *end);
 t_quote_state	init_quote_state(void);
-
+unsigned long	ft_strlen(const char str[]);
 // Quotes
-bool	check_quotes(const char *input);
-char	*process_quotes(char *input);
-void	update_split_state(char c, t_split_state *state);
-t_list	*split_pipes(char *str);
+bool			check_quotes(const char *input);
+void			update_quote_state(char **input, char **dst, \
+				t_quote_state *state);
+char			*process_quotes(char *input);
+void			update_split_state(char c, t_quote_state *state);
 
 
 #endif
