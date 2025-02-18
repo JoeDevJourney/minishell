@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 11:45:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:46:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	exec_builtin(char **cmd, char **env)
 		return (exec_env(env));
 	else if (!ft_strncmp(*cmd, "pwd", ft_strlen(*cmd)))
 		return (exec_pwd(cmd));
+	else if (!ft_strncmp(*cmd, "exit", ft_strlen(*cmd)))
+		return (exec_exit(cmd[1]));
 	return (1);
 }
 

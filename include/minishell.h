@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 12:18:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:47:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ bool	search_builtins(t_data inp);
 int		exec_builtin(char **cmd, char **env);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
+int		exec_exit(char *cmd);
 
 //	Utilities
 size_t	count_array_size(char **arr);
