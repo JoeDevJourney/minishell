@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 10:12:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:18:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static void	hdoc_oper(t_data *inp)
 void	parse_redir(t_data *inp)
 {
 	process_fds(inp);
-	while (*inp->input)
+	while (*inp->input && !errno)
 	{
 		if (*inp->input == '<')
 		{

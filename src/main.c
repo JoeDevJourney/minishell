@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 10:11:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:23:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		parse_command(&inp);
 	}
-	// inp.input = ft_strdup("ls -1 | cat -n && pwd");
-	// parse_command(&inp);
 	return (0);
 }
 

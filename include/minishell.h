@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/17 20:21:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 12:18:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <errno.h>
 # include <dirent.h>
 
@@ -74,8 +75,9 @@ void	parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
-void	exec_env(char **env);
-void	exec_pwd(char **cmd);
+int		exec_builtin(char **cmd, char **env);
+int		exec_env(char **env);
+int		exec_pwd(char **cmd);
 
 //	Utilities
 size_t	count_array_size(char **arr);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 10:16:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:49:49 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,20 @@ void	handle_command(t_data *inp)
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
-	if (!errno)
+	if (inp->pipe.num_cmd != 1)
+		inp->ret_val = handle_pipes(inp);
+	else
 	{
-		if (inp->pipe.num_cmd != 1)
-			inp->ret_val = handle_pipes(inp);
-		else
+		parse_redir(inp);
+		if (!errno)
 		{
-			parse_redir(inp);
-			if (!search_builtins(*inp))
+			if (search_builtins(*inp))
+				inp->ret_val = exec_builtin(inp->command, inp->env);
+			else
 				inp->ret_val = fork_command(inp);
 		}
+		else
+			inp->ret_val = 1;
 	}
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[0], STDOUT_FILENO);
