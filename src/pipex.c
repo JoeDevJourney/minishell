@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/17 20:37:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:11:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	init_pipes(t_redir_op *oper)
 	oper->fd = safe_malloc((oper->num_cmd - 1) * sizeof(int *));
 	i = -1;
 	while (++i < oper->num_cmd - 1)
-			oper->fd[i] = safe_malloc(2 * sizeof(int));
+		oper->fd[i] = safe_malloc(2 * sizeof(int));
 	i = -1;
 	while (++i < oper->num_cmd - 1)
 	{
@@ -109,26 +109,26 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 int	handle_pipes(t_data *inp)
 {
 	pid_t	*pid;
-	int		ptr;
+	int		fd;
 	int		i;
 	int		res;
 
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
 	i = 0;
-	ptr = STDOUT_FILENO;
-	res = fork_pipe(pid[i], inp, inp->pipe.fd[i], &ptr);
+	fd = STDOUT_FILENO;
+	res = fork_pipe(pid[i], inp, inp->pipe.fd[i], &fd);
 	while (++i < inp->pipe.num_cmd - 1)
 	{
 		close(inp->pipe.fd[i - 1][1]);
 		inp->pipe.cmd++;
 		res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
-		close(inp->pipe.fd[i - 1][i - 1]);
+		close(inp->pipe.fd[i - 1][0]);
 	}
 	close(inp->pipe.fd[i - 1][1]);
 	inp->pipe.cmd++;
-	ptr = STDIN_FILENO;
-	res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], &ptr);
+	fd = STDIN_FILENO;
+	res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], &fd);
 	close(inp->pipe.fd[i - 1][0]);
 	// wait_n_free(inp->pipe.num_cmd, pid, inp->pipe.fd);
 	return (res);

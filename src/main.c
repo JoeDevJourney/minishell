@@ -6,34 +6,34 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 20:04:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:11:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// static char	*read_input(void)
-// {
-// 	char	*str;
-// 	char	*prompt;
-// 	char	*temp;
-//
-// 	temp = ft_strjoin(GRN, getenv("USER"));
-// 	prompt = ft_strdup(temp);
-// 	free(temp);
-// 	temp = ft_strjoin(prompt, "@");
-// 	free(prompt);
-// 	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-// 	free(temp);
-// 	temp = ft_strjoin(prompt, RST);
-// 	free(prompt);
-// 	prompt = ft_strjoin(temp, " % ");
-// 	str = readline(prompt);
-// 	while (!*str)
-// 		str = readline(prompt);
-// 	add_history(str);
-// 	return (free(temp), free(prompt), str);
-// }
+static char	*read_input(void)
+{
+	char	*str;
+	char	*prompt;
+	char	*temp;
+
+	temp = ft_strjoin(GRN, getenv("USER"));
+	prompt = ft_strdup(temp);
+	free(temp);
+	temp = ft_strjoin(prompt, "@");
+	free(prompt);
+	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
+	free(temp);
+	temp = ft_strjoin(prompt, RST);
+	free(prompt);
+	prompt = ft_strjoin(temp, " % ");
+	str = readline(prompt);
+	while (!*str)
+		str = readline(prompt);
+	add_history(str);
+	return (free(temp), free(prompt), str);
+}
 
 static void	init_data(t_data *inp)
 {
@@ -76,8 +76,6 @@ static void	parse_command(t_data *inp)
 			if (!errno)
 				break ;
 		}
-		// print_data(*inp);
-		// pause();
 		free_array(inp->or.cmd);
 		if (errno)
 			break ;
@@ -99,16 +97,16 @@ int	main(int argc, char **argv, char **env)
 	inp.pipe.cmd = NULL;
 	inp.pipe.num_cmd = 0;
 	init_data(&inp);
-	// printf("Welcome\n");
-	// while (1)
-	// {
-	// 	inp.input = read_input();
-	// 	if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
-	// 		break ;
-	// 	parse_command(&inp);
-	// }
-	inp.input = ft_strdup("ls -1 | cat -n && pwd");
-	parse_command(&inp);
+	printf("Welcome\n");
+	while (1)
+	{
+		inp.input = read_input();
+		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+			break ;
+		parse_command(&inp);
+	}
+	// inp.input = ft_strdup("ls -1 | cat -n && pwd");
+	// parse_command(&inp);
 	return (0);
 }
 
