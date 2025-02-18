@@ -6,23 +6,43 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/17 20:03:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:33:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/**
- * @brief Returns the size of an array of strings 
- */
-size_t	count_array_size(char **arr)
+static void	init_array(t_redir_op *arr[], t_data *inp)
 {
-	size_t	len;
+	arr[0] = &inp->inp_op;
+	arr[1] = &inp->app_op;
+	arr[2] = &inp->out_op;
+	arr[3] = &inp->hdoc_op;
+}
 
-	len = 0;
-	while (arr && arr[len])
-		len++;
-	return (len);
+void	free_data(t_data *inp)
+{
+	t_redir_op	*oper_arr[4];
+	int			i;
+
+	i = -1;
+	init_array(oper_arr, inp);
+	while (++i < 4)
+	{
+		if (oper_arr[i]->cmd && *oper_arr[i]->cmd)
+		{
+			free_array(oper_arr[i]->cmd);
+			free(oper_arr[i]->fd[0]);
+			free(oper_arr[i]->fd[1]);
+			free(oper_arr[i]->fd);
+		}
+	}
+	free(inp->input);
+	free_array(inp->command);
+	free_array(inp->pipe.cmd);
+	// while (++j < inp->pipe.)
+	// 	free(oper_arr[i]->fd[j]);
+	// free(oper_arr[i]->fd);
 }
 
 void	print_data(t_data inp)

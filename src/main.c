@@ -6,49 +6,49 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 10:23:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:36:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*read_input(void)
-{
-	char	*str;
-	char	*prompt;
-	char	*temp;
-
-	temp = ft_strjoin(GRN, getenv("USER"));
-	prompt = ft_strdup(temp);
-	free(temp);
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-	free(temp);
-	temp = ft_strjoin(prompt, RST);
-	free(prompt);
-	prompt = ft_strjoin(temp, " % ");
-	str = readline(prompt);
-	while (!*str)
-		str = readline(prompt);
-	add_history(str);
-	return (free(temp), free(prompt), str);
-}
+/**
+ * @brief Prompt
+ */
+// static char	*read_input(void)
+// {
+// 	char	*str;
+// 	char	*prompt;
+// 	char	*temp;
+//
+// 	temp = ft_strjoin(GRN, getenv("USER"));
+// 	prompt = ft_strdup(temp);
+// 	free(temp);
+// 	temp = ft_strjoin(prompt, "@");
+// 	free(prompt);
+// 	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
+// 	free(temp);
+// 	temp = ft_strjoin(prompt, RST);
+// 	free(prompt);
+// 	prompt = ft_strjoin(temp, " % ");
+// 	str = readline(prompt);
+// 	while (!*str)
+// 		str = readline(prompt);
+// 	add_history(str);
+// 	return (free(temp), free(prompt), str);
+// }
 
 static void	init_data(t_data *inp)
 {
+	inp->input = NULL;
 	inp->inp_op.cmd = NULL;
 	inp->inp_op.num_cmd = 0;
-	// inp->inp_op.fd[1] = -1;
 	inp->app_op.cmd = NULL;
 	inp->app_op.num_cmd = 0;
-	// inp->app_op.fd[1] = -1;
 	inp->out_op.cmd = NULL;
 	inp->out_op.num_cmd = 0;
-	// inp->out_op.fd[1] = -1;
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	// inp->hdoc_op.fd[1] = -1;
 	inp->command = NULL;
 	errno = 0;
 }
@@ -73,11 +73,12 @@ static void	parse_command(t_data *inp)
 			inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 			inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
 			handle_command(inp);
-			if (!errno)
+			free_data(inp);
+			if (!inp->ret_val)
 				break ;
 		}
 		free_array(inp->or.cmd);
-		if (errno)
+		if (inp->ret_val)
 			break ;
 	}
 }
@@ -98,13 +99,18 @@ int	main(int argc, char **argv, char **env)
 	inp.pipe.num_cmd = 0;
 	init_data(&inp);
 	printf("Welcome\n");
-	while (1)
-	{
-		inp.input = read_input();
-		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
-			break ;
-		parse_command(&inp);
-	}
+	inp.input = ft_strdup("pwd || ls -l");
+	parse_command(&inp);
+	free_array(inp.and.cmd);
+	free(inp.home_dir);
+	// free(inp.input);
+	// while (1)
+	// {
+	// 	inp.input = read_input();
+	// 	if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+	// 		break ;
+	// 	parse_command(&inp);
+	// }
 	return (0);
 }
 

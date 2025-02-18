@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 14:41:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:29:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	handle_command(t_data *inp)
 	}
 	printf("ret: %d\n", inp->ret_val);
 	dup2(sfd[0], STDIN_FILENO);
-	dup2(sfd[0], STDOUT_FILENO);
+	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
 }

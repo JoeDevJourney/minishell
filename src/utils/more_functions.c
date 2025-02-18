@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 12:43:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:34:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ void	exit_with_error(char *msg, int ret_val)
 	exit(ret_val);
 }
 
-void	free_input(t_data *inp)
+/**
+ * @brief Returns the size of an array of strings 
+ */
+size_t	count_array_size(char **arr)
 {
-	if (inp->and.cmd && *inp->and.cmd)
-		free_array(inp->and.cmd);
-	if (inp->or.cmd && *inp->or.cmd)
-		free_array(inp->or.cmd);
-	if (inp->pipe.cmd && *inp->pipe.cmd)
-		free_array(inp->pipe.cmd);
-	// if (inp->redir.cmd && *inp->redir.cmd)
-	// 	free_array(inp->redir.cmd);
-	free(inp->input);
+	size_t	len;
+
+	len = 0;
+	while (arr && arr[len])
+		len++;
+	return (len);
 }
 
 /**
