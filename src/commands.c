@@ -90,7 +90,6 @@ void	handle_command(t_data *inp)
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
-	parse_redir(inp);
 	if (!errno)
 	{
 		if (inp->pipe.num_cmd != 1)
@@ -99,12 +98,12 @@ void	handle_command(t_data *inp)
 			if (!search_builtins(*inp))
 				inp->ret_val = fork_command(inp);
 	}
-	if (inp->inp_op.fd[1] != -1 || inp->hdoc_op.fd[1] != -1)
-		dup2(sfd[0], STDIN_FILENO);
-	if (inp->out_op.fd[1] != -1 || inp->app_op.fd[1] != -1)
-		dup2(sfd[0], STDOUT_FILENO);
-	close(sfd[0]);
-	close(sfd[1]);
+	// if (inp->inp_op.fd[1] != -1 || inp->hdoc_op.fd[1] != -1)
+	dup2(sfd[0], STDIN_FILENO);
+	// if (inp->out_op.fd[1] != -1 || inp->app_op.fd[1] != -1)
+	dup2(sfd[0], STDOUT_FILENO);
+	// close(sfd[0]);
+	// close(sfd[1]);
 }
 
 // int	main(int argc, char **argv, char **env)

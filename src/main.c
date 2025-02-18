@@ -39,16 +39,16 @@ static void	init_data(t_data *inp)
 {
 	inp->inp_op.cmd = NULL;
 	inp->inp_op.num_cmd = 0;
-	inp->inp_op.fd[1] = -1;
+	// inp->inp_op.fd[1] = -1;
 	inp->app_op.cmd = NULL;
 	inp->app_op.num_cmd = 0;
-	inp->app_op.fd[1] = -1;
+	// inp->app_op.fd[1] = -1;
 	inp->out_op.cmd = NULL;
 	inp->out_op.num_cmd = 0;
-	inp->out_op.fd[1] = -1;
+	// inp->out_op.fd[1] = -1;
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	inp->hdoc_op.fd[1] = -1;
+	// inp->hdoc_op.fd[1] = -1;
 	inp->command = NULL;
 	errno = 0;
 }
@@ -76,6 +76,8 @@ static void	parse_command(t_data *inp)
 			if (!errno)
 				break ;
 		}
+		print_data(*inp);
+		pause();
 		free_array(inp->or.cmd);
 		if (errno)
 			break ;
@@ -105,7 +107,7 @@ int	main(int argc, char **argv, char **env)
 	// 		break ;
 	// 	parse_command(&inp);
 	// }
-	inp.input = ft_strdup("ls -1 | cat -n && pwd");
+	inp.input = ft_strdup("cat < Makefile | cat -n && pwd");
 	parse_command(&inp);
 	return (0);
 }

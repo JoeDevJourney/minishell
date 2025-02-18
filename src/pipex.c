@@ -12,33 +12,36 @@
 
 #include "../include/minishell.h"
 
-static void	wait_n_free(int n, pid_t *pid, int **pfd)
-{
-	int	i;
-	int	status;
-
-	i = -1;
-	while (++i < n)
-	{
-		if (waitpid(pid[i], &status, 0) == -1)
-			exit_with_error("Pipe child process failed", EXIT_FAILURE);
-	}
-	i = -1;
-	while (++i < n - 1)
-		free(pfd[i]);
-	free(pid);
-	free(pfd);
-}
+// static void	wait_n_free(int n, pid_t *pid, int **pfd)
+// {
+// 	int	i;
+// 	int	status;
+//
+// 	i = -1;
+// 	while (++i < n)
+// 	{
+// 		if (waitpid(pid[i], &status, 0) == -1)
+// 			exit_with_error("Pipe child process failed", EXIT_FAILURE);
+// 	}
+// 	i = -1;
+// 	while (++i < n - 1)
+// 		free(pfd[i]);
+// 	free(pid);
+// 	free(pfd);
+// }
 
 static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
 
-	oper->fd = safe_malloc(oper->num_cmd * sizeof(int [2]));
+	oper->fd = safe_malloc((oper->num_cmd - 1) * sizeof(int *));
 	i = -1;
-	while (++i < oper->num_cmd)
+	while (++i < oper->num_cmd - 1)
+			oper->fd[i] = safe_malloc(2 * sizeof(int));
+	i = -1;
+	while (++i < oper->num_cmd - 1)
 	{
-		if (pipe(oper->fd) == -1)
+		if (pipe(oper->fd[i]) == -1)
 		{
 			while (i > 0)
 				free(oper->fd[--i]);
@@ -75,9 +78,26 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 
 static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
+	int	status;
+
+	parse_redir(inp);
+	
 	pid = fork();
 	if (pid == 0)
+	{
 		process_pipe_fds(inp, old_fd, new_fd);
+	}
+	else if (pid > 0)
+	{
+		if (waitpid(pid, &status, 0) == -1)
+			exit_with_error("Child process failed", EXIT_FAILURE);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (-1);
+	}
+	else
+		perror("Fork failed");
 	return (0);
 }
 
@@ -90,29 +110,28 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 int	handle_pipes(t_data *inp)
 {
 	pid_t	*pid;
-	int		std_fd;
+	int		ptr;
 	int		i;
 	int		res;
 
-	print_data(*inp);
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
 	i = 0;
-	std_fd = STDOUT_FILENO;
-	res = fork_pipe(pid[i], inp, p_fd[i], &std_fd);
+	ptr = STDOUT_FILENO;
+	res = fork_pipe(pid[i], inp, inp->pipe.fd[i], &ptr);
 	while (++i < inp->pipe.num_cmd - 1)
 	{
-		close(p_fd[i - 1][1]);
+		close(inp->pipe.fd[i - 1][1]);
 		inp->pipe.cmd++;
-		res = fork_pipe(pid[i], inp, p_fd[i - 1], p_fd[i]);
-		close(p_fd[i - 1][i - 1]);
+		res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
+		close(inp->pipe.fd[i - 1][i - 1]);
 	}
-	close(p_fd[i - 1][1]);
+	close(inp->pipe.fd[i - 1][1]);
 	inp->pipe.cmd++;
-	std_fd = STDIN_FILENO;
-	res = fork_pipe(pid[i], inp, p_fd[i - 1], &std_fd);
-	close(p_fd[i - 1][0]);
-	wait_n_free(inp->pipe.num_cmd, pid, p_fd);
+	ptr = STDIN_FILENO;
+	res = fork_pipe(pid[i], inp, inp->pipe.fd[i - 1], &ptr);
+	close(inp->pipe.fd[i - 1][0]);
+	// wait_n_free(inp->pipe.num_cmd, pid, inp->pipe.fd);
 	return (res);
 }
 
