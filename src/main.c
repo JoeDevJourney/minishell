@@ -76,8 +76,8 @@ static void	parse_command(t_data *inp)
 			if (!errno)
 				break ;
 		}
-		print_data(*inp);
-		pause();
+		// print_data(*inp);
+		// pause();
 		free_array(inp->or.cmd);
 		if (errno)
 			break ;
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **env)
 	// 		break ;
 	// 	parse_command(&inp);
 	// }
-	inp.input = ft_strdup("cat < Makefile | cat -n && pwd");
+	inp.input = ft_strdup("ls -1 | cat -n && pwd");
 	parse_command(&inp);
 	return (0);
 }

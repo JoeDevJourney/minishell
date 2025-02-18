@@ -95,8 +95,11 @@ void	handle_command(t_data *inp)
 		if (inp->pipe.num_cmd != 1)
 			inp->ret_val = handle_pipes(inp);
 		else
+		{
+			parse_redir(inp);
 			if (!search_builtins(*inp))
 				inp->ret_val = fork_command(inp);
+		}
 	}
 	// if (inp->inp_op.fd[1] != -1 || inp->hdoc_op.fd[1] != -1)
 	dup2(sfd[0], STDIN_FILENO);

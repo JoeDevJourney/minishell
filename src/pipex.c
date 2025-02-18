@@ -81,7 +81,6 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 	int	status;
 
 	parse_redir(inp);
-	
 	pid = fork();
 	if (pid == 0)
 	{
