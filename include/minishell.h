@@ -33,6 +33,13 @@
 # include <errno.h>
 # include <dirent.h>
 
+typedef struct s_env_var
+{
+	char				*name;
+	char				*value;
+	struct s_env_var	*next;
+}				t_env_var;
+
 typedef struct s_logical_op
 {
 	char	**cmd;
@@ -50,6 +57,7 @@ typedef struct s_data
 {
 	char			*home_dir;
 	char			**env;
+	t_env_var		*nvp;
 	char			*input;
 	char			**command;
 	t_logical_op	and;
@@ -63,37 +71,39 @@ typedef struct s_data
 }			t_data;
 
 //	Execution
-void	exec_command(t_data *inp);
-void	handle_pipes(t_data *inp);
-void	handle_command(t_data *inp);
-void	exec_external(t_data inp);
+void		exec_command(t_data *inp);
+void		handle_pipes(t_data *inp);
+void		handle_command(t_data *inp);
+void		exec_external(t_data inp);
 
 //	Operators
-void	expansion_oper(char **arr);
-void	process_fds(t_data *inp);
-void	parse_redir(t_data *inp);
+void		expansion_oper(char **arr);
+void		process_fds(t_data *inp);
+void		parse_redir(t_data *inp);
 
 //	Builtins
-bool	search_builtins(t_data inp);
-int		exec_builtin(char **cmd, char **env);
-int		exec_env(char **env);
-int		exec_pwd(char **cmd);
-int		exec_exit(char *cmd);
+bool		search_builtins(t_data inp);
+int			exec_builtin(char **cmd, char **env);
+int			exec_env(t_data inp);
+int			exec_pwd(char **cmd);
+int			exec_exit(char *cmd);
 
 //	Utilities
-size_t	count_array_size(char **arr);
-size_t	count_substr(const char *s, const char *delim);
-char	**ft_split2(const char *s, const char *delim);
-char	**add_to_array(char **arr, char *new_str);
-char	*join_cmd(char **arr);
-char	*rwd(char *dir);
-void	*safe_malloc(size_t size);
-void	init_redir(t_data *inp);
-void	free_array(char **arr);
-void	free_redir(t_data *inp);
-void	free_commands(t_data *inp);
-void	free_array_fd(int **fd);
-void	exit_with_error(char *msg, int ret_val);
+size_t		count_array_size(char **arr);
+size_t		count_substr(const char *s, const char *delim);
+char		**ft_split2(const char *s, const char *delim);
+char		**add_to_array(char **arr, char *new_str);
+char		*join_cmd(char **arr);
+char		*rwd(char *dir);
+void		*safe_malloc(size_t size);
+void		init_redir(t_data *inp);
+void		free_array(char **arr);
+void		free_redir(t_data *inp);
+void		free_commands(t_data *inp);
+void		free_array_fd(int **fd);
+void		exit_with_error(char *msg, int ret_val);
+void		dupl_env(t_data *inp, char **env);
+t_env_var	*create_env_node(char **cmd);
 
 void	print_data(t_data inp);
 
