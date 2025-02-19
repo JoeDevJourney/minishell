@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 16:29:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:18:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,13 @@ void	handle_command(t_data *inp)
 				inp->ret_val = exec_builtin(inp->command, inp->env);
 			else
 				inp->ret_val = fork_command(inp);
-			free_data(inp);						// <---- pipes leaks
 		}
 		else
 			inp->ret_val = 1;
+		free_redir(inp);
+		free_commands(inp);
+		init_redir(inp);
 	}
-	printf("ret: %d\n", inp->ret_val);
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);

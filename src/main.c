@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 17:36:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:16:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,53 @@
 /**
  * @brief Prompt
  */
-// static char	*read_input(void)
-// {
-// 	char	*str;
-// 	char	*prompt;
-// 	char	*temp;
-//
-// 	temp = ft_strjoin(GRN, getenv("USER"));
-// 	prompt = ft_strdup(temp);
-// 	free(temp);
-// 	temp = ft_strjoin(prompt, "@");
-// 	free(prompt);
-// 	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-// 	free(temp);
-// 	temp = ft_strjoin(prompt, RST);
-// 	free(prompt);
-// 	prompt = ft_strjoin(temp, " % ");
-// 	str = readline(prompt);
-// 	while (!*str)
-// 		str = readline(prompt);
-// 	add_history(str);
-// 	return (free(temp), free(prompt), str);
-// }
-
-static void	init_data(t_data *inp)
+static char	*read_input(void)
 {
-	inp->input = NULL;
-	inp->inp_op.cmd = NULL;
-	inp->inp_op.num_cmd = 0;
-	inp->app_op.cmd = NULL;
-	inp->app_op.num_cmd = 0;
-	inp->out_op.cmd = NULL;
-	inp->out_op.num_cmd = 0;
-	inp->hdoc_op.cmd = NULL;
-	inp->hdoc_op.num_cmd = 0;
-	inp->command = NULL;
-	errno = 0;
+	char	*str;
+	char	*prompt;
+	char	*temp;
+
+	temp = ft_strjoin(GRN, getenv("USER"));
+	prompt = ft_strdup(temp);
+	free(temp);
+	temp = ft_strjoin(prompt, "@");
+	free(prompt);
+	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
+	free(temp);
+	temp = ft_strjoin(prompt, RST);
+	free(prompt);
+	prompt = ft_strjoin(temp, " % ");
+	str = readline(prompt);
+	while (!*str)
+		str = readline(prompt);
+	add_history(str);
+	return (free(temp), free(prompt), str);
+}
+
+static void	init_data(t_data *inp, char **env)
+{
+	int	i;
+
+	inp->env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
+	i = -1;
+	while (env[++i])
+	{
+		inp->env[i] = ft_strdup(env[i]);
+		if (!inp->env[i])
+		{
+			while (i > 0)
+				free(inp->env[--i]);
+			free(inp->env);
+			return ;
+		}
+	}
+	inp->home_dir = ft_strdup(getenv("PWD"));
+	inp->and.cmd = NULL;
+	inp->and.num_cmd = 0;
+	inp->or.cmd = NULL;
+	inp->or.num_cmd = 0;
+	inp->pipe.cmd = NULL;
+	inp->pipe.num_cmd = 0;
 }
 
 static void	parse_command(t_data *inp)
@@ -69,10 +80,11 @@ static void	parse_command(t_data *inp)
 		j = -1;
 		while (++j < inp->or.num_cmd)
 		{
-			init_data(inp);
+			init_redir(inp);
 			inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 			inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
 			handle_command(inp);
+			free_array(inp->pipe.cmd);
 			if (!inp->ret_val)
 				break ;
 		}
@@ -80,6 +92,7 @@ static void	parse_command(t_data *inp)
 		if (inp->ret_val)
 			break ;
 	}
+	free_array(inp->and.cmd);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -88,28 +101,18 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	inp.env = env;
-	inp.home_dir = ft_strdup(getenv("PWD"));
-	inp.and.cmd = NULL;
-	inp.and.num_cmd = 0;
-	inp.or.cmd = NULL;
-	inp.or.num_cmd = 0;
-	inp.pipe.cmd = NULL;
-	inp.pipe.num_cmd = 0;
-	init_data(&inp);
+	init_data(&inp, env);
+	init_redir(&inp);
 	printf("Welcome\n");
-	inp.input = ft_strdup("ls -1 | cat -e");
-	parse_command(&inp);
-	free_array(inp.and.cmd);
+	while (1)
+	{
+		inp.input = read_input();
+		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+			break ;
+		parse_command(&inp);
+	}
 	free(inp.home_dir);
-	// free(inp.input);
-	// while (1)
-	// {
-	// 	inp.input = read_input();
-	// 	if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
-	// 		break ;
-	// 	parse_command(&inp);
-	// }
+	free_array(inp.env);
 	return (0);
 }
 
@@ -119,24 +122,3 @@ int	main(int argc, char **argv, char **env)
 // ls -1 | cat -n
 // echo This is a text | cat -n
 // cat src/pipes/infile | cat -e
-
-
-// In case duplicating env is needed
-// int count = 0;
-// while (env[count])
-// 	count++;
-// inp.env = malloc((count + 1) * sizeof(char *));				// Needs freeing
-// if (!inp.env)
-// 	return (0);
-// for (int i = 0; i < count; i++)
-// {
-// 	inp.env[i] = ft_strdup(env[i]);
-// 	if (!inp.env[i])
-// 	{
-// 		return (0);
-// 		while (i > 0)
-// 			free(inp.env[--i]);
-// 		free(inp.env);
-// 		return (0);
-// 	}
-// }

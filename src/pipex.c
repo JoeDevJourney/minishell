@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 15:01:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:28:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
 
-	oper->fd = safe_malloc((oper->num_cmd - 1) * sizeof(int *));
+	oper->fd = safe_malloc(oper->num_cmd * sizeof(int *));
 	i = -1;
 	while (++i < oper->num_cmd - 1)
 		oper->fd[i] = safe_malloc(2 * sizeof(int));
@@ -43,12 +43,17 @@ static void	init_pipes(t_redir_op *oper)
 	{
 		if (pipe(oper->fd[i]) == -1)
 		{
-			while (i > 0)
-				free(oper->fd[--i]);
+			while (--i >= 0)
+			{
+				close(oper->fd[i][0]);
+				close(oper->fd[i][1]);
+				free(oper->fd[i]);
+			}
 			free(oper->fd);
 			exit_with_error("Pipe creation failed", EXIT_FAILURE);
 		}
 	}
+	oper->fd[i] = NULL;
 }
 
 /**
@@ -89,10 +94,6 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
 	int	status;
 
-	if (inp->command && *inp->command)
-		free_array(inp->command);
-	if (inp->input && *inp->input)
-		free(inp->input);
 	parse_redir(inp);
 	pid = fork();
 	if (pid == 0)
@@ -101,6 +102,9 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
+		free_redir(inp);
+		free_commands(inp);
+		init_redir(inp);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else
@@ -108,7 +112,7 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 	}
 	else
 		perror("Fork failed");
-	return (0);
+	return (free_commands(inp), 0);
 }
 
 /**
@@ -143,20 +147,5 @@ void	handle_pipes(t_data *inp)
 	inp->ret_val = fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], &fd);
 	close(inp->pipe.fd[i - 1][0]);
 	free(pid);
-	i = -1;
-	while (++i < inp->pipe.num_cmd - 1)
-		free(inp->pipe.fd[i]);
-	free(inp->pipe.fd);
-	free_array(inp->pipe.cmd);
-	free(inp->input);
-	// free_array(inp->command);
+	free_array_fd(inp->pipe.fd);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	handle_pipes(--argc, ++argv);
-// 	return (0);
-// }
-// ./pipex "ls -1" "cat -n"
-// ./pipex "echo This is a text" "cat -n"
-// ./pipex "ls -a" "cat -n" "cat -e"

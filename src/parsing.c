@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 16:16:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 14:18:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,10 @@ static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 	del[1] = ">>";
 	del[2] = "<";
 	del[3] = ">";
-	lists[0] = &(inp->pipe.cmd);
-	lists[1] = &(inp->hdoc_op.cmd);
-	lists[2] = &(inp->app_op.cmd);
-	lists[3] = &(inp->inp_op.cmd);
-	lists[4] = &(inp->out_op.cmd);
+	lists[0] = &(inp->hdoc_op.cmd);
+	lists[1] = &(inp->app_op.cmd);
+	lists[2] = &(inp->inp_op.cmd);
+	lists[3] = &(inp->out_op.cmd);
 }
 
 /**
@@ -125,7 +124,7 @@ static void	trim_spaces(t_data *inp)
  */
 void	process_fds(t_data *inp)
 {
-	char	***lists[5];
+	char	***lists[4];
 	char	*del[4];
 	char	**ptr;
 	int		i;
@@ -133,15 +132,18 @@ void	process_fds(t_data *inp)
 
 	inp->input = ft_strdup(*inp->pipe.cmd);
 	init_lists_and_del(inp, lists, del);
+	j = -1;
+	while (++j < 4)
+		split_and_store(inp->pipe.cmd, lists[j], del[j]);
 	i = -1;
-	while (++i < 5)
+	while (++i < 4)
 	{
 		ptr = *lists[i];
 		while (ptr && *ptr)
 		{
 			j = -1;
 			while (++j < 4)
-				split_and_store(ptr, lists[j + 1], del[j]);
+				split_and_store(ptr, lists[j], del[j]);
 			ptr++;
 		}
 	}

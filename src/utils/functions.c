@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 16:38:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:36:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,6 @@ void	*safe_malloc(size_t size)
 	if (!ptr)
 		exit_with_error("Memory allocation failed", EXIT_FAILURE);
 	return (ptr);
-}
-
-void	free_array(char **arr)
-{
-	char	**temp;
-
-	temp = arr;
-	while (*temp)
-		free(*temp++);
-	free (arr);
 }
 
 /**
@@ -70,30 +60,4 @@ void	expansion_oper(char **arr)
 		}
 		ptr++;
 	}
-}
-
-/**
- * @brief Joins together a char **array, creating one ' ' separated char *str.
- */
-char	*join_cmd(char **arr)
-{
-	char	*temp;
-	char	*line;
-	char	*newline;
-
-	temp = NULL;
-	newline = NULL;
-	line = NULL;
-	while (*arr)
-	{
-		temp = ft_strjoin(*arr, " ");
-		newline = ft_strjoin(line, temp);
-		free(temp);
-		free (line);
-		line = newline;
-		arr++;
-	}
-	temp = NULL;
-	// free(newline);	(?)
-	return (line);
 }

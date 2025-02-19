@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 17:22:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:28:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,11 @@ char	**add_to_array(char **arr, char *new_str);
 char	*join_cmd(char **arr);
 char	*rwd(char *dir);
 void	*safe_malloc(size_t size);
+void	init_redir(t_data *inp);
 void	free_array(char **arr);
-void	free_input(t_data *inp);
-void	free_data(t_data *inp);
+void	free_redir(t_data *inp);
+void	free_commands(t_data *inp);
+void	free_array_fd(int **fd);
 void	exit_with_error(char *msg, int ret_val);
 
 void	print_data(t_data inp);

@@ -16,7 +16,6 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
 
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
-# OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBFT = $(LIBFTDIR)/libft.a
 NAME = minishell
 
