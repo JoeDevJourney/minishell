@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 18:57:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/19 11:25:55 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 t_quote_state	init_quote_state(void);
 unsigned long	ft_strlen(const char str[]);
+char			*ft_strncpy(char *dst, const char *src, size_t len);
 // Quotes
 bool			check_quotes(const char *input);
 void			update_quote_state(char **input, char **dst, \

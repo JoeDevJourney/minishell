@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 17:10:06 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/19 14:26:48 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ void	free_list(t_list *list)
 	}
 }
 
+char	*ft_strncpy(char *dst, const char *src, size_t len)
+{
+	if (len == 0 || *src == '\0')
+	{
+		if (len > 0)
+			*dst = '\0';
+		return (dst);
+	}
+	else
+	{
+		*dst = *src;
+		ft_strncpy(dst + 1, src + 1, len - 1);
+	}
+	return (dst);
+}
+
 void	add_command(t_list **list, const char *start, const char *end)
 {
 	t_list	*new_cmd;
@@ -41,7 +57,7 @@ void	add_command(t_list **list, const char *start, const char *end)
 		*list = new_cmd;
 	else
 	{
-		temp = list;
+		temp = *list;
 		while (temp->next != NULL)
 			temp = temp->next;
 		temp->next = new_cmd;
@@ -50,27 +66,15 @@ void	add_command(t_list **list, const char *start, const char *end)
 
 t_quote_state	init_quote_state(void)
 {
-	t_quote_state	state;
-
-	state.sq = false;
-	state.dq = false;
-	state.escape = false;
-	return (state);
+	return ((t_quote_state){false, false, false});
 }
 
 unsigned long	ft_strlen(const char str[])
 {
-	const char		*ptr;
 	unsigned long	len;
 
-	if (!str)
-		return (0);
-	ptr = str;
 	len = 0;
-	while (*ptr)
-	{
+	while (str[len] != '\0')
 		len++;
-		ptr++;
-	}
 	return (len);
 }

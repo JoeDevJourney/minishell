@@ -6,28 +6,23 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:36:03 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/18 18:57:57 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:13:18 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	update_split_state(char c, t_quote_state *state)
+char	*ft_strchr(const char *s, int c)
 {
-	if (state->escape)
+	while (*s)
 	{
-		state->escape = false;
-		return ;
+		if (*s == c)
+			return ((char *)s);
+		s++;
 	}
-	if (c == '\\')
-	{
-		state->escape = true;
-		return ;
-	}
-	if (c == '\'' && !state->dq)
-		state->sq = !state->sq;
-	else if (c == '"' && !state->sq)
-		state->dq = !state->dq;
+	if (*s == c)
+		return ((char *)s);
+	return (NULL);
 }
 
 bool	check_quotes(const char *input)
@@ -37,18 +32,21 @@ bool	check_quotes(const char *input)
 	state = init_quote_state();
 	while (*input)
 	{
-		update_split_state(*input, &state);
+		if (state.escape)
+		{
+			state.escape = false;
+			input++;
+			continue ;
+		}
+		if (*input == '\\' && state.dq)
+			state.escape = true;
+		else if (*input == '\'' && !state.dq)
+			state.sq = !state.sq;
+		else if (*input == '"' && !state.sq)
+			state.dq = !state.dq;
 		input++;
 	}
 	return (state.sq || state.dq);
-}
-
-void	update_quote_state(char **input, char **dst, t_quote_state *state)
-{
-	if (state->escape)
-	{
-		
-	}
 }
 
 char	*process_quotes(char *input)
@@ -62,31 +60,65 @@ char	*process_quotes(char *input)
 	state = init_quote_state();
 	while (*input)
 	{
-		update_quote_state(&input, &state);
+		if (state.escape)
+		{
+			*dst++ = *input++;
+			state.escape = false;
+			continue ;
+		}
+		if (*input == '\\' && state.dq)
+		{
+			state.escape = true;
+			*dst++ = *input++;
+			continue ;
+		}
+		if (*input == '\\' && !state.sq && !state.dq)
+		{
+			*dst++ = *input++;
+			continue ;
+		}
+		if (*input == '\'' && !state.dq)
+		{
+			state.sq = !state.sq;
+			input++;
+			continue ;
+		}
+		if (*input == '"' && !state.sq)
+		{
+			state.dq = !state.dq;
+			input++;
+			continue ;
+		}
+		*dst++ = *input++;
 	}
 	*dst = '\0';
 	return (res);
 }
 
-
 int main() {
-    const char *input1 = "echo 'Hello World'";
-    const char *input2 = "echo \"Hello $USER\"";
-    const char *input3 = "echo 'This is a \\ test'";
-    const char *input4 = "echo \"This is a \\\" test\"";
-    const char *input5 = "echo \"Hello; World\"";
-    const char *input6 = "echo 'Unclosed quote";
-    const char *input7 = "echo \"Unclosed quote";
-    const char *input8 = "echo \"This is a \\ backslash\"";
-    const char *input9 = "echo 'This is a \\ backslash'";
-    const char *input10 = "echo \"Unclosed quote with escape \\\"";
-    const char *input11 = "echo 'Unclosed quote with escape \\'";
-    const char *input12 = "echo \"Part1\" | echo \"Part2\"";
-    const char *input13 = "echo 'Part1' | echo 'Part2'";
-    const char *input14 = "echo \"Outer \\\"Inner\\\"\"";
-    const char *input15 = "echo 'Outer \\'Inner\\''";
-
-    const char *inputs[] = {input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13, input14, input15};
+    const char *inputs[] = {
+        "echo 'Hello World'",
+        "echo \"Hello $USER\"",
+        "echo 'This is a \\ test'",
+        "echo \"This is a \\\" test\"",
+        "echo \"Hello; World\"",
+        "echo 'Unclosed quote",
+        "echo \"Unclosed quote",
+        "echo \"This is a \\ backslash\"",
+        "echo 'This is a \\ backslash'",
+        "echo \"Closed quote with escape \\\"\"",
+        "echo 'Closed quote with escape \\,',",
+        "echo \"Part1\" | echo \"Part2\"",
+        "echo 'Part1' | echo 'Part2'",
+        "echo \"Outer \\\"Inner\\\"\"",
+        "echo 'Outer \\\'Inner\\\''",
+        "awk 'BEGIN {print \"Hello World\"}'",
+        "export VAR=\"Value with spaces\"",
+        "grep \"pattern\" file.txt | awk '{print $1}'",
+        "find . -name \"*.c\" -exec gcc -o program {} \\\\;",
+        "sed 's/old/new/g' file.txt",
+        "printf '%s\\n' \"String with space\""
+    };
     size_t input_count = sizeof(inputs) / sizeof(inputs[0]);
 
     for (size_t i = 0; i < input_count; i++) {
@@ -96,17 +128,9 @@ int main() {
         } else {
             char *processed_input = process_quotes((char *)inputs[i]);
             printf("Processed: %s\n", processed_input);
-            t_list *commands_list = split_pipes(processed_input);
-            t_list *tmp = commands_list;
-            while (tmp) {
-                printf("Command: %s\n", tmp->str);
-                tmp = tmp->next;
-            }
             free(processed_input);
-            free_list(commands_list);
         }
         printf("\n");
     }
-
     return 0;
 }
