@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/19 16:13:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:19:38 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ void	parse_redir(t_data *inp)
 	int	i;
 
 	process_fds(inp);
-	print_data(*inp);
 	i = -1;
 	while (inp->input[++i] && !errno)
 	{
