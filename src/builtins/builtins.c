@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 15:28:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:08:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 /**
  * @brief Executes the builtin command
  */
-int	exec_builtin(char **cmd, char **env)
+int	exec_builtin(t_data inp)
 {
-	if (!ft_strncmp(*cmd, "env", ft_strlen(*cmd)))
-		return (exec_env(env));
-	else if (!ft_strncmp(*cmd, "pwd", ft_strlen(*cmd)))
-		return (exec_pwd(cmd));
-	else if (!ft_strncmp(*cmd, "exit", ft_strlen(*cmd)))
-		return (exec_exit(cmd[1]));
+	if (!ft_strncmp(*inp.command, "env", ft_strlen(*inp.command)))
+		return (exec_env(inp.env));
+	else if (!ft_strncmp(*inp.command, "pwd", ft_strlen(*inp.command)))
+		return (exec_pwd(inp.command));
+	// else if (!ft_strncmp(*inp.command, "unset", ft_strlen(*inp.command)))
+	// 	return (exec_unset(&inp));
+	else if (!ft_strncmp(*inp.command, "exit", ft_strlen(*inp.command)))
+		return (exec_exit(inp.command[1]));
 	return (1);
 }
 

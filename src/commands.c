@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/19 16:18:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:15:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,12 @@ void	handle_command(t_data *inp)
 		handle_pipes(inp);
 	else
 	{
+		// quotes()
 		parse_redir(inp);
 		if (!errno)
 		{
 			if (search_builtins(*inp))
-				inp->ret_val = exec_builtin(inp->command, inp->env);
+				inp->ret_val = exec_builtin(*inp);
 			else
 				inp->ret_val = fork_command(inp);
 		}

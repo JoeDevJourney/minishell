@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/19 15:28:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 11:31:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	if (!search_builtins(*inp))
 		exec_external(*inp);
 	else
-		exec_builtin(inp->command, inp->env);
+		exec_builtin(*inp);
 	exit(0);
 }
 

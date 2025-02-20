@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/18 11:45:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 13:51:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,10 @@
 
 int	exec_env(char **env)
 {
-	char	**ptr;
+	size_t	i;
 
-	ptr = env;
-	while (*ptr)
-		printf("%s\n", *ptr++);
+	i = -1;
+	while (env[++i])
+		printf("%s\n", env[i]);
 	return (0);
 }
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	execute_env(env);
-// }

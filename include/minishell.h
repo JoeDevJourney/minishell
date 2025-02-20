@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/19 15:28:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:05:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
-int		exec_builtin(char **cmd, char **env);
+int		exec_builtin(t_data inp);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
 int		exec_exit(char *cmd);
@@ -85,7 +85,6 @@ size_t	count_array_size(char **arr);
 size_t	count_substr(const char *s, const char *delim);
 char	**ft_split2(const char *s, const char *delim);
 char	**add_to_array(char **arr, char *new_str);
-char	*join_cmd(char **arr);
 char	*rwd(char *dir);
 void	*safe_malloc(size_t size);
 void	init_redir(t_data *inp);
