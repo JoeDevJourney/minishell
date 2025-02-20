@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 13:08:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:27:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	exec_builtin(t_data inp)
 		return (exec_env(inp.env));
 	else if (!ft_strncmp(*inp.command, "pwd", ft_strlen(*inp.command)))
 		return (exec_pwd(inp.command));
-	// else if (!ft_strncmp(*inp.command, "unset", ft_strlen(*inp.command)))
-	// 	return (exec_unset(&inp));
+	else if (!ft_strncmp(*inp.command, "unset", ft_strlen(*inp.command)))
+		return (exec_unset(++inp.command, &inp.env));
 	else if (!ft_strncmp(*inp.command, "exit", ft_strlen(*inp.command)))
 		return (exec_exit(inp.command[1]));
 	return (1);

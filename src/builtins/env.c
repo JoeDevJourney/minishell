@@ -6,18 +6,18 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 17:37:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:29:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	exec_env(t_data inp)
+int	exec_env(char **env)
 {
 	size_t	i;
 
 	i = -1;
-	while (inp.env[++i])
-		printf("%s\n", inp.env[i]);
+	while (env[++i])
+		printf("%s\n", env[i]);
 	return (0);
 }

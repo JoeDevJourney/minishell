@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 17:45:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:28:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,12 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	pause();
 	init_redir(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
 		inp.input = read_input();
-		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)) && ft_strlen(inp.input) == 4)
 			break ;
 		parse_command(&inp);
 	}

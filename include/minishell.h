@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 17:36:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:57:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,16 @@ typedef struct s_data
 }			t_data;
 
 //	Execution
-void		exec_command(t_data *inp);
-void		handle_pipes(t_data *inp);
-void		handle_command(t_data *inp);
-void		exec_external(t_data inp);
+void	exec_command(t_data *inp);
+void	handle_pipes(t_data *inp);
+void	handle_command(t_data *inp);
+void	exec_external(t_data inp);
+int		exec_unset(char **cmd, char ***env);
 
 //	Operators
-void		expansion_oper(char **arr);
-void		process_fds(t_data *inp);
-void		parse_redir(t_data *inp);
+void	expansion_oper(char **arr);
+void	process_fds(t_data *inp);
+void	parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);
@@ -101,7 +102,6 @@ void	free_redir(t_data *inp);
 void	free_commands(t_data *inp);
 void	free_array_fd(int **fd);
 void	exit_with_error(char *msg, int ret_val);
-
 void	print_data(t_data inp);
 
 #endif

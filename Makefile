@@ -11,7 +11,7 @@ LIBFTDIR = ./include/libft
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
 		$(SRCDIR)/commands.c $(SRCDIR)/redirection.c $(SRCDIR)/parsing.c \
-		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c\
+		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c
 
 

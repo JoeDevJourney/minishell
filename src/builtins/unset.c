@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 17:36:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:28:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,8 @@ static int	var_index(char *cmd, char **env)
 	while (env[++i])
 	{
 		tok = ft_split(env[i], '=');
-		len = ft_strlen(*tok);
-		if (tok[0][len] == '\0')
-			printf("y");
-		else
-			printf("n"); pause();
-		if (!ft_strncmp(cmd, *tok, len) && tok[0][len + 1] == '\0')
+		len = ft_strlen(cmd);
+		if (!ft_strncmp(cmd, *tok, len) && tok[0][len] == '\0')
 			return (free_array(tok), i);
 		free_array(tok);
 	}
@@ -70,12 +66,15 @@ static int	var_index(char *cmd, char **env)
 }
 
 // int	exec_unset(t_data *inp)
-static int	exec_unset(char **cmd, char ***env)
+int	exec_unset(char **cmd, char ***env)
 {
 	int		index;
 	int		size;
 
 	size = count_array_size(*env);
+	// while (*cmd)
+	// 	printf("'%s'\n", *cmd++);
+	// pause();
 	if (!*cmd)
 		return (0);
 	if (!ft_strncmp(*cmd, "-v", ft_strlen(*cmd)))
@@ -93,40 +92,40 @@ static int	exec_unset(char **cmd, char ***env)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **env)
-{
-	t_data	inp;
-	int	i = -1;
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_data	inp;
+// 	int	i = -1;
 
-	(void)argc;
-	argv++;
-	inp.env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
-	i = -1;
-	while (env[++i])
-	{
-		inp.env[i] = ft_strdup(env[i]);
-		if (!inp.env[i])
-		{
-			while (i > 0)
-				free(inp.env[--i]);
-			free(inp.env);
-			return (0);
-		}
-	}
-	inp.env[i] = NULL;
-	i = -1;
-	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-	while (inp.env[++i])
-		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
-	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
-	if (argc > 1)
-		exec_unset(++argv, &inp.env);
-	i = -1;
-	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-	while (inp.env[++i])
-		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
-	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
-}
+// 	(void)argc;
+// 	argv++;
+// 	inp.env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
+// 	i = -1;
+// 	while (env[++i])
+// 	{
+// 		inp.env[i] = ft_strdup(env[i]);
+// 		if (!inp.env[i])
+// 		{
+// 			while (i > 0)
+// 				free(inp.env[--i]);
+// 			free(inp.env);
+// 			return (0);
+// 		}
+// 	}
+// 	inp.env[i] = NULL;
+// 	i = -1;
+// 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
+// 	while (inp.env[++i])
+// 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
+// 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
+// 	if (argc > 1)
+// 		exec_unset(++argv, &inp.env);
+// 	i = -1;
+// 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
+// 	while (inp.env[++i])
+// 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
+// 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
+// }
 // cc unset.c ../utils/more_functions.c ../utils/functions.c ../utils/even_more_functions.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strncmp.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strchr.c -o unset -g -Wall -Werror -Wextra
 
 
