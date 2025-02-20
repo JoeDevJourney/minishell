@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 12:05:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:36:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@
 # include <errno.h>
 # include <dirent.h>
 
+typedef struct s_env_var
+{
+	char				*name;
+	char				*value;
+	struct s_env_var	*next;
+}				t_env_var;
+
 typedef struct s_logical_op
 {
 	char	**cmd;
@@ -50,6 +57,7 @@ typedef struct s_data
 {
 	char			*home_dir;
 	char			**env;
+	t_env_var		*nvp;
 	char			*input;
 	char			**command;
 	t_logical_op	and;
@@ -63,15 +71,15 @@ typedef struct s_data
 }			t_data;
 
 //	Execution
-void	exec_command(t_data *inp);
-void	handle_pipes(t_data *inp);
-void	handle_command(t_data *inp);
-void	exec_external(t_data inp);
+void		exec_command(t_data *inp);
+void		handle_pipes(t_data *inp);
+void		handle_command(t_data *inp);
+void		exec_external(t_data inp);
 
 //	Operators
-void	expansion_oper(char **arr);
-void	process_fds(t_data *inp);
-void	parse_redir(t_data *inp);
+void		expansion_oper(char **arr);
+void		process_fds(t_data *inp);
+void		parse_redir(t_data *inp);
 
 //	Builtins
 bool	search_builtins(t_data inp);

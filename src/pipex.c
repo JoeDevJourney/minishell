@@ -12,24 +12,6 @@
 
 #include "../include/minishell.h"
 
-// static void	wait_n_free(int n, pid_t *pid, int **pfd)
-// {
-// 	int	i;
-// 	int	status;
-//
-// 	i = -1;
-// 	while (++i < n)
-// 	{
-// 		if (waitpid(pid[i], &status, 0) == -1)
-// 			exit_with_error("Pipe child process failed", EXIT_FAILURE);
-// 	}
-// 	i = -1;
-// 	while (++i < n - 1)
-// 		free(pfd[i]);
-// 	free(pid);
-// 	free(pfd);
-// }
-
 static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
