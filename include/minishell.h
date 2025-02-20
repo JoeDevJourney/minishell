@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/19 11:25:55 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/20 15:37:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ typedef struct s_oper
 
 typedef struct s_data
 {
-	char	*home_dir;
-	char	**env;
-	char	*str;
-	t_oper	and;
-	t_oper	or;
-	t_oper	pipe;
-	t_oper	redir;		
+	char		*home_dir;
+	char		**env;
+	char		*str;
+	char		*input;
+	const char	**pipe_cmd;
+	t_oper		and;
+	t_oper		or;
+	t_oper		pipe;
+	t_oper		redir;		
 }			t_data;
 
 typedef struct s_quote_state
@@ -128,10 +130,11 @@ unsigned long	ft_strlen(const char str[]);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 // Quotes
 bool			check_quotes(const char *input);
-void			update_quote_state(char **input, char **dst, \
+void			handle_escape(const char **input, char **dst, \
 				t_quote_state *state);
-char			*process_quotes(char *input);
-void			update_split_state(char c, t_quote_state *state);
+void			handle_quotes(const char **input, char **dst, \
+				t_quote_state *state);
+void			process_quotes(t_data	*inp);
 
 
 #endif
