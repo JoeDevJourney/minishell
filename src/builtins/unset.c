@@ -69,12 +69,7 @@ static int	var_index(char *cmd, char **env)
 int	exec_unset(char **cmd, char ***env)
 {
 	int		index;
-	int		size;
 
-	size = count_array_size(*env);
-	// while (*cmd)
-	// 	printf("'%s'\n", *cmd++);
-	// pause();
 	if (!*cmd)
 		return (0);
 	if (!ft_strncmp(*cmd, "-v", ft_strlen(*cmd)))

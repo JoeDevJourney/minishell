@@ -107,7 +107,7 @@ void	handle_command(t_data *inp)
 		if (!errno)
 		{
 			if (search_builtins(*inp))
-				inp->ret_val = exec_builtin(*inp);
+				inp->ret_val = exec_builtin(inp->command, &inp->env);
 			else
 				inp->ret_val = fork_command(inp);
 		}

@@ -64,7 +64,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	if (!search_builtins(*inp))
 		exec_external(*inp);
 	else
-		exec_builtin(*inp);
+		exec_builtin(inp->command, &inp->env);
 	exit(0);
 }
 

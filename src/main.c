@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 19:28:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:55:44 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,8 @@ static char	*read_input(void)
 
 static void	init_data(t_data *inp, char **env)
 {
-	int	i;
-
-	inp->env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
-	i = -1;
-	while (env[++i])
-	{
-		inp->env[i] = ft_strdup(env[i]);
-		if (!inp->env[i])
-		{
-			while (i > 0)
-				free(inp->env[--i]);
-			free(inp->env);
-			return ;
-		}
-	}
-	inp->env[i] = NULL;
+	inp->env = NULL;
+	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
@@ -108,18 +94,13 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.input = read_input();
-		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)) && ft_strlen(inp.input) == 4)
+		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
 			break ;
 		parse_command(&inp);
 	}
 	free(inp.home_dir);
+	free(inp.input);
 	free_array(inp.env);
 	return (0);
 }
 
-// ls -l | grep "\.c" > output.txt
-// cat < in.txt | grep "pattern" > med.txt || cat < in1.txt | grep "pattern" > med.txt && sort med.txt >> output.txt
-// ls > temp.txt | cat < temp.txt
-// ls -1 | cat -n
-// echo This is a text | cat -n
-// cat src/pipes/infile | cat -e
