@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/19 16:16:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:45:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,22 @@ static char	*read_input(void)
 
 static void	init_data(t_data *inp, char **env)
 {
-	dupl_env(inp, env);
+	int	i;
+
+	inp->env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
+	i = -1;
+	while (env[++i])
+	{
+		inp->env[i] = ft_strdup(env[i]);
+		if (!inp->env[i])
+		{
+			while (i > 0)
+				free(inp->env[--i]);
+			free(inp->env);
+			return ;
+		}
+	}
+	inp->env[i] = NULL;
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
@@ -88,6 +103,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
+	pause();
 	init_redir(&inp);
 	printf("Welcome\n");
 	while (1)
