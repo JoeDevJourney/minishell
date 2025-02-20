@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 17:36:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:37:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	exec_env(t_data inp)
 	size_t	i;
 
 	i = -1;
-	while (env[++i])
-		printf("%s\n", env[i]);
+	while (inp.env[++i])
+		printf("%s\n", inp.env[i]);
 	return (0);
 }
