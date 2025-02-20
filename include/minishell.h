@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/18 13:53:34 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 18:50:02 by jbrandt          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/02/20 18:54:24 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -166,3 +167,7 @@ void			handle_quotes(const char **input, char **dst, \
 void			process_quotes(t_data	*inp);
 
 #endif
+
+// search for the $ sign in getenv and parse the word to it to the getenv and process it.
+// look up if the quote is closed or not.
+// search for the quotes and find out if its double or single and if there is a dollar sign inside.

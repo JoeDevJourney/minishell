@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/19 16:16:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:55:44 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ static void	parse_command(t_data *inp)
 }
 
 int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
 
@@ -122,3 +123,24 @@ int	main(int argc, char **argv, char **env)
 // ls -1 | cat -n
 // echo This is a text | cat -n
 // cat src/pipes/infile | cat -e
+
+
+// In case duplicating env is needed
+// int count = 0;
+// while (env[count])
+// 	count++;
+// inp.env = malloc((count + 1) * sizeof(char *));				// Needs freeing
+// if (!inp.env)
+// 	return (0);
+// for (int i = 0; i < count; i++)
+// {
+// 	inp.env[i] = ft_strdup(env[i]);
+// 	if (!inp.env[i])
+// 	{
+// 		return (0);
+// 		while (i > 0)
+// 			free(inp.env[--i]);
+// 		free(inp.env);
+// 		return (0);
+// 	}
+// }
