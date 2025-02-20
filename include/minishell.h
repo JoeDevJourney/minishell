@@ -76,6 +76,7 @@ void	parse_redir(t_data *inp);
 //	Builtins
 bool	search_builtins(t_data inp);
 int		exec_builtin(char **cmd, char **env);
+void	dupl_env(char ***arr, char **env);
 int		exec_env(char **env);
 int		exec_pwd(char **cmd);
 int		exec_exit(char *cmd);

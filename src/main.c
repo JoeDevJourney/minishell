@@ -40,21 +40,8 @@ static char	*read_input(void)
 
 static void	init_data(t_data *inp, char **env)
 {
-	int	i;
-
-	inp->env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
-	i = -1;
-	while (env[++i])
-	{
-		inp->env[i] = ft_strdup(env[i]);
-		if (!inp->env[i])
-		{
-			while (i > 0)
-				free(inp->env[--i]);
-			free(inp->env);
-			return ;
-		}
-	}
+	inp->env = NULL;
+	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
