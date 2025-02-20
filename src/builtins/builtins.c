@@ -17,13 +17,13 @@
  */
 int	exec_builtin(char **cmd, char ***env)
 {
-	if (!ft_strncmp(*cmd, "env", ft_strlen(*cmd)))
+	if (!ft_strncmp(*cmd, "env", 3) && ft_strlen(*cmd) == 3)
 		return (exec_env(*env));
-	else if (!ft_strncmp(*cmd, "pwd", ft_strlen(*cmd)))
+	else if (!ft_strncmp(*cmd, "pwd", 3) && ft_strlen(*cmd) == 3)
 		return (exec_pwd(cmd));
-	else if (!ft_strncmp(*cmd, "unset", ft_strlen(*cmd)))
+	else if (!ft_strncmp(*cmd, "unset", 5) && ft_strlen(*cmd) == 5)
 		return (exec_unset(++cmd, env));
-	else if (!ft_strncmp(*cmd, "exit", ft_strlen(*cmd)))
+	else if (!ft_strncmp(*cmd, "exit", 4) && ft_strlen(*cmd) == 4)
 		return (exec_exit(cmd[1]));
 	return (1);
 }
@@ -48,7 +48,8 @@ bool	search_builtins(t_data inp)
 	entry = readdir(builtins_dir);
 	while (entry)
 	{
-		if (!ft_strncmp(obj, entry->d_name, ft_strlen(*inp.command)))
+		if (!ft_strncmp(obj, entry->d_name, ft_strlen(obj))
+			&& entry->d_name[ft_strlen(obj)] == '\0')
 			return (closedir(builtins_dir), free(obj), free(path), 1);
 		entry = readdir(builtins_dir);
 	}

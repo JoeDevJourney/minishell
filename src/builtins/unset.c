@@ -72,19 +72,20 @@ int	exec_unset(char **cmd, char ***env)
 
 	if (!*cmd)
 		return (0);
-	if (!ft_strncmp(*cmd, "-v", ft_strlen(*cmd)))
+	if (!ft_strncmp(*cmd, "-v", ft_strlen(*cmd)) && ft_strlen(*cmd) == 2)
 	{
 		if (!*(cmd + 1))
 			return (0);
 		cmd++;
+		while (*cmd)
+		{
+			index = var_index(*cmd, *env);
+			remove_line(env, index);
+			cmd++;
+		}
+		return (0);
 	}
-	while (*cmd)
-	{
-		index = var_index(*cmd, *env);
-		remove_line(env, index);
-		cmd++;
-	}
-	return (0);
+	return (printf("bash: unset: %s: invalid option\n", *cmd), 2);
 }
 
 // int	main(int argc, char **argv, char **env)
@@ -94,20 +95,7 @@ int	exec_unset(char **cmd, char ***env)
 
 // 	(void)argc;
 // 	argv++;
-// 	inp.env = safe_malloc((count_array_size(env) + 1) * sizeof(char *));
-// 	i = -1;
-// 	while (env[++i])
-// 	{
-// 		inp.env[i] = ft_strdup(env[i]);
-// 		if (!inp.env[i])
-// 		{
-// 			while (i > 0)
-// 				free(inp.env[--i]);
-// 			free(inp.env);
-// 			return (0);
-// 		}
-// 	}
-// 	inp.env[i] = NULL;
+// 	dupl_env(&inp.env, env);
 // 	i = -1;
 // 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
 // 	while (inp.env[++i])
@@ -121,7 +109,7 @@ int	exec_unset(char **cmd, char ***env)
 // 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
 // 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
 // }
-// cc unset.c ../utils/more_functions.c ../utils/functions.c ../utils/even_more_functions.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strncmp.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strchr.c -o unset -g -Wall -Werror -Wextra
+// cc unset.c env.c ../utils/more_functions.c ../utils/functions.c ../utils/even_more_functions.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strncmp.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strchr.c -o unset -g -Wall -Werror -Wextra
 
 
 // argv = 'unset'

@@ -94,7 +94,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.input = read_input();
-		if (!ft_strncmp(inp.input, "exit", ft_strlen(inp.input)))
+		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
 			break ;
 		parse_command(&inp);
 	}
