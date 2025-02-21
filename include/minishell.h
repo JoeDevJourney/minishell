@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 11:27:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:46:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,11 +158,9 @@ int				ft_strcmp(const char *s1, const char *s2);
 void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
-unsigned long	ft_strlen(const char str[]);
 t_quote_state	init_quote_state(void);
 
 // Quotes
-bool			check_quotes(const char *input);
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 char			**ft_split2(const char *s, const char *delim);
@@ -176,10 +174,6 @@ void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
-void			handle_escape(const char **input, char **dst, \
-				t_quote_state *state);
-void			handle_quotes(const char **input, char **dst, \
-				t_quote_state *state);
 void			process_quotes(t_data	*inp);
 
 #endif

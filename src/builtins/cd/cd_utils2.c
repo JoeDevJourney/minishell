@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/05 16:57:59 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/21 12:49:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,3 @@ int	add_env_var(char **env, char *new_entry)
 	return (0);
 }
 
-void	safe_free(void *ptr)
-{
-	if (ptr)
-	{
-		free(ptr);
-		ptr = NULL;
-	}
-}

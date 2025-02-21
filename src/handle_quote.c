@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 16:59:00 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/21 12:45:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-bool	check_quotes(const char *input)
+static bool	check_quotes(const char *input)
 {
 	t_quote_state	state;
 
@@ -36,7 +36,7 @@ bool	check_quotes(const char *input)
 	return (state.sq || state.dq);
 }
 
-void	handle_escape(const char **input, char **dst, t_quote_state *state)
+static void	handle_escape(const char **input, char **dst, t_quote_state *state)
 {
 	if (state->escape)
 	{
@@ -54,7 +54,7 @@ void	handle_escape(const char **input, char **dst, t_quote_state *state)
 	}
 }
 
-void	handle_quotes(const char **input, char **dst, t_quote_state *state)
+static void	handle_quotes(const char **input, char **dst, t_quote_state *state)
 {
 	while (**input)
 	{
