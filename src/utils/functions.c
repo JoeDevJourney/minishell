@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 16:48:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:49:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	expansion_oper(char **arr)
 }
 
 /**
- * @brief Checks if there's a  
+ * @brief Checks if there's a hanging command near an operator
+ * 
+ * @param str The address of the input as a str
+ * @param dl The operator as a delimeter 
  */
 bool	valid_oper(char **str, char *dl)
 {
@@ -77,3 +80,37 @@ bool	valid_oper(char **str, char *dl)
 	}
 	return (free_array(arr), 1);
 }
+
+/**
+ * @brief Checks if it's a valid directory
+ */
+int	valid_dir(char *cmd, char *cwd)
+{
+	DIR				*dr;
+	char			*path;
+	char			*temp;
+
+	if (*cmd == '/')
+		path = ft_strdup(cmd);
+	else
+	{
+		temp = ft_strjoin(cwd, "/");
+		path = ft_strjoin(temp, cmd);
+		free(temp);
+	}
+	dr = opendir(path);
+	if (!dr)
+		return (perror(path), free(path), 127);
+	return (closedir(dr), printf("%s: is a directory\n", cmd), free(path), 126);
+}
+
+// int main()
+// {
+// 	char *str = "../../src";
+// 	char *dir = getenv("PWD");
+
+// 	if (valid_dir(str, dir))
+// 		printf("y\n");
+// 	else
+// 		printf("n\n");
+// }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 16:46:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:43:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ typedef struct s_data
 {
 	char			*home_dir;
 	char			**env;
-	char			*str;
 	char			*input;
 	char			**command;
-	char			**pipe_cmd;
 	t_logical_op	and;
 	t_logical_op	or;
 	t_redir_op		pipe;
@@ -153,6 +151,7 @@ void			exit_with_error(char *msg, int ret_val);
 void			safe_free(void *ptr);
 void			print_data(t_data inp);
 void			process_quotes(t_data	*inp);
+int				valid_dir(char *cmd, char *cwd);
 int				ft_strcmp(const char *s1, const char *s2);
 
 // Quotes Utils

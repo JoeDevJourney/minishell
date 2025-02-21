@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 11:27:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:51:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ static char	*path_to_exec(char *name)
 	{
 		dir = opendir(*ptr);
 		if (!dir)
-			return (perror(*ptr), NULL);
+			return (free_array(path), perror(*ptr), NULL);
 		entry = readdir(dir);
 		while (entry)
 		{
 			if (!ft_strncmp(name, entry->d_name, ft_strlen(entry->d_name)))
-				return (closedir(dir), *ptr);
+				return (closedir(dir), free_array(path), *ptr);
 			entry = readdir(dir);
 		}
 		closedir (dir);
@@ -106,11 +106,13 @@ void	handle_command(t_data *inp)
 		process_fds(inp);
 		if (!errno)
 		{
+			pause();
 			if (search_builtins(*inp))
 				inp->ret_val = exec_builtin(inp->command, &inp->env);
 			else
 				inp->ret_val = fork_command(inp);
 		}
+		// errno = valid_dir(*inp->pipe.cmd, getenv("PWD"));			<-------- right place
 		else
 			inp->ret_val = 1;
 		free_redir(inp);
