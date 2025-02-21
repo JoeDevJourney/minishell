@@ -3,11 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 18:55:44 by jbrandt          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/02/21 10:37:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
+/* ************************************************************************** */
+
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
@@ -40,6 +42,8 @@ static char	*read_input(void)
 
 static void	init_data(t_data *inp, char **env)
 {
+	inp->env = NULL;
+	dupl_env(&inp->env, env);
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
