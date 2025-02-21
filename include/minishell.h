@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 12:46:35 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:01:45 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ typedef struct s_data
 {
 	char			*home_dir;
 	char			**env;
-	char			*str;
 	char			*input;
 	char			**command;
-	char			**pipe_cmd;
 	t_logical_op	and;
 	t_logical_op	or;
 	t_redir_op		pipe;
@@ -79,6 +77,8 @@ typedef struct s_quote_state
 	bool	sq;
 	bool	dq;
 	bool	escape;
+	bool	sq_closed;
+	bool	dq_closed;
 }	t_quote_state;
 
 typedef struct s_split_state
@@ -99,7 +99,6 @@ typedef struct s_list
 
 
 //	Execution
-void			exec_command(t_data *inp);
 void			handle_pipes(t_data *inp);
 void			handle_command(t_data *inp);
 void			exec_external(t_data inp);
@@ -126,7 +125,6 @@ int				ft_cd(char **env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
 int				update_env_var(char **env, const char *name, const char *value);
-void			ft_write_error(const char *msg);
 char			*get_home_dir(void);
 char			*get_oldpwd_dir(void);
 int				update_pwd_vars(char **env, const char *oldpwd);
@@ -138,10 +136,6 @@ void			dupl_env(char ***arr, char **env);
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 char			**ft_split2(const char *s, const char *delim);
-char			**add_to_array(char **arr, char *new_str);
-char			*ft_strcpy(char *dest, const char *src);
-char			*ft_strcat(char *dest, const char *src);
-char			*join_cmd(char **arr);
 char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
@@ -150,7 +144,6 @@ void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
-void			safe_free(void *ptr);
 void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
 
@@ -159,21 +152,6 @@ void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 t_quote_state	init_quote_state(void);
-
-// Quotes
-size_t			count_array_size(char **arr);
-size_t			count_substr(const char *s, const char *delim);
-char			**ft_split2(const char *s, const char *delim);
-char			**add_to_array(char **arr, char *new_str);
-char			*join_cmd(char **arr);
-char			*rwd(char *dir);
-void			*safe_malloc(size_t size);
-void			init_redir(t_data *inp);
-void			free_array(char **arr);
-void			free_redir(t_data *inp);
-void			free_commands(t_data *inp);
-void			free_array_fd(int **fd);
-void			exit_with_error(char *msg, int ret_val);
 void			process_quotes(t_data	*inp);
 
 #endif

@@ -3,46 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 12:49:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:00:50 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-char	*ft_strcpy(char *dest, const char *src)
-{
-	char	*ptr;
-
-	ptr = dest;
-	while (*src != '\0')
-	{
-		*ptr = *src;
-		ptr++;
-		src++;
-	}
-	*ptr = '\0';
-	return (dest);
-}
-
-char	*ft_strcat(char *dest, const char *src)
-{
-	char	*ptr;
-
-	ptr = dest;
-	while (*ptr != '\0')
-		ptr++;
-	while (*src != '\0')
-	{
-		*ptr = *src;
-		ptr++;
-		src++;
-	}
-	*ptr = '\0';
-	return (dest);
-}
 
 int	update_pwd_vars(char **env, const char *oldpwd)
 {
@@ -85,3 +53,46 @@ int	add_env_var(char **env, char *new_entry)
 	return (0);
 }
 
+static char	*process_argument(char *arg)
+{
+	char	*dir;
+	char	*home;
+
+	if (ft_strcmp(arg, "-") == 0)
+	{
+		dir = get_oldpwd_dir();
+		if (dir)
+		{
+			printf("%s\n", dir);
+			dir = ft_strdup(dir);
+		}
+		return (dir);
+	}
+	if (arg[0] == '~')
+	{
+		home = get_home_dir();
+		if (!home)
+			return (NULL);
+		dir = ft_strjoin(home, arg + 1);
+		return (dir);
+	}
+	if (arg[0] == '\0')
+		return (NULL);
+	return (ft_strdup(arg));
+}
+
+char	*get_target_dir(char **args)
+{
+	char	*home;
+
+	if (args[1] && args[2])
+		return (NULL);
+	if (!args[1])
+	{
+		home = get_home_dir();
+		if (home)
+			return (ft_strdup(home));
+		return (NULL);
+	}
+	return (process_argument(args[1]));
+}

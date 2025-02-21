@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_main.c                                          :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 12:48:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:58:04 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*create_env_entry(const char *name, const char *value)
 		perror("cd: malloc failed\n");
 		exit (EXIT_FAILURE);
 	}
-	ft_strcpy(new_entry, name);
-	ft_strcat(new_entry, "=");
-	ft_strcat(new_entry, value);
+	ft_strlcpy(new_entry, name, len);
+	ft_strlcat(new_entry, "=", len);
+	ft_strlcat(new_entry, value, len);
 	return (new_entry);
 }
 
