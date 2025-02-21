@@ -6,11 +6,26 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 12:32:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:10:21 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+/**
+ * @brief Returns the relative wd
+ * @note Used when printing the terminal prompt.
+ */
+static char	*rwd(char *dir)
+{
+	char	*ptr;
+
+	ptr = dir;
+	ptr += ft_strlen(dir) - 1;
+	while (ptr-- && *ptr != '/')
+		ptr--;
+	return (++ptr);
+}
 
 /**
  * @brief Prompt
@@ -67,7 +82,8 @@ int	main(int argc, char **argv, char **env)
 		inp.input = read_input();
 		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
 			break ;
-		parse_logic(&inp);
+		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
+			parse_logic(&inp);
 	}
 	free(inp.home_dir);
 	free(inp.input);

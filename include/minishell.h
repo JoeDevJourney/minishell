@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 12:46:35 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:46:43 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,12 @@ void			dupl_env(char ***arr, char **env);
 //	Utilities
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
+bool			valid_oper(char **str, char *del);
 char			**ft_split2(const char *s, const char *delim);
 char			**add_to_array(char **arr, char *new_str);
 char			*ft_strcpy(char *dest, const char *src);
 char			*ft_strcat(char *dest, const char *src);
 char			*join_cmd(char **arr);
-char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);
@@ -152,6 +152,7 @@ void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			safe_free(void *ptr);
 void			print_data(t_data inp);
+void			process_quotes(t_data	*inp);
 int				ft_strcmp(const char *s1, const char *s2);
 
 // Quotes Utils
@@ -160,24 +161,4 @@ void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 t_quote_state	init_quote_state(void);
 
-// Quotes
-size_t			count_array_size(char **arr);
-size_t			count_substr(const char *s, const char *delim);
-char			**ft_split2(const char *s, const char *delim);
-char			**add_to_array(char **arr, char *new_str);
-char			*join_cmd(char **arr);
-char			*rwd(char *dir);
-void			*safe_malloc(size_t size);
-void			init_redir(t_data *inp);
-void			free_array(char **arr);
-void			free_redir(t_data *inp);
-void			free_commands(t_data *inp);
-void			free_array_fd(int **fd);
-void			exit_with_error(char *msg, int ret_val);
-void			process_quotes(t_data	*inp);
-
 #endif
-
-// search for the $ sign in getenv and parse the word to it to the getenv and process it.
-// look up if the quote is closed or not.
-// search for the quotes and find out if its double or single and if there is a dollar sign inside.

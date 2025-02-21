@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 12:37:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:13:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void	execute_or_chain(t_data *inp)
 {
 	static int	j;
 
+	if (!valid_oper(&inp->or.cmd[j], "|"))
+		return ;
 	inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 	inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
 	init_redir(inp);

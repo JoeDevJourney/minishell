@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 10:33:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:48:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,6 @@ void	*safe_malloc(size_t size)
 	if (!ptr)
 		exit_with_error("Memory allocation failed", EXIT_FAILURE);
 	return (ptr);
-}
-
-/**
- * @brief Returns the relative wd
- * @note Used when printing the terminal prompt.
- */
-char	*rwd(char *dir)
-{
-	char	*ptr;
-
-	ptr = dir;
-	ptr += ft_strlen(dir) - 1;
-	while (ptr-- && *ptr != '/')
-		ptr--;
-	return (++ptr);
 }
 
 /**
@@ -60,4 +45,35 @@ void	expansion_oper(char **arr)
 		}
 		ptr++;
 	}
+}
+
+/**
+ * @brief Checks if there's a  
+ */
+bool	valid_oper(char **str, char *dl)
+{
+	char	**arr;
+	char	*ptr;
+	char	*cmd;
+	int		i;
+	int		size;
+
+	arr = ft_split2(*str, dl);
+	size = count_array_size(arr);
+	i = -1;
+	while (++i < size - 1)
+		if (*ft_strtrim(arr[i], " ") == '\0')
+			return (printf("syntax error near unexpected token `%s'\n", dl), 0);
+	if (*ft_strtrim(arr[i], " ") == '\0')
+	{
+		cmd = readline("> ");
+		while (!*cmd)
+			cmd = readline("> ");
+		ptr = ft_strjoin(*str, cmd);
+		free(*str);
+		*str = ft_strdup(ptr);
+		free(ptr);
+		free(cmd);
+	}
+	return (free_array(arr), 1);
 }
