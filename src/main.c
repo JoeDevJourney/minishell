@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 12:32:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 20:03:36 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,28 @@
 /**
  * @brief Prompt
  */
-static char	*read_input(void)
+static char	*read_input(char **env)
 {
 	char	*str;
 	char	*prompt;
-	char	*temp;
+	char	*user;
+	char	*pwd;
 
-	temp = ft_strjoin(GRN, getenv("USER"));
-	prompt = ft_strdup(temp);
-	free(temp);
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-	free(temp);
-	temp = ft_strjoin(prompt, RST);
-	free(prompt);
-	prompt = ft_strjoin(temp, " % ");
+	user = get_env_val(env, "USER");
+	pwd = get_env_val(env, "PWD");
+	prompt = ft_strjoin3(GRN, user, "@");
+	prompt = ft_strjoin_free(prompt, pwd, 1);
+	prompt = ft_strjoin_free(prompt, RST "%", 1);
 	str = readline(prompt);
-	while (!*str)
+	while (str && !*str)
+	{
+		free(str);
 		str = readline(prompt);
-	add_history(str);
-	return (free(temp), free(prompt), str);
+	}
+	if (str)
+		add_history(str);
+	free(prompt);
+	return (str);
 }
 
 static void	init_data(t_data *inp, char **env)
@@ -60,14 +61,14 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	init_redir(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.input = read_input();
-		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
+		inp.input = read_input(inp.env);
+		if (!inp.input || ft_strcmp(inp.input, "exit") == 0)
 			break ;
 		parse_logic(&inp);
+		free(inp.input);
 	}
 	free(inp.home_dir);
 	free(inp.input);

@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 17:05:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/21 19:44:50 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,15 +121,17 @@ char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
 int				ft_export(char **env, char **args);
-int				ft_cd(char **env, char **args);
+int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
-int				update_env_var(char **env, const char *name, const char *value);
-char			*get_home_dir(void);
-char			*get_oldpwd_dir(void);
-int				update_pwd_vars(char **env, const char *oldpwd);
-int				add_env_var(char **env, char *new_entry);
-char			*get_target_dir(char **args);
+int				update_env_var(char ***env, const char *name, \
+				const char *value);
+char			*get_home_dir(char **env);
+char			*get_oldpwd_dir(char **env);
+int				update_pwd_vars(char ***env, const char *oldpwd);
+int				add_env_var(char ***env, char *new_entry);
+char			*get_target_dir(char **args, char **env);
+char			*get_env_val(char **env, const char *name);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities
@@ -146,6 +148,8 @@ void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
+char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
+char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
 
 // Quotes Utils
 void			free_list(t_list *list);

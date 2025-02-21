@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 10:33:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:44:39 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,27 @@ void	expansion_oper(char **arr)
 		}
 		ptr++;
 	}
+}
+
+char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
+{
+	char	*tmp;
+	char	*result;
+
+	tmp = ft_strjoin(s1, s2);
+	result = ft_strjoin(tmp, s3);
+	free(tmp);
+	return (result);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	if (free_flag & 1)
+		free(s1);
+	if (free_flag & 2)
+		free(s2);
+	return (result);
 }
