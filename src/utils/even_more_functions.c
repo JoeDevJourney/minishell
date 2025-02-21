@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 13:33:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:10:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	init_redir(t_data *inp)
 {
-	inp->input = NULL;
 	inp->inp_op.cmd = NULL;
 	inp->inp_op.fd = NULL;
 	inp->inp_op.num_cmd = 0;
@@ -27,8 +26,9 @@ void	init_redir(t_data *inp)
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.fd = NULL;
 	inp->hdoc_op.num_cmd = 0;
+	inp->input = NULL;
 	inp->command = NULL;
-	// errno = 0;
+	errno = 0;
 }
 
 void	free_array(char **arr)

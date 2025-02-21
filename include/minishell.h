@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 10:36:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:27:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_data
 	char			*str;
 	char			*input;
 	char			**command;
-	const char		**pipe_cmd;
+	char			**pipe_cmd;
 	t_logical_op	and;
 	t_logical_op	or;
 	t_redir_op		pipe;
@@ -106,34 +106,15 @@ void			exec_external(t_data inp);
 
 //	Operators
 void			expansion_oper(char **arr);
-void			process_fds(t_data *inp);
 void			parse_redir(t_data *inp);
+void			process_fds(t_data *inp);
+void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
 int				exec_builtin(char **cmd, char ***env);
 int				exec_env(char **env);
-int				exec_pwd(char **cmd);
-int				exec_exit(char *cmd);
 int				exec_unset(char **cmd, char ***env);
-int				is_valid_identifier(const char *str);
-int				ft_export(char **env, char **args);
-int				ft_cd(char **env, char **args);
-int				replace_env_var(char **env, const char *name, char *new_entry);
-int				update_env_var(char **env, const char *name, const char *value);
-int				update_pwd_vars(char **env, const char *oldpwd);
-int				add_env_var(char **env, char *new_entry);
-void			ft_arrfree(char **arr);
-void			ft_swap(void *a, void *b, size_t size);
-void			ft_write_error(const char *msg);
-void			dupl_env(char ***arr, char **env);
-char			**ft_arrdup(char **arr, int size);
-char			*create_env_entry(const char *name, const char *value);
-char			*get_home_dir(void);
-char			*get_oldpwd_dir(void);
-char			*get_target_dir(char **args);
-bool			search_builtins(t_data inp);
-int				exec_env(char **env);
 int				exec_pwd(char **cmd);
 int				exec_exit(char *cmd);
 int				is_valid_identifier(const char *str);
@@ -158,6 +139,8 @@ size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 char			**ft_split2(const char *s, const char *delim);
 char			**add_to_array(char **arr, char *new_str);
+char			*ft_strcpy(char *dest, const char *src);
+char			*ft_strcat(char *dest, const char *src);
 char			*join_cmd(char **arr);
 char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
@@ -167,11 +150,9 @@ void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
-int				ft_strcmp(const char *s1, const char *s2);
-char			*ft_strcpy(char *dest, const char *src);
-char			*ft_strcat(char *dest, const char *src);
 void			safe_free(void *ptr);
 void			print_data(t_data inp);
+int				ft_strcmp(const char *s1, const char *s2);
 
 // Quotes Utils
 void			free_list(t_list *list);
@@ -182,11 +163,6 @@ t_quote_state	init_quote_state(void);
 
 // Quotes
 bool			check_quotes(const char *input);
-void			handle_escape(const char **input, char **dst, \
-				t_quote_state *state);
-void			handle_quotes(const char **input, char **dst, \
-				t_quote_state *state);
-void			process_quotes(t_data	*inp);
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 char			**ft_split2(const char *s, const char *delim);
@@ -200,20 +176,6 @@ void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
-int				ft_strcmp(const char *s1, const char *s2);
-char			*ft_strcpy(char *dest, const char *src);
-char			*ft_strcat(char *dest, const char *src);
-void			safe_free(void *ptr);
-
-void			print_data(t_data inp);
-// Quotes Utils
-void			free_list(t_list *list);
-void			add_command(t_list **list, const char *start, const char *end);
-t_quote_state	init_quote_state(void);
-unsigned long	ft_strlen(const char str[]);
-char			*ft_strncpy(char *dst, const char *src, size_t len);
-// Quotes
-bool			check_quotes(const char *input);
 void			handle_escape(const char **input, char **dst, \
 				t_quote_state *state);
 void			handle_quotes(const char **input, char **dst, \

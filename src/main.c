@@ -6,10 +6,8 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 10:37:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:32:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
@@ -55,37 +53,6 @@ static void	init_data(t_data *inp, char **env)
 	inp->pipe.num_cmd = 0;
 }
 
-static void	parse_command(t_data *inp)
-{
-	int	i;
-	int	j;
-
-	inp->and.cmd = ft_split2(inp->input, "&&");
-	inp->and.num_cmd = count_substr(inp->input, "&&");
-	free(inp->input);
-	i = -1;
-	while (++i < inp->and.num_cmd)
-	{
-		inp->or.cmd = ft_split2(inp->and.cmd[i], "||");
-		inp->or.num_cmd = count_substr(inp->and.cmd[i], "||");
-		j = -1;
-		while (++j < inp->or.num_cmd)
-		{
-			init_redir(inp);
-			inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
-			inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
-			handle_command(inp);
-			free_array(inp->pipe.cmd);
-			if (!inp->ret_val)
-				break ;
-		}
-		free_array(inp->or.cmd);
-		if (inp->ret_val)
-			break ;
-	}
-	free_array(inp->and.cmd);
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
@@ -100,7 +67,7 @@ int	main(int argc, char **argv, char **env)
 		inp.input = read_input();
 		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
 			break ;
-		parse_command(&inp);
+		parse_logic(&inp);
 	}
 	free(inp.home_dir);
 	free(inp.input);

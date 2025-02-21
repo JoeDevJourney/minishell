@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/19 17:19:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:26:43 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,11 @@ static void	hdoc_oper(t_data *inp)
 		i = 0;
 }
 
-void	parse_redir(t_data *inp)
+void	process_fds(t_data *inp)
 {
 	int	i;
 
-	process_fds(inp);
+	parse_redir(inp);
 	i = -1;
 	while (inp->input[++i] && !errno)
 	{

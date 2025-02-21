@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 10:33:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:27:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	handle_command(t_data *inp)
 	else
 	{
 		// quotes()
-		parse_redir(inp);
+		process_fds(inp);
 		if (!errno)
 		{
 			if (search_builtins(*inp))

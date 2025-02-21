@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 10:33:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:26:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
 	int	status;
 
-	parse_redir(inp);
+	process_fds(inp);
 	pid = fork();
 	if (pid == 0)
 		process_pipe_fds(inp, old_fd, new_fd);

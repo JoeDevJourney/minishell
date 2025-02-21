@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parse_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 19:21:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:26:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ static void	trim_spaces(t_data *inp)
  * @brief Scans the input for any redirerction operators and saves them in the
  * appropriate array
  */
-void	process_fds(t_data *inp)
+void	parse_redir(t_data *inp)
 {
 	char	***lists[4];
 	char	*del[4];

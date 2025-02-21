@@ -6,14 +6,14 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 10:26:00 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:45:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /**
- * @brief Removes the index line from the array and updates its size.
+ * @brief Removes the index line from the array
  */
 static void	remove_line(char ***env, int index)
 {
