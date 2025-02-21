@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 19:28:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 10:26:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,19 @@ static int	var_index(char *cmd, char **env)
 	return (-1);
 }
 
-// int	exec_unset(t_data *inp)
 int	exec_unset(char **cmd, char ***env)
 {
-	int		index;
-
 	if (!*cmd)
 		return (0);
-	if (!ft_strncmp(*cmd, "-v", ft_strlen(*cmd)) && ft_strlen(*cmd) == 2)
+	if (**cmd == '-')
 	{
-		if (!*(cmd + 1))
-			return (0);
+		if (ft_strncmp(*cmd, "-v", ft_strlen(*cmd)) && ft_strlen(*cmd) == 2)
+			return (printf("bash: unset: %s: invalid option\n", *cmd), 2);
 		cmd++;
-		while (*cmd)
-		{
-			index = var_index(*cmd, *env);
-			remove_line(env, index);
-			cmd++;
-		}
-		return (0);
 	}
-	return (printf("bash: unset: %s: invalid option\n", *cmd), 2);
+	while (*cmd)
+		remove_line(env, var_index(*cmd++, *env));
+	return (0);
 }
 
 // int	main(int argc, char **argv, char **env)
@@ -103,22 +95,13 @@ int	exec_unset(char **cmd, char ***env)
 // 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
 // 	if (argc > 1)
 // 		exec_unset(++argv, &inp.env);
+// 	else
+// 		printf("No param provided\n");
 // 	i = -1;
 // 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
 // 	while (inp.env[++i])
 // 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
 // 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
 // }
+
 // cc unset.c env.c ../utils/more_functions.c ../utils/functions.c ../utils/even_more_functions.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strncmp.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strchr.c -o unset -g -Wall -Werror -Wextra
-
-
-// argv = 'unset'
-
-
-// argv = 'unset' 'VAR'
-// argv = 'unset' 'VAR1' 'VAR2' 'VAR3'
-
-
-// argv = 'unset' '-v'
-// argv = 'unset' '-v' 'VAR'
-// argv = 'unset' '-v' 'VAR1' 'VAR2' 'VAR3'
