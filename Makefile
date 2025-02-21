@@ -1,7 +1,7 @@
 #
 #
 CC = cc
-CFLAGS = -g -Wall -Werror -Wextra -I$(LIBFTDIR)/include -I$(INCDIR)
+CFLAGS = -g -Wall -Werror -Wextra -fsanitize=address -I$(LIBFTDIR)/include -I$(INCDIR)
 MAKEFLAGS += -s
 
 SRCDIR = ./src
@@ -9,10 +9,17 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/parsing.c $(SRCDIR)/pipex.c $(SRCDIR)/externals.c $(SRCDIR)/functions.c\
-		$(SRCDIR)/expansion_oper.c
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
+		$(SRCDIR)/commands.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
+		\
+		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
+		\
+		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
+		# $(SRCDIR)/utils/export_utils.c
+		# $(SRCDIR)/utils/quote_utils.c
 
-OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
+OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 LIBFT = $(LIBFTDIR)/libft.a
 NAME = minishell
 
@@ -24,6 +31,12 @@ $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "$(NAME) compiled \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/builtins/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/utils/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):

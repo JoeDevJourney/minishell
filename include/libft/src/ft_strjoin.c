@@ -14,12 +14,12 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*concat_str;
+	char				*concat_str;
 
 	concat_str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (concat_str == NULL)
+	if (!concat_str)
 		return (NULL);
 	ft_strlcpy(concat_str, s1, ft_strlen(s1) + 1);
-	ft_strlcat(concat_str, s2, ft_strlen(concat_str) + ft_strlen(s2) + 1);
+	ft_strlcat(concat_str, s2, ft_strlen(s1) + ft_strlen(s2) + 1);
 	return (concat_str);
 }

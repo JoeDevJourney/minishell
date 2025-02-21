@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   more_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/28 20:19:23 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
+/*   Updated: 2025/02/18 17:34:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 static char	*substr_dup(const char *start, size_t len)
 {
@@ -21,6 +21,25 @@ static char	*substr_dup(const char *start, size_t len)
 		return (NULL);
 	ft_strlcpy(substr, start, len);
 	return (substr);
+}
+
+void	exit_with_error(char *msg, int ret_val)
+{
+	perror(msg);
+	exit(ret_val);
+}
+
+/**
+ * @brief Returns the size of an array of strings 
+ */
+size_t	count_array_size(char **arr)
+{
+	size_t	len;
+
+	len = 0;
+	while (arr && arr[len])
+		len++;
+	return (len);
 }
 
 /**
@@ -73,7 +92,7 @@ char	**ft_split2(const char *s, const char *delim)
 		return (NULL);
 	while (end)
 	{
-		result[i++] = substr_dup(start, end - start);
+		result[i++] = substr_dup(start, end - start + 1);
 		start = end + delim_len;
 		end = ft_strnstr(start, delim, ft_strlen(start));
 	}

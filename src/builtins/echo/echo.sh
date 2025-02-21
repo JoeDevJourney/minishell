@@ -1,4 +1,5 @@
 #!/bin/bash
+echo Checks different cases of input arguments for the echo command
 echo
 echo "command		  		output"
 echo

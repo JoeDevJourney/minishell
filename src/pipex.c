@@ -6,18 +6,43 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/01/30 18:25:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:22:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	process(char *cmd, int *old_fd, int *new_fd)
+static void	init_pipes(t_redir_op *oper)
 {
-	char	*tok[2];
+	int	i;
 
-	tok[0] = cmd;
-	tok[1] = NULL;
+	oper->fd = safe_malloc(oper->num_cmd * sizeof(int *));
+	i = -1;
+	while (++i < oper->num_cmd - 1)
+		oper->fd[i] = safe_malloc(2 * sizeof(int));
+	i = -1;
+	while (++i < oper->num_cmd - 1)
+	{
+		if (pipe(oper->fd[i]) == -1)
+		{
+			while (--i >= 0)
+			{
+				close(oper->fd[i][0]);
+				close(oper->fd[i][1]);
+				free(oper->fd[i]);
+			}
+			free(oper->fd);
+			exit_with_error("Pipe creation failed", EXIT_FAILURE);
+		}
+	}
+	oper->fd[i] = NULL;
+}
+
+/**
+ * @brief Redirection of the pipes' fds
+ */
+static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
+{
 	if (*new_fd == STDOUT_FILENO)
 	{
 		dup2(old_fd[1], *new_fd);
@@ -36,62 +61,40 @@ static void	process(char *cmd, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	externals(tok);
+	if (!search_builtins(*inp))
+		exec_external(*inp);
+	else
+		exec_builtin(inp->command, &inp->env);
 	exit(0);
 }
 
-static int	**init_pipes(int n)
+/**
+ * @brief Creates the child process for executing the command and makes
+ * the parent wait for it to finish, before returning its value
+ */
+static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
-	int	i;
-	int	**fd;
-
-	fd = (int **)safe_malloc((n - 1) * sizeof(int *));
-	i = -1;
-	while (++i < n - 1)
-		fd[i] = (int *)safe_malloc((2 * sizeof(int)));
-	i = -1;
-	while (++i < n - 1)
-	{
-		if (pipe(fd[i]) == -1)
-		{
-			ft_putstr_fd("pipex: pipe creation failed\n", 2);
-			while (i > 0)
-				free(fd[--i]);
-			free(fd);
-			exit(EXIT_FAILURE);
-		}
-	}
-	return (fd);
-}
-
-static void	fork_pr(pid_t pid, char *cmd, int *old_fd, int *new_fd)
-{
-	pid = fork();
-	if (pid == -1)
-		exit (EXIT_FAILURE);
-	if (pid == 0)
-		process(cmd, old_fd, new_fd);
-}
-
-static void	wait_n_free(int n, pid_t *pid, int **pfd)
-{
-	int	i;
 	int	status;
 
-	i = -1;
-	while (++i < n)
+	process_fds(inp);
+	pid = fork();
+	if (pid == 0)
+		process_pipe_fds(inp, old_fd, new_fd);
+	else if (pid > 0)
 	{
-		if (waitpid(pid[i], &status, 0) == -1)
-		{
-			perror("Waiting child process failed");
-			exit(EXIT_FAILURE);
-		}
+		if (waitpid(pid, &status, 0) == -1)
+			exit_with_error("Child process failed", EXIT_FAILURE);
+		free_redir(inp);
+		free_commands(inp);
+		init_redir(inp);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (-1);
 	}
-	i = -1;
-	while (++i < n - 1)
-		free(pfd[i]);
-	free(pid);
-	free(pfd);
+	else
+		perror("Fork failed");
+	return (free_commands(inp), 0);
 }
 
 /**
@@ -100,37 +103,31 @@ static void	wait_n_free(int n, pid_t *pid, int **pfd)
  * @param num Number of commands
  * @param cmd Commands broken down in an array of str
  */
-int	exec_pipes(int num, char **cmd)
+void	handle_pipes(t_data *inp)
 {
+	t_data	inp_cpy;
 	pid_t	*pid;
-	int		**p_fd;
-	int		ptr_fd;
+	int		fd;
 	int		i;
 
-	pid = (pid_t *)safe_malloc(num * sizeof(pid_t));
-	p_fd = init_pipes(num);
+	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
+	init_pipes(&inp->pipe);
+	inp_cpy = *inp;
 	i = 0;
-	ptr_fd = STDOUT_FILENO;
-	fork_pr(pid[i], cmd[i], p_fd[i], &ptr_fd);
-	while (++i < num - 1)
+	fd = STDOUT_FILENO;
+	fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i], &fd);
+	while (++i < inp_cpy.pipe.num_cmd - 1)
 	{
-		close(p_fd[i - 1][1]);
-		fork_pr(pid[i], cmd[i], p_fd[i - 1], p_fd[i]);
-		close(p_fd[i - 1][i - 1]);
+		close(inp->pipe.fd[i - 1][1]);
+		inp_cpy.pipe.cmd++;
+		fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
+		close(inp->pipe.fd[i - 1][0]);
 	}
-	close(p_fd[i - 1][1]);
-	ptr_fd = STDIN_FILENO;
-	fork_pr(pid[i], cmd[i], p_fd[i - 1], &ptr_fd);
-	close(p_fd[i - 1][0]);
-	wait_n_free(num, pid, p_fd);
-	return (0);
+	close(inp->pipe.fd[i - 1][1]);
+	inp_cpy.pipe.cmd++;
+	fd = STDIN_FILENO;
+	inp->ret_val = fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], &fd);
+	close(inp->pipe.fd[i - 1][0]);
+	free(pid);
+	free_array_fd(inp->pipe.fd);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	exec_pipes(--argc, ++argv);
-// 	return (0);
-// }
-// ./pipex "ls -1" "cat -n"
-// ./pipex "echo This is a text" "cat -n"
-// ./pipex "ls -a" "cat -n" "cat -e"

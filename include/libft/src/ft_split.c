@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:02:02 by dchrysov          #+#    #+#             */
-/*   Updated: 2024/12/21 14:07:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:53:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-static size_t	str_count(char const *s, char c)
+size_t	str_count(char const *s, char c)
 {
 	size_t	res;
 	int		in_word;
@@ -45,7 +45,7 @@ static char	*ft_next_word(char const **s, char c)
 	while (**s && **s != c)
 		(*s)++;
 	len = *s - start;
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	str = malloc(sizeof(char) * (len + 1));
 	if (!str)
 		return (NULL);
 	ft_strlcpy(str, start, len + 1);
@@ -74,7 +74,7 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (NULL);
 	word_count = str_count(s, c);
-	res = (char **)malloc(sizeof(char *) * (word_count + 1));
+	res = malloc(sizeof(char *) * (word_count + 1));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -91,3 +91,16 @@ char	**ft_split(char const *s, char c)
 	res[word_count] = NULL;
 	return (res);
 }
+
+// #include <stdio.h>
+// int main()
+// {
+// 	char *s = "Hello re malaka";
+// 	char **res = ft_split(s, ' ');
+// 	int i = 0;
+
+// 	while (res[i])
+// 		printf("%s\n", res[i++]);
+// 	free_split(res, str_count(s, ' '));
+// }
+// cc ft_split.c ft_strlcpy.c ft_strlen.c -g -Wall -Werror -Wextra

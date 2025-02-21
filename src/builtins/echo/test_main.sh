@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cc echo.c ../../../include/libft/src/ft_split.c ../../../include/libft/src/ft_strlen.c ../../../include/libft/src/ft_strlcpy.c ../../../include/libft/src/ft_strjoin.c ../../../include/libft/src/ft_strncmp.c ../../../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
+cc ../echo.c ../../../include/libft/src/ft_split.c ../../../include/libft/src/ft_strlen.c ../../../include/libft/src/ft_strlcpy.c ../../../include/libft/src/ft_strjoin.c ../../../include/libft/src/ft_strncmp.c ../../../include/libft/src/ft_strlcat.c -g -Wall -Werror -Wextra
 echo
 args=("Hello World" " " "")
 

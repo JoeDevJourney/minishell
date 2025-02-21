@@ -6,11 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/01/22 14:06:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:49 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
 static int	join_n_print(char **arr, bool newline)
 {
@@ -81,15 +81,15 @@ int	echo(char **str, bool upper)
 	return (join_n_print(str, 1));
 }
 
-int	main(int argc, char **argv)
-{
-	char	**token;
+// int	main(int argc, char **argv)
+// {
+// 	char	**token;
 
-	(void) argc;
-	token = ft_split(argv[2], ' ');
-	if (!ft_strncmp(argv[1], "echo", ft_strlen(argv[1])))
-		echo(token, false);
-	else if (!ft_strncmp(argv[1], "Echo", ft_strlen(argv[1])))
-		echo(token, true);
-}
+// 	(void) argc;
+// 	token = ft_split(argv[2], ' ');
+// 	if (!ft_strncmp(argv[1], "echo", ft_strlen(argv[1])))
+// 		echo(token, false);
+// 	else if (!ft_strncmp(argv[1], "Echo", ft_strlen(argv[1])))
+// 		echo(token, true);
+// }
 
