@@ -104,6 +104,7 @@ void	handle_command(t_data *inp)
 	{
 		// quotes()
 		process_fds(inp);
+		// print_data(*inp);
 		if (!errno)
 		{
 			if (search_builtins(*inp))

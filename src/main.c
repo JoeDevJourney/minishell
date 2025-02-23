@@ -24,9 +24,9 @@ static char	*read_input(char **env)
 
 	user = get_env_val(env, "USER");
 	pwd = get_env_val(env, "PWD");
-	prompt = ft_strjoin3(GRN, user, "@");
-	prompt = ft_strjoin_free(prompt, pwd, 1);
-	prompt = ft_strjoin_free(prompt, RST "%", 1);
+	prompt = ft_strjoin3(GRN, user, " @ ");
+	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1, 1);
+	prompt = ft_strjoin_free(prompt, RST " % ", 1);
 	str = readline(prompt);
 	while (str && !*str)
 	{
@@ -41,8 +41,6 @@ static char	*read_input(char **env)
 
 static void	init_data(t_data *inp, char **env)
 {
-	inp->env = NULL;
-	dupl_env(&inp->env, env);
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
@@ -70,6 +68,7 @@ int	main(int argc, char **argv, char **env)
 		parse_logic(&inp);
 		free(inp.input);
 	}
+	// print_data(inp);
 	free(inp.home_dir);
 	free(inp.input);
 	free_array(inp.env);

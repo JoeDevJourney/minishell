@@ -33,9 +33,9 @@ static void	execute_and_chain(t_data *inp)
 	inp->or.cmd = ft_split2(inp->and.cmd[i], "||");
 	inp->or.num_cmd = count_substr(inp->and.cmd[i], "||");
 	execute_or_chain(inp);
+	free_array(inp->or.cmd);
 	if (++i >= inp->and.num_cmd || inp->ret_val)
 		return ((void)(i = 0));
-	free_array(inp->or.cmd);
 	execute_and_chain(inp);
 }
 

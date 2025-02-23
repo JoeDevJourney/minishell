@@ -119,5 +119,5 @@ void	print_data(t_data inp)
 	while (inp.command && *inp.command)
 		printf("'%s', ", *inp.command++);
 	printf("]\n\n");
-	// pause();
+	pause();
 }
