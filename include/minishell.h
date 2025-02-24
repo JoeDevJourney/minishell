@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 12:18:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:53:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,14 @@ typedef struct s_list
 
 //	Execution
 void			handle_pipes(t_data *inp);
-void			handle_command(t_data *inp);
+void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
+void			handle_command(t_data *inp);
 
 //	Operators
+bool			process_fds(t_data *inp);
 void			expansion_oper(char **arr);
 void			parse_redir(t_data *inp);
-void			process_fds(t_data *inp);
 void			parse_logic(t_data *inp);
 
 //	Builtins
@@ -149,7 +150,6 @@ void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
 void			process_quotes(t_data	*inp);
-int				valid_dir(char *cmd, char *cwd);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
@@ -159,6 +159,5 @@ void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 t_quote_state	init_quote_state(void);
-void			process_quotes(t_data	*inp);
 
 #endif

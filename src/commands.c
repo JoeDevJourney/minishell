@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 12:19:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:53:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ static char	*path_to_exec(char *name)
 		while (entry)
 		{
 			if (!ft_strncmp(name, entry->d_name, ft_strlen(entry->d_name)))
-				return (closedir(dir), free_array(path), *ptr);
+				return (closedir(dir), *ptr);
 			entry = readdir(dir);
 		}
 		closedir (dir);
 		ptr++;
 	}
-	return (free_array(path), exit_with_error(name, 127), NULL);
+	return (free_array(path), NULL);				// <--- free_array() ?
 }
 
 /**
@@ -89,12 +89,34 @@ int	fork_command(t_data *inp)
 	return (0);
 }
 
+void	handle_command(t_data *inp)
+{
+	struct stat	info;
+
+	if (strchr(*inp->command, '/'))
+	{
+		if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
+			printf("%s: is a directory\n", *inp->command);
+		else
+			printf("%s: No such file or directory\n", *inp->command);
+	}
+	else
+	{
+		if (search_builtins(*inp))
+			inp->ret_val = exec_builtin(inp->command, &inp->env);
+		else if (path_to_exec(*inp->command))
+			inp->ret_val = fork_command(inp);
+		else
+			printf("%s: command not found\n", *inp->command);
+	}
+}
+
 /**
  * @brief Handles all execution, for both externals and builtins commands
  */
-void	handle_command(t_data *inp)
+void	execute_command(t_data *inp)
 {
-	int	sfd[2];
+	int			sfd[2];
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
@@ -102,17 +124,8 @@ void	handle_command(t_data *inp)
 		handle_pipes(inp);
 	else
 	{
-		// quotes()
-		process_fds(inp);
-		// print_data(*inp);
-		if (!errno)
-		{
-			if (search_builtins(*inp))
-				inp->ret_val = exec_builtin(inp->command, &inp->env);
-			else
-				inp->ret_val = fork_command(inp);
-		}
-		// errno = valid_dir(*inp->pipe.cmd, getenv("PWD"));			<-------- right place
+		if (process_fds(inp))					// quotes()
+			handle_command(inp);
 		else
 			inp->ret_val = 1;
 		free_redir(inp);
