@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 14:23:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:44:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ static bool	hdoc_oper(t_data *inp)
  * 
  * @note In all the individual redir functions, fd[0] is for the std fd and
  * fd[1] is the redirected one. 
+ * 
+ * @returns 1 in case of valid redir, 0 otherwise 
  */
 bool	process_fds(t_data *inp)
 {
