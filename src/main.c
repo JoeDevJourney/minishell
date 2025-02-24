@@ -6,57 +6,41 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 17:10:21 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:18:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /**
- * @brief Returns the relative wd
- * @note Used when printing the terminal prompt.
- */
-static char	*rwd(char *dir)
-{
-	char	*ptr;
-
-	ptr = dir;
-	ptr += ft_strlen(dir) - 1;
-	while (ptr-- && *ptr != '/')
-		ptr--;
-	return (++ptr);
-}
-
-/**
  * @brief Prompt
  */
-static char	*read_input(void)
+static char	*read_input(char **env)
 {
 	char	*str;
 	char	*prompt;
-	char	*temp;
+	char	*user;
+	char	*pwd;
 
-	temp = ft_strjoin(GRN, getenv("USER"));
-	prompt = ft_strdup(temp);
-	free(temp);
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-	free(temp);
-	temp = ft_strjoin(prompt, RST);
-	free(prompt);
-	prompt = ft_strjoin(temp, " % ");
+	user = get_env_val(env, "USER");
+	pwd = get_env_val(env, "PWD");
+	prompt = ft_strjoin3(GRN, user, " @ ");
+	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1, 1);
+	prompt = ft_strjoin_free(prompt, RST " % ", 1);
 	str = readline(prompt);
-	while (!*str)
+	while (str && !*str)
+	{
+		free(str);
 		str = readline(prompt);
-	add_history(str);
-	return (free(temp), free(prompt), str);
+	}
+	if (str)
+		add_history(str);
+	free(prompt);
+	return (str);
 }
 
 static void	init_data(t_data *inp, char **env)
 {
-	inp->env = NULL;
-	dupl_env(&inp->env, env);
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
@@ -75,16 +59,17 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	init_redir(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.input = read_input();
-		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
+		inp.input = read_input(inp.env);
+		if (!inp.input || ft_strcmp(inp.input, "exit") == 0)
 			break ;
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);
+		free(inp.input);
 	}
+	// print_data(inp);
 	free(inp.home_dir);
 	free(inp.input);
 	free_array(inp.env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 10:32:50 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:50:52 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	exec_builtin(char **cmd, char ***env)
 		return (exec_env(*env));
 	else if (!ft_strncmp(*cmd, "pwd", 3) && ft_strlen(*cmd) == 3)
 		return (exec_pwd(cmd));
+	else if (!ft_strncmp(*cmd, "cd", 2) && ft_strlen(*cmd) == 2)
+		return (ft_cd(env, cmd));
 	else if (!ft_strncmp(*cmd, "unset", 5) && ft_strlen(*cmd) == 5)
 		return (exec_unset(++cmd, env));
 	else if (!ft_strncmp(*cmd, "exit", 4) && ft_strlen(*cmd) == 4)

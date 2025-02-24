@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 18:51:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:19:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ void	handle_command(t_data *inp)
 	{
 		// quotes()
 		process_fds(inp);
+		// print_data(*inp);
 		if (!errno)
 		{
-			pause();
 			if (search_builtins(*inp))
 				inp->ret_val = exec_builtin(inp->command, &inp->env);
 			else

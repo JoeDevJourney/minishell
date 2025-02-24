@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 18:43:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:18:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_quote_state
 	bool	sq;
 	bool	dq;
 	bool	escape;
+	bool	sq_closed;
+	bool	dq_closed;
 }	t_quote_state;
 
 typedef struct s_split_state
@@ -97,7 +99,6 @@ typedef struct s_list
 
 
 //	Execution
-void			exec_command(t_data *inp);
 void			handle_pipes(t_data *inp);
 void			handle_command(t_data *inp);
 void			exec_external(t_data inp);
@@ -120,16 +121,17 @@ char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
 int				ft_export(char **env, char **args);
-int				ft_cd(char **env, char **args);
+int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
-int				update_env_var(char **env, const char *name, const char *value);
-void			ft_write_error(const char *msg);
-char			*get_home_dir(void);
-char			*get_oldpwd_dir(void);
-int				update_pwd_vars(char **env, const char *oldpwd);
-int				add_env_var(char **env, char *new_entry);
-char			*get_target_dir(char **args);
+int				update_env_var(char ***env, const char *name, \
+				const char *value);
+char			*get_home_dir(char **env);
+char			*get_oldpwd_dir(char **env);
+int				update_pwd_vars(char ***env, const char *oldpwd);
+int				add_env_var(char ***env, char *new_entry);
+char			*get_target_dir(char **args, char **env);
+char			*get_env_val(char **env, const char *name);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities
@@ -137,10 +139,7 @@ size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 bool			valid_oper(char **str, char *del);
 char			**ft_split2(const char *s, const char *delim);
-char			**add_to_array(char **arr, char *new_str);
-char			*ft_strcpy(char *dest, const char *src);
-char			*ft_strcat(char *dest, const char *src);
-char			*join_cmd(char **arr);
+char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);
@@ -148,16 +147,18 @@ void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
-void			safe_free(void *ptr);
 void			print_data(t_data inp);
 void			process_quotes(t_data	*inp);
 int				valid_dir(char *cmd, char *cwd);
 int				ft_strcmp(const char *s1, const char *s2);
+char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
+char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
 
 // Quotes Utils
 void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 t_quote_state	init_quote_state(void);
+void			process_quotes(t_data	*inp);
 
 #endif

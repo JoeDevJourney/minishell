@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_main.c                                      :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/13 13:26:26 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/21 13:32:46 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	ft_export(char **env, char **args)
 	{
 		if (!is_valid_identifier(args[i]))
 		{
-			ft_write_error("export: invalid identifier\n");
+			perror("export: invalid identifier\n");
 			ret = 1;
 		}
 		else if (handle_export_arg(env, args[i]) != 0)
