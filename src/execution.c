@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 17:38:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:07:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	handle_command(t_data *inp)
 	if (!ft_strchr(*inp->command, '/'))
 	{
 		if (search_builtins(*inp))
-			exec_builtin(inp);
+			inp->ret_val = exec_builtin(inp);
 		else if (path_to_exec(*inp))
 			inp->ret_val = fork_command(*inp);
 		else

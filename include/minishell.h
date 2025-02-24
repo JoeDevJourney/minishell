@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 17:32:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:07:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-void			exec_builtin(t_data *inp);
+int			exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);

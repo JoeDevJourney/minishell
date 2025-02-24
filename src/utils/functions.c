@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 13:54:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:06:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,6 @@ void	*safe_malloc(size_t size)
 	if (!ptr)
 		exit_with_error("Memory allocation failed", EXIT_FAILURE);
 	return (ptr);
-}
-
-/**
- * @brief Searches the **arr for the '$' to replace the environmental key
- * with its corresponding value
- */
-void	expansion_oper(char **arr)
-{
-	char	**ptr;
-	char	*val;
-
-	ptr = arr;
-	while (*ptr)
-	{
-		if (ft_strchr(*ptr, '$'))
-		{
-			val = getenv(ft_strchr(*ptr, '$') + 1);
-			free(*ptr);
-			if (val)
-				*ptr = ft_strdup(val);
-			else
-				*ptr = NULL;
-		}
-		ptr++;
-	}
 }
 
 char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)

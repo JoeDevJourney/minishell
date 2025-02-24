@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 15:45:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:06:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int	main(int argc, char **argv, char **env)
 			parse_logic(&inp);
 		free(inp.input);
 	}
-	// print_data(inp);
 	free(inp.home_dir);
 	free(inp.input);
 	free_array(inp.env);
