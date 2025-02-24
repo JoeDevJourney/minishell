@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 13:53:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:32:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-int				exec_builtin(char **cmd, char ***env);
+void			exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);
@@ -132,7 +132,7 @@ char			*get_oldpwd_dir(char **env);
 int				update_pwd_vars(char ***env, const char *oldpwd);
 int				add_env_var(char ***env, char *new_entry);
 char			*get_target_dir(char **args, char **env);
-char			*get_env_val(char **env, const char *name);
+char			*get_env_val(char **env, char *name);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities

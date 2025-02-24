@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.c                                         :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 13:53:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:34:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,34 @@
 
 /**
  * @brief Searches the $PATH directories for the exec
- * 
- * @param name Name of the executable
  */
-static char	*path_to_exec(char *name)
+static char	*path_to_exec(t_data inp)
 {
 	struct dirent	*entry;
 	DIR				*dir;
 	char			**path;
-	char			**ptr;
+	int				i;
 
-	path = ft_split(getenv("PATH"), ':');
+	path = ft_split(get_env_val(inp.env, "PATH"), ':');
 	if (!path)
-		return (perror("$PATH not set"), NULL);
-	ptr = path;
-	while (*ptr)
+		return (perror("$PATH"), NULL);
+	i = -1;
+	while (path[++i])
 	{
-		dir = opendir(*ptr);
+		dir = opendir(path[i]);
 		if (!dir)
-			return (free_array(path), perror(*ptr), NULL);
+			return (free_array(path), perror(path[i]), NULL);
 		entry = readdir(dir);
 		while (entry)
 		{
-			if (!ft_strncmp(name, entry->d_name, ft_strlen(entry->d_name)))
-				return (closedir(dir), *ptr);
+			if (!ft_strncmp(*inp.command, entry->d_name, ft_strlen(*inp.command))
+				&& entry->d_name[ft_strlen(*inp.command)] == '\0')
+				return (closedir(dir), path[i]);
 			entry = readdir(dir);
 		}
 		closedir (dir);
-		ptr++;
 	}
-	return (free_array(path), NULL);				// <--- free_array() ?
+	return (path[i]);
 }
 
 /**
@@ -54,27 +52,26 @@ void	exec_external(t_data inp)
 	char	*dir;
 	char	*full_path;
 
-	dir = ft_strjoin(path_to_exec(*inp.command), "/");
+	dir = ft_strjoin(path_to_exec(inp), "/");
 	full_path = ft_strjoin(dir, *inp.command);
 	free(*inp.command);
 	*inp.command = ft_strdup(full_path);
 	free(full_path);
 	free(dir);
-	if (execve(*inp.command, inp.command, inp.env) == -1)
-		exit_with_error(*inp.command, errno);
+	execve(*inp.command, inp.command, inp.env);
 }
 
 /**
  * @brief Creates the child process for a single command
  */
-int	fork_command(t_data *inp)
+static int	fork_command(t_data inp)
 {
 	pid_t	pid;
 	int		status;
 
 	pid = fork();
 	if (pid == 0)
-		exec_external(*inp);
+		exec_external(inp);
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
@@ -89,25 +86,34 @@ int	fork_command(t_data *inp)
 	return (0);
 }
 
+/**
+ * @brief Checks the input if it's a valid command or a valid directory
+ */
 void	handle_command(t_data *inp)
 {
 	struct stat	info;
 
-	if (strchr(*inp->command, '/'))
+	if (!ft_strchr(*inp->command, '/'))
 	{
-		if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
-			printf("%s: is a directory\n", *inp->command);
+		if (search_builtins(*inp))
+			exec_builtin(inp);
+		else if (path_to_exec(*inp))
+			inp->ret_val = fork_command(*inp);
 		else
-			printf("%s: No such file or directory\n", *inp->command);
+			return (printf("%s: command not found\n", *inp->command),
+				(void)(inp->ret_val = 127));
+		free_redir(inp);
+		free_commands(inp);
+		init_redir(inp);
 	}
 	else
 	{
-		if (search_builtins(*inp))
-			inp->ret_val = exec_builtin(inp->command, &inp->env);
-		else if (path_to_exec(*inp->command))
-			inp->ret_val = fork_command(inp);
+		if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
+			return (printf("%s: is a directory\n", *inp->command),
+				(void)(inp->ret_val = 126));
 		else
-			printf("%s: command not found\n", *inp->command);
+			return (printf("%s: No such file or directory\n", *inp->command),
+				(void)(inp->ret_val = 127));
 	}
 }
 
@@ -124,13 +130,10 @@ void	execute_command(t_data *inp)
 		handle_pipes(inp);
 	else
 	{
-		if (process_fds(inp))					// quotes()
+		if (process_fds(inp))					//  && quotes()
 			handle_command(inp);
 		else
 			inp->ret_val = 1;
-		free_redir(inp);
-		free_commands(inp);
-		init_redir(inp);
 	}
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);

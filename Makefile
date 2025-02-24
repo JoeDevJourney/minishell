@@ -10,7 +10,7 @@ INCDIR = ./include
 LIBFTDIR = ./include/libft
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
-		$(SRCDIR)/commands.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
+		$(SRCDIR)/execution.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
 		\
 		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
 		\

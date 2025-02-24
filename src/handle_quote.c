@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 12:45:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:09:14 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,18 @@ void	process_quotes(t_data *inp)
 //     char *dst;
 //     t_quote_state state = init_quote_state();
 //     size_t input_len = ft_strlen(input);
-    
+//
 //     if (check_quotes(input)) {
 //         printf("Error: Unclosed quote detected.\n");
 //         return;
 //     }
-    
+//
 //     inp->input = malloc(input_len + 1);
 //     if (!inp->input) {
 //         printf("Malloc failed.\n");
 //         return;
 //     }
-    
+//
 //     dst = inp->input;
 //     while (*input) {
 //         if (state.escape) {
@@ -165,16 +165,16 @@ void	process_quotes(t_data *inp)
 //         "echo '\"$USER\"'",
 //         "echo '\"'\"$USER\"'\"'"
 //     };
-    
+//
 //     size_t input_count = sizeof(inputs) / sizeof(inputs[0]);
 //     t_data data;
 //     for (size_t i = 0; i < input_count; i++) {
 //         printf("Input: %s\n", inputs[i]);
-        
+//
 //         char *cmd[] = {(char *)inputs[i], NULL};
 //         data.pipe.cmd = cmd;
 //         data.pipe.num_cmd = 1;
-        
+//
 //         if (check_quotes(inputs[i])) {
 //             printf("Error: Unclosed quotes detected.\n");
 //         } else {

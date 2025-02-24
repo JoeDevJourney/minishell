@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 13:41:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:23:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,9 @@ static bool	hdoc_oper(t_data *inp)
 /**
  * @brief Takes the (char *)inp->input and executes the appropriate redirection
  * based on the (char **)inp->command 
+ * 
+ * @note In all the individual redir functions, fd[0] is for the std fd and
+ * fd[1] is the redirected one. 
  */
 bool	process_fds(t_data *inp)
 {

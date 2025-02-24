@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 12:18:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:45:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.input = read_input(inp.env);
-		if (!inp.input || ft_strcmp(inp.input, "exit") == 0)
-			break ;
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);
 		free(inp.input);

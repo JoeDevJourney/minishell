@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 11:26:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 17:32:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	if (!search_builtins(*inp))
 		exec_external(*inp);
 	else
-		exec_builtin(inp->command, &inp->env);
+		exec_builtin(inp);
 	exit(0);
 }
 
@@ -98,10 +98,7 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 }
 
 /**
- * @brief Executes pipes when given the cmds stored as an array of str.
- * 
- * @param num Number of commands
- * @param cmd Commands broken down in an array of str
+ * @brief Executes pipe(s) when given the (char **) cmd(s).
  */
 void	handle_pipes(t_data *inp)
 {
