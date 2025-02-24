@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 18:07:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:44:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ typedef struct s_redir_op
 	int		**fd;
 }			t_redir_op;
 
+typedef struct s_quote_state
+{
+	bool	sq;
+	bool	dq;
+	bool	escape;
+	bool	sq_closed;
+	bool	dq_closed;
+}	t_quote_state;
+
 typedef struct s_data
 {
 	char			*home_dir;
@@ -72,14 +81,6 @@ typedef struct s_data
 	int				ret_val;
 	t_oper			redir;
 }			t_data;
-typedef struct s_quote_state
-{
-	bool	sq;
-	bool	dq;
-	bool	escape;
-	bool	sq_closed;
-	bool	dq_closed;
-}	t_quote_state;
 
 typedef struct s_split_state
 {
