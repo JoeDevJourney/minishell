@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quote_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/19 14:26:48 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/24 19:23:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-
-void	free_list(t_list *list)
-{
-	t_list	*tmp;
-
-	while (list)
-	{
-		tmp = list;
-		list = list->next;
-		free(tmp->str);
-		free(tmp);
-	}
-}
+#include "../../include/minishell.h"
 
 char	*ft_strncpy(char *dst, const char *src, size_t len)
 {
@@ -62,19 +49,4 @@ void	add_command(t_list **list, const char *start, const char *end)
 			temp = temp->next;
 		temp->next = new_cmd;
 	}
-}
-
-t_quote_state	init_quote_state(void)
-{
-	return ((t_quote_state){false, false, false});
-}
-
-unsigned long	ft_strlen(const char str[])
-{
-	unsigned long	len;
-
-	len = 0;
-	while (str[len] != '\0')
-		len++;
-	return (len);
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:57:47 by dchrysov          #+#    #+#             */
-/*   Updated: 2024/12/12 14:14:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 21:26:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char	*substr;
 
 	if (s == NULL)
-	{
-		substr = "";
-		return (substr);
-	}
+		return (NULL);
 	if (start >= ft_strlen(s))
 	{
 		substr = (char *)malloc(1);

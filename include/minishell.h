@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 18:44:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 19:23:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <errno.h>
-# include <string.h>
 # include <limits.h>
 # include <dirent.h>
 
@@ -78,6 +77,7 @@ typedef struct s_data
 	t_redir_op		out_op;
 	t_redir_op		app_op;
 	t_redir_op		hdoc_op;
+	t_quote_state	quotes;
 	int				ret_val;
 	t_oper			redir;
 }			t_data;
@@ -113,7 +113,7 @@ void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-int			exec_builtin(t_data *inp);
+int				exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);
@@ -150,15 +150,13 @@ void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
-void			process_quotes(t_data	*inp);
+void			process_quotes(t_data *inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
 
 // Quotes Utils
-void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
-t_quote_state	init_quote_state(void);
 
 #endif

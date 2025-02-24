@@ -6,103 +6,140 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/24 14:09:14 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 21:53:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static bool	check_quotes(const char *input)
+static t_quote_state	init_quote_state(void)
 {
-	t_quote_state	state;
-
-	state = init_quote_state();
-	while (*input)
-	{
-		if (state.escape)
-		{
-			state.escape = false;
-			input++;
-			continue ;
-		}
-		if (*input == '\\' && state.dq)
-			state.escape = true;
-		else if (*input == '\'' && !state.dq)
-			state.sq = !state.sq;
-		else if (*input == '"' && !state.sq)
-			state.dq = !state.dq;
-		input++;
-	}
-	return (state.sq || state.dq);
+	return ((t_quote_state){false, false, false, true, true});
 }
 
-static void	handle_escape(const char **input, char **dst, t_quote_state *state)
+static bool	check_quotes(t_data *inp)
 {
-	if (state->escape)
-	{
-		**dst = **input;
-		(*dst)++;
-		(*input)++;
-		state->escape = false;
-	}
-	else if (**input == '\\' && (state->dq || state->sq))
-	{
-		state->escape = true;
-		**dst = **input;
-		(*dst)++;
-		(*input)++;
-	}
-}
+	int	i;
 
-static void	handle_quotes(const char **input, char **dst, t_quote_state *state)
-{
-	while (**input)
+	inp->quotes = init_quote_state();
+	i = -1;
+	while (inp->pipe.cmd[0][++i])
 	{
-		handle_escape(input, dst, state);
-		if (**input == '\'' && !state->dq)
+		if (inp->quotes.escape)
 		{
-			state->sq = !state->sq;
-			(*input)++;
+			inp->quotes.escape = false;
 			continue ;
 		}
-		if (**input == '"' && !state->sq)
+		if (inp->pipe.cmd[0][i] == '\\' && inp->quotes.dq)
+			inp->quotes.escape = true;
+		else if (inp->pipe.cmd[0][i] == '\'' && !inp->quotes.dq)
+			inp->quotes.sq = !inp->quotes.sq;
+		else if (inp->pipe.cmd[0][i] == '"' && !inp->quotes.sq)
+			inp->quotes.dq = !inp->quotes.dq;
+	}
+	return (inp->quotes.sq || inp->quotes.dq);
+}
+
+// static void	handle_escape(char **input, t_quote_state *state)
+// {
+// 	if (state->escape)
+// 	{
+// 		(*input)++;
+// 		state->escape = false;
+// 	}
+// 	else if (**input == '\\' && (state->dq || state->sq))
+// 	{
+// 		state->escape = true;
+// 		(*input)++;
+// 	}
+// }
+
+static void	handle_quotes(char **input, t_quote_state *state)
+{
+	char 	*temp1;
+	char	*temp;
+	char	*res;
+	int		start;
+	int		end;
+
+	start = -1;
+	temp = ft_strdup(input[0]);
+	free(input[0]);
+	input[0] = NULL;
+	temp1 = NULL;
+	res = NULL;
+	while (temp[++start])
+	{
+		// handle_escape(input, state);
+		// if (temp[start] == '\'' && !state->dq)
+		// {
+		// 	state->sq = !state->sq;
+		// 	continue ;
+		// }
+		if (temp[start] == '\'' && !state->dq)
 		{
+			end = start + 1;
+			while (temp[end] != '\'')
+				end++;
+			if (res)
+				free(res);
+			res = ft_substr(temp, start + 1, end - start - 1);
+			if (input[0])
+				temp1 = ft_strdup(input[0]);
+			else
+				temp1 = ft_strdup("");
+			free(input[0]);
+			input[0] = ft_strjoin(temp1, res);
+			free(temp1);
+			start = end;
 			state->dq = !state->dq;
-			(*input)++;
-			continue ;
 		}
-		**dst = **input;
-		(*dst)++;
-		(*input)++;
+		if (temp[start] == '"' && !state->sq)
+		{
+			end = start + 1;
+			while (temp[end] != '"')
+				end++;
+			if (res)
+				free(res);
+			res = ft_substr(temp, start + 1, end - start - 1);
+			state->dq = !state->dq;
+			if (input[0])
+				temp1 = ft_strdup(input[0]);
+			else
+				temp1 = ft_strdup("");
+			free(input[0]);
+			input[0] = ft_strjoin(temp1, res);
+			free(temp1);
+			start = end;
+		}
 	}
-	**dst = '\0';
 }
 
 void	process_quotes(t_data *inp)
 {
-	const char		*input;
-	char			*dst;
-	t_quote_state	state;
-	size_t			input_len;
-
-	input = *inp->pipe.cmd;
-	state = init_quote_state();
-	input_len = ft_strlen(input);
-	if (check_quotes(input))
+	inp->quotes = init_quote_state();
+	if (check_quotes(inp))
 	{
 		printf("Error: Quote still open.\n");
 		return ;
 	}
-	inp->input = malloc(input_len + 1);
-	if (inp->input == NULL)
-	{
-		printf("malloc fail.\n");
-		return ;
-	}
-	dst = inp->input;
-	printf("Processing quotes for: %s\n", input);
-	handle_quotes(&input, &dst, &state);
+	printf("Processing quotes for: %s\n", *inp->pipe.cmd);
+	handle_quotes(inp->pipe.cmd, &inp->quotes);
 }
+
+int	main()
+{
+	t_data	inp;
+
+	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
+	inp.pipe.cmd[0] = ft_strdup("\"Hello World\" 'single '");
+	inp.pipe.cmd[1] = NULL;
+	process_quotes(&inp);
+	printf("Result: '%s'\n", *inp.pipe.cmd);
+}
+
+// cc handle_quote.c utils/*.c ../include/libft/src/*.c -o handle_quote -Wall -Werror -Wextra -lreadline -g
+
 
 // void process_quotes_bash_like(t_data *inp) {
 //     const char *input = *inp->pipe.cmd;
