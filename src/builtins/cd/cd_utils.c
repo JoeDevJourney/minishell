@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/24 18:39:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:47:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ char	*get_env_val(char **env, char *name)
 	name_len = ft_strlen(name);
 	i = -1;
 	while (env[++i])
+	{
 		if (!ft_strncmp(env[i], name, name_len) && env[i][name_len] == '=')
 			return (&env[i][name_len + 1]);
+	}
 	return (NULL);
 }
 

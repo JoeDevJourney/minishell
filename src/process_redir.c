@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 17:44:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:15:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static bool	hdoc_oper(t_data *inp)
 		return (perror(inp->hdoc_op.cmd[i]), false);
 	while (1)
 	{
-		input = readline("heredoc> ");
+		input = readline("> ");
 		if (*input != '\0'
 			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(inp->input)))
 			break ;

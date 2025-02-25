@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/24 19:23:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:04:01 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,59 +53,55 @@ void	add_command(t_list **list, const char *start, const char *end)
 
 static char	*join_cmd(char **arr)
 {
-	char	*temp;
 	char	*res;
 	char	*with_space;
+	int		i;
 
-	if (!arr || !*arr)
-		return (NULL);
-	temp = NULL;
-	temp = ft_strdup(*arr++);
-	while (*arr)
+	i = 0;
+	res = ft_strdup(arr[i]);
+	while (arr[++i])
 	{
-		with_space = ft_strjoin(temp, " ");
-		free(temp);
-		res = ft_strjoin(with_space, *arr);
+		with_space = ft_strjoin(res, " ");
+		free(res);
+		res = ft_strjoin(with_space, arr[i]);
 		free(with_space);
-		temp = res;
-		arr++;
 	}
-	return (free(temp), res);
+	return (res);
 }
 
 void	expansion_oper(char **env, char **cmd)
 {
+	char	**res;
 	char	**arr;
-	char	*val;
 	int		i;
 
 	arr = ft_split(*cmd, ' ');
+	res = safe_malloc((count_array_size(arr) + 1) * sizeof(char *));
 	i = -1;
 	while (arr[++i])
 	{
-		if (arr[i][0] == '$')
-		{
-			val = ft_strdup(arr[i] + 1);
-			free(arr[i]);
-			arr[i] = get_env_val(env, val);
-			free(val);
-		}
+		if (arr[i][0] == '$' && get_env_val(env, arr[i] + 1))
+			res[i] = ft_strdup(get_env_val(env, arr[i] + 1));
+		else
+			res[i] = ft_strdup(arr[i]);
 	}
-	if (val)
-	{
-		free(*cmd);
-		*cmd = join_cmd(arr);
-	}
-	// free_array(arr);
+	res[i] = NULL;
+	free(*cmd);
+	*cmd = join_cmd(res);
+	free_array(arr);
+	free_array(res);
 }
 
-int main(int argc, char **argv, char **env)
-{
-	char *str = ft_strdup("Hello $SHLVL malaka!");
+// int main(int argc, char **argv, char **env)
+// {
+// 	char *str = ft_strdup("Hello $PWD malaka!");
 
-	(void)argc;
-	(void)argv;
-	expansion_oper(env, &str);
-	printf("res: '%s'\n", str);
-	// free(str);
-}
+// 	(void)argc;
+// 	(void)argv;
+// 	printf("\nbefore: '%s'\n", str);
+// 	expansion_oper(env, &str);
+// 	printf("after: '%s'\n\n", str);
+// 	free(str);
+// }
+
+// cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

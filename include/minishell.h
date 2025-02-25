@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 19:23:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:55:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void			handle_command(t_data *inp);
 
 //	Operators
 bool			process_fds(t_data *inp);
-void			expansion_oper(char **arr);
+void			expansion_oper(char **env, char **cmd);
 void			parse_redir(t_data *inp);
 void			parse_logic(t_data *inp);
 
@@ -150,7 +150,6 @@ void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
-void			process_quotes(t_data *inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/24 21:53:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:04:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,91 +54,101 @@ static bool	check_quotes(t_data *inp)
 // 	}
 // }
 
-static void	handle_quotes(char **input, t_quote_state *state)
+static int	quote_array(t_data *inp, int start, char **res, bool double_flag)
 {
-	char 	*temp1;
+	int		end;
+
+	end = start + 1;
+	if (double_flag)
+	{
+		while (inp->pipe.cmd[0][end] != '"')
+			end++;
+		inp->quotes.dq = !inp->quotes.dq;
+		*res = ft_substr(inp->pipe.cmd[0], start + 1, end - start - 1);
+		printf("res: '%s'\n", *res);
+		expansion_oper(inp->env, res);
+	}
+	else
+	{
+		while (inp->pipe.cmd[0][end] && inp->pipe.cmd[0][end] != '\'')
+			end++;
+		inp->quotes.sq = !inp->quotes.sq;
+		*res = ft_substr(inp->pipe.cmd[0], start + 1, end - start - 1);
+	}
+	return (end);
+}
+
+static void	handle_quotes(t_data *inp)
+{
 	char	*temp;
+	char	*temp_res;
 	char	*res;
 	int		start;
 	int		end;
 
-	start = -1;
-	temp = ft_strdup(input[0]);
-	free(input[0]);
-	input[0] = NULL;
-	temp1 = NULL;
 	res = NULL;
-	while (temp[++start])
+	start = -1;
+	while (inp->pipe.cmd[0][++start])
 	{
+		temp_res = NULL;
+		temp = NULL;
 		// handle_escape(input, state);
 		// if (temp[start] == '\'' && !state->dq)
 		// {
 		// 	state->sq = !state->sq;
 		// 	continue ;
 		// }
-		if (temp[start] == '\'' && !state->dq)
+		if ((inp->pipe.cmd[0][start] == '\'' && inp->quotes.dq_closed) || (inp->pipe.cmd[0][start] == '"' && inp->quotes.sq_closed))
 		{
-			end = start + 1;
-			while (temp[end] != '\'')
-				end++;
-			if (res)
-				free(res);
-			res = ft_substr(temp, start + 1, end - start - 1);
-			if (input[0])
-				temp1 = ft_strdup(input[0]);
-			else
-				temp1 = ft_strdup("");
-			free(input[0]);
-			input[0] = ft_strjoin(temp1, res);
-			free(temp1);
-			start = end;
-			state->dq = !state->dq;
+			if (inp->pipe.cmd[0][start] == '\'' && inp->quotes.dq_closed)
+				end = quote_array(inp, start, &temp, 0);
+			else if (inp->pipe.cmd[0][start] == '"' && inp->quotes.sq_closed)
+				end = quote_array(inp, start, &temp, 1);
 		}
-		if (temp[start] == '"' && !state->sq)
+		else
 		{
-			end = start + 1;
-			while (temp[end] != '"')
-				end++;
-			if (res)
-				free(res);
-			res = ft_substr(temp, start + 1, end - start - 1);
-			state->dq = !state->dq;
-			if (input[0])
-				temp1 = ft_strdup(input[0]);
-			else
-				temp1 = ft_strdup("");
-			free(input[0]);
-			input[0] = ft_strjoin(temp1, res);
-			free(temp1);
-			start = end;
+			temp = safe_malloc(sizeof(char) * 2);
+			temp[0] = inp->pipe.cmd[0][start];
+			temp[1] = '\0';
+			end = start;
 		}
+		if (res)
+		{
+			temp_res = ft_strdup(res);
+			free(res);
+		}
+		else
+			temp_res = ft_strdup("");
+		res = ft_strjoin(temp_res, temp);
+		free(temp);
+		free(temp_res);
+		start = end;
 	}
+	free(inp->pipe.cmd[0]);
+	inp->pipe.cmd[0] = res;
 }
 
-void	process_quotes(t_data *inp)
-{
-	inp->quotes = init_quote_state();
-	if (check_quotes(inp))
-	{
-		printf("Error: Quote still open.\n");
-		return ;
-	}
-	printf("Processing quotes for: %s\n", *inp->pipe.cmd);
-	handle_quotes(inp->pipe.cmd, &inp->quotes);
-}
-
-int	main()
+int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
 
+	(void)argc;
+	(void)argv;
+	dupl_env(&inp.env, env);
 	inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
-	inp.pipe.cmd[0] = ft_strdup("\"Hello World\" 'single '");
+	inp.pipe.cmd[0] = ft_strdup("\"double: $PWD\"");
 	inp.pipe.cmd[1] = NULL;
-	process_quotes(&inp);
-	printf("Result: '%s'\n", *inp.pipe.cmd);
+	inp.quotes = init_quote_state();
+	if (check_quotes(&inp))
+		return (printf("Error: Quote still open.\n"), 0);
+	printf("\nProcessing quotes for: %s\n", *inp.pipe.cmd);
+	handle_quotes(&inp);
+	printf("Result: '%s'\n\n", *inp.pipe.cmd);
+	free_array(inp.pipe.cmd);
+	free_array(inp.env);
 }
 
-// cc handle_quote.c utils/*.c ../include/libft/src/*.c -o handle_quote -Wall -Werror -Wextra -lreadline -g
+// cc handle_quote.c builtins/cd/*.c utils/*.c ../include/libft/src/*.c -o handle_quote -Wall -Werror -Wextra -lreadline -g
 
 
 // void process_quotes_bash_like(t_data *inp) {
