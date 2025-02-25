@@ -111,7 +111,7 @@ void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-int				exec_builtin(char **cmd, char ***env);
+int				exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);

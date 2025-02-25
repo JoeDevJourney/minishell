@@ -14,19 +14,22 @@
 
 /**
  * @brief Executes the builtin command
+ * 
+ * @note For commands like echo/export we need the argument in its unmodified
+ * status, so we use *inp.pipe.cmd
  */
-int	exec_builtin(char **cmd, char ***env)
+int	exec_builtin(t_data *inp)
 {
-	if (!ft_strncmp(*cmd, "env", 3) && ft_strlen(*cmd) == 3)
-		return (exec_env(*env));
-	else if (!ft_strncmp(*cmd, "pwd", 3) && ft_strlen(*cmd) == 3)
-		return (exec_pwd(cmd));
-	else if (!ft_strncmp(*cmd, "cd", 2) && ft_strlen(*cmd) == 2)
-		return (ft_cd(env, cmd));
-	else if (!ft_strncmp(*cmd, "unset", 5) && ft_strlen(*cmd) == 5)
-		return (exec_unset(++cmd, env));
-	else if (!ft_strncmp(*cmd, "exit", 4) && ft_strlen(*cmd) == 4)
-		return (exec_exit(cmd[1]));
+	if (!ft_strncmp(*inp->command, "env", 3) && ft_strlen(*inp->command) == 3)
+		return (exec_env(inp->env));
+	else if (!ft_strncmp(*inp->command, "pwd", 3) && ft_strlen(*inp->command) == 3)
+		return (exec_pwd(inp->command));
+	else if (!ft_strncmp(*inp->command, "cd", 2) && ft_strlen(*inp->command) == 2)
+		return (ft_cd(&inp->env, inp->command));
+	else if (!ft_strncmp(*inp->command, "unset", 5) && ft_strlen(*inp->command) == 5)
+		return (exec_unset(++inp->command, &inp->env));
+	else if (!ft_strncmp(*inp->command, "exit", 4) && ft_strlen(*inp->command) == 4)
+		return (exec_exit(inp->command[1]));
 	return (1);
 }
 
