@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 11:26:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 18:09:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,13 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 {
 	int	status;
 
-	process_fds(inp);
 	pid = fork();
 	if (pid == 0)
+	{
+		if (!process_fds(inp))
+			exec_exit(0);
 		process_pipe_fds(inp, old_fd, new_fd);
+	}
 	else if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
@@ -98,10 +101,7 @@ static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
 }
 
 /**
- * @brief Executes pipes when given the cmds stored as an array of str.
- * 
- * @param num Number of commands
- * @param cmd Commands broken down in an array of str
+ * @brief Executes pipe(s) when given the (char **) cmd(s).
  */
 void	handle_pipes(t_data *inp)
 {

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 12:54:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/24 15:35:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	var_index(char *cmd, char **env)
 
 int	exec_unset(char **cmd, char ***env)
 {
-	if (!*cmd)
+	if (!*cmd++)
 		return (0);
 	if (**cmd == '-')
 	{

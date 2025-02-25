@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 18:34:40 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/24 13:40:01 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_cd(char ***env, char **args)
 	oldpwd = get_env_val(*env, "PWD");
 	dir = get_target_dir(args, *env);
 	if (!dir || chdir(dir) != 0)
-		return (perror("cd failed"), 1);
+		return (perror("cd"), 1);
 	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
 		return (1);
 	if (update_pwd_vars(env, oldpwd) != 0)

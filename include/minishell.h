@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 19:44:50 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/24 18:44:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ typedef struct s_redir_op
 	int		**fd;
 }			t_redir_op;
 
+typedef struct s_quote_state
+{
+	bool	sq;
+	bool	dq;
+	bool	escape;
+	bool	sq_closed;
+	bool	dq_closed;
+}	t_quote_state;
+
 typedef struct s_data
 {
 	char			*home_dir;
@@ -72,14 +81,6 @@ typedef struct s_data
 	int				ret_val;
 	t_oper			redir;
 }			t_data;
-typedef struct s_quote_state
-{
-	bool	sq;
-	bool	dq;
-	bool	escape;
-	bool	sq_closed;
-	bool	dq_closed;
-}	t_quote_state;
 
 typedef struct s_split_state
 {
@@ -100,13 +101,14 @@ typedef struct s_list
 
 //	Execution
 void			handle_pipes(t_data *inp);
-void			handle_command(t_data *inp);
+void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
+void			handle_command(t_data *inp);
 
 //	Operators
+bool			process_fds(t_data *inp);
 void			expansion_oper(char **arr);
 void			parse_redir(t_data *inp);
-void			process_fds(t_data *inp);
 void			parse_logic(t_data *inp);
 
 //	Builtins
@@ -131,12 +133,13 @@ char			*get_oldpwd_dir(char **env);
 int				update_pwd_vars(char ***env, const char *oldpwd);
 int				add_env_var(char ***env, char *new_entry);
 char			*get_target_dir(char **args, char **env);
-char			*get_env_val(char **env, const char *name);
+char			*get_env_val(char **env, char *name);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
+bool			valid_oper(char **str, char *del);
 char			**ft_split2(const char *s, const char *delim);
 char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
@@ -147,6 +150,7 @@ void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
+void			process_quotes(t_data	*inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
@@ -156,10 +160,5 @@ void			free_list(t_list *list);
 void			add_command(t_list **list, const char *start, const char *end);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
 t_quote_state	init_quote_state(void);
-void			process_quotes(t_data	*inp);
 
 #endif
-
-// search for the $ sign in getenv and parse the word to it to the getenv and process it.
-// look up if the quote is closed or not.
-// search for the quotes and find out if its double or single and if there is a dollar sign inside.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 20:03:36 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/24 18:06:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,10 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.input = read_input(inp.env);
-		if (!inp.input || ft_strcmp(inp.input, "exit") == 0)
-			break ;
-		parse_logic(&inp);
+		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
+			parse_logic(&inp);
 		free(inp.input);
 	}
-	// print_data(inp);
 	free(inp.home_dir);
 	free(inp.input);
 	free_array(inp.env);
