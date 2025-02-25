@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/25 12:35:31 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/25 19:44:24 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
  */
 int	exec_builtin(t_data *inp)
 {
+	char	**args;
+
 	if (!ft_strncmp(*inp->command, "env", 3) && ft_strlen(*inp->command) == 3)
 		return (exec_env(inp->env));
 	else if (!ft_strncmp(*inp->command, "pwd", 3)
@@ -27,7 +29,11 @@ int	exec_builtin(t_data *inp)
 		return (ft_cd(&inp->env, inp->command));
 	else if (!ft_strncmp(*inp->command, "export", 6)
 		&& ft_strlen(*inp->command) == 6)
-		return (ft_export(inp->env, inp->command));
+	{
+		args = ft_split_preserve_quotes(inp->input + 7);
+		free_array(args);
+		return (ft_export(&inp->env, args));
+	}
 	else if (!ft_strncmp(*inp->command, "unset", 5)
 		&& ft_strlen(*inp->command) == 5)
 		return (exec_unset(inp->command, &inp->env));

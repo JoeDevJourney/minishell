@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 18:06:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:05:03 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,15 @@ bool	valid_oper(char **str, char *dl)
 		free(cmd);
 	}
 	return (free_array(arr), 1);
+}
+
+char	*remove_dq(char *value)
+{
+	char	*new_value;
+
+	if (*value == '"' && value[ft_strlen(value) - 1] == '"')
+		new_value = ft_substr(value, 1, ft_strlen(value) - 2);
+	else
+		new_value = ft_strdup(value);
+	return (new_value);
 }

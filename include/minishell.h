@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/24 18:44:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:42:55 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void			parse_logic(t_data *inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-int			exec_builtin(t_data *inp);
+int				exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);
@@ -122,7 +122,7 @@ int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char **env, char **args);
+int				ft_export(char ***env, char **args);
 int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
@@ -154,6 +154,10 @@ void			process_quotes(t_data	*inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
+char			*remove_dq(char *value);
+int				is_valid_name(const char *str);
+char			**ft_split_preserve_quotes(const char *str);
+
 
 // Quotes Utils
 void			free_list(t_list *list);

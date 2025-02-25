@@ -6,33 +6,44 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:47:46 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 18:54:05 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/25 18:54:35 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_valid_char(int c)
+int	is_valid_name(const char *str)
 {
-	return (ft_isalnum(c) || c == '_');
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	str++;
+	while (*str && *str != '=')
+	{
+		if (!ft_isalnum(*str) && *str != '_')
+			return (0);
+		str++;
+	}
+	return (1);
 }
 
 int	is_valid_identifier(const char *str)
 {
 	const char	*ptr;
+	int			has_equal;
 
+	has_equal = 0;
+	ptr = str;
 	if (!str || !*str)
 		return (0);
-	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
-	ptr = str + 1;
 	while (*ptr && *ptr != '=')
-	{
-		if (!is_valid_char(*ptr))
-			return (0);
 		ptr++;
-	}
-	return (1);
+	if (*ptr == '=')
+		has_equal = 1;
+	if (has_equal)
+		return (is_valid_name(str));
+	return (is_valid_name(str));
 }
 
 char	**ft_arrdup(char **arr, int size)

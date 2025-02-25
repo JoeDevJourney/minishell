@@ -19,6 +19,8 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
 		$(SRCDIR)/builtins/cd/cd.c $(SRCDIR)/builtins/cd/cd_utils.c $(SRCDIR)/builtins/cd/cd_utils2.c \
 		\
 		$(SRCDIR)/builtins/export.c $(SRCDIR)/utils/export_utils.c \
+		\
+		$(SRCDIR)/utils/builtins_utils.c \
 		# $(SRCDIR)/utils/quote_utils.c
 
 

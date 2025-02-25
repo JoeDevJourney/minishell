@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/25 12:37:20 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/25 19:06:02 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,22 @@ static void	sort_env_copy(char **copy, int size)
 
 static void	print_env_copy(char **copy)
 {
-	int	i;
+	int		i;
+	char	*value;
 
 	i = -1;
 	while (copy[++i])
 	{
-		printf("declare -x %s", copy[i]);
-		if (ft_strchr(copy[i], '='))
-			printf("\"%s\"", ft_strchr(copy[i], '=') + 1);
+		printf("declare -x ");
+		value = ft_strchr(copy[i], '=');
+		if (value)
+		{
+			printf("%.*s", (int)(value - copy[i] + 1), copy[i]);
+			value++;
+			printf("\"%s\"", value);
+		}
+		else
+			printf("%s", copy[i]);
 		printf("\n");
 	}
 }
@@ -63,10 +71,11 @@ static void	print_sorted_env(char **env)
 	ft_arrfree(copy);
 }
 
-static int	handle_export_arg(char **env, char *arg)
+static int	handle_export_arg(char ***env, char *arg)
 {
 	char	*name;
 	char	*value;
+	char	*new_value;
 	int		result;
 
 	value = ft_strchr(arg, '=');
@@ -74,30 +83,47 @@ static int	handle_export_arg(char **env, char *arg)
 	{
 		name = ft_substr(arg, 0, value - arg);
 		value++;
+		new_value = ft_strdup(value);
 	}
 	else
 	{
 		name = ft_strdup(arg);
-		value = "";
+		new_value = ft_strdup("");
 	}
-	result = update_env_var(&env, name, value);
+	if (!is_valid_name(name))
+	{
+		free(name);
+		free(new_value);
+		return (1);
+	}
+	result = update_env_var(env, name, new_value);
 	free(name);
+	free(new_value);
 	return (result);
 }
 
-int	ft_export(char **env, char **args)
+int	ft_export(char ***env, char **args)
 {
 	int	i;
 	int	ret;
+	int	j;
 
+	j = 0;
+	while (args[j])
+	{
+		printf("DEBUG: args[%d] = '%s'\n", j, args[j]);
+		j++;
+	}
 	if (!args[1])
-		return (print_sorted_env(env), 0);
+		return (print_sorted_env(*env), 0);
 	ret = 0;
 	i = 1;
 	while (args[i])
 	{
+		printf("DEBUG: Checking identifier: %s\n", args[i]);
 		if (!is_valid_identifier(args[i]))
 		{
+			printf("DEBUG: Invalid identifier detected: %s\n", args[i]);
 			perror("export: invalid identifier\n");
 			ret = 1;
 		}
