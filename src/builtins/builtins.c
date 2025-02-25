@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 18:08:05 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/25 12:35:31 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ int	exec_builtin(t_data *inp)
 	else if (!ft_strncmp(*inp->command, "cd", 2)
 		&& ft_strlen(*inp->command) == 2)
 		return (ft_cd(&inp->env, inp->command));
+	else if (!ft_strncmp(*inp->command, "export", 6)
+		&& ft_strlen(*inp->command) == 6)
+		return (ft_export(inp->env, inp->command));
 	else if (!ft_strncmp(*inp->command, "unset", 5)
 		&& ft_strlen(*inp->command) == 5)
 		return (exec_unset(inp->command, &inp->env));
