@@ -50,3 +50,62 @@ void	add_command(t_list **list, const char *start, const char *end)
 		temp->next = new_cmd;
 	}
 }
+
+static char	*join_cmd(char **arr)
+{
+	char	*temp;
+	char	*res;
+	char	*with_space;
+
+	if (!arr || !*arr)
+		return (NULL);
+	temp = NULL;
+	temp = ft_strdup(*arr++);
+	while (*arr)
+	{
+		with_space = ft_strjoin(temp, " ");
+		free(temp);
+		res = ft_strjoin(with_space, *arr);
+		free(with_space);
+		temp = res;
+		arr++;
+	}
+	return (free(temp), res);
+}
+
+void	expansion_oper(char **env, char **cmd)
+{
+	char	**arr;
+	char	*val;
+	int		i;
+
+	arr = ft_split(*cmd, ' ');
+	i = -1;
+	while (arr[++i])
+	{
+		if (arr[i][0] == '$')
+		{
+			val = ft_strdup(arr[i] + 1);
+			free(arr[i]);
+			arr[i] = get_env_val(env, val);
+			free(val);
+		}
+	}
+	if (val)
+	{
+		free(*cmd);
+		*cmd = join_cmd(arr);
+	}
+	// free_array(arr);
+}
+
+int main(int argc, char **argv, char **env)
+{
+	char *str = ft_strdup("Hello $SHLVL malaka!");
+
+	(void)argc;
+	(void)argv;
+	expansion_oper(env, &str);
+	printf("res: '%s'\n", str);
+	// free(str);
+}
