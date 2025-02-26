@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 14:52:55 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:18:04 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	handle_export_arg(char ***env, char *arg)
 	else
 	{
 		name = ft_strdup(arg);
-		value = "";
+		value = NULL;
 	}
 	result = update_env_var(env, name, value);
 	free(name);
