@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/26 12:26:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 13:52:52 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
+int				is_valid_identifier(const char *str);
 
 // Quotes Utils
 void			add_command(t_list **list, const char *start, const char *end);
