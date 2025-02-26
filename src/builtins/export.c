@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 18:18:04 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 19:33:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,15 +107,13 @@ int	ft_export(char ***env, char *args)
 		return (print_sorted_env(*env), 0);
 	}
 	i = 0;
-	while (arr[i])
+	while (arr[++i])
 	{
 		if (!ft_strchr(arr[i], '"'))
-			handle_double_quotes();
+			double_quotes(&arr[i], *env);
 		else if (!ft_strchr(arr[i], '\''))
-			handle_single_quotes();
-		else
-			handle_export_arg(env, arr[i]);
-		i++;
+			single_quotes(&arr[i]);
+		handle_export_arg(env, arr[i]);
 	}
 	ft_arrfree(arr);
 	return (0);

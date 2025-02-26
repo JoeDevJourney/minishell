@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 17:36:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 19:33:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	single_quotes(char **str)
+void	single_quotes(char **str)
 {
 	char	*res;
 
@@ -51,7 +51,7 @@ static void	extract_env_value(char *src, char **dst, int *src_i, int *dst_i, cha
 // 	if ()
 // }
 
-static void	double_quotes(char **str, char **env)
+void	double_quotes(char **str, char **env)
 {
 	char	*src;
 	char	*buffer;
@@ -84,28 +84,28 @@ static void	double_quotes(char **str, char **env)
 
 // search_quotes() ????
 
-int	main(int argc, char **argv, char **env)
-{
-	char *str;
+// int	main(int argc, char **argv, char **env)
+// {
+// 	char *str;
+//
+// 	(void)argc;
+// 	(void)argv;
+// 	str = ft_strdup("\"Hello: $USER\\\" it going?\"");
+// 	printf("%s\n", str);
+// 	double_quotes(&str, env);
+// 	printf("%s\n\n", str);
+// 	free(str);
+// 	str = ft_strdup("'Hello: $USER  How\\\"s it going?\\'");
+// 	printf("%s\n", str);
+// 	single_quotes(&str);
+// 	printf("%s\n\n", str);
+// 	free(str);
+// 	// if (check_quotes(&inp))
+// 	// 	return (printf("Error: Quote still open.\n"), 0);
 
-	(void)argc;
-	(void)argv;
-	str = ft_strdup("\"Hello: $USER\\\" it going?\"");
-	printf("%s\n", str);
-	double_quotes(&str, env);
-	printf("%s\n\n", str);
-	free(str);
-	str = ft_strdup("'Hello: $USER  How\\\"s it going?\\'");
-	printf("%s\n", str);
-	single_quotes(&str);
-	printf("%s\n\n", str);
-	free(str);
-	// if (check_quotes(&inp))
-	// 	return (printf("Error: Quote still open.\n"), 0);
-
-	// handle_quotes(&inp);
-	// free_array(inp.pipe.cmd);
-	// free_array(inp.env);
-}
+// 	// handle_quotes(&inp);
+// 	// free_array(inp.pipe.cmd);
+// 	// free_array(inp.env);
+// }
 
 // cc quotes.c -o quotes utils/*.c builtins/env.c builtins/cd/cd_utils.c ../include/libft/src/*.c -Wall -Wextra -Werror -lreadline

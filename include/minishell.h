@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/26 18:23:51 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 19:33:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ bool			process_fds(t_data *inp);
 void			expansion_oper(char **env, char **cmd);
 void			parse_redir(t_data *inp);
 void			parse_logic(t_data *inp);
+void			single_quotes(char **str);
+void			double_quotes(char **str, char **env);
 
 //	Builtins
 bool			search_builtins(t_data inp);
@@ -122,7 +124,7 @@ int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char ***env, char **args);
+int				ft_export(char ***env, char *args);
 int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
