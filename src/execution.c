@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 20:54:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:10:47 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	handle_command(t_data *inp)
 
 	if (!ft_strchr(*inp->command, '/'))
 	{
+		// handle_quote();
 		if (search_builtins(*inp))
 			inp->ret_val = exec_builtin(inp);
 		else if (path_to_exec(*inp))
@@ -131,6 +132,7 @@ void	execute_command(t_data *inp)
 	else
 	{
 		// print_data(*inp);
+		
 		if (process_fds(inp))					//  && quotes()
 			handle_command(inp);
 		else

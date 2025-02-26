@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 12:59:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:03:02 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,5 @@ void	parse_redir(t_data *inp)
 		}
 	}
 	trim_spaces(inp);
-	inp->command = ft_split(*inp->pipe.cmd, ' ');
+	// inp->command = ft_split(*inp->pipe.cmd, ' ');
 }
