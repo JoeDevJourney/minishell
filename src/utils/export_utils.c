@@ -6,30 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:47:46 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 18:25:06 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:28:01 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-// int	is_valid_identifier(const char *str)
-// {
-// 	const char	*ptr;
-
-// 	ptr = str;
-// 	if (!str || !*str)
-// 		return (0);
-// 	if (!ft_isalpha(*ptr) && *ptr != '_')
-// 		return (0);
-// 	ptr++;
-// 	while (*ptr && *ptr != '=')
-// 	{
-// 		if (!ft_isalnum(*ptr) && *ptr != '_')
-// 			return (0);
-// 		ptr++;
-// 	}
-// 	return (1);
-// }
 
 char	**ft_arrdup(char **arr, int size)
 {
