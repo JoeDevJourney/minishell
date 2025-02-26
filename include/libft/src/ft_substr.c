@@ -6,12 +6,15 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:57:47 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 21:26:36 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 14:37:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
+/**
+ * @brief Allocates memory to copy the substr s, starting from index start
+ */
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
