@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/25 12:15:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:00:16 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,10 @@ bool	process_fds(t_data *inp)
 	bool	res;
 
 	parse_redir(inp);
+
+//execute quotes only for the redirection arrays.
+
+	print_data(*inp);
 	i = -1;
 	res = true;
 	while (inp->input[++i] && res)

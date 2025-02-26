@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 13:32:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:18:04 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,23 @@ static void	sort_env_copy(char **copy, int size)
 
 static void	print_env_copy(char **copy)
 {
-	int	i;
+	int		i;
+	char	*value;
 
 	i = -1;
 	while (copy[++i])
 	{
-		printf("declare -x %s", copy[i]);
-		if (ft_strchr(copy[i], '='))
-			printf("\"%s\"", ft_strchr(copy[i], '=') + 1);
-		printf("\n");
+		printf("declare -x ");
+		value = ft_strchr(copy[i], '=');
+		if (value)
+		{
+			printf("%.*s\"", (int)(value - copy[i] + 1), copy[i]);
+			value++;
+			printf("%s", value);
+		}
+		else
+			printf("%s", copy[i]);
+		printf("\"\n");
 	}
 }
 
@@ -63,7 +71,7 @@ static void	print_sorted_env(char **env)
 	ft_arrfree(copy);
 }
 
-static int	handle_export_arg(char **env, char *arg)
+static int	handle_export_arg(char ***env, char *arg)
 {
 	char	*name;
 	char	*value;
@@ -78,34 +86,39 @@ static int	handle_export_arg(char **env, char *arg)
 	else
 	{
 		name = ft_strdup(arg);
-		value = "";
+		value = NULL;
 	}
 	result = update_env_var(env, name, value);
 	free(name);
 	return (result);
 }
 
-int	ft_export(char **env, char **args)
+int	ft_export(char ***env, char *args)
 {
-	int	i;
-	int	ret;
+	int		i;
+	char	**arr;
 
-	if (!args[1])
-		return (print_sorted_env(env), 0);
-	ret = 0;
-	i = 1;
-	while (args[i])
+	arr = ft_split(args, ' ');
+	if (!arr)
+		return (perror("malloc error"), 1);
+	if (count_array_size(arr) == 1)
 	{
-		if (!is_valid_identifier(args[i]))
-		{
-			perror("export: invalid identifier\n");
-			ret = 1;
-		}
-		else if (handle_export_arg(env, args[i]) != 0)
-			ret = 1;
+		ft_arrfree(arr);
+		return (print_sorted_env(*env), 0);
+	}
+	i = 0;
+	while (arr[i])
+	{
+		if (!ft_strchr(arr[i], '"'))
+			handle_double_quotes();
+		else if (!ft_strchr(arr[i], '\''))
+			handle_single_quotes();
+		else
+			handle_export_arg(env, arr[i]);
 		i++;
 	}
-	return (ret);
+	ft_arrfree(arr);
+	return (0);
 }
 
 // #include <stdio.h>

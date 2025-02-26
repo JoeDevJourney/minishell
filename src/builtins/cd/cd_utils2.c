@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 18:33:13 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 16:16:24 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ char	*get_target_dir(char **args, char **env)
 {
 	char	*home;
 
-	if (args[1] && args[2])
-		return (NULL);
 	if (!args[1])
 	{
 		home = get_home_dir(env);

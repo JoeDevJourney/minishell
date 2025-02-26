@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/25 15:55:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:23:51 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char **env, char **args);
+int				ft_export(char ***env, char **args);
 int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
@@ -141,7 +141,6 @@ size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 bool			valid_oper(char **str, char *del);
 char			**ft_split2(const char *s, const char *delim);
-char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);
@@ -153,6 +152,7 @@ void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
+int				is_valid_identifier(const char *str);
 
 // Quotes Utils
 void			add_command(t_list **list, const char *start, const char *end);

@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/26 12:22:08 by dchrysov         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/02/26 18:35:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 
@@ -95,6 +96,7 @@ void	handle_command(t_data *inp)
 
 	if (!ft_strchr(*inp->command, '/'))
 	{
+		// handle_quote();
 		if (search_builtins(*inp))
 			inp->ret_val = exec_builtin(inp);
 		else if (path_to_exec(*inp))
@@ -130,7 +132,9 @@ void	execute_command(t_data *inp)
 		handle_pipes(inp);
 	else
 	{
-		if (process_fds(inp))
+		// print_data(*inp);
+		
+		if (process_fds(inp))					//  && quotes()
 			handle_command(inp);
 		else
 			inp->ret_val = 1;

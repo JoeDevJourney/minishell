@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/26 12:20:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:35:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ int	exec_builtin(t_data *inp)
 	else if (!ft_strncmp(*inp->command, "cd", 2)
 		&& ft_strlen(*inp->command) == 2)
 		return (ft_cd(&inp->env, inp->command));
+	else if (!ft_strncmp(*inp->command, "export", 6)
+		&& ft_strlen(*inp->command) == 6)
+		return (ft_export(&inp->env, &inp->pipe.cmd[0]));
 	else if (!ft_strncmp(*inp->command, "unset", 5)
 		&& ft_strlen(*inp->command) == 5)
 		return (exec_unset(++inp->command, &inp->env));

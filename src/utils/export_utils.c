@@ -6,34 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:47:46 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 18:54:05 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:28:01 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	is_valid_char(int c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
-
-int	is_valid_identifier(const char *str)
-{
-	const char	*ptr;
-
-	if (!str || !*str)
-		return (0);
-	if (!ft_isalpha(*str) && *str != '_')
-		return (0);
-	ptr = str + 1;
-	while (*ptr && *ptr != '=')
-	{
-		if (!is_valid_char(*ptr))
-			return (0);
-		ptr++;
-	}
-	return (1);
-}
 
 char	**ft_arrdup(char **arr, int size)
 {
@@ -66,10 +43,7 @@ void	ft_swap(void *a, void *b, size_t size)
 
 	temp = malloc(size);
 	if (!temp)
-	{
-		perror("malloc error");
-		exit(EXIT_FAILURE);
-	}
+		exit_with_error("malloc error\n", EXIT_FAILURE);
 	ft_memcpy(temp, a, size);
 	ft_memcpy(a, b, size);
 	ft_memcpy(b, temp, size);
