@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 13:32:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:30:12 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,18 @@ static int	handle_export_arg(char **env, char *arg)
 		name = ft_strdup(arg);
 		value = "";
 	}
-	result = update_env_var(env, name, value);
+	result = update_env_var(&env, name, value);
 	free(name);
 	return (result);
 }
 
-int	ft_export(char **env, char **args)
+int	ft_export(char ***env, char **args)
 {
 	int	i;
 	int	ret;
 
 	if (!args[1])
-		return (print_sorted_env(env), 0);
+		return (print_sorted_env(*env), 0);
 	ret = 0;
 	i = 1;
 	while (args[i])
@@ -101,7 +101,7 @@ int	ft_export(char **env, char **args)
 			perror("export: invalid identifier\n");
 			ret = 1;
 		}
-		else if (handle_export_arg(env, args[i]) != 0)
+		else if (handle_export_arg(*env, args[i]) != 0)
 			ret = 1;
 		i++;
 	}

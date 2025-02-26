@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/25 15:55:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:26:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char **env, char **args);
+int				ft_export(char ***env, char **args);
 int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);
