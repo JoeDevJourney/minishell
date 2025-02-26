@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/26 12:26:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 16:52:01 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,6 @@ size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 bool			valid_oper(char **str, char *del);
 char			**ft_split2(const char *s, const char *delim);
-char			*rwd(char *dir);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);

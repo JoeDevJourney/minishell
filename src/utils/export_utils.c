@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:47:46 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/20 18:54:05 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/26 17:08:51 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ void	ft_swap(void *a, void *b, size_t size)
 
 	temp = malloc(size);
 	if (!temp)
-	{
-		perror("malloc error");
-		exit(EXIT_FAILURE);
-	}
+		exit_with_error("malloc error\n", EXIT_FAILURE);
 	ft_memcpy(temp, a, size);
 	ft_memcpy(a, b, size);
 	ft_memcpy(b, temp, size);
