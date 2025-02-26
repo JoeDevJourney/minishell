@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 19:33:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 20:19:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,11 @@ static void	print_env_copy(char **copy)
 		{
 			printf("%.*s\"", (int)(value - copy[i] + 1), copy[i]);
 			value++;
-			printf("%s", value);
+			printf("%s\"", value);
 		}
 		else
 			printf("%s", copy[i]);
-		printf("\"\n");
+		printf("\n");
 	}
 }
 
