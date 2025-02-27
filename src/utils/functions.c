@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 14:52:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:53:38 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,4 @@ bool	valid_oper(char **str, char *dl)
 		free(ptr);
 	}
 	return (free_array(arr), 1);
-}
-
-void	expand_redir(t_data *inp)
-{
-	
 }
