@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/25 15:47:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:59:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (*s1 - *s2);
 }
 
+/**
+ * @brief Replaces the env variable with its value
+ */
 char	*get_env_val(char **env, char *name)
 {
 	size_t	name_len;

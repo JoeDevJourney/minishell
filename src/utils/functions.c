@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 14:53:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:47:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,29 @@ bool	valid_oper(char **str, char *dl)
 		free(ptr);
 	}
 	return (free_array(arr), 1);
+}
+
+static void	expansion_oper(char **str, char ***env)
+{
+	char	*val;
+
+	if (**str == '$')
+	{
+		val = ft_strdup(get_env_val(*env, &(*str)[1]));
+		free(*str);
+		*str = ft_strdup(val);
+		free(val);
+	}
+}
+
+void	expand_redir(t_data *inp)
+{
+	if (inp->inp_op.cmd && *inp->inp_op.cmd)
+		expnd_quotes(&inp->inp_op.cmd, &inp->env, expansion_oper);
+	if (inp->out_op.cmd && *inp->out_op.cmd)
+		expnd_quotes(&inp->out_op.cmd, &inp->env, expansion_oper);
+	if (inp->app_op.cmd && *inp->app_op.cmd)
+		expnd_quotes(&inp->app_op.cmd, &inp->env, expansion_oper);
+	if (inp->hdoc_op.cmd && *inp->hdoc_op.cmd)
+		expnd_quotes(&inp->hdoc_op.cmd, &inp->env, expansion_oper);
 }

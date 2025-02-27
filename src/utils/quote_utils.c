@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 14:42:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:41:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,25 @@ void	check_open_quotes(char **str, char quote)
 		ask_for_quote(str, quote);
 }
 
+/**
+ * @brief Takes input the address of an arr, goes through all of its strings,
+ * looking for quotes, executing the appropriate f in every case.
+ */
+void	expnd_quotes(char ***arr, char ***env, void (*f)(char **, char ***))
+{
+	int	i;
 
-
-
-
+	i = 0;
+	while ((*arr)[i])
+	{
+		if (ft_strchr((*arr)[i], '"'))
+			handle_quote(&(*arr)[i], *env, '"');
+		else if (ft_strchr((*arr)[i], '\''))
+			handle_quote(&(*arr)[i], *env, '\'');
+		f(&(*arr)[i], env);
+		i++;
+	}
+}
 
 
 // int main(int argc, char **argv, char **env)

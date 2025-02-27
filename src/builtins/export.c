@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 13:29:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:39:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,31 +71,29 @@ static void	print_sorted_env(char **env)
 	ft_arrfree(copy);
 }
 
-static int	handle_export_arg(char ***env, char *arg)
+static void	handle_export_arg(char **arg, char ***env)
 {
 	char	*name;
 	char	*value;
 	int		result;
 
-	value = ft_strchr(arg, '=');
+	value = ft_strchr(*arg, '=');
 	if (value)
 	{
-		name = ft_substr(arg, 0, value - arg);
+		name = ft_substr(*arg, 0, value - *arg);
 		value++;
 	}
 	else
 	{
-		name = ft_strdup(arg);
+		name = ft_strdup(*arg);
 		value = NULL;
 	}
 	result = update_env_var(env, name, value);
 	free(name);
-	return (result);
 }
 
 int	ft_export(char ***env, char *args)
 {
-	int		i;
 	char	**arr;
 
 	arr = ft_split(args, ' ');
@@ -103,15 +101,7 @@ int	ft_export(char ***env, char *args)
 		return (perror("malloc error"), 1);
 	if (count_array_size(arr) == 1)
 		return (ft_arrfree(arr), print_sorted_env(*env), 0);
-	i = 0;
-	while (arr[++i])
-	{
-		if (ft_strchr(arr[i], '"'))
-			handle_quotes(&arr[i], *env, '"');
-		else if (ft_strchr(arr[i], '\''))
-			handle_quotes(&arr[i], *env, '\'');
-		handle_export_arg(env, arr[i]);
-	}
+	expnd_quotes(&arr, env, handle_export_arg);
 	ft_arrfree(arr);
 	return (0);
 }

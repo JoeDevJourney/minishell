@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 13:06:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:47:30 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static void	double_quotes(char **str, char **env)
 	free(buffer);
 }
 
-void	handle_quotes(char **str, char **env, char quote)
+void	handle_quote(char **str, char **env, char quote)
 {
 	check_open_quotes(str, quote);
 	trim_quotes(str, quote);
