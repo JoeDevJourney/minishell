@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 17:47:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 19:02:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ static bool	app_oper(t_data *inp)
 	return (true);
 }
 
+/**
+ * @note Need to add the expansion functionality in the user input
+ */
 static bool	hdoc_oper(t_data *inp)
 {
 	static size_t	i;
@@ -125,11 +128,7 @@ bool	process_fds(t_data *inp)
 	bool	res;
 
 	parse_redir(inp);
-
-	//execute quotes only for the redirection arrays.
 	expand_redir(inp);
-	// print_data(*inp);
-
 	i = -1;
 	res = true;
 	while (inp->input[++i] && res)

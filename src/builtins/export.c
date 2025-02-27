@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 16:39:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 19:18:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ static void	print_sorted_env(char **env)
 	ft_arrfree(copy);
 }
 
+/**
+ * @brief Creates/updates the env variable arg with the new value
+ * 
+ * @param value The new value
+ */
 static void	handle_export_arg(char **arg, char ***env)
 {
 	char	*name;
@@ -92,16 +97,18 @@ static void	handle_export_arg(char **arg, char ***env)
 	free(name);
 }
 
-int	ft_export(char ***env, char *args)
+int	ft_export(char ***env, char *cmd)
 {
 	char	**arr;
+	char	**args;
 
-	arr = ft_split(args, ' ');
+	arr = ft_split(cmd, ' ');
 	if (!arr)
 		return (perror("malloc error"), 1);
 	if (count_array_size(arr) == 1)
 		return (ft_arrfree(arr), print_sorted_env(*env), 0);
-	expnd_quotes(&arr, env, handle_export_arg);
+	args = arr + 1;
+	expnd_quotes(&args, env, handle_export_arg);
 	ft_arrfree(arr);
 	return (0);
 }

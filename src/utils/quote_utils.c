@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 17:41:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 19:18:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,17 @@ void	expnd_quotes(char ***arr, char ***env, void (*f)(char **, char ***))
 	int	i;
 
 	i = 0;
+	if (!(*arr)[i])
+		return ;
 	while ((*arr)[i])
 	{
-		if (ft_strchr((*arr)[i], '"'))
+		if (ft_strchr((*arr)[i], '"')
+			|| (!ft_strchr((*arr)[i], '"') && !ft_strchr((*arr)[i], '\'')))
 			handle_quote(&(*arr)[i], *env, '"');
 		else if (ft_strchr((*arr)[i], '\''))
 			handle_quote(&(*arr)[i], *env, '\'');
-		f(&(*arr)[i], env);
+		if (f)
+			f(&(*arr)[i], env);
 		i++;
 	}
 }
