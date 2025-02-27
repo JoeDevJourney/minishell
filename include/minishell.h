@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 13:06:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:50:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
 int				is_valid_identifier(const char *str);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
-char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
 char			*join_cmd(char **arr, char *del);
 
 // Quotes Utils

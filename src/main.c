@@ -6,11 +6,23 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 12:44:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:50:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	if (free_flag & 1)
+		free(s1);
+	if (free_flag & 2)
+		free(s2);
+	return (result);
+}
 
 /**
  * @brief Prompt

@@ -6,20 +6,32 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 13:39:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:52:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	*safe_malloc(size_t size)
+/**
+ * @brief Initializes redir struct variables
+ */
+void	init_redir(t_data *inp)
 {
-	void	*ptr;
-
-	ptr = malloc(size);
-	if (!ptr)
-		exit_with_error("Memory allocation failed", EXIT_FAILURE);
-	return (ptr);
+	inp->inp_op.cmd = NULL;
+	inp->inp_op.fd = NULL;
+	inp->inp_op.num_cmd = 0;
+	inp->app_op.cmd = NULL;
+	inp->app_op.fd = NULL;
+	inp->app_op.num_cmd = 0;
+	inp->out_op.cmd = NULL;
+	inp->out_op.fd = NULL;
+	inp->out_op.num_cmd = 0;
+	inp->hdoc_op.cmd = NULL;
+	inp->hdoc_op.fd = NULL;
+	inp->hdoc_op.num_cmd = 0;
+	inp->input = NULL;
+	inp->command = NULL;
+	errno = 0;
 }
 
 /**
@@ -33,18 +45,6 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	tmp = ft_strjoin(s1, s2);
 	result = ft_strjoin(tmp, s3);
 	free(tmp);
-	return (result);
-}
-
-char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
-{
-	char	*result;
-
-	result = ft_strjoin(s1, s2);
-	if (free_flag & 1)
-		free(s1);
-	if (free_flag & 2)
-		free(s2);
 	return (result);
 }
 
@@ -87,4 +87,9 @@ bool	valid_oper(char **str, char *dl)
 		free(ptr);
 	}
 	return (free_array(arr), 1);
+}
+
+void	expand_redir(t_data *inp)
+{
+	
 }

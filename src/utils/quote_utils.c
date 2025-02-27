@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 13:56:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:42:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,6 @@ char	*ft_strncpy(char *dst, const char *src, size_t len)
 		ft_strncpy(dst + 1, src + 1, len - 1);
 	}
 	return (dst);
-}
-
-void	add_command(t_list **list, const char *start, const char *end)
-{
-	t_list	*new_cmd;
-	size_t	len;
-	t_list	*temp;
-
-	new_cmd = malloc(sizeof(t_list));
-	len = end - start;
-	new_cmd->str = malloc(len + 1);
-	ft_strncpy(new_cmd->str, start, len);
-	new_cmd->str[len] = '\0';
-	new_cmd->next = NULL;
-	if (*list == NULL)
-		*list = new_cmd;
-	else
-	{
-		temp = *list;
-		while (temp->next != NULL)
-			temp = temp->next;
-		temp->next = new_cmd;
-	}
 }
 
 /**
