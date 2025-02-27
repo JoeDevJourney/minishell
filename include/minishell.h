@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 14:50:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:47:35 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # include <errno.h>
 # include <limits.h>
 # include <dirent.h>
+# include <signal.h>
+
+extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_logical_op
 {
@@ -104,6 +107,7 @@ void			handle_pipes(t_data *inp);
 void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
 void			handle_command(t_data *inp);
+void			setup_signals(void);
 
 //	Operators
 bool			process_fds(t_data *inp);

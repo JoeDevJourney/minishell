@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 14:50:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 15:49:58 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,19 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	setup_signals();
 	init_data(&inp, env);
 	printf("Welcome\n");
 	while (1)
 	{
+		if (g_signal == SIGINT)
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+			g_signal = 0;
+		}
 		inp.input = read_input(inp.env);
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);
