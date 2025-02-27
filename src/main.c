@@ -6,11 +6,13 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 15:49:58 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/27 17:02:08 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+volatile sig_atomic_t	g_signal = 0;
 
 static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
 {
@@ -75,15 +77,17 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome\n");
 	while (1)
 	{
-		if (g_signal == SIGINT)
+		if (g_signal == 1)
 		{
-			printf("\n");
-			rl_on_new_line();
-			rl_replace_line("", 0);
-			rl_redisplay();
 			g_signal = 0;
+			continue ;
 		}
 		inp.input = read_input(inp.env);
+		if (!inp.input)
+		{
+			printf("exit\n");
+			break ;
+		}
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);
 		free(inp.input);

@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 15:47:35 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/02/27 16:49:33 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # include <dirent.h>
 # include <signal.h>
 
-extern volatile sig_atomic_t	g_signal;
+extern volatile sig_atomic_t g_signal;
 
 typedef struct s_logical_op
 {
@@ -108,6 +108,7 @@ void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
 void			handle_command(t_data *inp);
 void			setup_signals(void);
+void			handle_signal(int sig);
 
 //	Operators
 bool			process_fds(t_data *inp);
