@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/26 19:33:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:06:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ bool			process_fds(t_data *inp);
 void			expansion_oper(char **env, char **cmd);
 void			parse_redir(t_data *inp);
 void			parse_logic(t_data *inp);
-void			single_quotes(char **str);
-void			double_quotes(char **str, char **env);
+void			handle_quotes(char **str, char **env, char quote);
+void			check_open_quotes(char **str, char quote);
 
 //	Builtins
 bool			search_builtins(t_data inp);
@@ -152,9 +152,10 @@ void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
 int				ft_strcmp(const char *s1, const char *s2);
+int				is_valid_identifier(const char *str);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*ft_strjoin_free(char *s1, char *s2, int free_flag);
-int				is_valid_identifier(const char *str);
+char			*join_cmd(char **arr, char *del);
 
 // Quotes Utils
 void			add_command(t_list **list, const char *start, const char *end);

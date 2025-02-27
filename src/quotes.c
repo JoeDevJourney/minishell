@@ -6,20 +6,31 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 19:33:54 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:06:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	single_quotes(char **str)
+/**
+ * @brief Replaces original str after trimming the quote   
+ */
+static void	trim_quotes(char **str, char quote)
 {
-	char	*res;
+	char	**tok;
+	char	**trim;
+	int		i;
 
-	res = ft_strtrim(*str, "'");
+	tok = ft_split(*str, '=');
+	trim = safe_malloc((count_array_size(tok) + 1) * sizeof(char *));
+	i = -1;
+	while (tok[++i])
+		trim[i] = ft_strdup(ft_strtrim(tok[i], &quote));
+	trim[i] = NULL;
 	free(*str);
-	*str = ft_strdup(res);
-	free(res);
+	*str = join_cmd(trim, "=");
+	free_array(tok);
+	free_array(trim);
 }
 
 static void	extract_env_value(char *src, char **dst, int *src_i, int *dst_i, char **env)
@@ -45,15 +56,18 @@ static void	extract_env_value(char *src, char **dst, int *src_i, int *dst_i, cha
 	free(var_name);
 }
 
-// static void	escape_char(char **src, int *src_i)
-// {
-// 	(*src_i)++;
-// 	if ()
-// }
-
-void	double_quotes(char **str, char **env)
+static void	single_quotes(char **str)
 {
-	char	*src;
+	char	*res;
+
+	res = ft_strtrim(*str, "'");
+	free(*str);
+	*str = ft_strdup(res);
+	free(res);
+}
+
+static void	double_quotes(char **str, char **env)
+{
 	char	*buffer;
 	int		dest_pos;
 	int		src_pos;
@@ -61,25 +75,33 @@ void	double_quotes(char **str, char **env)
 	dest_pos = 0;
 	src_pos = 0;
 	buffer = safe_malloc(1024);
-	src = ft_strtrim(*str, "\"");
-	while (src[src_pos])
+	while ((*str)[src_pos])
 	{
-		if (src[src_pos] == '$')
-			extract_env_value(src, &buffer, &src_pos, &dest_pos, env);
-		else if (src[src_pos] == '\\')
+		if ((*str)[src_pos] == '$')
+			extract_env_value((*str), &buffer, &src_pos, &dest_pos, env);
+		else if ((*str)[src_pos] == '\\')
 		{
 			src_pos++;
-			buffer[dest_pos++] = src[src_pos++];
+			buffer[dest_pos++] = (*str)[src_pos++];
 		}
 		else
 			if (dest_pos < 1023)
-				buffer[dest_pos++] = src[src_pos++];
+				buffer[dest_pos++] = (*str)[src_pos++];
 	}
 	buffer[dest_pos] = '\0';
 	free(*str);
 	*str = ft_strdup(buffer);
 	free(buffer);
-	free(src);
+}
+
+void	handle_quotes(char **str, char **env, char quote)
+{
+	check_open_quotes(str, quote);
+	trim_quotes(str, quote);
+	if (quote == '"')
+		double_quotes(str, env);
+	else
+		single_quotes(str);
 }
 
 // search_quotes() ????

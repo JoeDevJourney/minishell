@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 20:19:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:29:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,14 @@ int	ft_export(char ***env, char *args)
 	if (!arr)
 		return (perror("malloc error"), 1);
 	if (count_array_size(arr) == 1)
-	{
-		ft_arrfree(arr);
-		return (print_sorted_env(*env), 0);
-	}
+		return (ft_arrfree(arr), print_sorted_env(*env), 0);
 	i = 0;
 	while (arr[++i])
 	{
-		if (!ft_strchr(arr[i], '"'))
-			double_quotes(&arr[i], *env);
-		else if (!ft_strchr(arr[i], '\''))
-			single_quotes(&arr[i]);
+		if (ft_strchr(arr[i], '"'))
+			handle_quotes(&arr[i], *env, '"');
+		else if (ft_strchr(arr[i], '\''))
+			handle_quotes(&arr[i], *env, '\'');
 		handle_export_arg(env, arr[i]);
 	}
 	ft_arrfree(arr);

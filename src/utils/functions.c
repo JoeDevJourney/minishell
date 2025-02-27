@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/24 18:06:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:39:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	*safe_malloc(size_t size)
 	return (ptr);
 }
 
+/**
+ * @brief Joins 3 str together
+ */
 char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 {
 	char	*tmp;
