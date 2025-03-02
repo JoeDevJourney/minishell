@@ -100,7 +100,7 @@ typedef struct s_list
 
 
 //	Execution
-void			handle_pipes(t_data *inp);
+int				handle_pipes(t_data *inp);
 void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
 void			handle_command(t_data *inp);

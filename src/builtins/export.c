@@ -80,7 +80,7 @@ static void	handle_export_arg(char **arg, char ***env)
 {
 	char	*name;
 	char	*value;
-	int		result;
+	// int		result;
 
 	value = ft_strchr(*arg, '=');
 	if (value)
@@ -93,7 +93,7 @@ static void	handle_export_arg(char **arg, char ***env)
 		name = ft_strdup(*arg);
 		value = NULL;
 	}
-	result = update_env_var(env, name, value);
+	update_env_var(env, name, value);
 	free(name);
 }
 

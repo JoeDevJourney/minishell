@@ -37,7 +37,8 @@ int	exec_builtin(t_data *inp)
 	else if (!ft_strncmp(*inp->command, "exit", 4)
 		&& ft_strlen(*inp->command) == 4)
 		return (exec_exit(inp->command[1]));
-	return (1);
+	// return (1);
+	exit(1);
 }
 
 /**

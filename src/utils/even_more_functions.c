@@ -33,6 +33,9 @@ void	free_array(char **arr)
 	arr = NULL;
 }
 
+/**
+ * @brief Frees an array of fds of any size
+ */
 void	free_array_fd(int **fd)
 {
 	int	i;

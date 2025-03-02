@@ -96,17 +96,13 @@ void	handle_command(t_data *inp)
 
 	if (!ft_strchr(*inp->command, '/'))
 	{
-		// handle_quote();
 		if (search_builtins(*inp))
 			inp->ret_val = exec_builtin(inp);
-		else if (path_to_exec(*inp))
+		else if (path_to_exec(*inp))					//Needs freeing
 			inp->ret_val = fork_command(*inp);
 		else
 			return (printf("%s: command not found\n", *inp->command),
 				(void)(inp->ret_val = 127));
-		free_redir(inp);
-		free_commands(inp);
-		init_redir(inp);
 	}
 	else
 	{
@@ -117,24 +113,24 @@ void	handle_command(t_data *inp)
 			return (printf("%s: No such file or directory\n", *inp->command),
 				(void)(inp->ret_val = 127));
 	}
+	return (free_redir(inp), free_commands(inp), init_redir(inp));
 }
 
 /**
- * @brief Handles all execution, for both externals and builtins commands
+ * @brief Handles all execution, for both externals and builtin commands
  */
 void	execute_command(t_data *inp)
 {
-	int			sfd[2];
+	int	sfd[2];
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
 	if (inp->pipe.num_cmd != 1)
-		handle_pipes(inp);
+		inp->ret_val = handle_pipes(inp);
 	else
 	{
 		// print_data(*inp);
-		
-		if (process_fds(inp))					//  && quotes()
+		if (process_fds(inp))
 			handle_command(inp);
 		else
 			inp->ret_val = 1;
