@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/26 19:54:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:36:05 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ void	handle_command(t_data *inp)
 
 	if (!ft_strchr(*inp->command, '/'))
 	{
-		// handle_quote();
 		if (search_builtins(*inp))
 			inp->ret_val = exec_builtin(inp);
 		else if (path_to_exec(*inp))
@@ -104,19 +103,20 @@ void	handle_command(t_data *inp)
 		else
 			return (printf("%s: command not found\n", *inp->command),
 				(void)(inp->ret_val = 127));
-		free_redir(inp);
-		free_commands(inp);
-		init_redir(inp);
 	}
 	else
 	{
-		if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
-			return (printf("%s: is a directory\n", *inp->command),
-				(void)(inp->ret_val = 126));
+		if (stat(*inp->command, &info) == -1)
+		{
+			printf("%s: No such file or directory\n", *inp->command);
+			inp->ret_val = 126;
+		}
 		else
-			return (printf("%s: No such file or directory\n", *inp->command),
-				(void)(inp->ret_val = 127));
+			inp->ret_val = fork_command(*inp);
 	}
+	free_redir(inp);
+	free_commands(inp);
+	init_redir(inp);
 }
 
 /**
@@ -133,7 +133,6 @@ void	execute_command(t_data *inp)
 	else
 	{
 		// print_data(*inp);
-		
 		if (process_fds(inp))					//  && quotes()
 			handle_command(inp);
 		else

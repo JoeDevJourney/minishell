@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 17:02:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/03 18:57:55 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	setup_signals();
 	init_data(&inp, env);
+	update_shell_lvl(&inp);
 	printf("Welcome\n");
 	while (1)
 	{

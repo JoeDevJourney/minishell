@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/27 16:49:33 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/03 19:36:09 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ int				ft_strcmp(const char *s1, const char *s2);
 int				is_valid_identifier(const char *str);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
+void			update_shell_lvl(t_data *inp);
 
 // Quotes Utils
 void			add_command(t_list **list, const char *start, const char *end);

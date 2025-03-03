@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 14:53:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 20:01:42 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,31 @@ bool	valid_oper(char **str, char *dl)
 		free(ptr);
 	}
 	return (free_array(arr), 1);
+}
+
+void	update_shell_lvl(t_data *inp)
+{
+	int		lvl;
+	int		i;
+	char	*lvl_str;
+
+	lvl = 0;
+	i = 0;
+	while (inp->env[i] != NULL)
+	{
+		if (ft_strncmp(inp->env[i], "SHLVL", 6) == 0)
+		{
+			lvl = ft_atoi(inp->env[i] + 6);
+			break ;
+		}
+		i++;
+	}
+	lvl++;
+	if (lvl < 1)
+		lvl = 1;
+	lvl_str = ft_itoa(lvl);
+	if (!lvl_str)
+		return ;
+	update_env_var(&inp->env, "SHLVL", lvl_str);
+	free(lvl_str);
 }
