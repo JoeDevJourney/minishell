@@ -6,15 +6,18 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:31:49 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 13:22:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:13:50 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	exec_exit(char *cmd)
+/**
+ * @returns val
+ */
+int	exec_exit(char *val)
 {
-	if (!cmd)
+	if (!val)
 		exit(0);
-	exit(ft_atoi(cmd));
+	exit(ft_atoi(val));
 }

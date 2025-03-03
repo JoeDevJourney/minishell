@@ -6,42 +6,53 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/21 13:20:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:20:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	if (free_flag & 1)
+		free(s1);
+	if (free_flag & 2)
+		free(s2);
+	return (result);
+}
+
 /**
  * @brief Prompt
  */
-static char	*read_input(void)
+static char	*read_input(char **env)
 {
 	char	*str;
 	char	*prompt;
-	char	*temp;
+	char	*user;
+	char	*pwd;
 
-	temp = ft_strjoin(GRN, getenv("USER"));
-	prompt = ft_strdup(temp);
-	free(temp);
-	temp = ft_strjoin(prompt, "@");
-	free(prompt);
-	prompt = ft_strjoin(temp, rwd(getenv("PWD")));
-	free(temp);
-	temp = ft_strjoin(prompt, RST);
-	free(prompt);
-	prompt = ft_strjoin(temp, " % ");
+	user = get_env_val(env, "USER");
+	pwd = get_env_val(env, "PWD");
+	prompt = ft_strjoin3(GRN, user, " @ ");
+	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1, 1);
+	prompt = ft_strjoin_free(prompt, RST " % ", 1);
 	str = readline(prompt);
-	while (!*str)
+	while (str && !*str)
+	{
+		free(str);
 		str = readline(prompt);
-	add_history(str);
-	return (free(temp), free(prompt), str);
+	}
+	if (str)
+		add_history(str);
+	free(prompt);
+	return (str);
 }
 
 static void	init_data(t_data *inp, char **env)
 {
-	inp->env = NULL;
-	dupl_env(&inp->env, env);
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));
@@ -60,14 +71,13 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	init_redir(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.input = read_input();
-		if ((!ft_strncmp(inp.input, "exit\n", 4)) && ft_strlen(inp.input) == 4)
-			break ;
-		parse_logic(&inp);
+		inp.input = read_input(inp.env);
+		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
+			parse_logic(&inp);
+		free(inp.input);
 	}
 	free(inp.home_dir);
 	free(inp.input);

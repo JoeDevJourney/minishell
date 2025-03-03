@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_main.c                                      :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/13 13:26:26 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/03 13:20:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,22 @@ static void	sort_env_copy(char **copy, int size)
 
 static void	print_env_copy(char **copy)
 {
-	int	i;
+	int		i;
+	char	*value;
 
 	i = -1;
 	while (copy[++i])
 	{
-		printf("declare -x %s", copy[i]);
-		if (ft_strchr(copy[i], '='))
-			printf("\"%s\"", ft_strchr(copy[i], '=') + 1);
+		printf("declare -x ");
+		value = ft_strchr(copy[i], '=');
+		if (value)
+		{
+			printf("%.*s\"", (int)(value - copy[i] + 1), copy[i]);
+			value++;
+			printf("%s\"", value);
+		}
+		else
+			printf("%s", copy[i]);
 		printf("\n");
 	}
 }
@@ -63,49 +71,46 @@ static void	print_sorted_env(char **env)
 	ft_arrfree(copy);
 }
 
-static int	handle_export_arg(char **env, char *arg)
+/**
+ * @brief Creates/updates the env variable arg with the new value
+ * 
+ * @param value The new value
+ */
+static void	handle_export_arg(char **arg, char ***env)
 {
 	char	*name;
 	char	*value;
-	int		result;
+	// int		result;
 
-	value = ft_strchr(arg, '=');
+	value = ft_strchr(*arg, '=');
 	if (value)
 	{
-		name = ft_substr(arg, 0, value - arg);
+		name = ft_substr(*arg, 0, value - *arg);
 		value++;
 	}
 	else
 	{
-		name = ft_strdup(arg);
-		value = "";
+		name = ft_strdup(*arg);
+		value = NULL;
 	}
-	result = update_env_var(env, name, value);
+	update_env_var(env, name, value);
 	free(name);
-	return (result);
 }
 
-int	ft_export(char **env, char **args)
+int	ft_export(char ***env, char *cmd)
 {
-	int	i;
-	int	ret;
+	char	**arr;
+	char	**args;
 
-	if (!args[1])
-		return (print_sorted_env(env), 0);
-	ret = 0;
-	i = 1;
-	while (args[i])
-	{
-		if (!is_valid_identifier(args[i]))
-		{
-			ft_write_error("export: invalid identifier\n");
-			ret = 1;
-		}
-		else if (handle_export_arg(env, args[i]) != 0)
-			ret = 1;
-		i++;
-	}
-	return (ret);
+	arr = ft_split(cmd, ' ');
+	if (!arr)
+		return (perror("malloc error"), 1);
+	if (count_array_size(arr) == 1)
+		return (ft_arrfree(arr), print_sorted_env(*env), 0);
+	args = arr + 1;
+	expnd_quotes(&args, env, handle_export_arg);
+	ft_arrfree(arr);
+	return (0);
 }
 
 // #include <stdio.h>

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 11:26:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 19:35:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,9 @@ static void	trim_spaces(t_data *inp)
 /**
  * @brief Scans the input for any redirerction operators and saves them in the
  * appropriate array
+ * 
+ * @note (char *)inp->input: input command
+ * @note (char **)inp->command: output command
  */
 void	parse_redir(t_data *inp)
 {

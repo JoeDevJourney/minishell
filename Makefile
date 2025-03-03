@@ -9,14 +9,17 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c \
-		$(SRCDIR)/commands.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/quotes.c \
+		$(SRCDIR)/execution.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
 		\
 		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
 		\
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
-		# $(SRCDIR)/utils/export_utils.c
-		# $(SRCDIR)/utils/quote_utils.c
+		$(SRCDIR)/utils/quote_utils.c \
+		\
+		$(SRCDIR)/builtins/cd/cd.c $(SRCDIR)/builtins/cd/cd_utils.c $(SRCDIR)/builtins/cd/cd_utils2.c \
+		\
+		$(SRCDIR)/builtins/export.c $(SRCDIR)/utils/export_utils.c \
 
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
@@ -37,6 +40,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/builtins/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/utils/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/builtins/cd/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 12:54:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/26 19:52:43 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,20 @@ static int	var_index(char *cmd, char **env)
 
 int	exec_unset(char **cmd, char ***env)
 {
-	if (!*cmd)
+	int	i;
+
+	i = 0;
+	if (!cmd[i])
 		return (0);
-	if (**cmd == '-')
+	if (cmd[i][0] == '-')
 	{
-		if (ft_strncmp(*cmd, "-v", ft_strlen(*cmd)) && ft_strlen(*cmd) == 2)
-			return (printf("bash: unset: %s: invalid option\n", *cmd), 2);
-		cmd++;
+		if (ft_strncmp(cmd[i], "-v", ft_strlen(cmd[i]))
+			&& ft_strlen(cmd[i]) == 2)
+			return (printf("bash: unset: %s: invalid option\n", cmd[i]), 2);
+		i++;
 	}
-	while (*cmd)
-		remove_line(env, var_index(*cmd++, *env));
+	while (cmd[i])
+		remove_line(env, var_index(cmd[i++], *env));
 	return (0);
 }
 

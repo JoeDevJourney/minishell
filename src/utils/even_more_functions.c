@@ -6,29 +6,20 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/21 12:10:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:51:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	init_redir(t_data *inp)
+void	*safe_malloc(size_t size)
 {
-	inp->inp_op.cmd = NULL;
-	inp->inp_op.fd = NULL;
-	inp->inp_op.num_cmd = 0;
-	inp->app_op.cmd = NULL;
-	inp->app_op.fd = NULL;
-	inp->app_op.num_cmd = 0;
-	inp->out_op.cmd = NULL;
-	inp->out_op.fd = NULL;
-	inp->out_op.num_cmd = 0;
-	inp->hdoc_op.cmd = NULL;
-	inp->hdoc_op.fd = NULL;
-	inp->hdoc_op.num_cmd = 0;
-	inp->input = NULL;
-	inp->command = NULL;
-	errno = 0;
+	void	*ptr;
+
+	ptr = malloc(size);
+	if (!ptr)
+		exit_with_error("Memory allocation failed", EXIT_FAILURE);
+	return (ptr);
 }
 
 void	free_array(char **arr)
@@ -42,6 +33,9 @@ void	free_array(char **arr)
 	arr = NULL;
 }
 
+/**
+ * @brief Frees an array of fds of any size
+ */
 void	free_array_fd(int **fd)
 {
 	int	i;
@@ -119,5 +113,5 @@ void	print_data(t_data inp)
 	while (inp.command && *inp.command)
 		printf("'%s', ", *inp.command++);
 	printf("]\n\n");
-	// pause();
+	pause();
 }

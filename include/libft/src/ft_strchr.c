@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 12:50:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2024/12/12 14:13:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/02/27 10:28:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /**
  * @brief Searches for a char in a str and if found, it returns a pointer to
- * the first occurence
+ * the first occurence, otherwise NULL
  */
 char	*ft_strchr(const char *s, int c)
 {

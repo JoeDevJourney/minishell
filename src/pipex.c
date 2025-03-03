@@ -6,23 +6,44 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/21 13:22:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 13:14:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+static int	wait_n_free(t_data *inp, int *pid)
+{
+	int	status;
+	int	i;
+
+	i = -1;
+	while (++i < inp->pipe.num_cmd)
+		if (waitpid(pid[i], &status, 0) == -1)
+			exit_with_error("Child process failed", EXIT_FAILURE);
+	free_redir(inp);
+	free_commands(inp);
+	init_redir(inp);
+	free(pid);
+	free_array_fd(inp->pipe.fd);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (-1);
+}
+
 static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
 
-	oper->fd = safe_malloc(oper->num_cmd * sizeof(int *));
-	i = -1;
-	while (++i < oper->num_cmd - 1)
-		oper->fd[i] = safe_malloc(2 * sizeof(int));
-	i = -1;
-	while (++i < oper->num_cmd - 1)
+	oper->fd = safe_malloc((oper->num_cmd + 1) * sizeof(int *));
+	i = 0;
+	oper->fd[i] = safe_malloc(2 * sizeof(int));
+	oper->fd[i][0] = STDIN_FILENO;
+	oper->fd[i][1] = STDOUT_FILENO;
+	while (++i < oper->num_cmd)
 	{
+		oper->fd[i] = safe_malloc(2 * sizeof(int));
 		if (pipe(oper->fd[i]) == -1)
 		{
 			while (--i >= 0)
@@ -64,70 +85,50 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	if (!search_builtins(*inp))
 		exec_external(*inp);
 	else
-		exec_builtin(inp->command, &inp->env);
-	exit(0);
+		exec_builtin(inp);
 }
 
 /**
  * @brief Creates the child process for executing the command and makes
  * the parent wait for it to finish, before returning its value
  */
-static int	fork_pipe(pid_t pid, t_data *inp, int *old_fd, int *new_fd)
+static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 {
-	int	status;
+	int	pid;
 
-	process_fds(inp);
 	pid = fork();
 	if (pid == 0)
-		process_pipe_fds(inp, old_fd, new_fd);
-	else if (pid > 0)
 	{
-		if (waitpid(pid, &status, 0) == -1)
-			exit_with_error("Child process failed", EXIT_FAILURE);
-		free_redir(inp);
-		free_commands(inp);
-		init_redir(inp);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (-1);
+		if (!process_fds(inp))
+			exec_exit(0);
+		process_pipe_fds(inp, old_fd, new_fd);
 	}
-	else
-		perror("Fork failed");
-	return (free_commands(inp), 0);
+	return (pid);
 }
 
 /**
- * @brief Executes pipes when given the cmds stored as an array of str.
- * 
- * @param num Number of commands
- * @param cmd Commands broken down in an array of str
+ * @brief Executes pipe(s) when given the (char **) cmd(s).
  */
-void	handle_pipes(t_data *inp)
+int	handle_pipes(t_data *inp)
 {
 	t_data	inp_cpy;
 	pid_t	*pid;
-	int		fd;
 	int		i;
 
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
 	inp_cpy = *inp;
 	i = 0;
-	fd = STDOUT_FILENO;
-	fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i], &fd);
-	while (++i < inp_cpy.pipe.num_cmd - 1)
+	pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i + 1], &inp->pipe.fd[0][1]);
+	while (++i < inp_cpy.pipe.num_cmd)
 	{
-		close(inp->pipe.fd[i - 1][1]);
+		close(inp->pipe.fd[i][1]);
 		inp_cpy.pipe.cmd++;
-		fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], inp->pipe.fd[i]);
-		close(inp->pipe.fd[i - 1][0]);
+		if (i != inp_cpy.pipe.num_cmd - 1)
+			pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i], inp->pipe.fd[i + 1]);
+		else
+			pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i], &inp->pipe.fd[0][0]);
+		close(inp->pipe.fd[i][0]);
 	}
-	close(inp->pipe.fd[i - 1][1]);
-	inp_cpy.pipe.cmd++;
-	fd = STDIN_FILENO;
-	inp->ret_val = fork_pipe(pid[i], &inp_cpy, inp->pipe.fd[i - 1], &fd);
-	close(inp->pipe.fd[i - 1][0]);
-	free(pid);
-	free_array_fd(inp->pipe.fd);
+	return (wait_n_free(inp, pid));
 }
