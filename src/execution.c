@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/03 13:20:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:54:21 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void	handle_command(t_data *inp)
 
 	if (!ft_strchr(*inp->command, '/'))
 	{
+		// print_data(*inp);
 		if (search_builtins(*inp))
 			inp->ret_val = exec_builtin(inp);
 		else if (path_to_exec(*inp))					//Needs freeing

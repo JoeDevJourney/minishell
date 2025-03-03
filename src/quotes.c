@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/03 13:20:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:23:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,31 +103,5 @@ void	handle_quote(char **str, char **env, char quote)
 	else
 		single_quotes(str);
 }
-
-// search_quotes() ????
-
-// int	main(int argc, char **argv, char **env)
-// {
-// 	char *str;
-//
-// 	(void)argc;
-// 	(void)argv;
-// 	str = ft_strdup("\"Hello: $USER\\\" it going?\"");
-// 	printf("%s\n", str);
-// 	double_quotes(&str, env);
-// 	printf("%s\n\n", str);
-// 	free(str);
-// 	str = ft_strdup("'Hello: $USER  How\\\"s it going?\\'");
-// 	printf("%s\n", str);
-// 	single_quotes(&str);
-// 	printf("%s\n\n", str);
-// 	free(str);
-// 	// if (check_quotes(&inp))
-// 	// 	return (printf("Error: Quote still open.\n"), 0);
-
-// 	// handle_quotes(&inp);
-// 	// free_array(inp.pipe.cmd);
-// 	// free_array(inp.env);
-// }
 
 // cc quotes.c -o quotes utils/*.c builtins/env.c builtins/cd/cd_utils.c ../include/libft/src/*.c -Wall -Wextra -Werror -lreadline

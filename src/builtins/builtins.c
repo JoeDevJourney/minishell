@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/03 13:14:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:53:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	exec_builtin(t_data *inp)
 	else if (!ft_strncmp(*inp->command, "exit", 4)
 		&& ft_strlen(*inp->command) == 4)
 		return (exec_exit(inp->command[1]));
-	// return (1);
-	exit(1);
+	// return (exec_echo(&inp->pipe.cmd[0], inp->env));
+	return (0);
 }
 
 /**

@@ -20,6 +20,7 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/quotes.c \
 		$(SRCDIR)/builtins/cd/cd.c $(SRCDIR)/builtins/cd/cd_utils.c $(SRCDIR)/builtins/cd/cd_utils2.c \
 		\
 		$(SRCDIR)/builtins/export.c $(SRCDIR)/utils/export_utils.c \
+		# $(SRCDIR)/builtins/echo.c
 
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
