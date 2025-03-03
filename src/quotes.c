@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/03 18:23:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 20:04:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,9 @@ static void	double_quotes(char **str, char **env)
 	free(buffer);
 }
 
+/**
+ * @brief Takes the address of a string and expands it based on its quotes 
+ */
 void	handle_quote(char **str, char **env, char quote)
 {
 	check_open_quotes(str, quote);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/03 19:13:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/03 20:22:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,64 +70,22 @@ static bool	upper_check(char *str)
 	return (false);
 }
 
-static char	**parse_arguments(char *str)
+static void	parse_arguments(char *str, char **env)
 {
-	char **tokens = malloc(100 * sizeof(char *));
-	int token_count = 0;
-	int	i = -1;
-	int	len = strlen(str);
-	char buffer[1024];
-	int buf_index = 0;
-	char quote = 0;
+	char	**dq;
 
-	while (++i < len)
-	{
-		if (isspace(str[i]) && !quote)
-		{
-			if (buf_index > 0)
-			{
-				buffer[buf_index] = '\0';
-				tokens[token_count++] = strdup(buffer);
-				buf_index = 0;
-			}
-		}
-		else if (str[i] == '"' || str[i] == '\'')
-		{
-			if (quote == str[i])
-			{
-				buffer[buf_index++] = str[i];
-				quote = 0;
-			}
-			else if (quote == 0)
-			{
-				quote = str[i];
-				buffer[buf_index++] = str[i];
-			}
-			else
-				buffer[buf_index++] = str[i];
-		}
-		else
-			buffer[buf_index++] = str[i];
-	}
-	if (buf_index > 0)
-	{
-		buffer[buf_index] = '\0';
-		tokens[token_count++] = strdup(buffer);
-	}
-	tokens[token_count] = NULL;
-	return (tokens);
+	(void)env;
+	dq = ft_split(str, '"');
+	while (*dq)
+		printf("%s\n", *dq++);
+	pause();
 }
 
 int	exec_echo(char *str, char **env)
 {
 	bool	upper;
-	char	**arr;
 
-	(void)env;
-	arr = parse_arguments(str);
-	while (*arr)
-		printf("%s\n", *arr++);
-	pause();
+	parse_arguments(str, env);
 	if (upper_check(str))
 		upper = true;
 	else
@@ -140,13 +98,13 @@ int	exec_echo(char *str, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	int		res;
-	t_data	inp;
+	char	*str;
 
 	(void) argc;
+	str = join_cmd(++argv, "");
+	printf("%s\n", str); pause();
 	res = exec_echo(*++argv, env);
 	printf("\n-------------\nres: %d\n-------------\n\n", res);
-	free_array(inp.pipe.cmd);
-	free_array(inp.env);
 	return (0);
 }
 
