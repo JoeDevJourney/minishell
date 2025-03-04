@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 11:54:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:20:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,25 +84,12 @@ void	expnd_quotes(char ***arr, char ***env, void (*f)(char **, char ***))
 		if (ft_strchr((*arr)[i], '"')
 			|| (!ft_strchr((*arr)[i], '"') && !ft_strchr((*arr)[i], '\'')))
 			handle_quote(&(*arr)[i], *env, '"');
-		else if (ft_strchr((*arr)[i], '\''))
+		if (ft_strchr((*arr)[i], '\''))
 			handle_quote(&(*arr)[i], *env, '\'');
 		if (f)
 			f(&(*arr)[i], env);
 		i++;
 	}
 }
-
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	char *str = ft_strdup("Hello $PWD malaka!");
-
-// 	(void)argc;
-// 	(void)argv;
-// 	printf("\nbefore: '%s'\n", str);
-// 	expansion_oper(env, &str);
-// 	printf("after: '%s'\n\n", str);
-// 	free(str);
-// }
 
 // cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

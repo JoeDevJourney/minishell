@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 14:58:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:20:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,26 @@ static int	count_tokens(char *str)
  */
 static void	quoted_token(char **str, char **arr, int *i)
 {
-	char	quote;
 	int		len;
+	bool	open_sq;
+	bool	open_dq;
 
-	len = 1;
-	quote = *(*str + *i);
-	while ((*str)[++*i])
+	len = 0;
+	open_sq = false;
+	open_dq = false;
+	while (1)
 	{
-		len++;
-		if ((*str)[*i] == quote &&
-			((*str)[*i + 1] == ' ' || (*str)[*i + 1] == '\0'))
+		if ((*str)[*i] == '"' && !open_sq)
+			open_dq = !open_dq;
+		if ((*str)[*i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+		if (((*str)[*i] == ' ' && !open_dq && !open_sq) || (*str)[*i] == '\0')
 			break ;
+		(*i)++;
+		len++;
 	}
 	*arr = safe_malloc(len + 1);
-	ft_strlcpy(*arr, *str + *i - len + 1, len + 1);
+	ft_strlcpy(*arr, *str + *i - len, len + 1);
 }
 
 /**
@@ -68,14 +74,14 @@ static void	unquoted_token(char **str, char **arr, int *i)
 	{
 		if ((*str)[*i] == ' ' || (*str)[*i] == '\0')
 			break ;
-		len++;
 		(*i)++;
+		len++;
 	}
 	*arr = safe_malloc(len + 1);
 	ft_strlcpy(*arr, *str + *i - len, len + 1);
 }
 
-void	parse_command(t_data *inp)
+static void	tokenize(t_data *inp)
 {
 	int		word_i;
 	int		i;
@@ -96,4 +102,11 @@ void	parse_command(t_data *inp)
 			break ;
 	}
 	inp->command[++word_i] = NULL;
+}
+
+void	parse_command(t_data *inp)
+{
+	tokenize(inp);
+	expnd_quotes(&inp->command, &inp->env, NULL);
+	print_data(*inp);
 }

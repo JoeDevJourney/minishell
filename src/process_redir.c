@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 13:27:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 16:06:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ bool	process_fds(t_data *inp)
 
 	parse_redir(inp);
 	expand_redir(inp);
-	// print_data(*inp);
 	parse_command(inp);
+	// print_data(*inp);
 	i = -1;
 	res = true;
 	while (inp->input[++i] && res)

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/03 13:20:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:40:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ static void	handle_export_arg(char **arg, char ***env)
 {
 	char	*name;
 	char	*value;
-	// int		result;
 
 	value = ft_strchr(*arg, '=');
 	if (value)
