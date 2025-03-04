@@ -6,27 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/03 20:10:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:54:48 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-char	*ft_strncpy(char *dst, const char *src, size_t len)
-{
-	if (len == 0 || *src == '\0')
-	{
-		if (len > 0)
-			*dst = '\0';
-		return (dst);
-	}
-	else
-	{
-		*dst = *src;
-		ft_strncpy(dst + 1, src + 1, len - 1);
-	}
-	return (dst);
-}
 
 /**
  * @brief Merges the strings of an arr back together, separated by the del

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/03 20:38:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:50:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ void	execute_command(t_data *inp)
 		inp->ret_val = handle_pipes(inp);
 	else
 	{
-		// print_data(*inp);
 		if (process_fds(inp))
 			handle_command(inp);
 		else

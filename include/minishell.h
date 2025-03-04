@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/03 18:36:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:59:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void			handle_command(t_data *inp);
 bool			process_fds(t_data *inp);
 void			parse_redir(t_data *inp);
 void			parse_logic(t_data *inp);
+void			parse_command(t_data *inp);
 void			handle_quote(char **arr, char **env, char quote);
 void			check_open_quotes(char **str, char quote);
 void			expand_redir(t_data *inp);
