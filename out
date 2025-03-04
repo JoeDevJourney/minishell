@@ -1,7 +1,0 @@
-total 344
--rw-r--r--   1 dchrysov  2024_heilbronn    2029 Mar  4 16:29 Makefile
-drwxr-xr-x   4 dchrysov  2024_heilbronn     136 Mar  3 13:13 include
--rwxr-xr-x   1 dchrysov  2024_heilbronn  169312 Mar  4 20:14 minishell
-drwxr-xr-x  25 dchrysov  2024_heilbronn     850 Mar  4 20:14 obj
--rw-r--r--   1 dchrysov  2024_heilbronn       0 Mar  4 20:14 out
-drwxr-xr-x  12 dchrysov  2024_heilbronn     408 Mar  3 13:21 src
