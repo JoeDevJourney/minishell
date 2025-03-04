@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/27 18:18:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 17:58:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void	parse_logic(t_data *inp)
 	free(inp->input);
 	execute_and_chain(inp);
 	free_array(inp->and.cmd);
-	printf("---------------\nret: %d\n---------------\n", inp->ret_val);
+	// printf("---------------\nret: %d\n---------------\n", inp->ret_val);
 }

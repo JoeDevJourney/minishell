@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 12:01:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:15:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,10 @@ void	parse_redir(t_data *inp)
 	int		i;
 	int		j;
 
-	inp->input = ft_strdup(*inp->pipe.cmd);
 	init_lists_and_del(inp, lists, del);
 	j = -1;
 	while (++j < 4)
-		split_and_store(inp->pipe.cmd, lists[j], del[j]);
+		split_and_store(&inp->input, lists[j], del[j]);
 	i = -1;
 	while (++i < 4)
 	{
@@ -151,5 +150,6 @@ void	parse_redir(t_data *inp)
 		}
 	}
 	trim_spaces(inp);
-	// inp->command = ft_split(*inp->pipe.cmd, ' ');
+	parse_command(inp);
+	expand_redir(inp);
 }

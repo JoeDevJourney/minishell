@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/03 13:20:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:27:27 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int	main(int argc, char **argv, char **env)
 		inp.input = read_input(inp.env);
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);
-		free(inp.input);
 	}
 	free(inp.home_dir);
 	free(inp.input);

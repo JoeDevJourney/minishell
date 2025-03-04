@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 15:40:49 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:37:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ bool	valid_oper(char **str, char *dl)
 void	expand_redir(t_data *inp)
 {
 	if (inp->inp_op.cmd && *inp->inp_op.cmd)
-		expnd_quotes(&inp->inp_op.cmd, &inp->env, NULL);
+		expnd_quotes(inp->inp_op.cmd, &inp->env, NULL);
 	if (inp->out_op.cmd && *inp->out_op.cmd)
-		expnd_quotes(&inp->out_op.cmd, &inp->env, NULL);
+		expnd_quotes(inp->out_op.cmd, &inp->env, NULL);
 	if (inp->app_op.cmd && *inp->app_op.cmd)
-		expnd_quotes(&inp->app_op.cmd, &inp->env, NULL);
+		expnd_quotes(inp->app_op.cmd, &inp->env, NULL);
 	// if (inp->hdoc_op.cmd && *inp->hdoc_op.cmd)
 	// 	expnd_quotes(&inp->hdoc_op.cmd, &inp->env, expansion_oper);
 }

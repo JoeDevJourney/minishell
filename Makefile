@@ -13,6 +13,7 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/quotes.c \
 		$(SRCDIR)/execution.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
 		\
 		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
+		$(SRCDIR)/builtins/echo.c \
 		\
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
 		$(SRCDIR)/utils/quote_utils.c $(SRCDIR)/utils/parse_command.c \
@@ -20,7 +21,6 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/quotes.c \
 		$(SRCDIR)/builtins/cd/cd.c $(SRCDIR)/builtins/cd/cd_utils.c $(SRCDIR)/builtins/cd/cd_utils2.c \
 		\
 		$(SRCDIR)/builtins/export.c $(SRCDIR)/utils/export_utils.c \
-		# $(SRCDIR)/builtins/echo.c
 
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))

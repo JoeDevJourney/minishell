@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 16:20:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:34:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,26 +70,20 @@ void	check_open_quotes(char **str, char quote)
 
 /**
  * @brief Takes input the address of an arr, goes through all of its strings,
- * looking for quotes, executing the appropriate f in every case.
+ * looking for quotes, expanding and executing the appropriate f in every case.
  */
-void	expnd_quotes(char ***arr, char ***env, void (*f)(char **, char ***))
+void	expnd_quotes(char **arr, char ***env, void (*f)(char **, char ***))
 {
 	int	i;
 
 	i = 0;
-	if (!(*arr)[i])
+	if (!*arr)
 		return ;
-	while ((*arr)[i])
-	{
-		if (ft_strchr((*arr)[i], '"')
-			|| (!ft_strchr((*arr)[i], '"') && !ft_strchr((*arr)[i], '\'')))
-			handle_quote(&(*arr)[i], *env, '"');
-		if (ft_strchr((*arr)[i], '\''))
-			handle_quote(&(*arr)[i], *env, '\'');
-		if (f)
-			f(&(*arr)[i], env);
-		i++;
-	}
+	handle_quote(arr, *env, '"');
+	handle_quote(arr, *env, '\'');
+	if (f)
+		f(arr, env);
+	i++;
 }
 
 // cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

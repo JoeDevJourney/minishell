@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 16:06:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:50:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ static bool	hdoc_oper(t_data *inp)
 		ft_putendl_fd(input, *inp->hdoc_op.fd[1]);
 		free(input);
 	}
-	close(*inp->hdoc_op.fd[1]);
-	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	if (!inp->hdoc_op.cmd[++i])
 		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
+	close(*inp->hdoc_op.fd[1]);
+	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	close(*inp->hdoc_op.fd[1]);
 	free(input);
 	free(hdoc);
@@ -128,23 +128,21 @@ bool	process_fds(t_data *inp)
 	bool	res;
 
 	parse_redir(inp);
-	expand_redir(inp);
-	parse_command(inp);
-	// print_data(*inp);
+	print_data(*inp);
 	i = -1;
 	res = true;
-	while (inp->input[++i] && res)
+	while ((*inp->pipe.cmd)[++i] && res)
 	{
-		if (inp->input[i] == '<')
+		if ((*inp->pipe.cmd)[i] == '<')
 		{
-			if (inp->input[++i] == '<')
+			if ((*inp->pipe.cmd)[++i] == '<')
 				res = hdoc_oper(inp);
 			else
 				res = inp_oper(inp);
 		}
-		else if (inp->input[i] == '>')
+		else if ((*inp->pipe.cmd)[i] == '>')
 		{
-			if (inp->input[++i] == '>')
+			if ((*inp->pipe.cmd)[++i] == '>')
 				res = app_oper(inp);
 			else
 				res = out_oper(inp);

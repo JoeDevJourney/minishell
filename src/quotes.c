@@ -6,32 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 16:17:49 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:31:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-/**
- * @brief Replaces original str after trimming the quote   
- */
-static void	trim_quotes(char **str, char quote)
-{
-	char	**tok;
-	char	**trim;
-	int		i;
-
-	tok = ft_split(*str, '=');
-	trim = safe_malloc((count_array_size(tok) + 1) * sizeof(char *));
-	i = -1;
-	while (tok[++i])
-		trim[i] = ft_strdup(ft_strtrim(tok[i], &quote));
-	trim[i] = NULL;
-	free(*str);
-	*str = join_cmd(trim, "=");
-	free_array(tok);
-	free_array(trim);
-}
 
 static void	extract_env_value(char *src, char **dst, int *src_i, int *dst_i, char **env)
 {
@@ -103,15 +82,14 @@ void	handle_quote(char **str, char **env, char quote)
 	int		i;
 
 	check_open_quotes(str, quote);
-	trim_quotes(str, quote);
 	arr = ft_split(*str, quote);
 	i = -1;
 	while (arr[++i])
 	{
 		if (quote == '"')
-			double_quotes(str, env);
+			double_quotes(&arr[i], env);
 		else
-			single_quotes(str);
+			single_quotes(&arr[i]);
 	}
 	free(*str);
 	*str = join_cmd(arr, "");

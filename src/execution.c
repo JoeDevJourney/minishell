@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 15:26:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:52:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,31 +90,31 @@ static int	fork_command(t_data inp)
 /**
  * @brief Checks the input if it's a valid command or a valid directory
  */
-void	handle_command(t_data *inp)
+static int	handle_command(t_data *inp)
 {
 	struct stat	info;
 
-	if (!ft_strchr(*inp->command, '/'))
+	inp->input = ft_strdup(*inp->pipe.cmd);
+	if (process_fds(inp))
 	{
-		// print_data(*inp);
-		if (search_builtins(*inp))
-			inp->ret_val = exec_builtin(inp);
-		else if (path_to_exec(*inp))					//Needs freeing
-			inp->ret_val = fork_command(*inp);
+		if (!ft_strchr(*inp->command, '/'))
+		{
+			if (search_builtins(*inp))
+				return (exec_builtin(inp));
+			else if (path_to_exec(*inp))								//Needs freeing
+				return (fork_command(*inp));
+			return (printf("%s: command not found\n", *inp->command), 127);
+		}
 		else
-			return (printf("%s: command not found\n", *inp->command),
-				(void)(inp->ret_val = 127));
+		{
+			if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
+				return (printf("%s: is a directory\n", *inp->command), 126);
+			return (printf("%s: No such file or directory\n", *inp->command),
+				127);
+		}
 	}
 	else
-	{
-		if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
-			return (printf("%s: is a directory\n", *inp->command),
-				(void)(inp->ret_val = 126));
-		else
-			return (printf("%s: No such file or directory\n", *inp->command),
-				(void)(inp->ret_val = 127));
-	}
-	return (free_redir(inp), free_commands(inp), init_redir(inp));
+		return (free_redir(inp), free_commands(inp), init_redir(inp), 1);
 }
 
 /**
@@ -129,12 +129,10 @@ void	execute_command(t_data *inp)
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = handle_pipes(inp);
 	else
-	{
-		if (process_fds(inp))
-			handle_command(inp);
-		else
-			inp->ret_val = 1;
-	}
+		inp->ret_val = handle_command(inp);
+	free_redir(inp);
+	free_commands(inp);
+	init_redir(inp);
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);

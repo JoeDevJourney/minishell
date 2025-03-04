@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 11:59:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 19:19:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ typedef struct s_list
 int				handle_pipes(t_data *inp);
 void			execute_command(t_data *inp);
 void			exec_external(t_data inp);
-void			handle_command(t_data *inp);
 
 //	Operators
 bool			process_fds(t_data *inp);
@@ -113,7 +112,7 @@ void			parse_command(t_data *inp);
 void			handle_quote(char **arr, char **env, char quote);
 void			check_open_quotes(char **str, char quote);
 void			expand_redir(t_data *inp);
-void			expnd_quotes(char ***str, char ***env,
+void			expnd_quotes(char **str, char ***env,
 					void (*f)(char **, char ***));
 
 //	Builtins
@@ -123,12 +122,12 @@ int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(char **cmd);
 int				exec_exit(char *cmd);
-int				exec_echo(char *str, char **env);
+int				exec_echo(char **str);
 int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char ***env, char *args);
+int				ft_export(char *cmd, char ***env);
 int				ft_cd(char ***env, char **args);
 char			*create_env_entry(const char *name, const char *value);
 int				replace_env_var(char **env, const char *name, char *new_entry);

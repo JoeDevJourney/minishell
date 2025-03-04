@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 15:40:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:59:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	handle_export_arg(char **arg, char ***env)
 	free(name);
 }
 
-int	ft_export(char ***env, char *cmd)
+int	ft_export(char *cmd, char ***env)
 {
 	char	**arr;
 	char	**args;
@@ -107,7 +107,7 @@ int	ft_export(char ***env, char *cmd)
 	if (count_array_size(arr) == 1)
 		return (ft_arrfree(arr), print_sorted_env(*env), 0);
 	args = arr + 1;
-	expnd_quotes(&args, env, handle_export_arg);
+	expnd_quotes(args, env, handle_export_arg);
 	ft_arrfree(arr);
 	return (0);
 }

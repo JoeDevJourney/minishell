@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/03 13:14:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:55:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ static int	wait_n_free(t_data *inp, int *pid)
 	while (++i < inp->pipe.num_cmd)
 		if (waitpid(pid[i], &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
-	free_redir(inp);
-	free_commands(inp);
-	init_redir(inp);
 	free(pid);
 	free_array_fd(inp->pipe.fd);
 	if (WIFEXITED(status))
@@ -95,14 +92,24 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 {
 	int	pid;
+	// int	sfd[2];
 
+	// sfd[0] = dup(STDIN_FILENO);
+	// sfd[1] = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
 	{
+		if (inp->input)
+			free(inp->input);
+		inp->input = ft_strdup(*inp->pipe.cmd);
 		if (!process_fds(inp))
 			exec_exit(0);
 		process_pipe_fds(inp, old_fd, new_fd);
 	}
+	// dup2(sfd[0], STDIN_FILENO);
+	// dup2(sfd[1], STDOUT_FILENO);
+	// close(sfd[0]);
+	// close(sfd[1]);
 	return (pid);
 }
 
@@ -111,24 +118,24 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
  */
 int	handle_pipes(t_data *inp)
 {
-	t_data	inp_cpy;
+	t_data	ptr;
 	pid_t	*pid;
 	int		i;
 
 	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
-	inp_cpy = *inp;
+	ptr = *inp;
 	i = 0;
-	pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i + 1], &inp->pipe.fd[0][1]);
-	while (++i < inp_cpy.pipe.num_cmd)
+	pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i + 1], &ptr.pipe.fd[0][1]);
+	while (++i < ptr.pipe.num_cmd)
 	{
-		close(inp->pipe.fd[i][1]);
-		inp_cpy.pipe.cmd++;
-		if (i != inp_cpy.pipe.num_cmd - 1)
-			pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i], inp->pipe.fd[i + 1]);
+		close(ptr.pipe.fd[i][1]);
+		ptr.pipe.cmd++;
+		if (i != ptr.pipe.num_cmd - 1)
+			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], ptr.pipe.fd[i + 1]);
 		else
-			pid[i] = fork_pipe(&inp_cpy, inp->pipe.fd[i], &inp->pipe.fd[0][0]);
-		close(inp->pipe.fd[i][0]);
+			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], &ptr.pipe.fd[0][0]);
+		close(ptr.pipe.fd[i][0]);
 	}
-	return (wait_n_free(inp, pid));
+	return (wait_n_free(&ptr, pid));
 }
