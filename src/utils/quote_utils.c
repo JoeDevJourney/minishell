@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 18:34:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:32:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,10 @@ void	check_open_quotes(char **str, char quote)
  */
 void	expnd_quotes(char **arr, char ***env, void (*f)(char **, char ***))
 {
-	int	i;
-
-	i = 0;
-	if (!*arr)
-		return ;
 	handle_quote(arr, *env, '"');
 	handle_quote(arr, *env, '\'');
 	if (f)
 		f(arr, env);
-	i++;
 }
 
 // cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

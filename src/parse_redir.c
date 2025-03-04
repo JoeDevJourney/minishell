@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 20:15:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:41:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ static void	trim_spaces(t_data *inp)
  * @brief Scans the input for any redirerction operators and saves them in the
  * appropriate array
  * 
- * @note (char *)inp->input: input command
- * @note (char **)inp->command: output command
+ * @note (char *)inp->cmd: input command
+ * @note (char **)inp->tok: output command
  */
 void	parse_redir(t_data *inp)
 {
@@ -136,7 +136,7 @@ void	parse_redir(t_data *inp)
 	init_lists_and_del(inp, lists, del);
 	j = -1;
 	while (++j < 4)
-		split_and_store(&inp->input, lists[j], del[j]);
+		split_and_store(&inp->cmd, lists[j], del[j]);
 	i = -1;
 	while (++i < 4)
 	{
@@ -150,6 +150,9 @@ void	parse_redir(t_data *inp)
 		}
 	}
 	trim_spaces(inp);
-	parse_command(inp);
 	expand_redir(inp);
+	expnd_quotes(&inp->cmd, &inp->env, NULL);
+	print_data(*inp);
+	parse_command(inp);
+	print_data(*inp);
 }

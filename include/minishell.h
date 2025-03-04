@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 19:19:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ typedef struct s_data
 {
 	char			*home_dir;
 	char			**env;
-	char			*input;
-	char			**command;
+	char			*cmd;
+	char			**tok;
 	t_logical_op	and;
 	t_logical_op	or;
 	t_redir_op		pipe;

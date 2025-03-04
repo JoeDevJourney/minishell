@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 18:59:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@
  */
 int	exec_builtin(t_data *inp)
 {
-	if (!ft_strncmp(*inp->command, "env", 3) && ft_strlen(*inp->command) == 3)
+	if (!ft_strncmp(*inp->tok, "env", 3) && ft_strlen(*inp->tok) == 3)
 		return (exec_env(inp->env));
-	else if (!ft_strncmp(*inp->command, "pwd", 3)
-		&& ft_strlen(*inp->command) == 3)
-		return (exec_pwd(inp->command));
-	else if (!ft_strncmp(*inp->command, "cd", 2)
-		&& ft_strlen(*inp->command) == 2)
-		return (ft_cd(&inp->env, inp->command));
-	else if (!ft_strncmp(*inp->command, "export", 6)
-		&& ft_strlen(*inp->command) == 6)
+	else if (!ft_strncmp(*inp->tok, "pwd", 3)
+		&& ft_strlen(*inp->tok) == 3)
+		return (exec_pwd(inp->tok));
+	else if (!ft_strncmp(*inp->tok, "cd", 2)
+		&& ft_strlen(*inp->tok) == 2)
+		return (ft_cd(&inp->env, inp->tok));
+	else if (!ft_strncmp(*inp->tok, "export", 6)
+		&& ft_strlen(*inp->tok) == 6)
 		return (ft_export(inp->pipe.cmd[0], &inp->env));
-	else if (!ft_strncmp(*inp->command, "unset", 5)
-		&& ft_strlen(*inp->command) == 5)
-		return (exec_unset(inp->command + 1, &inp->env));
-	else if (!ft_strncmp(*inp->command, "exit", 4)
-		&& ft_strlen(*inp->command) == 4)
-		return (exec_exit(inp->command[1]));
-	return (exec_echo(inp->command));
+	else if (!ft_strncmp(*inp->tok, "unset", 5)
+		&& ft_strlen(*inp->tok) == 5)
+		return (exec_unset(inp->tok + 1, &inp->env));
+	else if (!ft_strncmp(*inp->tok, "exit", 4)
+		&& ft_strlen(*inp->tok) == 4)
+		return (exec_exit(inp->tok[1]));
+	return (exec_echo(inp->tok));
 	return (0);
 }
 
@@ -53,7 +53,7 @@ bool	search_builtins(t_data inp)
 	char			*obj;
 	char			*path;
 
-	obj = ft_strjoin(*inp.command, ".o");
+	obj = ft_strjoin(*inp.tok, ".o");
 	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
 	if (!builtins_dir)

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 18:31:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:27:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ void	handle_quote(char **str, char **env, char quote)
 	i = -1;
 	while (arr[++i])
 	{
-		if (quote == '"')
-			double_quotes(&arr[i], env);
-		else
+		if (quote == '\'')
 			single_quotes(&arr[i]);
+		else
+			double_quotes(&arr[i], env);
 	}
 	free(*str);
 	*str = join_cmd(arr, "");

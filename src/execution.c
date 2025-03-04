@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 20:52:35 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static char	*path_to_exec(t_data inp)
 		entry = readdir(dir);
 		while (entry)
 		{
-			if (!ft_strncmp(*inp.command, entry->d_name, ft_strlen(*inp.command))
-				&& entry->d_name[ft_strlen(*inp.command)] == '\0')
+			if (!ft_strncmp(*inp.tok, entry->d_name, ft_strlen(*inp.tok))
+				&& entry->d_name[ft_strlen(*inp.tok)] == '\0')
 				return (closedir(dir), path[i]);
 			entry = readdir(dir);
 		}
@@ -54,12 +54,12 @@ void	exec_external(t_data inp)
 	char	*full_path;
 
 	dir = ft_strjoin(path_to_exec(inp), "/");
-	full_path = ft_strjoin(dir, *inp.command);
-	free(*inp.command);
-	*inp.command = ft_strdup(full_path);
+	full_path = ft_strjoin(dir, *inp.tok);
+	free(*inp.tok);
+	*inp.tok = ft_strdup(full_path);
 	free(full_path);
 	free(dir);
-	execve(*inp.command, inp.command, inp.env);
+	execve(*inp.tok, inp.tok, inp.env);
 }
 
 /**
@@ -94,22 +94,22 @@ static int	handle_command(t_data *inp)
 {
 	struct stat	info;
 
-	inp->input = ft_strdup(*inp->pipe.cmd);
+	inp->cmd = ft_strdup(*inp->pipe.cmd);
 	if (process_fds(inp))
 	{
-		if (!ft_strchr(*inp->command, '/'))
+		if (!ft_strchr(*inp->tok, '/'))
 		{
 			if (search_builtins(*inp))
 				return (exec_builtin(inp));
 			else if (path_to_exec(*inp))								//Needs freeing
 				return (fork_command(*inp));
-			return (printf("%s: command not found\n", *inp->command), 127);
+			return (printf("%s: command not found\n", *inp->tok), 127);
 		}
 		else
 		{
-			if (stat(*inp->command, &info) == 0 && S_ISDIR(info.st_mode))
-				return (printf("%s: is a directory\n", *inp->command), 126);
-			return (printf("%s: No such file or directory\n", *inp->command),
+			if (stat(*inp->tok, &info) == 0 && S_ISDIR(info.st_mode))
+				return (printf("%s: is a directory\n", *inp->tok), 126);
+			return (printf("%s: No such file or directory\n", *inp->tok),
 				127);
 		}
 	}

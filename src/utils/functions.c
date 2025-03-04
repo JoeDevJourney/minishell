@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 18:37:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	init_redir(t_data *inp)
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.fd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	inp->input = NULL;
-	inp->command = NULL;
+	inp->cmd = NULL;
+	inp->tok = NULL;
 	errno = 0;
 }
 

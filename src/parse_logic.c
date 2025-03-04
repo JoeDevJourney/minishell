@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 17:58:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:14:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ static void	execute_and_chain(t_data *inp)
 
 void	parse_logic(t_data *inp)
 {
-	inp->and.cmd = ft_split2(inp->input, "&&");
-	inp->and.num_cmd = count_substr(inp->input, "&&");
-	free(inp->input);
+	inp->and.cmd = ft_split2(inp->cmd, "&&");
+	inp->and.num_cmd = count_substr(inp->cmd, "&&");
+	free(inp->cmd);
 	execute_and_chain(inp);
 	free_array(inp->and.cmd);
 	// printf("---------------\nret: %d\n---------------\n", inp->ret_val);

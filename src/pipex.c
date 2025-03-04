@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 20:55:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:14:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (inp->input)
-			free(inp->input);
-		inp->input = ft_strdup(*inp->pipe.cmd);
+		if (inp->cmd)
+			free(inp->cmd);
+		inp->cmd = ft_strdup(*inp->pipe.cmd);
 		if (!process_fds(inp))
 			exec_exit(0);
 		process_pipe_fds(inp, old_fd, new_fd);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 19:52:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:16:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ void	free_array_fd(int **fd)
 
 void	free_commands(t_data *inp)
 {
-	if (inp->input && *inp->input)
-		free(inp->input);
-	if (inp->command && *inp->command)
-		free_array(inp->command);
+	if (inp->cmd && *inp->cmd)
+		free(inp->cmd);
+	if (inp->tok && *inp->tok)
+		free_array(inp->tok);
 }
 
 void	free_redir(t_data *inp)
@@ -92,7 +92,6 @@ void	print_data(t_data inp)
 	while (inp.pipe.cmd && *inp.pipe.cmd)
 		printf("'%s', ", *inp.pipe.cmd++);
 	printf("]\n");
-	printf("input: '%s'\n", inp.input);
 	printf("hdoc[%d]: [", inp.hdoc_op.num_cmd);
 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
 		printf("'%s', ", *inp.hdoc_op.cmd++);
@@ -109,9 +108,10 @@ void	print_data(t_data inp)
 	while (inp.app_op.cmd && *inp.app_op.cmd)
 		printf("'%s', ", *inp.app_op.cmd++);
 	printf("]\n");
-	printf("command[%zu]: [", count_array_size(inp.command));
-	while (inp.command && *inp.command)
-		printf("'%s', ", *inp.command++);
+	printf("cmd: '%s'\n", inp.cmd);
+	printf("tok[%zu]: [", count_array_size(inp.tok));
+	while (inp.tok && *inp.tok)
+		printf("'%s', ", *inp.tok++);
 	printf("]\n\n");
 	// pause();
 }

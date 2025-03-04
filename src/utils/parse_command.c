@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 20:00:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:44:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	count_tokens(char *str)
 }
 
 /**
- * @brief It uses ' ' or '\0' to extract the quoted substring, quotes including,
+ * @brief It uses ' ' or '\0' to extract the quoted substring, quotes included,
  * from str and saves it as an individual token to the arr.
  */
 static void	quoted_token(char **str, char **arr, char **env, int *i)
@@ -46,7 +46,7 @@ static void	quoted_token(char **str, char **arr, char **env, int *i)
 	len = 0;
 	open_sq = false;
 	open_dq = false;
-	printf("%s\n", *str); pause();
+	(void)env;
 	while (1)
 	{
 		if ((*str)[*i] == '"' && !open_sq)
@@ -60,7 +60,7 @@ static void	quoted_token(char **str, char **arr, char **env, int *i)
 	}
 	*arr = safe_malloc(len + 1);
 	ft_strlcpy(*arr, *str + *i - len, len + 1);
-	expnd_quotes(arr, &env, NULL);
+	// expnd_quotes(arr, &env, NULL);
 }
 
 /**
@@ -71,6 +71,7 @@ static void	unquoted_token(char **str, char **arr, char **env, int *i)
 {
 	int	len;
 
+	(void)env;
 	len = 0;
 	while (1)
 	{
@@ -81,7 +82,7 @@ static void	unquoted_token(char **str, char **arr, char **env, int *i)
 	}
 	*arr = safe_malloc(len + 1);
 	ft_strlcpy(*arr, *str + *i - len, len + 1);
-	expnd_quotes(arr, &env, NULL);
+	// expnd_quotes(arr, &env, NULL);
 }
 
 void	parse_command(t_data *inp)
@@ -89,20 +90,20 @@ void	parse_command(t_data *inp)
 	int		word_i;
 	int		i;
 
-	inp->command = safe_malloc((count_tokens(inp->input) + 1)
+	inp->tok = safe_malloc((count_tokens(inp->cmd) + 1)
 			* sizeof(char *));
 	word_i = -1;
 	i = -1;
-	while (inp->input[++i])
+	while (inp->cmd[++i])
 	{
-		while (inp->input[i] == ' ')
+		while (inp->cmd[i] == ' ')
 			i++;
-		if (inp->input[i] == '"' || inp->input[i] == '\'')
-			quoted_token(&inp->input, &inp->command[++word_i], inp->env, &i);
+		if (inp->cmd[i] == '"' || inp->cmd[i] == '\'')
+			quoted_token(&inp->cmd, &inp->tok[++word_i], inp->env, &i);
 		else
-			unquoted_token(&inp->input, &inp->command[++word_i], inp->env, &i);
-		if (inp->input[i] == '\0')
+			unquoted_token(&inp->cmd, &inp->tok[++word_i], inp->env, &i);
+		if (inp->cmd[i] == '\0')
 			break ;
 	}
-	inp->command[++word_i] = NULL;
+	inp->tok[++word_i] = NULL;
 }
