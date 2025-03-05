@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 18:59:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 12:43:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,25 +76,25 @@ static void	print_sorted_env(char **env)
  * 
  * @param value The new value
  */
-static void	handle_export_arg(char **arg, char ***env)
-{
-	char	*name;
-	char	*value;
+// static void	handle_export_arg(char **arg, char ***env)
+// {
+// 	char	*name;
+// 	char	*value;
 
-	value = ft_strchr(*arg, '=');
-	if (value)
-	{
-		name = ft_substr(*arg, 0, value - *arg);
-		value++;
-	}
-	else
-	{
-		name = ft_strdup(*arg);
-		value = NULL;
-	}
-	update_env_var(env, name, value);
-	free(name);
-}
+// 	value = ft_strchr(*arg, '=');
+// 	if (value)
+// 	{
+// 		name = ft_substr(*arg, 0, value - *arg);
+// 		value++;
+// 	}
+// 	else
+// 	{
+// 		name = ft_strdup(*arg);
+// 		value = NULL;
+// 	}
+// 	update_env_var(env, name, value);
+// 	free(name);
+// }
 
 int	ft_export(char *cmd, char ***env)
 {
@@ -107,7 +107,7 @@ int	ft_export(char *cmd, char ***env)
 	if (count_array_size(arr) == 1)
 		return (ft_arrfree(arr), print_sorted_env(*env), 0);
 	args = arr + 1;
-	expnd_quotes(args, env, handle_export_arg);
+	// expnd_quotes(args, env, handle_export_arg);
 	ft_arrfree(arr);
 	return (0);
 }

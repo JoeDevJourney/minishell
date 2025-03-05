@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 23:14:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:39:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 /**
  * @brief Executes pipe(s) when given the (char **) cmd(s).
  */
-int	handle_pipes(t_data *inp)
+int	exec_pipes(t_data *inp)
 {
 	t_data	ptr;
 	pid_t	*pid;

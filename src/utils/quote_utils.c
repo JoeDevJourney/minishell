@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/04 23:32:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:42:27 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,6 @@ void	check_open_quotes(char **str, char quote)
 			num++;
 	if (num % 2 != 0)
 		ask_for_quote(str, quote);
-}
-
-/**
- * @brief Takes input the address of an arr, goes through all of its strings,
- * looking for quotes, expanding and executing the appropriate f in every case.
- */
-void	expnd_quotes(char **arr, char ***env, void (*f)(char **, char ***))
-{
-	handle_quote(arr, *env, '"');
-	handle_quote(arr, *env, '\'');
-	if (f)
-		f(arr, env);
 }
 
 // cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

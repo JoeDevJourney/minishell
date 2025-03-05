@@ -6,38 +6,48 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 23:44:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:38:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
 /**
  * @brief Counts words when not included in quotes 
  */
 static int	count_tokens(char *str)
 {
-	bool	closed_q;
-	int		res;
+	bool	open_sq;
+	bool	open_dq;
+	int		num;
 
-	closed_q = true;
-	res = 0;
+	open_sq = false;
+	open_dq = false;
+	num = 1;
 	while (*str)
 	{
-		if (*str == ' ' && closed_q)
-			res++;
-		else if (*str == '"' || *str == '\'')
-			closed_q = !closed_q;
+		if (*str == '"' && !open_sq)
+			open_dq = !open_dq;
+		if (*str == '\'' && !open_dq)
+			open_sq = !open_sq;
+		if (*str == ' ' && !open_dq && !open_sq)
+		{
+			num++;
+			while (*str && *str == ' ')
+				str++;
+			continue ;
+		}
 		str++;
 	}
-	return (res + 1);
+	return (num);
 }
+
 
 /**
  * @brief It uses ' ' or '\0' to extract the quoted substring, quotes included,
  * from str and saves it as an individual token to the arr.
  */
-static void	quoted_token(char **str, char **arr, char **env, int *i)
+static void	quoted_token(char **str, char **arr, int *i)
 {
 	int		len;
 	bool	open_sq;
@@ -46,7 +56,6 @@ static void	quoted_token(char **str, char **arr, char **env, int *i)
 	len = 0;
 	open_sq = false;
 	open_dq = false;
-	(void)env;
 	while (1)
 	{
 		if ((*str)[*i] == '"' && !open_sq)
@@ -60,50 +69,62 @@ static void	quoted_token(char **str, char **arr, char **env, int *i)
 	}
 	*arr = safe_malloc(len + 1);
 	ft_strlcpy(*arr, *str + *i - len, len + 1);
-	// expnd_quotes(arr, &env, NULL);
 }
 
 /**
  * @brief It uses ' ' or '\0' to extract the unquoted substring and save it
  * to the arr.
  */
-static void	unquoted_token(char **str, char **arr, char **env, int *i)
+static void	unquoted_token(char **str, char **arr, int *i)
 {
 	int	len;
 
-	(void)env;
-	len = 0;
+	len = *i;
 	while (1)
 	{
-		if ((*str)[*i] == ' ' || (*str)[*i] == '\0')
+		if ((*str)[len] == ' ' || (*str)[len] == '\0')
 			break ;
-		(*i)++;
 		len++;
 	}
+	len -= *i;
 	*arr = safe_malloc(len + 1);
-	ft_strlcpy(*arr, *str + *i - len, len + 1);
-	// expnd_quotes(arr, &env, NULL);
+	ft_strlcpy(*arr, *str + *i, len + 1);
+	(*i) += len;
+}
+
+/**
+ * @brief It breaks the str into tokens, according to quote type,
+ * as well as removing the quotes themselves.
+ */
+static void	tokenization(char **str, char ***arr)
+{
+	int	i;
+	int	word_i;
+
+	i = -1;
+	word_i = -1;
+	*arr = safe_malloc((count_tokens(*str) + 1) * sizeof(char *));
+	while ((*str)[++i])
+	{
+		while ((*str)[i] == ' ')
+			i++;
+		if ((*str)[i] == '"' || (*str)[i] == '\'')
+			quoted_token(str, &(*arr)[++word_i], &i);
+		else
+			unquoted_token(str, &(*arr)[++word_i], &i);
+		if ((*str)[i] == '\0')
+			break ;
+	}
+	(*arr)[++word_i] = NULL;
 }
 
 void	parse_command(t_data *inp)
 {
-	int		word_i;
-	int		i;
-
-	inp->tok = safe_malloc((count_tokens(inp->cmd) + 1)
-			* sizeof(char *));
-	word_i = -1;
-	i = -1;
-	while (inp->cmd[++i])
-	{
-		while (inp->cmd[i] == ' ')
-			i++;
-		if (inp->cmd[i] == '"' || inp->cmd[i] == '\'')
-			quoted_token(&inp->cmd, &inp->tok[++word_i], inp->env, &i);
-		else
-			unquoted_token(&inp->cmd, &inp->tok[++word_i], inp->env, &i);
-		if (inp->cmd[i] == '\0')
-			break ;
-	}
-	inp->tok[++word_i] = NULL;
+	inp->cmd = ft_strdup(*inp->pipe.cmd);
+	parse_redir(inp);
+	// expand_redir(inp);			// gonna need mod
+	// check open quotes
+	expansion(&inp->cmd, inp->env);
+	tokenization(&inp->cmd, &inp->tok);
+	// print_data(*inp);
 }

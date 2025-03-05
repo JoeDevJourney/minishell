@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 11:23:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ bool	process_fds(t_data *inp)
 	int		i;
 	bool	res;
 
-	parse_redir(inp);
 	i = -1;
 	res = true;
 	while ((*inp->pipe.cmd)[++i] && res)

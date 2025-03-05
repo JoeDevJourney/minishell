@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:51:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ typedef struct s_list
 
 
 //	Execution
-int				handle_pipes(t_data *inp);
-void			execute_command(t_data *inp);
+int				exec_pipes(t_data *inp);
+void			parse_n_exec(t_data *inp);
 void			exec_external(t_data inp);
 
 //	Operators
@@ -112,6 +112,7 @@ void			parse_command(t_data *inp);
 void			handle_quote(char **arr, char **env, char quote);
 void			check_open_quotes(char **str, char quote);
 void			expand_redir(t_data *inp);
+void			expansion(char **str, char **env);
 void			expnd_quotes(char **str, char ***env,
 					void (*f)(char **, char ***));
 
