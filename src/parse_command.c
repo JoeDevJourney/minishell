@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 20:14:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:40:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	count_tokens(char *str)
  * @brief It uses ' ' or '\0' to extract the quoted substring, quotes removed,
  * from str and saves it as an individual token to the arr.
  */
-static void	quoted_token(char **str, char **arr, int *i)
+static void	extract_token(char **str, char **arr, int *i)
 {
 	int		len;
 	int		copy_i;
@@ -76,27 +76,6 @@ static void	quoted_token(char **str, char **arr, int *i)
 }
 
 /**
- * @brief It uses ' ' or '\0' to extract the unquoted substring and save it
- * to the arr.
- */
-static void	unquoted_token(char **str, char **arr, int *i)
-{
-	int	len;
-
-	len = *i;
-	while (1)
-	{
-		if ((*str)[len] == ' ' || (*str)[len] == '\0')
-			break ;
-		len++;
-	}
-	len -= *i;
-	*arr = safe_malloc(len + 1);
-	ft_strlcpy(*arr, *str + *i, len + 1);
-	(*i) += len;
-}
-
-/**
  * @brief It breaks the str into tokens, according to quote type,
  * as well as removing the quotes themselves.
  */
@@ -112,10 +91,7 @@ static void	tokenization(char **str, char ***arr)
 	{
 		while ((*str)[i] == ' ')
 			i++;
-		if ((*str)[i] == '"' || (*str)[i] == '\'')
-			quoted_token(str, &(*arr)[++word_i], &i);
-		else
-			unquoted_token(str, &(*arr)[++word_i], &i);
+		extract_token(str, &(*arr)[++word_i], &i);
 		if ((*str)[i] == '\0')
 			break ;
 	}
@@ -129,5 +105,4 @@ void	parse_command(t_data *inp)
 	parse_redir(inp);
 	expansion(&inp->cmd, inp->env);
 	tokenization(&inp->cmd, &inp->tok);
-	// print_data(*inp);
 }

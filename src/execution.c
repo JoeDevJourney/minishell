@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/05 18:53:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:45:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ static int	exec_command(t_data *inp)
 	{
 		if (!ft_strchr(*inp->tok, '/'))
 		{
+			// print_data(*inp);
 			if (search_builtins(*inp))
 				return (exec_builtin(inp));
 			else if (path_to_exec(*inp))						//Needs freeing
