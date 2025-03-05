@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/05 11:39:35 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:33:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,29 +92,22 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 {
 	int	pid;
-	// int	sfd[2];
 
-	// sfd[0] = dup(STDIN_FILENO);
-	// sfd[1] = dup(STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
 	{
 		if (inp->cmd)
 			free(inp->cmd);
-		inp->cmd = ft_strdup(*inp->pipe.cmd);
+		parse_command(inp);
 		if (!process_fds(inp))
 			exec_exit(0);
 		process_pipe_fds(inp, old_fd, new_fd);
 	}
-	// dup2(sfd[0], STDIN_FILENO);
-	// dup2(sfd[1], STDOUT_FILENO);
-	// close(sfd[0]);
-	// close(sfd[1]);
 	return (pid);
 }
 
 /**
- * @brief Executes pipe(s) when given the (char **) cmd(s).
+ * @brief Executes pipe(s) given in (char **) cmds.
  */
 int	exec_pipes(t_data *inp)
 {

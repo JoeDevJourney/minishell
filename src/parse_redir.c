@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 14:37:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:49:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,5 @@ void	parse_redir(t_data *inp)
 		}
 	}
 	trim_spaces(inp);
+	expand_redir(inp);
 }

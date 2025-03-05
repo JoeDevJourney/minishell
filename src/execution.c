@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/05 12:02:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:22:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	exec_external(t_data inp)
 	char	*dir;
 	char	*full_path;
 
-	//tokenization
 	dir = ft_strjoin(path_to_exec(inp), "/");
 	full_path = ft_strjoin(dir, *inp.tok);
 	free(*inp.tok);
@@ -115,7 +114,7 @@ static int	exec_command(t_data *inp)
 		}
 	}
 	else
-		return (free_redir(inp), free_commands(inp), init_redir(inp), 1);
+		return (1);
 }
 
 /**

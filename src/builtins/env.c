@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/20 18:56:27 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/05 17:11:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,5 @@ int	exec_env(char **env)
 		printf("%s\n", env[i]);
 	return (0);
 }
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	exec_env(env);
-// }
 
 // cc env.c ../utils/functions.c ../utils/more_functions.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strchr.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strncmp.c -o env -Wall -Werror -Wextra

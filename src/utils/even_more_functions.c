@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 14:32:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:25:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	free_array_fd(int **fd)
 	if (!fd)
 		return ;
 	i = 0;
-	while (fd[i])
+	while (fd && fd[i])
 		i++;
 	while (i-- > 0)
 		free(fd[i]);
@@ -71,10 +71,7 @@ void	free_redir(t_data *inp)
 	while (++i < 4)
 	{
 		if (oper_arr[i]->cmd && *oper_arr[i]->cmd)
-		{
 			free_array(oper_arr[i]->cmd);
-			free_array_fd(oper_arr[i]->fd);
-		}
 	}
 }
 

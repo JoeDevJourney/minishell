@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 12:43:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:16:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,30 @@ bool	valid_oper(char **str, char *dl)
 	return (free_array(arr), 1);
 }
 
-// void	expand_redir(t_data *inp)
-// {
-// 	if (inp->inp_op.cmd && *inp->inp_op.cmd)
-// 		expnd_quotes(inp->inp_op.cmd, &inp->env, NULL);
-// 	if (inp->out_op.cmd && *inp->out_op.cmd)
-// 		expnd_quotes(inp->out_op.cmd, &inp->env, NULL);
-// 	if (inp->app_op.cmd && *inp->app_op.cmd)
-// 		expnd_quotes(inp->app_op.cmd, &inp->env, NULL);
-// 	// if (inp->hdoc_op.cmd && *inp->hdoc_op.cmd)
-// 	// 	expnd_quotes(&inp->hdoc_op.cmd, &inp->env, expansion_oper);
-// }
+void	expand_redir(t_data *inp)
+{
+	int		arr_i;
+	int		str_i;
+	char	*trimmed;
+	char	**arr[4];
+
+	arr[0] = inp->inp_op.cmd;
+	arr[1] = inp->out_op.cmd;
+	arr[2] = inp->app_op.cmd;
+	arr[3] = NULL;
+	arr_i = -1;
+	while (arr[++arr_i])
+	{
+		str_i = -1;
+		while (arr[arr_i][++str_i])
+		{
+			expansion(&arr[arr_i][str_i], inp->env);
+			trimmed = ft_strtrim(arr[arr_i][str_i], "\"");
+			free(arr[arr_i][str_i]);
+			arr[arr_i][str_i] = trimmed;
+			trimmed = ft_strtrim(arr[arr_i][str_i], "'");
+			free(arr[arr_i][str_i]);
+			arr[arr_i][str_i] = trimmed;
+		}
+	}
+}

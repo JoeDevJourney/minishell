@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes.c                                           :+:      :+:    :+:   */
+/*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/05 14:52:36 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:44:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	expand_segment(char **str, int *i, char del, char **env)
 	ft_strlcpy(prefix, *str, *i + 1);
 	seg = *str + *i;
 	len = 1;
-	while (seg[len] != del && seg[len])
+	while (seg[len] && seg[len] != del)
 		len++ ;
 	seg = safe_malloc(len + 1);
 	ft_strlcpy(seg, *str + *i, len + 1);
@@ -102,7 +102,11 @@ static void	expand_segment(char **str, int *i, char del, char **env)
 void	expansion(char **str, char **env)
 {
 	int		i;
+	char	*trimmed;
 
+	trimmed = ft_strtrim(*str, " ");
+	free(*str);
+	*str = trimmed;
 	i = -1;
 	while ((*str)[++i])
 	{

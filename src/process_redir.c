@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 11:23:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:24:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static bool	out_oper(t_data *inp)
 	if (!inp->out_op.cmd[++i])
 		dup2(*inp->out_op.fd[1], *inp->out_op.fd[0]);
 	close(*inp->out_op.fd[1]);
+	free_array_fd(inp->out_op.fd);
 	if (i == count_array_size(inp->out_op.cmd))
 		i = 0;
 	return (true);
@@ -48,6 +49,7 @@ static bool	inp_oper(t_data *inp)
 	if (!inp->inp_op.cmd[++i])
 		dup2(*inp->inp_op.fd[1], *inp->inp_op.fd[0]);
 	close(*inp->inp_op.fd[1]);
+	free_array_fd(inp->inp_op.fd);
 	if (i == count_array_size(inp->inp_op.cmd))
 		i = 0;
 	return (true);
@@ -69,6 +71,7 @@ static bool	app_oper(t_data *inp)
 	if (!inp->app_op.cmd[++i])
 		dup2(*inp->app_op.fd[1], *inp->app_op.fd[0]);
 	close(*inp->app_op.fd[1]);
+	free_array_fd(inp->app_op.fd);
 	if (i == count_array_size(inp->app_op.cmd))
 		i = 0;
 	return (true);
@@ -107,7 +110,7 @@ static bool	hdoc_oper(t_data *inp)
 		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
 	if (i == count_array_size(inp->hdoc_op.cmd))
 		i = 0;
-	return (close(*inp->hdoc_op.fd[1]), free(input), free(hdoc), true);
+	return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd), free(input), free(hdoc), true);
 }
 
 /**

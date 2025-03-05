@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 16:38:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:03:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,9 @@ static void	tokenization(char **str, char ***arr)
 
 void	parse_command(t_data *inp)
 {
+	// check open quotes
 	inp->cmd = ft_strdup(*inp->pipe.cmd);
 	parse_redir(inp);
-	// expand_redir(inp);			// gonna need mod
-	// check open quotes
 	expansion(&inp->cmd, inp->env);
 	tokenization(&inp->cmd, &inp->tok);
 	// print_data(*inp);
