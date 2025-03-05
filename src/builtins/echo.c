@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/04 23:22:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:25:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,22 @@ static int	upper_echo(char **arr)
 
 static int	lower_echo(char **arr)
 {
-	bool	newline;
+	bool	nl_flag;
 	char	*res;
 	int		i;
 
 	if (!arr || !*arr)
 		return (printf("\n"), 0);
-	newline = false;
+	nl_flag = false;
 	i = 0;
 	while (!ft_strncmp(arr[i], "-n", 2) && ft_strlen(arr[i]) == 2)
 	{
 		i++;
-		newline = true;
+		nl_flag = true;
 	}
 	res = join_cmd(&arr[i], " ");
 	printf("%s", res);
-	if (!newline)
+	if (!nl_flag)
 		printf("\n");
 	return (free(res), 0);
 }
@@ -67,5 +67,3 @@ int	exec_echo(char **cmd)
 	}
 	return (lower_echo(&cmd[1]));
 }
-
-// cc echo.c ../../include/libft/src/*.c ../utils/*.c cd/cd_utils.c ../quotes.c -o echo -Wall -Werror -Wextra -lreadline

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/05 17:44:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:29:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,3 @@ void	expansion(char **str, char **env)
 			expand_segment(str, &i, ' ', env);
 	}
 }
-
-// cc quotes.c -o quotes utils/more_functions.c utils/even_more_functions.c builtins/env.c builtins/cd/cd_utils.c ../include/libft/src/*.c -Wall -Wextra -Werror -lreadline

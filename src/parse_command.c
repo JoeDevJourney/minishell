@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 18:03:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:14:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,33 +42,37 @@ static int	count_tokens(char *str)
 	return (num);
 }
 
-
 /**
- * @brief It uses ' ' or '\0' to extract the quoted substring, quotes included,
+ * @brief It uses ' ' or '\0' to extract the quoted substring, quotes removed,
  * from str and saves it as an individual token to the arr.
  */
 static void	quoted_token(char **str, char **arr, int *i)
 {
 	int		len;
+	int		copy_i;
 	bool	open_sq;
 	bool	open_dq;
 
 	len = 0;
 	open_sq = false;
 	open_dq = false;
-	while (1)
+	copy_i = *i - 1;
+	while ((*str)[*i] && (!((*str)[*i] == ' ' && !open_sq && !open_dq)))
 	{
 		if ((*str)[*i] == '"' && !open_sq)
 			open_dq = !open_dq;
-		if ((*str)[*i] == '\'' && !open_dq)
+		else if ((*str)[*i] == '\'' && !open_dq)
 			open_sq = !open_sq;
-		if (((*str)[*i] == ' ' && !open_dq && !open_sq) || (*str)[*i] == '\0')
-			break ;
+		else
+			len++;
 		(*i)++;
-		len++;
 	}
 	*arr = safe_malloc(len + 1);
-	ft_strlcpy(*arr, *str + *i - len, len + 1);
+	len = 0;
+	while (++copy_i < *i)
+		if ((*str)[copy_i] != '"' && (*str)[copy_i] != '\'')
+			(*arr)[len++] = (*str)[copy_i];
+	(*arr)[len] = '\0';
 }
 
 /**
