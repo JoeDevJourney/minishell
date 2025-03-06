@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 19:59:27 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/06 20:15:58 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,32 @@ void	update_shell_lvl(t_data *inp)
 
 void	restart_minishell(t_data *inp)
 {
-	pid_t	pid;
-	int		status;
-	char	*args[2];
+	pid_t				pid;
+	int					status;
+	char				*args[2];
+	struct sigaction	sa_old;
+	struct sigaction	sa_new;
 
+	sa_new.sa_handler = SIG_IGN;
+	sigemptyset(&sa_new.sa_mask);
+	sa_new.sa_flags = 0;
+	sigaction(SIGINT, &sa_new, &sa_old);
 	pid = fork();
 	if (pid == 0)
 	{
+		sa_new.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa_new, NULL);
+		setup_signals();
 		args[0] = "./minishell";
 		args[1] = NULL;
 		execve(args[0], args, inp->env);
 		exit_with_error("execve failed", 1);
 	}
 	else if (pid > 0)
+	{
 		waitpid(pid, &status, 0);
+		sigaction(SIGINT, &sa_old, NULL);
+	}
 	else
 		perror("fork failed");
 }
