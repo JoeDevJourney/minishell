@@ -5,53 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 12:38:44 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
+/*   Updated: 2025/03/06 15:40:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+static char	*create_env_entry(char *name, char *value)
 {
-	while (*s1 && *s2 && *s1 == *s2)
+	char	*new_entry;
+	size_t	len;
+
+	len = ft_strlen(name) + ft_strlen(value) + 2;
+	new_entry = malloc(len);
+	if (!new_entry)
+		exit_with_error("cd: malloc failed\n", EXIT_FAILURE);
+	ft_strlcpy(new_entry, name, len);
+	if (value)
 	{
-		s1++;
-		s2++;
+		ft_strlcat(new_entry, "=", len);
+		ft_strlcat(new_entry, value, len);
 	}
-	return (*s1 - *s2);
+	return (new_entry);
 }
 
-/**
- * @brief Extracts the env variable from the env list.
- */
-char	*get_env_val(t_data inp, char *name)
+static int	replace_env_var(char **env, char *name, char *new_entry)
 {
-	size_t	name_len;
 	int		i;
 
-	name_len = ft_strlen(name);
-	i = -1;
-	if (!ft_strncmp(name, "\?", 1) && name_len == 1)
-		return (ft_itoa(inp.ret_val));
-	while (inp.env[++i])
-		if (!ft_strncmp(inp.env[i], name, name_len)
-			&& inp.env[i][name_len] == '=')
-			return (&inp.env[i][name_len + 1]);
-	return (NULL);
+	i = 0;
+	while (env[i] != NULL)
+	{
+		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0 \
+			&& env[i][ft_strlen(name)] == '=')
+		{
+			free(env[i]);
+			env[i] = new_entry;
+			return (0);
+		}
+		i++;
+	}
+	return (-1);
 }
 
-char	*get_home_dir(t_data inp)
+static int	add_env_var(char ***env, char *new_entry)
 {
-	char	*home;
+	int		i;
+	int		j;
+	char	**new_environ;
 
-	home = get_env_val(inp, "HOME");
-	if (home == NULL)
-	{
-		perror("cd: HOME not set\n");
-		return (NULL);
-	}
-	return (home);
+	i = 0;
+	while ((*env)[i] != NULL)
+		i++;
+	new_environ = safe_malloc((i + 2) * sizeof(char *));
+	j = -1;
+	while (++j < i)
+		new_environ[j] = (*env)[j];
+	new_environ[i] = new_entry;
+	new_environ[i + 1] = NULL;
+	*env = new_environ;						// free first???
+	return (0);
 }
 
 char	*get_oldpwd_dir(t_data inp)
@@ -62,4 +76,22 @@ char	*get_oldpwd_dir(t_data inp)
 	if (!oldpwd)
 		perror("cd: OLDPWD not set\n");
 	return (oldpwd);
+}
+
+/**
+ * @brief Adds a new element in the env list if it doesn't already exist,
+ * otherwise it replaces its value.
+ */
+int	update_env_var(char ***env, char *name, char *value)
+{
+	char	*new_entry;
+
+	new_entry = create_env_entry(name, value);
+	if (!new_entry)
+		return (1);
+	if (replace_env_var(*env, name, new_entry) == 0)
+		return (0);
+	if (add_env_var(env, new_entry) != 0)
+		return (1);
+	return (0);
 }

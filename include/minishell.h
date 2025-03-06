@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/06 14:53:13 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:39:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,14 +128,11 @@ int				is_valid_identifier(const char *str);
 char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
-int				ft_export(char **cmd, char ***env);
+int				ft_export(t_data *inp);
 int				ft_cd(t_data *inp);
-int				update_env_var(char ***env, const char *name, \
-				const char *value);
+int				update_env_var(char ***env, char *name, char *value);
 char			*get_home_dir(t_data inp);
 char			*get_oldpwd_dir(t_data inp);
-int				update_pwd_vars(char ***env, const char *oldpwd);
-int				add_env_var(char ***env, char *new_entry);
 char			*get_target_dir(t_data inp);
 char			*get_env_val(t_data inp, char *name);
 void			dupl_env(char ***arr, char **env);

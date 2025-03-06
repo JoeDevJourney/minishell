@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 11:15:14 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:34:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ bool	search_builtins(t_data inp)
  */
 int	exec_builtin(t_data *inp)
 {
+	print_data(*inp);
 	if (!ft_strncmp(*inp->tok, "env", 3) && ft_strlen(*inp->tok) == 3)
 		return (exec_env(inp->env));
 	else if (!ft_strncmp(*inp->tok, "pwd", 3)
@@ -73,7 +74,7 @@ int	exec_builtin(t_data *inp)
 		return (ft_cd(inp));
 	else if (!ft_strncmp(*inp->tok, "export", 6)
 		&& ft_strlen(*inp->tok) == 6)
-		return (ft_export(inp->tok, &inp->env));
+		return (ft_export(inp));
 	else if (!ft_strncmp(*inp->tok, "unset", 5)
 		&& ft_strlen(*inp->tok) == 5)
 		return (exec_unset(inp->tok + 1, &inp->env));

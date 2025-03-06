@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:47:46 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/27 11:21:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:15:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,23 @@ void	ft_swap(void *a, void *b, size_t size)
 	ft_memcpy(a, b, size);
 	ft_memcpy(b, temp, size);
 	free(temp);
+}
+
+/**
+ * @brief Extracts the env variable from the env list.
+ */
+char	*get_env_val(t_data inp, char *name)
+{
+	size_t	name_len;
+	int		i;
+
+	name_len = ft_strlen(name);
+	i = -1;
+	if (!ft_strncmp(name, "\?", 1) && name_len == 1)
+		return (ft_itoa(inp.ret_val));
+	while (inp.env[++i])
+		if (!ft_strncmp(inp.env[i], name, name_len)
+			&& inp.env[i][name_len] == '=')
+			return (&inp.env[i][name_len + 1]);
+	return (NULL);
 }

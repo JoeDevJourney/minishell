@@ -5,62 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 14:53:33 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
+/*   Updated: 2025/03/06 15:40:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-static char	*create_env_entry(const char *name, const char *value)
+static int	update_pwd_vars(char ***env, char *oldpwd)
 {
-	char	*new_entry;
-	size_t	len;
+	char	cwd[PATH_MAX];
 
-	len = ft_strlen(name) + ft_strlen(value) + 2;
-	new_entry = malloc(len);
-	if (!new_entry)
-		exit_with_error("cd: malloc failed\n", EXIT_FAILURE);
-	ft_strlcpy(new_entry, name, len);
-	if (value)
-	{
-		ft_strlcat(new_entry, "=", len);
-		ft_strlcat(new_entry, value, len);
-	}
-	return (new_entry);
-}
-
-static int	replace_env_var(char **env, const char *name, char *new_entry)
-{
-	int		i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0 \
-			&& env[i][ft_strlen(name)] == '=')
-		{
-			free(env[i]);
-			env[i] = new_entry;
-			return (0);
-		}
-		i++;
-	}
-	return (-1);
-}
-
-int	update_env_var(char ***env, const char *name, const char *value)
-{
-	char	*new_entry;
-
-	new_entry = create_env_entry(name, value);
-	if (!new_entry)
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (1);
-	if (replace_env_var(*env, name, new_entry) == 0)
-		return (0);
-	if (add_env_var(env, new_entry) != 0)
+	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
+		return (1);
+	if (update_env_var(env, "PWD", cwd) != 0)
 		return (1);
 	return (0);
+}
+
+static char	*process_argument(t_data inp)
+{
+	char	*dir;
+	char	*home;
+
+	if (!ft_strncmp(inp.tok[1], "-", 1) && ft_strlen(inp.tok[1]) == 1)
+	{
+		dir = get_oldpwd_dir(inp);
+		if (dir)
+		{
+			printf("%s\n", dir);
+			dir = ft_strdup(dir);
+		}
+		return (dir);
+	}
+	if (inp.tok[1][0] == '~')
+	{
+		home = get_home_dir(inp);
+		if (!home)
+			return (NULL);
+		dir = ft_strjoin(home, inp.tok[1] + 1);
+		return (dir);
+	}
+	if (inp.tok[1][0] == '\0')
+		return (NULL);
+	return (ft_strdup(inp.tok[1]));
+}
+
+char	*get_target_dir(t_data inp)
+{
+	char	*home;
+
+	if (!inp.tok[1])
+	{
+		home = get_home_dir(inp);
+		if (home)
+			return (ft_strdup(home));
+		return (NULL);
+	}
+	return (process_argument(inp));
+}
+
+char	*get_home_dir(t_data inp)
+{
+	char	*home;
+
+	home = get_env_val(inp, "HOME");
+	if (home == NULL)
+	{
+		perror("cd: HOME not set\n");
+		return (NULL);
+	}
+	return (home);
 }
 
 int	ft_cd(t_data *inp)
@@ -71,7 +88,7 @@ int	ft_cd(t_data *inp)
 	oldpwd = get_env_val(*inp, "PWD");
 	dir = get_target_dir(*inp);
 	if (!dir || chdir(dir) != 0)
-		return (perror("cd"), 1);
+		return (perror(dir), 1);
 	if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
 		return (1);
 	if (update_pwd_vars(&inp->env, oldpwd) != 0)
