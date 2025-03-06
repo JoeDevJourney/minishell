@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/03 18:57:55 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/06 19:59:14 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,12 @@ int	main(int argc, char **argv, char **env)
 		}
 		inp.input = read_input(inp.env);
 		if (!inp.input)
-		{
-			printf("exit\n");
 			break ;
+		if (ft_strcmp(inp.input, "./minishell") == 0)
+		{
+			restart_minishell(&inp);
+			free(inp.input);
+			continue ;
 		}
 		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
 			parse_logic(&inp);

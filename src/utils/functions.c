@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 17:20:30 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/06 19:59:27 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,31 +92,39 @@ bool	valid_oper(char **str, char *dl)
 void	update_shell_lvl(t_data *inp)
 {
 	int		lvl;
-	int		i;
+	char	*shlvl_val;
 	char	*lvl_str;
-	char	*shlvl_entry;
 
-	lvl = 0;
-	i = 0;
-	while (inp->env[i] != NULL)
+	lvl = 1;
+	shlvl_val = get_env_val(inp->env, "SHLVL");
+	if (shlvl_val)
 	{
-		if (ft_strncmp(inp->env[i], "SHLVL", 5) == 0)
-		{
-			shlvl_entry = inp->env[i];
-			while (*shlvl_entry && *shlvl_entry != '=')
-				shlvl_entry++;
-			if (*shlvl_entry)
-				lvl = ft_atoi(shlvl_entry + 1) + 1;
-			break ;
-		}
-		i++;
+		lvl = ft_atoi(shlvl_val) + 1;
 	}
-	if (lvl == 0)
-		lvl = 1;
 	lvl_str = ft_itoa(lvl);
 	if (lvl_str)
 	{
 		update_env_var(&inp->env, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
+}
+
+void	restart_minishell(t_data *inp)
+{
+	pid_t	pid;
+	int		status;
+	char	*args[2];
+
+	pid = fork();
+	if (pid == 0)
+	{
+		args[0] = "./minishell";
+		args[1] = NULL;
+		execve(args[0], args, inp->env);
+		exit_with_error("execve failed", 1);
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else
+		perror("fork failed");
 }
