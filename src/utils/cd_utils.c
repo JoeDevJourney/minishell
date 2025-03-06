@@ -5,111 +5,88 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 17:32:59 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
+/*   Updated: 2025/03/06 17:36:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/**
- * @brief Concatenates name and value with '=' in between
- */
-static char	*create_env_entry(char *name, char *value)
-{
-	char	*new_entry;
-	size_t	len;
 
-	len = ft_strlen(name) + ft_strlen(value) + 2;
-	new_entry = malloc(len);
-	if (!new_entry)
-		exit_with_error("cd: malloc failed\n", EXIT_FAILURE);
-	ft_strlcpy(new_entry, name, len);
-	if (value)
+static char	*get_home_dir(t_data inp)
+{
+	char	*home;
+
+	home = get_env_val(inp, "HOME");
+	if (home == NULL)
 	{
-		ft_strlcat(new_entry, "=", len);
-		ft_strlcat(new_entry, value, len);
+		perror("cd: HOME not set\n");
+		return (NULL);
 	}
-	return (new_entry);
+	return (home);
 }
 
-/**
- * @brief Checks the env for 'name' and updates its value
- * 
- * @returns 0 upon succcessful replacement, -1 otherwise
- */
-static int	replace_env_var(char **env, char *name, char *new_entry)
+static char	*get_oldpwd_dir(t_data inp)
 {
-	int		i;
-
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0 \
-			&& env[i][ft_strlen(name)] == '=')
-		{
-			free(env[i]);
-			env[i] = new_entry;
-			return (0);
-		}
-		i++;
-	}
-	return (-1);
-}
-
-/**
- * @brief Adds the new entry to the env list.
- */
-static int	add_env_var(char ***env, char *new_entry)
-{
-	int		i;
-	int		j;
-	char	**new_environ;
-
-	i = 0;
-	while ((*env)[i] != NULL)
-		i++;
-	new_environ = safe_malloc((i + 2) * sizeof(char *));
-	j = -1;
-	while (++j < i)
-		new_environ[j] = (*env)[j];
-	new_environ[i] = new_entry;
-	new_environ[i + 1] = NULL;
-	*env = new_environ;						// free first???
-	return (0);
-}
-
-/**
- * @brief Adds a new element in the env list if it doesn't already exist,
- * otherwise it replaces its value.
- */
-int	update_env_var(char ***env, char *name, char *value)
-{
-	char	*new_entry;
-
-	new_entry = create_env_entry(name, value);
-	if (!new_entry)
-		return (1);
-	if (replace_env_var(*env, name, new_entry) == 0)
-		return (0);
-	if (add_env_var(env, new_entry) != 0)
-		return (1);
-	return (0);
-}
-
-int	ft_cd(t_data *inp)
-{
-	char	*dir;
 	char	*oldpwd;
 
-	oldpwd = get_env_val(*inp, "PWD");
-	dir = get_target_dir(*inp);
-	if (!dir || chdir(dir) != 0)
-		return (perror(dir), 1);
-	if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
+	oldpwd = get_env_val(inp, "OLDPWD");
+	if (!oldpwd)
+		perror("cd: OLDPWD not set\n");
+	return (oldpwd);
+}
+
+static char	*process_argument(t_data inp)
+{
+	char	*dir;
+	char	*home;
+
+	if (!ft_strncmp(inp.tok[1], "-", 1) && ft_strlen(inp.tok[1]) == 1)
+	{
+		dir = get_oldpwd_dir(inp);
+		if (dir)
+		{
+			printf("%s\n", dir);
+			dir = ft_strdup(dir);
+		}
+		return (dir);
+	}
+	if (inp.tok[1][0] == '~')
+	{
+		home = get_home_dir(inp);
+		if (!home)
+			return (NULL);
+		dir = ft_strjoin(home, inp.tok[1] + 1);
+		return (dir);
+	}
+	if (inp.tok[1][0] == '\0')
+		return (NULL);
+	return (ft_strdup(inp.tok[1]));
+}
+
+char	*get_target_dir(t_data inp)
+{
+	char	*home;
+
+	if (!inp.tok[1])
+	{
+		home = get_home_dir(inp);
+		if (home)
+			return (ft_strdup(home));
+		return (NULL);
+	}
+	return (process_argument(inp));
+}
+
+int	update_pwd_vars(char ***env, char *oldpwd)
+{
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (1);
-	if (update_pwd_vars(&inp->env, oldpwd) != 0)
+	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
 		return (1);
-	free(dir);
+	if (update_env_var(env, "PWD", cwd) != 0)
+		return (1);
 	return (0);
 }
