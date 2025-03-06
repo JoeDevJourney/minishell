@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 17:59:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:03:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,57 @@ static int	count_tokens(char *str)
 }
 
 /**
+ * @brief Copies the content of the the quoted string passed as input to the tok
+ * 
+ * @param start is the starting index of the string
+ * @param end is the ending index of the string
+ */
+static void	copy_to_token(char *str, char *tok, int start, int end)
+{
+	bool	open_sq;
+	bool	open_dq;
+	int		j;
+
+	open_sq = false;
+	open_dq = false;
+	j = 0;
+	while (++start < end)
+	{
+		if (str[start] == '"' && !open_sq)
+		{
+			open_dq = !open_dq;
+			continue ;
+		}
+		if (str[start] == '\'' && !open_dq)
+		{
+			open_sq = !open_sq;
+			continue ;
+		}
+		tok[j++] = str[start];
+	}
+	tok[j] = '\0';
+}
+
+/**
  * @brief It uses ' ' or '\0' to extract the quoted substring, quotes removed,
  * from str and saves it as an individual token to the arr.
+ * 
+ * @param i index that stops at the first ' ' that's not included in quotes 
+ * @param len length of the extracted token.
+ * 
+ * @note i and len don't always match
  */
 static void	extract_token(char **str, char **arr, int *i)
 {
 	int		len;
-	int		copy_i;
+	int		start;
 	bool	open_sq;
 	bool	open_dq;
 
 	len = 0;
 	open_sq = false;
 	open_dq = false;
-	copy_i = *i - 1;
+	start = *i - 1;
 	while ((*str)[*i] && (!((*str)[*i] == ' ' && !open_sq && !open_dq)))
 	{
 		if ((*str)[*i] == '"' && !open_sq)
@@ -68,16 +105,16 @@ static void	extract_token(char **str, char **arr, int *i)
 			len++;
 		(*i)++;
 	}
+	printf("len: %d\n", len);
 	*arr = safe_malloc(len + 1);
-	len = 0;
-	while (++copy_i < *i)
-		if ((*str)[copy_i] != '"' && (*str)[copy_i] != '\'')
-			(*arr)[len++] = (*str)[copy_i];
-	(*arr)[len] = '\0';
+	copy_to_token(*str, *arr, start, *i);
 }
 
 /**
  * @brief It breaks the str into tokens, removing the quotes if encountered.
+ * 
+ * @param str the address of the string to be scanned.
+ * @param arr the address of the arr of strings for the tokens to be saved.
  */
 static void	tokenization(char **str, char ***arr)
 {
