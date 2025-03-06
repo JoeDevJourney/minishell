@@ -6,23 +6,34 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 15:40:00 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:35:14 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
-static int	update_pwd_vars(char ***env, char *oldpwd)
+
+static char	*get_home_dir(t_data inp)
 {
-	char	cwd[PATH_MAX];
+	char	*home;
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (1);
-	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
-		return (1);
-	if (update_env_var(env, "PWD", cwd) != 0)
-		return (1);
-	return (0);
+	home = get_env_val(inp, "HOME");
+	if (home == NULL)
+	{
+		perror("cd: HOME not set\n");
+		return (NULL);
+	}
+	return (home);
+}
+
+static char	*get_oldpwd_dir(t_data inp)
+{
+	char	*oldpwd;
+
+	oldpwd = get_env_val(inp, "OLDPWD");
+	if (!oldpwd)
+		perror("cd: OLDPWD not set\n");
+	return (oldpwd);
 }
 
 static char	*process_argument(t_data inp)
@@ -67,32 +78,15 @@ char	*get_target_dir(t_data inp)
 	return (process_argument(inp));
 }
 
-char	*get_home_dir(t_data inp)
+int	update_pwd_vars(char ***env, char *oldpwd)
 {
-	char	*home;
+	char	cwd[PATH_MAX];
 
-	home = get_env_val(inp, "HOME");
-	if (home == NULL)
-	{
-		perror("cd: HOME not set\n");
-		return (NULL);
-	}
-	return (home);
-}
-
-int	ft_cd(t_data *inp)
-{
-	char	*dir;
-	char	*oldpwd;
-
-	oldpwd = get_env_val(*inp, "PWD");
-	dir = get_target_dir(*inp);
-	if (!dir || chdir(dir) != 0)
-		return (perror(dir), 1);
-	if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		return (1);
-	if (update_pwd_vars(&inp->env, oldpwd) != 0)
+	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
 		return (1);
-	free(dir);
+	if (update_env_var(env, "PWD", cwd) != 0)
+		return (1);
 	return (0);
 }

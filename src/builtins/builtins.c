@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 15:34:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:59:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static char	*str_to_lower(char *str)
  * @brief Searches for the object file of the command in the obj directory
  * 
  * @returns 1 if the obj is found, 0 if not
+ * 
+ * @param lcase Brings it to lowercase, as bash is case insensitive.
  */
 bool	search_builtins(t_data inp)
 {
@@ -55,15 +57,8 @@ bool	search_builtins(t_data inp)
 	return (closedir(builtins_dir), free(obj), free(lcase), free(path), 0);
 }
 
-/**
- * @brief Executes the builtin command
- * 
- * @note For commands like echo/export we need the argument in its unmodified
- * status, so we use *inp.pipe.cmd
- */
 int	exec_builtin(t_data *inp)
 {
-	print_data(*inp);
 	if (!ft_strncmp(*inp->tok, "env", 3) && ft_strlen(*inp->tok) == 3)
 		return (exec_env(inp->env));
 	else if (!ft_strncmp(*inp->tok, "pwd", 3)

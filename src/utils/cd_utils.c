@@ -6,12 +6,15 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 15:40:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:32:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
+/**
+ * @brief Concatenates name and value with '=' in between
+ */
 static char	*create_env_entry(char *name, char *value)
 {
 	char	*new_entry;
@@ -30,6 +33,11 @@ static char	*create_env_entry(char *name, char *value)
 	return (new_entry);
 }
 
+/**
+ * @brief Checks the env for 'name' and updates its value
+ * 
+ * @returns 0 upon succcessful replacement, -1 otherwise
+ */
 static int	replace_env_var(char **env, char *name, char *new_entry)
 {
 	int		i;
@@ -49,6 +57,9 @@ static int	replace_env_var(char **env, char *name, char *new_entry)
 	return (-1);
 }
 
+/**
+ * @brief Adds the new entry to the env list.
+ */
 static int	add_env_var(char ***env, char *new_entry)
 {
 	int		i;
@@ -68,16 +79,6 @@ static int	add_env_var(char ***env, char *new_entry)
 	return (0);
 }
 
-char	*get_oldpwd_dir(t_data inp)
-{
-	char	*oldpwd;
-
-	oldpwd = get_env_val(inp, "OLDPWD");
-	if (!oldpwd)
-		perror("cd: OLDPWD not set\n");
-	return (oldpwd);
-}
-
 /**
  * @brief Adds a new element in the env list if it doesn't already exist,
  * otherwise it replaces its value.
@@ -93,5 +94,22 @@ int	update_env_var(char ***env, char *name, char *value)
 		return (0);
 	if (add_env_var(env, new_entry) != 0)
 		return (1);
+	return (0);
+}
+
+int	ft_cd(t_data *inp)
+{
+	char	*dir;
+	char	*oldpwd;
+
+	oldpwd = get_env_val(*inp, "PWD");
+	dir = get_target_dir(*inp);
+	if (!dir || chdir(dir) != 0)
+		return (perror(dir), 1);
+	if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
+		return (1);
+	if (update_pwd_vars(&inp->env, oldpwd) != 0)
+		return (1);
+	free(dir);
 	return (0);
 }
