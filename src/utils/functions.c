@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/03 20:01:42 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/06 17:20:30 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,24 +94,29 @@ void	update_shell_lvl(t_data *inp)
 	int		lvl;
 	int		i;
 	char	*lvl_str;
+	char	*shlvl_entry;
 
 	lvl = 0;
 	i = 0;
 	while (inp->env[i] != NULL)
 	{
-		if (ft_strncmp(inp->env[i], "SHLVL", 6) == 0)
+		if (ft_strncmp(inp->env[i], "SHLVL", 5) == 0)
 		{
-			lvl = ft_atoi(inp->env[i] + 6);
+			shlvl_entry = inp->env[i];
+			while (*shlvl_entry && *shlvl_entry != '=')
+				shlvl_entry++;
+			if (*shlvl_entry)
+				lvl = ft_atoi(shlvl_entry + 1) + 1;
 			break ;
 		}
 		i++;
 	}
-	lvl++;
-	if (lvl < 1)
+	if (lvl == 0)
 		lvl = 1;
 	lvl_str = ft_itoa(lvl);
-	if (!lvl_str)
-		return ;
-	update_env_var(&inp->env, "SHLVL", lvl_str);
-	free(lvl_str);
+	if (lvl_str)
+	{
+		update_env_var(&inp->env, "SHLVL", lvl_str);
+		free(lvl_str);
+	}
 }
