@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 13:21:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:09:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,42 +75,6 @@ static bool	app_oper(t_data *inp)
 	if (i == count_array_size(inp->app_op.cmd))
 		i = 0;
 	return (true);
-}
-
-/**
- * @note Need to add the expansion functionality in the user input
- */
-static bool	hdoc_oper(t_data *inp)
-{
-	static size_t	i;
-	char			*input;
-	char			*hdoc;
-
-	hdoc = ft_strjoin(inp->home_dir, "/src/heredoc");
-	inp->hdoc_op.fd = safe_malloc(3 * sizeof(int *));
-	inp->hdoc_op.fd[0] = safe_malloc(sizeof(int));
-	*inp->hdoc_op.fd[0] = STDIN_FILENO;
-	inp->hdoc_op.fd[1] = safe_malloc(sizeof(int));
-	*inp->hdoc_op.fd[1] = open(hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*inp->hdoc_op.fd[1] == -1)
-		return (perror(inp->hdoc_op.cmd[i]), false);
-	inp->hdoc_op.fd[2] = NULL;
-	while (1)
-	{
-		input = readline("> ");
-		if (*input != '\0'
-			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(inp->cmd)))
-			break ;
-		ft_putendl_fd(input, *inp->hdoc_op.fd[1]);
-		free(input);
-	}
-	close(*inp->hdoc_op.fd[1]);
-	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
-	if (!inp->hdoc_op.cmd[++i])
-		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
-	if (i == count_array_size(inp->hdoc_op.cmd))
-		i = 0;
-	return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd), free(input), free(hdoc), true);
 }
 
 /**

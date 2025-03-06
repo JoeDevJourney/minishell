@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 17:46:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:09:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@ int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 void			exec_external(t_data inp);
 
-//	Operators
+//	Parsing/expansion
 bool			process_fds(t_data *inp);
+bool			hdoc_oper(t_data *inp);
 void			parse_redir(t_data *inp);
 void			parse_n_tokenize(t_data *inp);
 void			parse_command(t_data *inp);

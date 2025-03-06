@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 19:03:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:20:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ static void	extract_token(char **str, char **arr, int *i)
 			len++;
 		(*i)++;
 	}
-	printf("len: %d\n", len);
 	*arr = safe_malloc(len + 1);
 	copy_to_token(*str, *arr, start, *i);
 }
