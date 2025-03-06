@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/06 12:20:50 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 18:02:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static char	*read_input(t_data inp)
 
 static void	init_data(t_data *inp, char **env)
 {
+	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	inp->home_dir = ft_strdup(getenv("PWD"));

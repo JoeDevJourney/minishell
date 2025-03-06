@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quote_utils.c                                      :+:      :+:    :+:   */
+/*   guess_what_more_functions.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 10:39:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 18:01:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-/**
- * @brief Merges the strings of an arr back together, separated by the del
- */
-char	*join_cmd(char **arr, char *del)
-{
-	char	*res;
-	char	*with_space;
-	int		i;
-
-	i = 0;
-	res = ft_strdup(arr[i]);
-	while (arr[++i])
-	{
-		with_space = ft_strjoin(res, del);
-		free(res);
-		res = ft_strjoin(with_space, arr[i]);
-		free(with_space);
-	}
-	return (res);
-}
 
 static void	ask_for_quote(char **str, char quote)
 {
@@ -73,4 +52,45 @@ void	check_open_quotes(char **str)
 		ask_for_quote(str, '"');
 }
 
-// cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline
+/**
+ * @brief Merges the strings of an arr back together, separated by the del
+ */
+char	*join_cmd(char **arr, char *del)
+{
+	char	*res;
+	char	*with_space;
+	int		i;
+
+	i = 0;
+	res = ft_strdup(arr[i]);
+	while (arr[++i])
+	{
+		with_space = ft_strjoin(res, del);
+		free(res);
+		res = ft_strjoin(with_space, arr[i]);
+		free(with_space);
+	}
+	return (res);
+}
+
+/**
+ * @brief Extracts the env variable from the env list.
+ */
+char	*get_env_val(t_data inp, char *name)
+{
+	size_t	name_len;
+	int		i;
+
+	name_len = ft_strlen(name);
+	i = -1;
+	if (!ft_strncmp(name, "$", 1) && name_len == 1)
+		return (ft_itoa(inp.pid));
+	if (!ft_strncmp(name, "\?", 1) && name_len == 1)
+		return (ft_itoa(inp.ret_val));
+	while (inp.env[++i])
+		if (!ft_strncmp(inp.env[i], name, name_len)
+			&& inp.env[i][name_len] == '=')
+			return (&inp.env[i][name_len + 1]);
+	return (NULL);
+}
+

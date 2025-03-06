@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 14:04:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:57:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 	var_i = ++(*src_i);
 	if (src[var_i] == '{')
 		var_i++;
-	while (ft_isalnum(src[*src_i]) || src[*src_i] == '_' || src[*src_i] == '\?')
+	while (ft_isalnum(src[*src_i]) || src[*src_i] == '_' || src[*src_i] == '\?'
+		|| src[*src_i] == '$')
 		(*src_i)++;
 	if (src[*src_i] == '}')
 		(*src_i)++;
@@ -99,7 +100,7 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 }
 
 /**
- * @brief Expands the input str if necessary based on each quote functionality
+ * @brief Expands the input str if necessary based on each quote's functionality
  */
 void	expansion(char **str, t_data inp)
 {

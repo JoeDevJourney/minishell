@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_utils.c                                         :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 17:32:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:44:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	update_env_var(char ***env, char *name, char *value)
 	return (0);
 }
 
-int	ft_cd(t_data *inp)
+int	exec_cd(t_data *inp)
 {
 	char	*dir;
 	char	*oldpwd;

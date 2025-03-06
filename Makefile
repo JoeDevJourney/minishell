@@ -9,18 +9,14 @@ OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c \
-		$(SRCDIR)/execution.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
+SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c $(SRCDIR)/execution.c \
+		$(SRCDIR)/parse_command.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
 		\
-		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c $(SRCDIR)/builtins/unset.c \
-		$(SRCDIR)/builtins/echo.c $(SRCDIR)/builtins/cd.c \
+		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c \
+		$(SRCDIR)/builtins/echo.c $(SRCDIR)/builtins/cd.c $(SRCDIR)/builtins/unset.c $(SRCDIR)/builtins/export.c \
 		\
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
-		$(SRCDIR)/utils/quote_utils.c $(SRCDIR)/utils/parse_command.c $(SRCDIR)/utils/cd_utils.c \
-		\
-		\
-		$(SRCDIR)/builtins/export.c $(SRCDIR)/utils/export_utils.c \
-
+		$(SRCDIR)/utils/guess_what_more_functions.c $(SRCDIR)/utils/dir_utils.c \
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 LIBFT = $(LIBFTDIR)/libft.a

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 15:40:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 17:44:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	handle_export_arg(char **arg, char ***env)
 	return (res);
 }
 
-int	ft_export(t_data *inp)
+int	exec_export(t_data *inp)
 {
 	return (handle_export_arg(inp->tok, &inp->env));
 }
