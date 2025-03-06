@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 11:38:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:44:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	execute_or_chain(t_data *inp)
+static void	tokenize_or(t_data *inp)
 {
 	static int	j;
 
@@ -25,28 +25,27 @@ static void	execute_or_chain(t_data *inp)
 	free_array(inp->pipe.cmd);
 	if (++j >= inp->or.num_cmd || !inp->ret_val)
 		return ((void)(j = 0));
-	execute_or_chain(inp);
+	tokenize_or(inp);
 }
 
-static void	execute_and_chain(t_data *inp)
+static void	tokenize_and(t_data *inp)
 {
 	static int	i;
 
 	inp->or.cmd = ft_split2(inp->and.cmd[i], "||");
 	inp->or.num_cmd = count_substr(inp->and.cmd[i], "||");
-	execute_or_chain(inp);
+	tokenize_or(inp);
 	free_array(inp->or.cmd);
 	if (++i >= inp->and.num_cmd || inp->ret_val)
 		return ((void)(i = 0));
-	execute_and_chain(inp);
+	tokenize_and(inp);
 }
 
-void	parse_logic(t_data *inp)
+void	parse_n_tokenize(t_data *inp)
 {
 	inp->and.cmd = ft_split2(inp->cmd, "&&");
 	inp->and.num_cmd = count_substr(inp->cmd, "&&");
 	free(inp->cmd);
-	execute_and_chain(inp);
+	tokenize_and(inp);
 	free_array(inp->and.cmd);
-	// printf("---------------\nret: %d\n---------------\n", inp->ret_val);
 }

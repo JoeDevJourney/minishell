@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 20:41:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:15:14 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_pwd(inp->tok));
 	else if (!ft_strncmp(*inp->tok, "cd", 2)
 		&& ft_strlen(*inp->tok) == 2)
-		return (ft_cd(&inp->env, inp->tok));
+		return (ft_cd(inp));
 	else if (!ft_strncmp(*inp->tok, "export", 6)
 		&& ft_strlen(*inp->tok) == 6)
 		return (ft_export(inp->tok, &inp->env));

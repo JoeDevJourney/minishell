@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/05 20:45:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:43:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*path_to_exec(t_data inp)
 	char			**path;
 	int				i;
 
-	path = ft_split(get_env_val(inp.env, "PATH"), ':');
+	path = ft_split(get_env_val(inp, "PATH"), ':');
 	if (!path)
 		return (perror("$PATH"), NULL);
 	i = -1;
@@ -93,18 +93,19 @@ static int	fork_command(t_data inp)
 static int	exec_command(t_data *inp)
 {
 	struct stat	info;
+	char		*p;
 
 	parse_command(inp);
 	if (process_fds(inp))
 	{
 		if (!ft_strchr(*inp->tok, '/'))
 		{
-			// print_data(*inp);
+			p = path_to_exec(*inp);
 			if (search_builtins(*inp))
-				return (exec_builtin(inp));
-			else if (path_to_exec(*inp))						//Needs freeing
-				return (fork_command(*inp));
-			return (printf("%s: command not found\n", *inp->tok), 127);
+				return (free(p), exec_builtin(inp));
+			else if (p)
+				return (free(p), fork_command(*inp));
+			return (free(p), printf("%s: command not found\n", *inp->tok), 127);
 		}
 		else
 		{
@@ -114,8 +115,7 @@ static int	exec_command(t_data *inp)
 				127);
 		}
 	}
-	else
-		return (1);
+	return (1);
 }
 
 /**

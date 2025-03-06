@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 18:16:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 11:17:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	expand_redir(t_data *inp)
 		str_i = -1;
 		while (arr[arr_i][++str_i])
 		{
-			expansion(&arr[arr_i][str_i], inp->env);
+			expansion(&arr[arr_i][str_i], *inp);
 			trimmed = ft_strtrim(arr[arr_i][str_i], "\"");
 			free(arr[arr_i][str_i]);
 			arr[arr_i][str_i] = trimmed;

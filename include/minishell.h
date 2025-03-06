@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/05 20:42:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:53:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,12 +107,12 @@ void			exec_external(t_data inp);
 //	Operators
 bool			process_fds(t_data *inp);
 void			parse_redir(t_data *inp);
-void			parse_logic(t_data *inp);
+void			parse_n_tokenize(t_data *inp);
 void			parse_command(t_data *inp);
 void			handle_quote(char **arr, char **env, char quote);
-void			check_open_quotes(char **str, char quote);
+void			check_open_quotes(char **str);
 void			expand_redir(t_data *inp);
-void			expansion(char **str, char **env);
+void			expansion(char **str, t_data inp);
 void			expnd_quotes(char **str, char ***env,
 					void (*f)(char **, char ***));
 
@@ -129,17 +129,15 @@ char			**ft_arrdup(char **arr, int size);
 void			ft_arrfree(char **arr);
 void			ft_swap(void *a, void *b, size_t size);
 int				ft_export(char **cmd, char ***env);
-int				ft_cd(char ***env, char **args);
-char			*create_env_entry(const char *name, const char *value);
-int				replace_env_var(char **env, const char *name, char *new_entry);
+int				ft_cd(t_data *inp);
 int				update_env_var(char ***env, const char *name, \
 				const char *value);
-char			*get_home_dir(char **env);
-char			*get_oldpwd_dir(char **env);
+char			*get_home_dir(t_data inp);
+char			*get_oldpwd_dir(t_data inp);
 int				update_pwd_vars(char ***env, const char *oldpwd);
 int				add_env_var(char ***env, char *new_entry);
-char			*get_target_dir(char **args, char **env);
-char			*get_env_val(char **env, char *name);
+char			*get_target_dir(t_data inp);
+char			*get_env_val(t_data inp, char *name);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities

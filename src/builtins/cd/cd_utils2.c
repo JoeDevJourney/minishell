@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:15:14 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/02/26 16:16:24 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/06 11:37:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ int	add_env_var(char ***env, char *new_entry)
 	return (0);
 }
 
-static char	*process_argument(char *arg, char **env)
+static char	*process_argument(t_data inp)
 {
 	char	*dir;
 	char	*home;
 
-	if (ft_strcmp(arg, "-") == 0)
+	if (ft_strcmp(inp.tok[1], "-") == 0)
 	{
-		dir = get_oldpwd_dir(env);
+		dir = get_oldpwd_dir(inp);
 		if (dir)
 		{
 			printf("%s\n", dir);
@@ -68,29 +68,29 @@ static char	*process_argument(char *arg, char **env)
 		}
 		return (dir);
 	}
-	if (arg[0] == '~')
+	if (inp.tok[1][0] == '~')
 	{
-		home = get_home_dir(env);
+		home = get_home_dir(inp);
 		if (!home)
 			return (NULL);
-		dir = ft_strjoin(home, arg + 1);
+		dir = ft_strjoin(home, inp.tok[1] + 1);
 		return (dir);
 	}
-	if (arg[0] == '\0')
+	if (inp.tok[1][0] == '\0')
 		return (NULL);
-	return (ft_strdup(arg));
+	return (ft_strdup(inp.tok[1]));
 }
 
-char	*get_target_dir(char **args, char **env)
+char	*get_target_dir(t_data inp)
 {
 	char	*home;
 
-	if (!args[1])
+	if (!inp.tok[1])
 	{
-		home = get_home_dir(env);
+		home = get_home_dir(inp);
 		if (home)
 			return (ft_strdup(home));
 		return (NULL);
 	}
-	return (process_argument(args[1], env));
+	return (process_argument(inp));
 }

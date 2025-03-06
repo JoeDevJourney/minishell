@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/05 14:42:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:39:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,31 @@ static void	ask_for_quote(char **str, char quote)
 		*str = ft_strjoin(temp, rem);
 		free(temp);
 		if (ft_strchr(rem, quote))
-		{
-			free(rem);
-			break ;
-		}
+			return (free(rem));
 		free(rem);
 	}
 }
 
-void	check_open_quotes(char **str, char quote)
+void	check_open_quotes(char **str)
 {
 	int		i;
-	int		num;
+	bool	open_sq;
+	bool	open_dq;
 
+	open_sq = false;
+	open_dq = false;
 	i = -1;
-	num = 0;
 	while ((*str)[++i])
-		if ((*str)[i] == quote)
-			num++;
-	if (num % 2 != 0)
-		ask_for_quote(str, quote);
+		if ((*str)[i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+	if (open_sq)
+		ask_for_quote(str, '\'');
+	i = -1;
+	while ((*str)[++i])
+		if ((*str)[i] == '"' && !open_sq)
+			open_dq = !open_dq;
+	if (open_dq)
+		ask_for_quote(str, '"');
 }
 
 // cc *.c ../builtins/cd/cd_utils.c ../../include/libft/src/*.c -o quote_utils -Wall -Werror -Wextra -g -lreadline

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/04 23:13:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 12:20:50 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
 /**
  * @brief Prompt
  */
-static char	*read_input(char **env)
+static char	*read_input(t_data inp)
 {
 	char	*str;
 	char	*prompt;
 	char	*user;
 	char	*pwd;
 
-	user = get_env_val(env, "USER");
-	pwd = get_env_val(env, "PWD");
+	user = get_env_val(inp, "USER");
+	pwd = get_env_val(inp, "PWD");
 	prompt = ft_strjoin3(GRN, user, " @ ");
 	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1, 1);
 	prompt = ft_strjoin_free(prompt, RST " % ", 1);
@@ -62,6 +62,7 @@ static void	init_data(t_data *inp, char **env)
 	inp->or.num_cmd = 0;
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
+	inp->ret_val = 0;
 }
 
 int	main(int argc, char **argv, char **env)
@@ -74,9 +75,9 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.cmd = read_input(inp.env);
+		inp.cmd = read_input(inp);
 		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
-			parse_logic(&inp);
+			parse_n_tokenize(&inp);
 	}
 	free(inp.home_dir);
 	free(inp.cmd);

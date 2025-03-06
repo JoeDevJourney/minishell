@@ -6,14 +6,15 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 20:40:37 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 10:45:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /**
- * @brief Counts words when not included in quotes 
+ * @brief Tokens are everything in betweem two whotespaces. 
+ * Spaces inside quotes don't count.  
  */
 static int	count_tokens(char *str)
 {
@@ -76,8 +77,7 @@ static void	extract_token(char **str, char **arr, int *i)
 }
 
 /**
- * @brief It breaks the str into tokens, according to quote type,
- * as well as removing the quotes themselves.
+ * @brief It breaks the str into tokens, removing the quotes if encountered.
  */
 static void	tokenization(char **str, char ***arr)
 {
@@ -100,9 +100,9 @@ static void	tokenization(char **str, char ***arr)
 
 void	parse_command(t_data *inp)
 {
-	// check open quotes
+	check_open_quotes(inp->pipe.cmd);
 	inp->cmd = ft_strdup(*inp->pipe.cmd);
 	parse_redir(inp);
-	expansion(&inp->cmd, inp->env);
+	expansion(&inp->cmd, *inp);
 	tokenization(&inp->cmd, &inp->tok);
 }

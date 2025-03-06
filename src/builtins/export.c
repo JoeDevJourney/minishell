@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/05 20:48:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/06 14:50:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,47 +107,3 @@ int	ft_export(char **cmd, char ***env)
 	handle_export_arg(&cmd[1], env);
 	return (0);
 }
-
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-
-// int ft_export(char **env, char **args);
-// char **copy_env(char **env);
-// void cleanup_env(char **env);
-// void print_sorted_env(char **env);
-
-// int main(void)
-// {
-//     char *base_env[] = {
-//         "PATH=/usr/bin",
-//         "USER=testuser",
-//         "SHELL=/bin/bash",
-//         NULL
-//     };
-//     char **env = copy_env(base_env);
-//     char *test_cases[] = {
-//         "export",               // 1. Leeres Export
-//         "export VALID=123",     // 2. Gültige Variable
-//         "export INVALID-NAME",  // 3. Ungültiger Name
-//         "export _UNDER=SCORE",  // 4. Unterstriche
-//         "export EMPTY=",        // 5. Leerer Wert
-//         "export 123INVALID=no", // 6. Zahl am Anfang
-//         "export SPECIAL='$PATH'",//7. Sonderzeichen
-//         NULL
-//     };
-//     printf("=== Starting export Tests ===\n\n");
-//     for (int i = 0; test_cases[i]; i++)
-//     {
-//         printf("Test %d: %s\n", i+1, test_cases[i]);
-//         char **args = ft_split(test_cases[i], ' ');
-//         int result = ft_export(env, args);
-//         printf("Return Code: %d\n", result);
-//         printf("Current Environment:\n");
-//         print_sorted_env(env);
-//         printf("----------------------\n\n");
-//         free(args);
-//     }
-//     cleanup_env(env);
-//     return 0;
-// }
