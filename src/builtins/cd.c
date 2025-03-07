@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 12:01:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:20:12 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,15 +86,26 @@ static int	add_env_var(char ***env, char *new_entry)
 int	update_env_var(char ***env, char *name, char *value)
 {
 	char	*new_entry;
+	int		i;
+	int		name_len;
 
-	new_entry = create_env_entry(name, value);
+	name_len = ft_strlen(name);
+	new_entry = ft_strjoin3(name, "=", value);
 	if (!new_entry)
 		return (1);
-	if (replace_env_var(*env, name, new_entry) == 0)
-		return (0);
-	if (add_env_var(env, new_entry) != 0)
-		return (1);
-	return (0);
+	i = 0;
+	while ((*env)[i])
+	{
+		if (ft_strncmp((*env)[i], name, name_len) == 0 &&
+			(*env)[i][name_len] == '=')
+		{
+			free((*env)[i]);
+			(*env)[i] = new_entry;
+			return (0);
+		}
+		i++;
+	}
+	return (add_env_var(env, new_entry));
 }
 
 int	exec_cd(t_data *inp)

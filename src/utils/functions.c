@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:09:21 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:24:28 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,55 @@ bool	valid_oper(char **str, char *dl)
 		free(ptr);
 	}
 	return (free_array(arr), 1);
+}
+
+void	update_shell_lvl(t_data *inp)
+{
+	int		lvl;
+	char	*shlvl_val;
+	char	*lvl_str;
+
+	lvl = 1;
+	shlvl_val = get_env_val(inp->env, "SHLVL");
+	if (shlvl_val)
+	{
+		lvl = ft_atoi(shlvl_val) + 1;
+	}
+	lvl_str = ft_itoa(lvl);
+	if (lvl_str)
+	{
+		update_env_var(&inp->env, "SHLVL", lvl_str);
+		free(lvl_str);
+	}
+}
+
+void	restart_minishell(t_data *inp)
+{
+	pid_t				pid;
+	int					status;
+	char				*args[1];
+	struct sigaction	sa_old;
+	struct sigaction	sa_new;
+
+	sa_new.sa_handler = SIG_IGN;
+	sigemptyset(&sa_new.sa_mask);
+	sa_new.sa_flags = 0;
+	sigaction(SIGINT, &sa_new, &sa_old);
+	pid = fork();
+	if (pid == 0)
+	{
+		sa_new.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa_new, NULL);
+		setup_signals();
+		args[0] = "./minishell";
+		execve(args[0], args, inp->env);
+		exit_with_error("execve failed", 1);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		sigaction(SIGINT, &sa_old, NULL);
+	}
 }
 
 /**

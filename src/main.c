@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:02:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:18:54 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,17 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.cmd = read_input(inp);
-		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
-			parse_n_tokenize(&inp);
+		inp.input = read_input(inp.env);
+		if (ft_strcmp(inp.input, "./minishell") == 0 ||
+			ft_strcmp(inp.input, "./minishell ") == 0)
+		{
+			restart_minishell(&inp);
+			free(inp.input);
+			continue ;
+		}
+		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
+			parse_logic(&inp);
+		free(inp.input);
 	}
 	free(inp.home_dir);
 	free(inp.cmd);
