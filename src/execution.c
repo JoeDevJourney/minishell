@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/07 12:19:25 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:44:00 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	exec_external(t_data inp)
 	char	*dir;
 	char	*full_path;
 
+
 	dir = ft_strjoin(path_to_exec(inp), "/");
 	full_path = ft_strjoin(dir, *inp.tok);
 	free(*inp.tok);
@@ -70,12 +71,16 @@ static int	fork_command(t_data inp)
 	int		status;
 
 	pid = fork();
+	g_signal = 1;
+	setup_signals(g_signal);
 	if (pid == 0)
 		exec_external(inp);
-	else if (pid > 0)
+	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
+		g_signal = 0;
+		setup_signals(g_signal);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else

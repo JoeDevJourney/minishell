@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 14:26:43 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:32:31 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,17 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	setup_signals();
+	setup_signals(g_signal);
 	init_data(&inp, env);
 	printf("Welcome\n");
 	while (1)
 	{
-		if (g_signal == 1)
-		{
-			g_signal = 0;
-			continue ;
-		}
 		inp.cmd = read_input(inp);
 		if (!inp.cmd)
+		{
+			printf("exit\n");
 			break ;
+		}
 		if ((ft_strncmp(inp.cmd, "./minishell", 11) == 0 && ft_strlen(inp.cmd) == 11) ||
 			(ft_strncmp(inp.cmd, "./minishell ", 12) == 0 && ft_strlen(inp.cmd) == 12))
 		{

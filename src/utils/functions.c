@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 14:22:35 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:42:32 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,16 +123,12 @@ void	restart_minishell(t_data *inp)
 	{
 		sa_new.sa_handler = SIG_DFL;
 		sigaction(SIGINT, &sa_new, NULL);
-		setup_signals();
+		setup_signals(g_signal);
 		args[0] = "./minishell";
 		execve(args[0], args, inp->env);
-		exit_with_error("execve failed", 1);
 	}
-	else if (pid > 0)
-	{
+	if (pid > 0)
 		waitpid(pid, &status, 0);
-		sigaction(SIGINT, &sa_old, NULL);
-	}
 }
 
 /**
