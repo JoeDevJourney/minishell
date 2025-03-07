@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:24:28 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:22:35 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	update_shell_lvl(t_data *inp)
 	char	*lvl_str;
 
 	lvl = 1;
-	shlvl_val = get_env_val(inp->env, "SHLVL");
+	shlvl_val = get_env_val(*inp, "SHLVL");
 	if (shlvl_val)
 	{
 		lvl = ft_atoi(shlvl_val) + 1;

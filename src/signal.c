@@ -6,13 +6,13 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 20:16:24 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 14:27:59 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	handle_signal(int sig)
+static void	handle_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
