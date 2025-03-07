@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:38:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:36:32 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # include <dirent.h>
 # include <signal.h>
 
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_logical_op
 {
@@ -78,7 +78,6 @@ bool			hdoc_oper(t_data *inp);
 void			parse_redir(t_data *inp);
 void			parse_n_tokenize(t_data *inp);
 void			parse_input(t_data *inp);
-void			handle_quote(char **arr, char **env, char quote);
 void			check_open_quotes(char **str);
 void			expand_redir(t_data *inp);
 void			expansion(char **str, t_data inp);
@@ -93,17 +92,15 @@ int				exec_exit(char *cmd);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
-char			*get_target_dir(t_data inp);
-int				update_pwd_vars(char ***env, char *oldpwd);
 int				update_env_var(char ***env, char *name, char *value);
 char			*get_env_val(t_data inp, char *name);
+char			*get_target_dir(t_data inp);
 void			dupl_env(char ***arr, char **env);
 
 //	Utilities
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
 bool			valid_oper(char **str, char *del);
-char			**ft_split2(const char *s, const char *delim);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);
@@ -112,11 +109,10 @@ void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
 void			exit_with_error(char *msg, int ret_val);
 void			print_data(t_data inp);
+void			setup_signals(void);
+char			**ft_split2(const char *s, const char *delim);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
-void			update_shell_lvl(t_data *inp);
-void			restart_minishell(t_data *inp);
-void			setup_signals(void);
-void			handle_signal(int sig);
+char			*ft_strjoin_free(char *s1, char *s2);
 
 #endif

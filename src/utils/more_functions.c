@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 14:43:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 17:25:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ size_t	count_array_size(char **arr)
 	size_t	len;
 
 	len = 0;
-	while (arr && arr[len])
+	if (!arr)
+		return (0);
+	while (arr[len])
 		len++;
 	return (len);
 }

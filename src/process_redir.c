@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 19:09:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:58:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,3 +113,37 @@ bool	process_fds(t_data *inp)
 	return (res);
 }
 
+/**
+ * @brief Expands all redir operators, keeping any quotes, except for the hdoc
+ * 
+ * @note The fds won't be tokenized, cause it messes with their execution.
+ * Instead they are trimmed for both single and double quotes.
+ * Hdoc is handled speacially.
+ */
+void	expand_redir(t_data *inp)
+{
+	int		arr_i;
+	int		str_i;
+	char	*trimmed;
+	char	**arr[4];
+
+	arr[0] = inp->inp_op.cmd;
+	arr[1] = inp->out_op.cmd;
+	arr[2] = inp->app_op.cmd;
+	arr[3] = NULL;
+	arr_i = -1;
+	while (arr[++arr_i])
+	{
+		str_i = -1;
+		while (arr[arr_i][++str_i])
+		{
+			expansion(&arr[arr_i][str_i], *inp);
+			trimmed = ft_strtrim(arr[arr_i][str_i], "\"");
+			free(arr[arr_i][str_i]);
+			arr[arr_i][str_i] = trimmed;
+			trimmed = ft_strtrim(arr[arr_i][str_i], "'");
+			free(arr[arr_i][str_i]);
+			arr[arr_i][str_i] = trimmed;
+		}
+	}
+}

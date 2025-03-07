@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 17:57:36 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:12:33 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 	remainder = ft_strdup(*str + *i + len);
 	*i += ft_strlen(seg) - 1;
 	free(*str);
-	*str = safe_malloc(ft_strlen(seg) + ft_strlen(remainder) + 1);
 	*str = ft_strjoin3(prefix, seg, remainder);
 	free(prefix);
 	free(remainder);

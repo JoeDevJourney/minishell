@@ -3,21 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 12:21:13 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 18:22:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/**
- * @brief Creates/updates the env variable arg with the new value
- * 
- * @param value The new value
- */
-static int	handle_export_arg(char **arg, char ***env)
+int	exec_export(t_data *inp)
 {
 	char	*name;
 	char	*value;
@@ -25,26 +20,21 @@ static int	handle_export_arg(char **arg, char ***env)
 	int		i;
 
 	i = 0;
-	while (arg[++i])
+	while (inp->tok[++i])
 	{
-		value = ft_strchr(arg[i], '=');
+		value = ft_strchr(inp->tok[i], '=');
 		if (value)
 		{
-			name = ft_substr(arg[i], 0, value - arg[i]);
+			name = ft_substr(inp->tok[i], 0, value - inp->tok[i]);
 			value++;
 		}
 		else
 		{
-			name = ft_strdup(arg[i]);
+			name = ft_strdup(inp->tok[i]);
 			value = NULL;
 		}
-		res = update_env_var(env, name, value);
+		res = update_env_var(&inp->env, name, value);
 		free(name);
 	}
 	return (res);
-}
-
-int	exec_export(t_data *inp)
-{
-	return (handle_export_arg(inp->tok, &inp->env));
 }

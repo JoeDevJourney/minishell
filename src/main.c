@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:34:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:42:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,57 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
-static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
+static inline void	update_shell_lvl(t_data *inp)
 {
-	char	*result;
+	int		lvl;
+	char	*shlvl_val;
+	char	*lvl_str;
 
-	result = ft_strjoin(s1, s2);
-	if (free_flag & 1)
-		free(s1);
-	if (free_flag & 2)
-		free(s2);
-	return (result);
+	lvl = 1;
+	shlvl_val = get_env_val(*inp, "SHLVL");
+	if (shlvl_val)
+		lvl = ft_atoi(shlvl_val) + 1;
+	lvl_str = ft_itoa(lvl);
+	if (lvl_str)
+	{
+		update_env_var(&inp->env, "SHLVL", lvl_str);
+		free(lvl_str);
+	}
+}
+
+static inline void	restart_minishell(t_data *inp)
+{
+	pid_t				pid;
+	int					status;
+	char				*args[1];
+	struct sigaction	sa_old;
+	struct sigaction	sa_new;
+
+	sa_new.sa_handler = SIG_IGN;
+	sigemptyset(&sa_new.sa_mask);
+	sa_new.sa_flags = 0;
+	sigaction(SIGINT, &sa_new, &sa_old);
+	pid = fork();
+	if (pid == 0)
+	{
+		sa_new.sa_handler = SIG_DFL;
+		sigaction(SIGINT, &sa_new, NULL);
+		setup_signals();
+		args[0] = "./minishell";
+		execve(args[0], args, inp->env);
+		exit_with_error("execve failed", 1);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		sigaction(SIGINT, &sa_old, NULL);
+	}
 }
 
 /**
  * @brief Prompt
  */
-static char	*read_input(t_data inp)
+static inline char	*read_input(t_data inp)
 {
 	char	*str;
 	char	*prompt;
@@ -39,8 +74,8 @@ static char	*read_input(t_data inp)
 	user = get_env_val(inp, "USER");
 	pwd = get_env_val(inp, "PWD");
 	prompt = ft_strjoin3(GRN, user, " @ ");
-	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1, 1);
-	prompt = ft_strjoin_free(prompt, RST " % ", 1);
+	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
+	prompt = ft_strjoin_free(prompt, RST " % ");
 	str = readline(prompt);
 	while (str && !*str)
 	{
@@ -58,6 +93,7 @@ static void	init_data(t_data *inp, char **env)
 	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
+	update_shell_lvl(inp);
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
@@ -74,24 +110,31 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	setup_signals();
 	init_data(&inp, env);
 	printf("Welcome\n");
-	while (1)
-	{
-		inp.cmd = read_input(inp);
-		if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
-			|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
-		{
-			restart_minishell(&inp);
-			free(inp.cmd);
-			continue ;
-		}
-		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
-			parse_n_tokenize(&inp);
-		free(inp.cmd);
-	}
+	// while (1)
+	// {
+	// 	if (g_signal == 1)
+	// 	{
+	// 		g_signal = 0;
+	// 		continue ;
+	// 	}
+	// 	inp.cmd = read_input(inp);
+	// 	if (!inp.cmd)
+	// 		break ;
+	// 	if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
+	// 		|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
+	// 		restart_minishell(&inp);
+	// 	else if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+	// 		parse_n_tokenize(&inp);
+	// 	free(inp.cmd);
+	// }
+	inp.cmd = ft_strdup("cat < Makefile > out");
+	if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+		parse_n_tokenize(&inp);
+	free_array(inp.env);
 	free(inp.home_dir);
 	free(inp.cmd);
-	free_array(inp.env);
 	return (0);
 }
