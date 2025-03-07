@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 17:34:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:50:06 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	update_env_var(char ***env, const char *name, const char *value)
 	i = 0;
 	while ((*env)[i])
 	{
-		if (ft_strncmp((*env)[i], name, name_len) == 0 && (*env)[i][name_len] == '=')
+		if (ft_strncmp((*env)[i], name, name_len) == 0 &&
+			(*env)[i][name_len] == '=')
 		{
 			free((*env)[i]);
 			(*env)[i] = new_entry;

@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/06 19:59:14 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 11:46:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ int	main(int argc, char **argv, char **env)
 		inp.input = read_input(inp.env);
 		if (!inp.input)
 			break ;
-		if (ft_strcmp(inp.input, "./minishell") == 0)
+		if (ft_strcmp(inp.input, "./minishell") == 0 ||
+			ft_strcmp(inp.input, "./minishell ") == 0)
 		{
 			restart_minishell(&inp);
 			free(inp.input);
