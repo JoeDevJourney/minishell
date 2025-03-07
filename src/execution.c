@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/07 20:44:00 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 20:53:30 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static char	*path_to_exec(t_data inp)
 	struct dirent	*entry;
 	DIR				*dir;
 	char			**path;
+	char			*res;
 	int				i;
 
 	path = ft_split(get_env_val(inp, "PATH"), ':');
-	if (!path)
-		return (perror("$PATH"), NULL);
+	res = NULL;
 	i = -1;
 	while (path[++i])
 	{
@@ -36,12 +36,13 @@ static char	*path_to_exec(t_data inp)
 		{
 			if (!ft_strncmp(*inp.tok, entry->d_name, ft_strlen(*inp.tok))
 				&& entry->d_name[ft_strlen(*inp.tok)] == '\0')
-				return (closedir(dir), path[i]);
+				if (!res)
+					res = ft_strdup(path[i]);
 			entry = readdir(dir);
 		}
 		closedir (dir);
 	}
-	return (path[i]);
+	return (free_array(path), res);
 }
 
 /**
@@ -50,10 +51,13 @@ static char	*path_to_exec(t_data inp)
 void	exec_external(t_data inp)
 {
 	char	*dir;
+	char	*path;
 	char	*full_path;
 
 
-	dir = ft_strjoin(path_to_exec(inp), "/");
+	path = path_to_exec(inp);
+	dir = ft_strjoin(path, "/");
+	free(path);
 	full_path = ft_strjoin(dir, *inp.tok);
 	free(*inp.tok);
 	*inp.tok = ft_strdup(full_path);
@@ -109,7 +113,8 @@ static int	exec_command(t_data *inp)
 				return (free(p), exec_builtin(inp));
 			else if (p)
 				return (free(p), fork_command(*inp));
-			return (free(p), printf("%s: command not found\n", *inp->tok), 127);
+			else
+				return (free(p), printf("%s: command not found\n", *inp->tok), 127);
 		}
 		else
 		{

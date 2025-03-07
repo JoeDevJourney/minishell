@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 11:24:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:00:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	*safe_malloc(size_t size)
 {
 	void	*ptr;
 
+	if (size == 0)
+		return (perror("0 bytes"), NULL);
 	ptr = malloc(size);
 	if (!ptr)
 		exit_with_error("Memory allocation failed", EXIT_FAILURE);

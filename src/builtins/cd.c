@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 14:20:04 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 18:44:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,21 @@ static int	add_env_var(char ***env, char *new_entry)
 		new_environ[j] = (*env)[j];
 	new_environ[i] = new_entry;
 	new_environ[i + 1] = NULL;
-	*env = new_environ;						// free first???
+	free_array(*env);
+	*env = new_environ;
+	return (0);
+}
+
+static int	update_pwd_vars(char ***env, char *oldpwd)
+{
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		return (1);
+	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
+		return (1);
+	if (update_env_var(env, "PWD", cwd) != 0)
+		return (1);
 	return (0);
 }
 

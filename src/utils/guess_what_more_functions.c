@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   guess_what_more_functions.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 10:21:31 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 21:01:10 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,13 @@ char	*get_env_val(t_data inp, char *name)
 			&& inp.env[i][name_len] == '=')
 			return (&inp.env[i][name_len + 1]);
 	return (NULL);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2)
+{
+	char	*result;
+
+	result = ft_strjoin(s1, s2);
+	free(s1);
+	return (result);
 }
