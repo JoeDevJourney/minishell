@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:01:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:02:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	setup_signals();
 	init_data(&inp, env);
-	update_shell_lvl(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
