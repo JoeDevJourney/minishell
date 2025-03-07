@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 18:42:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 18:44:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ static void	init_data(t_data *inp, char **env)
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
+	update_shell_lvl(inp);
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
@@ -111,28 +112,29 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	setup_signals();
+	setup_signals();
 	init_data(&inp, env);
 	printf("Welcome\n");
-	// while (1)
-	// {
-	// 	if (g_signal == 1)
-	// 	{
-	// 		g_signal = 0;
-	// 		continue ;
-	// 	}
-	// 	inp.cmd = read_input(inp);
-	// 	if (!inp.cmd)
-	// 		break ;
-	// 	if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
-	// 		|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
-	// 		restart_minishell(&inp);
-	// 	else if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
-	// 		parse_n_tokenize(&inp);
-	// 	free(inp.cmd);
-	// }
-	inp.cmd = ft_strdup("cat < Makefile > out");
-	if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
-		parse_n_tokenize(&inp);
+	while (1)
+	{
+		if (g_signal == 1)
+		{
+			g_signal = 0;
+			continue ;
+		}
+		inp.cmd = read_input(inp);
+		if (!inp.cmd)
+			break ;
+		if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
+			|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
+			restart_minishell(&inp);
+		else if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+			parse_n_tokenize(&inp);
+		free(inp.cmd);
+	}
+	// inp.cmd = ft_strdup("cat < Makefile > out");
+	// if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+	// 	parse_n_tokenize(&inp);
 	free_array(inp.env);
 	free(inp.home_dir);
 	free(inp.cmd);
