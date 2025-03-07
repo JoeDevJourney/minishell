@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 11:27:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:01:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # include <errno.h>
 # include <limits.h>
 # include <dirent.h>
+# include <signal.h>
+
+extern volatile sig_atomic_t g_signal;
 
 typedef struct s_logical_op
 {

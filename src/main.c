@@ -6,11 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 10:19:53 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 12:01:32 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+volatile sig_atomic_t	g_signal = 0;
 
 static char	*ft_strjoin_free(char *s1, char *s2, int free_flag)
 {
@@ -72,7 +74,9 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	setup_signals();
 	init_data(&inp, env);
+	update_shell_lvl(&inp);
 	printf("Welcome\n");
 	while (1)
 	{
