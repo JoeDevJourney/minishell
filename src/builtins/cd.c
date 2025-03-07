@@ -3,59 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 12:20:12 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 12:37:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/**
- * @brief Concatenates name and value with '=' in between
- */
-static char	*create_env_entry(char *name, char *value)
-{
-	char	*new_entry;
-	size_t	len;
+// /**
+//  * @brief Concatenates name and value with '=' in between
+//  */
+// static char	*create_env_entry(char *name, char *value)
+// {
+// 	char	*new_entry;
+// 	size_t	len;
 
-	len = ft_strlen(name) + ft_strlen(value) + 2;
-	new_entry = malloc(len);
-	if (!new_entry)
-		exit_with_error("cd: malloc failed\n", EXIT_FAILURE);
-	ft_strlcpy(new_entry, name, len);
-	if (value)
-	{
-		ft_strlcat(new_entry, "=", len);
-		ft_strlcat(new_entry, value, len);
-	}
-	return (new_entry);
-}
+// 	len = ft_strlen(name) + ft_strlen(value) + 2;
+// 	new_entry = malloc(len);
+// 	if (!new_entry)
+// 		exit_with_error("cd: malloc failed\n", EXIT_FAILURE);
+// 	ft_strlcpy(new_entry, name, len);
+// 	if (value)
+// 	{
+// 		ft_strlcat(new_entry, "=", len);
+// 		ft_strlcat(new_entry, value, len);
+// 	}
+// 	return (new_entry);
+// }
 
-/**
- * @brief Checks the env for 'name' and updates its value
- * 
- * @returns 0 upon succcessful replacement, -1 otherwise
- */
-static int	replace_env_var(char **env, char *name, char *new_entry)
-{
-	int		i;
+// /**
+//  * @brief Checks the env for 'name' and updates its value
+//  * 
+//  * @returns 0 upon succcessful replacement, -1 otherwise
+//  */
+// static int	replace_env_var(char **env, char *name, char *new_entry)
+// {
+// 	int		i;
 
-	i = 0;
-	while (env[i] != NULL)
-	{
-		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0 \
-			&& env[i][ft_strlen(name)] == '=')
-		{
-			free(env[i]);
-			env[i] = new_entry;
-			return (0);
-		}
-		i++;
-	}
-	return (-1);
-}
+// 	i = 0;
+// 	while (env[i] != NULL)
+// 	{
+// 		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0 \
+// 			&& env[i][ft_strlen(name)] == '=')
+// 		{
+// 			free(env[i]);
+// 			env[i] = new_entry;
+// 			return (0);
+// 		}
+// 		i++;
+// 	}
+// 	return (-1);
+// }
 
 /**
  * @brief Adds the new entry to the env list.

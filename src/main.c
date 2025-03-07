@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:18:54 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 12:34:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,17 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome\n");
 	while (1)
 	{
-		inp.input = read_input(inp.env);
-		if (ft_strcmp(inp.input, "./minishell") == 0 ||
-			ft_strcmp(inp.input, "./minishell ") == 0)
+		inp.cmd = read_input(inp);
+		if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
+			|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
 		{
 			restart_minishell(&inp);
-			free(inp.input);
+			free(inp.cmd);
 			continue ;
 		}
-		if (valid_oper(&inp.input, "&&") && valid_oper(&inp.input, "||"))
-			parse_logic(&inp);
-		free(inp.input);
+		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+			parse_n_tokenize(&inp);
+		free(inp.cmd);
 	}
 	free(inp.home_dir);
 	free(inp.cmd);

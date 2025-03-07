@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 12:16:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/07 12:38:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,7 @@ char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
 void			update_shell_lvl(t_data *inp);
 void			restart_minishell(t_data *inp);
+void			setup_signals(void);
+void			handle_signal(int sig);
 
 #endif
