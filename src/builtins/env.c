@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 17:11:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:20:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,3 @@ int	exec_env(char **env)
 		printf("%s\n", env[i]);
 	return (0);
 }
-
-// cc env.c ../utils/functions.c ../utils/more_functions.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strchr.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strncmp.c -o env -Wall -Werror -Wextra

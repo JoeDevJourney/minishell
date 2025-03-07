@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/06 12:43:08 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/03/07 10:18:40 by dchrysov          #+#    #+#             */
+/*   Updated: 2025/03/07 11:54:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/minishell.h"
 
@@ -95,7 +94,7 @@ static int	exec_command(t_data *inp)
 	struct stat	info;
 	char		*p;
 
-	parse_command(inp);
+	parse_input(inp);
 	if (process_fds(inp))
 	{
 		if (!ft_strchr(*inp->tok, '/'))

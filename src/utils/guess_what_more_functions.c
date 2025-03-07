@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/06 18:01:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:21:31 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,3 @@ char	*get_env_val(t_data inp, char *name)
 			return (&inp.env[i][name_len + 1]);
 	return (NULL);
 }
-

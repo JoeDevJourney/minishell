@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 11:17:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:34:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	init_redir(t_data *inp)
 	inp->hdoc_op.num_cmd = 0;
 	inp->cmd = NULL;
 	inp->tok = NULL;
-	errno = 0;
+	// errno = 0;
 }
 
 /**
@@ -72,23 +72,27 @@ bool	valid_oper(char **str, char *dl)
 		{
 			if (i < size - 1)
 				return (printf("syntax error near unexpected token `%s'\n", dl), 0);
-			else
-			{
+			cmd = readline("> ");
+			while (!*cmd)
 				cmd = readline("> ");
-				while (!*cmd)
-					cmd = readline("> ");
-				free(ptr);
-				ptr = ft_strjoin(*str, cmd);
-				free(*str);
-				*str = ft_strdup(ptr);
-				free(cmd);
-			}
+			free(ptr);
+			ptr = ft_strjoin(*str, cmd);
+			free(*str);
+			*str = ft_strdup(ptr);
+			free(cmd);
 		}
 		free(ptr);
 	}
 	return (free_array(arr), 1);
 }
 
+/**
+ * @brief Expands all redir operators, keeping any quotes, except for the hdoc
+ * 
+ * @note The fds won't be tokenized, cause it messes with their execution.
+ * Instead they are trimmed for both single and double quotes.
+ * Hdoc is handled speacially.
+ */
 void	expand_redir(t_data *inp)
 {
 	int		arr_i;

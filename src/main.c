@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/06 18:02:09 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
+/*   Updated: 2025/03/07 10:19:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,3 @@ int	main(int argc, char **argv, char **env)
 	free_array(inp.env);
 	return (0);
 }
-

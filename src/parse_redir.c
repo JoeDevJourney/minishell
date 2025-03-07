@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 17:49:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 11:27:21 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,33 @@
 /**
  * @brief Merges two array of strings together
  * 
- * @param rest The src array to be expanded after merging
- * @param split_arr The dest array to be merged with src
- * @param new_count The size of the dest array
+ * @param src The src array to be expanded after merging
+ * @param dst The dest array to be merged with src
+ * @param dst_size The size of the dest array
  * 
  * @note If src is NULL it will still merge it with dest, resulting
  * to its duplication
  */
-static void	merge_rest(char ***rest, char **split_arr, size_t new_count)
+static void	merge_arrays(char ***src, char **dst, size_t dst_size)
 {
-	size_t	old_count;
-	size_t	total_count;
-	char	**new_rest;
+	size_t	src_size;
+	size_t	total_size;
+	char	**new_dst;
 	size_t	i;
 	size_t	j;
 
-	old_count = count_array_size(*rest);
-	total_count = old_count + new_count;
-	new_rest = safe_malloc((total_count + 1) * sizeof(char *));
+	src_size = count_array_size(*src);
+	total_size = src_size + dst_size;
+	new_dst = safe_malloc((total_size + 1) * sizeof(char *));
 	i = -1;
-	while (++i < old_count)
-		new_rest[i] = (*rest)[i];
+	while (++i < src_size)
+		new_dst[i] = (*src)[i];
 	j = 1;
-	while (split_arr[j])
-		new_rest[i++] = ft_strdup(split_arr[j++]);
-	new_rest[i] = NULL;
-	free(*rest);
-	*rest = new_rest;
+	while (dst[j])
+		new_dst[i++] = ft_strdup(dst[j++]);
+	new_dst[i] = NULL;
+	free(*src);
+	*src = new_dst;
 }
 
 /**
@@ -66,7 +66,7 @@ static void	split_and_store(char **str, char ***rest, char *del)
 	*str = ft_strdup(split_arr[0]);
 	new_count = count_array_size(split_arr) - 1;
 	if (new_count > 0)
-		merge_rest(rest, split_arr, new_count);
+		merge_arrays(rest, split_arr, new_count);
 	free_array(split_arr);
 }
 
@@ -150,5 +150,4 @@ void	parse_redir(t_data *inp)
 		}
 	}
 	trim_spaces(inp);
-	expand_redir(inp);
 }

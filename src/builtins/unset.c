@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/26 19:52:43 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/07 10:20:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,29 +83,3 @@ int	exec_unset(char **cmd, char ***env)
 		remove_line(env, var_index(cmd[i++], *env));
 	return (0);
 }
-
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_data	inp;
-// 	int	i = -1;
-
-// 	(void)argc;
-// 	argv++;
-// 	dupl_env(&inp.env, env);
-// 	i = -1;
-// 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-// 	while (inp.env[++i])
-// 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
-// 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
-// 	if (argc > 1)
-// 		exec_unset(++argv, &inp.env);
-// 	else
-// 		printf("No param provided\n");
-// 	i = -1;
-// 	printf("\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-// 	while (inp.env[++i])
-// 		printf("inp.env[%d]: '%s'\n", i, inp.env[i]);
-// 	printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n");
-// }
-
-// cc unset.c env.c ../utils/more_functions.c ../utils/functions.c ../utils/even_more_functions.c ../../include/libft/src/ft_split.c ../../include/libft/src/ft_strdup.c ../../include/libft/src/ft_strlcpy.c ../../include/libft/src/ft_strlen.c ../../include/libft/src/ft_strncmp.c ../../include/libft/src/ft_strnstr.c ../../include/libft/src/ft_strchr.c -o unset -g -Wall -Werror -Wextra
