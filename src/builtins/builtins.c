@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 16:35:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 12:30:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ bool	search_builtins(t_data inp)
 	char			*path;
 	char			*lcase;
 
-	lcase = str_to_lower(*inp.tok);
+	if (!ft_strncmp(*inp.tok, "./minishell", 11))
+		lcase = ft_strdup("minishell");
+	else
+		lcase = str_to_lower(*inp.tok);
 	obj = ft_strjoin(lcase, ".o");
 	path = ft_strjoin(inp.home_dir, "/obj/");
 	builtins_dir = opendir(path);
@@ -76,6 +79,9 @@ int	exec_builtin(t_data *inp)
 	else if (!ft_strncmp(*inp->tok, "exit", 4)
 		&& ft_strlen(*inp->tok) == 4)
 		return (exec_exit(inp->tok[1]));
+	if (!ft_strncmp(inp->cmd, "./minishell", 11)
+		&& ((ft_strlen(inp->cmd) == 11) || ft_strlen(inp->cmd) == 12))
+		return (restart_minishell(inp));
 	return (exec_echo(inp->tok));
 	return (0);
 }

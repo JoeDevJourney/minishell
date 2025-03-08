@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 21:03:59 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:11:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static void	init_data(t_data *inp, char **env)
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	update_shell_lvl(inp);
 	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
@@ -64,21 +63,18 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
-	setup_signals(g_signal);
 	init_data(&inp, env);
-	printf("Welcome\n");
+	setup_signals(g_signal);
+	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
 		inp.cmd = read_input(inp);
 		if (!inp.cmd)
 		{
-			printf("exit\n");
+			printf("exit SHLVL %s\n", get_env_val(inp, "SHLVL"));
 			break ;
 		}
-		if ((!ft_strncmp(inp.cmd, "./minishell", 11) && ft_strlen(inp.cmd) == 11)
-			|| (!ft_strncmp(inp.cmd, "./minishell ", 12) && ft_strlen(inp.cmd) == 12))
-			restart_minishell(&inp);
-		else if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
 			parse_n_tokenize(&inp);
 		free(inp.cmd);
 	}

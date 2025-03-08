@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 21:04:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:10:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_data
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 void			exec_external(t_data inp);
+int	main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
 bool			process_fds(t_data *inp);
@@ -112,8 +113,8 @@ void			print_data(t_data inp);
 char			**ft_split2(const char *s, const char *delim);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
-void			restart_minishell(t_data *inp);
-void			setup_signals(int is_child);
+int				restart_minishell(t_data *inp);
+void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
 

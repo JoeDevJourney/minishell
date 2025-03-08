@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/07 20:53:30 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:11:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,9 @@ static int	fork_command(t_data inp)
 		setup_signals(g_signal);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
-		else
-			return (-1);
+		return (130);
 	}
-	else
-		perror("Fork failed");
-	return (0);
+	return (perror("Fork failed"), -1);
 }
 
 /**
@@ -106,23 +103,20 @@ static int	exec_command(t_data *inp)
 	parse_input(inp);
 	if (process_fds(inp))
 	{
-		if (!ft_strchr(*inp->tok, '/'))
+		if (!ft_strchr(*inp->tok, '/')
+			|| ((!ft_strncmp(*inp->tok, "./minishell", 11))
+				&& (ft_strlen(*inp->tok) == 11 || ft_strlen(*inp->tok) == 12)))
 		{
 			p = path_to_exec(*inp);
 			if (search_builtins(*inp))
 				return (free(p), exec_builtin(inp));
 			else if (p)
 				return (free(p), fork_command(*inp));
-			else
-				return (free(p), printf("%s: command not found\n", *inp->tok), 127);
+			return (free(p), printf("%s: command not found\n", *inp->tok), 127);
 		}
-		else
-		{
-			if (stat(*inp->tok, &info) == 0 && S_ISDIR(info.st_mode))
-				return (printf("%s: is a directory\n", *inp->tok), 126);
-			return (printf("%s: No such file or directory\n", *inp->tok),
-				127);
-		}
+		if (stat(*inp->tok, &info) == 0 && S_ISDIR(info.st_mode))
+			return (printf("%s: is a directory\n", *inp->tok), 126);
+		return (printf("%s: No such file or directory\n", *inp->tok), 127);
 	}
 	return (1);
 }

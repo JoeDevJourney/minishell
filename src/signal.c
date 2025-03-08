@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 20:49:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 13:10:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	child_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("^C\n");
+		printf("\n");
 		g_signal = 0;
 	}
 }
@@ -32,7 +32,7 @@ static void	parent_signal(int sig)
 	}
 }
 
-void	setup_signals(int is_child)
+void	setup_signals(bool is_child)
 {
 	struct sigaction	sa;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 21:05:48 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 12:29:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,38 +95,11 @@ void	update_shell_lvl(t_data *inp)
 	lvl = 1;
 	shlvl_val = get_env_val(*inp, "SHLVL");
 	if (shlvl_val)
-	{
 		lvl = ft_atoi(shlvl_val) + 1;
-	}
 	lvl_str = ft_itoa(lvl);
 	if (lvl_str)
 	{
 		update_env_var(&inp->env, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
-}
-
-void	restart_minishell(t_data *inp)
-{
-	pid_t				pid;
-	int					status;
-	char				*args[1];
-	struct sigaction	sa_old;
-	struct sigaction	sa_new;
-
-	sa_new.sa_handler = SIG_IGN;
-	sigemptyset(&sa_new.sa_mask);
-	sa_new.sa_flags = 0;
-	sigaction(SIGINT, &sa_new, &sa_old);
-	pid = fork();
-	if (pid == 0)
-	{
-		sa_new.sa_handler = SIG_DFL;
-		sigaction(SIGINT, &sa_new, NULL);
-		setup_signals(g_signal);
-		args[0] = "./minishell";
-		execve(args[0], args, inp->env);
-	}
-	if (pid > 0)
-		waitpid(pid, &status, 0);
 }
