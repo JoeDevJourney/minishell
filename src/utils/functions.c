@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 18:05:13 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 19:12:29 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,24 +72,21 @@ bool	valid_oper(t_data *inp, char **str, char *dl)
 		{
 			if (i < size - 1)
 			{
-				printf("syntax error: unexpected end of file\n");
+				printf("bash: syntax error near unexpected token `%s\'\n", dl);
 				free(ptr);
 				free_array(arr);
 				inp->ret_val = 258;
 				return (false);
 			}
-			else
-			{
+			cmd = readline("> ");
+			while (!*cmd)
 				cmd = readline("> ");
-				while (!*cmd)
-					cmd = readline("> ");
-				free(ptr);
-				ptr = ft_strjoin(*str, cmd);
-				free(*str);
-				*str = ft_strdup(ptr);
-				free(cmd);
-				free(ptr);
-			}
+			free(ptr);
+			ptr = ft_strjoin(*str, cmd);
+			free(*str);
+			*str = ft_strdup(ptr);
+			free(cmd);
+			free(ptr);
 		}
 		else
 			free(ptr);

@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 17:52:21 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/08 21:09:20 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_data
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 void			exec_external(t_data inp);
-int	main(int argc, char **argv, char **env);
+int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
 bool			process_fds(t_data *inp);
@@ -88,8 +88,8 @@ bool			search_builtins(t_data inp);
 int				exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
-int				exec_pwd(char **cmd);
-int				exec_exit(char *cmd);
+int				exec_pwd(t_data inp);
+int				exec_exit(char **args);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
