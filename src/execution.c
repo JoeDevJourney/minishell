@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/08 13:11:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:17:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	fork_command(t_data inp)
 
 	pid = fork();
 	g_signal = 1;
-	setup_signals(g_signal);
+	// setup_signals(g_signal);
 	if (pid == 0)
 		exec_external(inp);
 	if (pid > 0)
@@ -84,7 +84,7 @@ static int	fork_command(t_data inp)
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		g_signal = 0;
-		setup_signals(g_signal);
+		// setup_signals(g_signal);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		return (130);
