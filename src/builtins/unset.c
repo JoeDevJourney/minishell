@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:37:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 10:20:37 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:41:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ static int	var_index(char *cmd, char **env)
 	return (-1);
 }
 
+/**
+ * @brief Removes an env var from the array
+ * 
+ * @note Argument is inp.tok starting from index 1.
+ */
 int	exec_unset(char **cmd, char ***env)
 {
 	int	i;

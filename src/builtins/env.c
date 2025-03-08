@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 16:21:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:38:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,9 @@ void	dupl_env(char ***arr, char **env)
 int	exec_env(char **env)
 {
 	int	i;
-	int	size;
 
 	i = -1;
-	size = count_array_size(env);
-	while (++i < size)
+	while (env[++i])
 		printf("%s\n", env[i]);
 	return (0);
 }
