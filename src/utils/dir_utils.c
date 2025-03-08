@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 15:09:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:36:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,17 @@ char	*get_target_dir(t_data inp)
 		return (NULL);
 	}
 	return (process_argument(inp));
+}
+
+int	update_pwd_vars(char ***env, char *oldpwd)
+{
+	char	cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		return (1);
+	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
+		return (1);
+	if (update_env_var(env, "PWD", cwd) != 0)
+		return (1);
+	return (0);
 }

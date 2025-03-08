@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 13:10:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 15:36:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_data
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 void			exec_external(t_data inp);
-int	main(int argc, char **argv, char **env);
+int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
 bool			process_fds(t_data *inp);
@@ -97,6 +97,7 @@ int				update_env_var(char ***env, char *name, char *value);
 char			*get_env_val(t_data inp, char *name);
 char			*get_target_dir(t_data inp);
 void			dupl_env(char ***arr, char **env);
+int				update_pwd_vars(char ***env, char *oldpwd);
 
 //	Utilities
 size_t			count_array_size(char **arr);
