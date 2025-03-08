@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 12:29:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:05:13 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
  * @param str The address of the input as a str
  * @param dl The operator as a delimeter 
  */
-bool	valid_oper(char **str, char *dl)
+bool	valid_oper(t_data *inp, char **str, char *dl)
 {
 	char	**arr;
 	char	*ptr;
@@ -71,17 +71,28 @@ bool	valid_oper(char **str, char *dl)
 		if (*ptr == '\0')
 		{
 			if (i < size - 1)
-				return (printf("syntax error near unexpected token `%s'\n", dl), 0);
-			cmd = readline("> ");
-			while (!*cmd)
+			{
+				printf("syntax error: unexpected end of file\n");
+				free(ptr);
+				free_array(arr);
+				inp->ret_val = 258;
+				return (false);
+			}
+			else
+			{
 				cmd = readline("> ");
-			free(ptr);
-			ptr = ft_strjoin(*str, cmd);
-			free(*str);
-			*str = ft_strdup(ptr);
-			free(cmd);
+				while (!*cmd)
+					cmd = readline("> ");
+				free(ptr);
+				ptr = ft_strjoin(*str, cmd);
+				free(*str);
+				*str = ft_strdup(ptr);
+				free(cmd);
+				free(ptr);
+			}
 		}
-		free(ptr);
+		else
+			free(ptr);
 	}
 	return (free_array(arr), 1);
 }

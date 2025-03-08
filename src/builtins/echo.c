@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/05 20:25:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 16:22:49 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,19 @@ static int	lower_echo(char **arr)
 	bool	nl_flag;
 	char	*res;
 	int		i;
+	int		j;
 
 	if (!arr || !*arr)
 		return (printf("\n"), 0);
 	nl_flag = false;
 	i = 0;
-	while (!ft_strncmp(arr[i], "-n", 2) && ft_strlen(arr[i]) == 2)
+	while (arr[i] && arr[i][0] == '-')
 	{
+		j = 1;
+		while (arr[i][j] == 'n')
+			j++;
+		if (arr[i][j] != '\0')
+			break ;
 		i++;
 		nl_flag = true;
 	}

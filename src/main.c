@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 15:17:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:53:04 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int	main(int argc, char **argv, char **env)
 			printf("exit SHLVL %s\n", get_env_val(inp, "SHLVL"));
 			break ;
 		}
-		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+		if (valid_oper(&inp, &inp.cmd, "&&")
+			&& valid_oper(&inp, &inp.cmd, "||"))
 			parse_n_tokenize(&inp);
 		free(inp.cmd);
 	}

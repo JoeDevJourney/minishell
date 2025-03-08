@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 13:10:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:52:21 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void			dupl_env(char ***arr, char **env);
 //	Utilities
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
-bool			valid_oper(char **str, char *del);
+bool			valid_oper(t_data *inp, char **str, char *dl);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_logic.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 12:44:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 17:55:14 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	tokenize_or(t_data *inp)
 {
 	static int	j;
 
-	if (!valid_oper(&inp->or.cmd[j], "|"))
+	if (!valid_oper(inp, &inp->or.cmd[j], "|"))
 		return ;
 	inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 	inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
