@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 11:27:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 17:00:59 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 		close(new_fd[1]);
 	}
 	close(old_fd[0]);
-	if (!search_builtins(*inp))
-		exec_external(*inp);
-	else
-		exec_builtin(inp);
+	inp->ret_val = exec_command(inp, true);
 }
 
 /**
@@ -99,8 +96,8 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 		if (inp->cmd)
 			free(inp->cmd);
 		parse_input(inp);
-		if (!process_fds(inp))
-			exec_exit(0);
+		if (!process_fds(inp) || !*inp->tok)
+			inp->ret_val = exec_exit((char *[]){"11111", NULL});
 		process_pipe_fds(inp, old_fd, new_fd);
 	}
 	return (pid);
@@ -130,5 +127,5 @@ int	exec_pipes(t_data *inp)
 			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], &ptr.pipe.fd[0][0]);
 		close(ptr.pipe.fd[i][0]);
 	}
-	return (wait_n_free(&ptr, pid));
+	return (wait_n_free(&ptr, pid), ptr.ret_val);
 }

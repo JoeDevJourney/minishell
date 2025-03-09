@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:37:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:59:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_data
 //	Execution
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
-void			exec_external(t_data inp);
+int				exec_command(t_data *inp, bool pipe_flag);
 int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
