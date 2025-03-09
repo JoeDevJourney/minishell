@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 16:46:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:36:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_env(inp->env));
 	else if (!ft_strncmp(*inp->tok, "pwd", 3)
 		&& ft_strlen(*inp->tok) == 3)
-		return (exec_pwd(inp->tok));
+		return (exec_pwd(*inp));
 	else if (!ft_strncmp(*inp->tok, "cd", 2)
 		&& ft_strlen(*inp->tok) == 2)
 		return (exec_cd(inp));
@@ -78,7 +78,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_unset(inp->tok + 1, &inp->env));
 	else if (!ft_strncmp(*inp->tok, "exit", 4)
 		&& ft_strlen(*inp->tok) == 4)
-		return (exec_exit(inp->tok[1]));
+		return (exec_exit(inp->tok));
 	if (!ft_strncmp(inp->cmd, "./minishell", 11)
 		&& ((ft_strlen(inp->cmd) == 11) || ft_strlen(inp->cmd) == 12))
 		return (restart_minishell(inp));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/08 15:17:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 21:05:07 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static int	exec_command(t_data *inp)
 	char		*p;
 
 	parse_input(inp);
-	if (process_fds(inp))
+	if (process_fds(inp) && *inp->tok)
 	{
 		if (!ft_strchr(*inp->tok, '/')
 			|| ((!ft_strncmp(*inp->tok, "./minishell", 11))

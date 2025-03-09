@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:23:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:37:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,8 @@ bool			search_builtins(t_data inp);
 int				exec_builtin(t_data *inp);
 int				exec_env(char **env);
 int				exec_unset(char **cmd, char ***env);
-int				exec_pwd(char **cmd);
-int				exec_exit(char *cmd);
+int				exec_pwd(t_data inp);
+int				exec_exit(char **args);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);

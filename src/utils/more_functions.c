@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 17:25:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 20:53:33 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	**ft_split2(const char *s, const char *delim)
 	start = s;
 	delim_len = ft_strlen(delim);
 	end = ft_strnstr(start, delim, ft_strlen(start));
-	if (!s || !delim)
+	if (!s || !delim || *s == '\0')
 		return (NULL);
 	result = (char **)malloc((count_substr(s, delim) + 1) * sizeof(char *));
 	if (!result)
