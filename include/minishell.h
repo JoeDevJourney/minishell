@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 16:06:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/09 21:39:20 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,9 @@ int				restart_minishell(t_data *inp);
 void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
+void			parent_signal(int sig);
+void			child_signal(int sig);
+void			setup_hdoc_signal(void);
+void			hdoc_prompt(t_data *inp, int i);
 
 #endif

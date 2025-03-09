@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 16:09:31 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/09 18:10:45 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,14 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.cmd = read_input(inp);
-		// if (!ft_strncmp(inp.cmd, " ", 1) && ft_strlen(inp.cmd) == 1)
-		// 	continue ;
-		// check for spaces
 		if (!inp.cmd)
 		{
 			printf("exit SHLVL %s\n", get_env_val(inp, "SHLVL"));
 			break ;
 		}
+		if (!ft_strncmp(inp.cmd, " ", 1) && ft_strlen(inp.cmd) == 1)
+			continue ;
+		// check for spaces
 		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
 			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);

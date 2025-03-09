@@ -6,11 +6,24 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 16:06:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/09 21:44:06 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	setup_hdoc_signal(void)
+{
+	struct sigaction	sa;
+
+	rl_catch_signals = 0;
+	sa.sa_handler = child_signal;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, NULL);
+}
 
 static void	write_to_fd(char **input, t_data *inp, int i)
 {
@@ -41,10 +54,11 @@ static void	write_to_fd(char **input, t_data *inp, int i)
 	}
 }
 
-static void	hdoc_prompt(t_data *inp, int i)
+void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
 
+	setup_hdoc_signal();
 	input = ft_strdup("\0");
 	while (1)
 	{
@@ -54,6 +68,11 @@ static void	hdoc_prompt(t_data *inp, int i)
 			break ;
 		free(input);
 		input = readline("> ");
+		if (!input)
+		{
+			printf("> ");
+			return ;
+		}
 		write_to_fd(&input, inp, i);
 	}
 	free(input);
@@ -83,7 +102,9 @@ bool	hdoc_oper(t_data *inp)
 		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
 	if (i == count_array_size(inp->hdoc_op.cmd))
 		i = 0;
-	return (close(*inp->hdoc_op.fd[1]),
-		free_array_fd(inp->hdoc_op.fd), free(hdoc), true);
+	close(*inp->hdoc_op.fd[1]);
+	free_array_fd(inp->hdoc_op.fd);
+	free(hdoc);
+	return (true);
 }
 

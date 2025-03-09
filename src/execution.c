@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 16:06:45 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/09 21:43:22 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,32 @@ void	exec_external(t_data inp)
 /**
  * @brief Creates the child process for a single command
  */
-static int	fork_command(t_data inp)
+static int	fork_command(t_data *inp)
 {
 	pid_t	pid;
 	int		status;
+	bool	is_heredoc;
 
+	is_heredoc = false;
 	pid = fork();
 	g_signal = 1;
-	// setup_signals(g_signal);
+	setup_signals(g_signal);
 	if (pid == 0)
-		exec_external(inp);
+	{
+		if (is_heredoc)
+		{
+			setup_hdoc_signal();
+			hdoc_prompt(inp, 0);
+		}
+		else
+			exec_external(*inp);
+	}
 	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		g_signal = 0;
-		// setup_signals(g_signal);
+		setup_signals(g_signal);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		return (130);
@@ -111,7 +121,7 @@ static int	exec_command(t_data *inp)
 			if (search_builtins(*inp))
 				return (free(p), exec_builtin(inp));
 			else if (p)
-				return (free(p), fork_command(*inp));
+				return (free(p), fork_command(inp));
 			return (free(p), printf("%s: command not found\n", *inp->tok), 127);
 		}
 		if (stat(*inp->tok, &info) == 0 && S_ISDIR(info.st_mode))
