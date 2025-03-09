@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 18:19:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:42:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 	ft_strlcpy(seg, *str + *i, len + 1);
 	seg_expansion(&seg, inp);
 	remainder = ft_strdup(*str + *i + len);
-	*i += ft_strlen(seg) - 1;
+	*i += ft_strlen(seg);
 	free(*str);
 	*str = ft_strjoin3(prefix, seg, remainder);
 	free(prefix);
@@ -118,5 +118,7 @@ void	expansion(char **str, t_data inp)
 				continue ;
 		else
 			expand_segment(str, &i, ' ', inp);
+		if ((*str)[i] == '\0')
+			break ;
 	}
 }

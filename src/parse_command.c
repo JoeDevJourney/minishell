@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 18:53:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 10:43:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,6 @@ void	parse_input(t_data *inp)
 	inp->cmd = ft_strdup(*inp->pipe.cmd);
 	parse_redir(inp);
 	expand_redir(inp);
-	print_data(*inp);
 	expansion(&inp->cmd, *inp);
-	print_data(*inp);
 	tokenization(&inp->cmd, &inp->tok);
 }
