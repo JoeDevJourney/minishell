@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 13:41:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 16:06:45 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,8 @@ static int	exec_command(t_data *inp)
  */
 void	parse_n_exec(t_data *inp)
 {
-	int	sfd[2];
+	int		sfd[2];
+	char	*hdoc;
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
@@ -141,4 +142,8 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
+	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
+	if (!access(hdoc, F_OK))
+		unlink(hdoc);
+	free(hdoc);
 }
