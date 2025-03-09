@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 13:41:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 14:11:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ static int	exec_command(t_data *inp)
 	parse_input(inp);
 	if (process_fds(inp) && *inp->tok)
 	{
+		// print_data(*inp);
 		if (!ft_strchr(*inp->tok, '/')
 			|| ((!ft_strncmp(*inp->tok, "./minishell", 11))
 				&& (ft_strlen(*inp->tok) == 11 || ft_strlen(*inp->tok) == 12)))

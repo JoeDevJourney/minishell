@@ -6,55 +6,66 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:29:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 14:16:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	write_to_fd(char **input, t_data *inp, int i)
+/**
+ * @brief Checks for quotes in the delimeter
+ * 
+ * @returns the delimeter trimmed of quotes
+ * 
+ * @note return 1 if there were quotes in the first place, 0 otherwise
+ */
+static bool	trim_delimeter(char **del)
 {
 	char	*trimmed;
+	bool	res;
 
-	check_open_quotes(&inp->hdoc_op.cmd[i]);
-	while (ft_strchr(inp->hdoc_op.cmd[i], '\''))
+	check_open_quotes(del);
+	res = false;
+	while (ft_strchr(*del, '\''))
 	{
-		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "'");
-		free(inp->hdoc_op.cmd[i]);
-		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "'");
+		trimmed = ft_strtrim(*del, "'");
+		free(*del);
+		*del = ft_strtrim(trimmed, "'");
 		free(trimmed);
+		res = true;
 	}
-	while (ft_strchr(inp->hdoc_op.cmd[i], '"'))
+	while (ft_strchr(*del, '"'))
 	{
-		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "\"");
-		free(inp->hdoc_op.cmd[i]);
-		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "\"");
+		trimmed = ft_strtrim(*del, "\"");
+		free(*del);
+		*del = ft_strtrim(trimmed, "\"");
 		free(trimmed);
+		res = true;
 	}
-	if (ft_strchr(inp->hdoc_op.cmd[i], '"')
-		|| ft_strchr(inp->hdoc_op.cmd[i], '\''))
-		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
-	else
-	{
-		expansion(input, *inp);
-		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
-	}
+	return (res);
 }
 
 static void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
+	bool	q_flag;
 
-	input = ft_strdup("\0");
+	if (trim_delimeter(&inp->hdoc_op.cmd[i]))
+		q_flag = true;
+	else
+		q_flag = false;
+	input = NULL;
 	while (1)
 	{
-		if (*input != '\0'
-			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
+		if (input)
+			free(input);
+		input = readline("> ");
+		if (!ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
 			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
 			break ;
-		free(input);
-		input = readline("> ");
-		write_to_fd(&input, inp, i);
+		if (!q_flag)
+			expansion(&input, *inp);
+		ft_putendl_fd(input, *inp->hdoc_op.fd[1]);
 	}
 	free(input);
 }
