@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 18:26:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:57:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*path_to_exec(t_data inp)
 	char			*res;
 	int				i;
 
-	path = ft_split(get_env_val(inp, "PATH"), ':');
+	path = ft_split(get_env_val(inp.env_node, "PATH"), ':');
 	res = NULL;
 	i = -1;
 	while (path && path[++i])

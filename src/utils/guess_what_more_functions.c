@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/09 12:20:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:56:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,17 @@ char	*join_cmd(char **arr, char *del)
 /**
  * @brief Extracts the env variable from the env list.
  */
-char	*get_env_val(t_data inp, char *name)
+char	*get_env_val(t_env *head, char *name)
 {
-	size_t	name_len;
-	int		i;
+	t_env	*current;
 
-	name_len = ft_strlen(name);
-	i = -1;
-	if (!ft_strncmp(name, "$", 1) && name_len == 1)
-		return (ft_itoa(inp.pid));
-	if (!ft_strncmp(name, "\?", 1) && name_len == 1)
-		return (ft_itoa(inp.ret_val));
-	while (inp.env[++i])
-		if (!ft_strncmp(inp.env[i], name, name_len)
-			&& inp.env[i][name_len] == '=')
-			return (&inp.env[i][name_len + 1]);
+	current = head;
+	while (current)
+	{
+		if (strcmp(current->name, name) == 0)
+			return (current->value);
+		current = current->next;
+	}
 	return (NULL);
 }
 

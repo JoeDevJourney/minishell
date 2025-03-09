@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:37:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 22:02:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,45 +48,6 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	return (result);
 }
 
-/**
- * @brief Checks if there's a hanging command near an operator
- * 
- * @note It doesn't work for commands with mixed operators.
- */
-bool	valid_oper(char **cmd, char *del)
-{
-	int		i;
-	int		size;
-	char	*input;
-	char	**arr;
-	char	*trimmed;
-
-	arr = ft_split2(*cmd, del);
-	size = count_array_size(arr);
-	i = -1;
-	while (arr[++i])
-	{
-		trimmed = ft_strtrim(arr[i], " ");
-		free(arr[i]);
-		arr[i] = trimmed;
-	}
-	i = -1;
-	while (++i < size)
-	{
-		if (i < size - 1 && arr[i][0] == '\0')
-			return (
-				printf("bash: syntax error near unexpected token `%s'\n", del),
-				false);
-		if (i == size - 1 && arr[i][0] == '\0')
-		{
-			input = readline("");
-			*cmd = ft_strjoin_free(*cmd, input);
-			free(input);
-		}
-	}
-	return (true);
-}
-
 void	update_shell_lvl(t_data *inp)
 {
 	int		lvl;
@@ -94,7 +55,7 @@ void	update_shell_lvl(t_data *inp)
 	char	*lvl_str;
 
 	lvl = 1;
-	shlvl_val = get_env_val(*inp, "SHLVL");
+	shlvl_val = get_env_val(inp->env_node, "SHLVL");
 	if (shlvl_val)
 		lvl = ft_atoi(shlvl_val) + 1;
 	lvl_str = ft_itoa(lvl);

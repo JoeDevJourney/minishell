@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:36:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:09:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	tokenize_or(t_data *inp)
 {
-	static int	j;
+	static int	j = 0;
 
 	inp->pipe.cmd = ft_split2(inp->or.cmd[j], "|");
 	inp->pipe.num_cmd = count_substr(inp->or.cmd[j], "|");
@@ -28,7 +28,7 @@ static void	tokenize_or(t_data *inp)
 
 static void	tokenize_and(t_data *inp)
 {
-	static int	i;
+	static int	i = 0;
 
 	inp->or.cmd = ft_split2(inp->and.cmd[i], "||");
 	inp->or.num_cmd = count_substr(inp->and.cmd[i], "||");

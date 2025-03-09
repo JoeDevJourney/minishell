@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:36:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:46:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ bool	search_builtins(t_data inp)
 int	exec_builtin(t_data *inp)
 {
 	if (!ft_strncmp(*inp->tok, "env", 3) && ft_strlen(*inp->tok) == 3)
-		return (exec_env(inp->env));
+		return (exec_env(inp->env_node));
 	else if (!ft_strncmp(*inp->tok, "pwd", 3)
 		&& ft_strlen(*inp->tok) == 3)
 		return (exec_pwd(*inp));

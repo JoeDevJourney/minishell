@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 16:59:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:56:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <sys/types.h>
+# include <unistd.h>
 # include <errno.h>
 # include <limits.h>
 # include <dirent.h>
@@ -50,11 +52,20 @@ typedef struct s_redir_op
 	int		**fd;
 }			t_redir_op;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	int				size;
+	struct s_env	*next;
+}			t_env;
+
 typedef struct s_data
 {
 	pid_t			pid;
 	char			*home_dir;
 	char			**env;
+	t_env			*env_node;
 	char			*cmd;
 	char			**tok;
 	t_logical_op	and;
@@ -86,7 +97,7 @@ void			expansion(char **str, t_data inp);
 //	Builtins
 bool			search_builtins(t_data inp);
 int				exec_builtin(t_data *inp);
-int				exec_env(char **env);
+int				exec_env(t_env *env);
 int				exec_unset(char **cmd, char ***env);
 int				exec_pwd(t_data inp);
 int				exec_exit(char **args);
@@ -94,9 +105,13 @@ int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
 int				update_env_var(char ***env, char *name, char *value);
-char			*get_env_val(t_data inp, char *name);
+char			*get_env_val(t_env *head, char *name);
+
 char			*get_target_dir(t_data inp);
+
 void			dupl_env(char ***arr, char **env);
+t_env			*dupl_env2(char **env);
+
 int				update_pwd_vars(char ***env, char *oldpwd);
 
 //	Utilities

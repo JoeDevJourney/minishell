@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 15:36:56 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 21:58:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*get_home_dir(t_data inp)
 {
 	char	*home;
 
-	home = get_env_val(inp, "HOME");
+	home = get_env_val(inp.env_node, "HOME");
 	if (home == NULL)
 	{
 		perror("cd: HOME not set\n");
@@ -29,7 +29,7 @@ static char	*get_oldpwd_dir(t_data inp)
 {
 	char	*oldpwd;
 
-	oldpwd = get_env_val(inp, "OLDPWD");
+	oldpwd = get_env_val(inp.env_node, "OLDPWD");
 	if (!oldpwd)
 		perror("cd: OLDPWD not set\n");
 	return (oldpwd);
@@ -85,7 +85,7 @@ int	update_pwd_vars(char ***env, char *oldpwd)
 		return (1);
 	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
 		return (1);
-	if (update_env_var(env, "PWD", cwd) != 0)
+	if (oldpwd && update_env_var(env, "PWD", cwd) != 0)
 		return (1);
 	return (0);
 }

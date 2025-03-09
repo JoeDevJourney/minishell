@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 16:27:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 22:01:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ static void	add_env_var(char ***env, char *new_entry)
 	char	**new_environ;
 
 	size = count_array_size(*env);
-	printf("size: %d\n", size);
 	new_environ = safe_malloc((size + 2) * sizeof(char *));
 	j = -1;
 	while ((*env)[++j])
 		new_environ[j] = ft_strdup((*env)[j]);
-	new_environ[j] = ft_strdup(new_entry);
-	new_environ[++j] = NULL;
+	new_environ[j++] = ft_strdup(new_entry);
+	new_environ[j] = NULL;
 	free_array(*env);
 	*env = new_environ;
 }
@@ -38,16 +37,11 @@ static char	*create_env_entry(const char *name, const char *value)
 	char	*new_entry;
 	size_t	len;
 
-	len = ft_strlen(name) + ft_strlen(value) + 2;
-	new_entry = malloc(len);
-	if (!new_entry)
-	{
-		perror("cd: malloc failed\n");
-		exit (EXIT_FAILURE);
-	}
-	ft_strlcpy(new_entry, name, len);
-	ft_strlcat(new_entry, "=", len);
-	ft_strlcat(new_entry, value, len);
+	len = ft_strlen(name) + ft_strlen(value) + 1;
+	new_entry = safe_malloc(len + 1);
+	ft_strlcpy(new_entry, name, len + 1);
+	ft_strlcat(new_entry, "=", len + 1);
+	ft_strlcat(new_entry, value, len + 1);
 	return (new_entry);
 }
 
@@ -83,6 +77,7 @@ int	update_env_var(char ***env, char *name, char *value)
 	if (replace_env_var(env, name, new_entry))
 		return (0);
 	add_env_var(env, new_entry);
+	free(new_entry);
 	return (0);
 }
 
@@ -91,14 +86,15 @@ int	exec_cd(t_data *inp)
 	char	*dir;
 	char	*oldpwd;
 
-	oldpwd = get_env_val(*inp, "PWD");
+	oldpwd = ft_strdup(get_env_val(inp->env_node, "PWD"));
 	dir = get_target_dir(*inp);
 	if (!dir || chdir(dir) != 0)
 		return (perror(dir), 1);
-	if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
-		return (1);
+	// if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
+	// 	return (1);
 	if (update_pwd_vars(&inp->env, oldpwd) != 0)
 		return (1);
 	free(dir);
+	free(oldpwd);
 	return (0);
 }
