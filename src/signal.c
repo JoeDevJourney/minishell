@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 13:10:25 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:41:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	child_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
+		printf("^C\n");
 		g_signal = 0;
 	}
 }

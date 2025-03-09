@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:35:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 18:58:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,22 @@ static void	init_data(t_data *inp, char **env)
 	inp->ret_val = 0;
 }
 
+static bool	trim_user_input(t_data *inp)
+{
+	char	*trimmed;
+
+	if (!inp->cmd)
+		return (printf("exit SHLVL %s\n", get_env_val(*inp, "SHLVL")), false);
+	while (*inp->cmd == ' ')
+	{
+		trimmed = ft_strtrim(inp->cmd, " ");
+		free(inp->cmd);
+		inp->cmd = ft_strdup(trimmed);
+		free(trimmed);
+	}
+	return (true);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
@@ -64,19 +80,14 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	// setup_signals(g_signal);
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
 		inp.cmd = read_input(inp);
-		// if (!ft_strncmp(inp.cmd, " ", 1) && ft_strlen(inp.cmd) == 1)
-		// 	continue ;
-		// check for spaces
-		if (!inp.cmd)
-		{
-			printf("exit SHLVL %s\n", get_env_val(inp, "SHLVL"));
+		if (!trim_user_input(&inp))
 			break ;
-		}
+		if (*inp.cmd == '\0')
+			continue ;
 		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
 			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);
