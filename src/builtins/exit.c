@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:31:49 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 18:45:30 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/09 14:04:42 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,20 @@ int	exec_exit(char **args)
 	exit_code = 0;
 	if (args[1] && args[2])
 	{
-		printf("minishell: exit: too many arguments\n");
+		printf("exit\n");
+		printf("bash: exit: too many arguments\n");
 		return (1);
 	}
 	if (args[1] && !is_numeric(args[1]))
 	{
-		printf("minishell: exit: %s: numeric argument required\n", args[1]);
+		printf("exit\n");
+		printf("bash: exit: %s: numeric argument required\n", args[1]);
 		exit_code = 255;
 	}
 	else if (args[1])
+	{
+		printf("exit\n");
 		exit_code = ft_atoi(args[1]) % 256;
+	}
 	exit(exit_code);
 }
