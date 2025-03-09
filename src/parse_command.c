@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/07 18:12:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:53:57 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,19 @@ static void	copy_to_token(char *str, char *tok, int start, int end)
 	j = 0;
 	while (++start < end)
 	{
-		if (str[start] == '"' && !open_sq)
+		if ((!open_sq && str[start] == '"') || (!open_dq && str[start] == '\''))
 		{
-			open_dq = !open_dq;
+			if (!open_sq && str[start] == '"')
+				open_dq = !open_dq;
+			else
+				open_sq = !open_sq;
 			continue ;
 		}
-		if (str[start] == '\'' && !open_dq)
-		{
-			open_sq = !open_sq;
-			continue ;
-		}
+		if (open_dq && str[start] == '\\' && (str[start + 1] == '"'
+				|| str[start + 1] == '$' || str[start + 1] == '\\'))
+			start++;
+		else if (!open_sq && !open_dq && str[start] == '\\' && str[start + 1])
+			start++;
 		tok[j++] = str[start];
 	}
 	tok[j] = '\0';
@@ -77,7 +80,7 @@ static void	copy_to_token(char *str, char *tok, int start, int end)
 
 /**
  * @brief It uses ' ' or '\0' to extract the quoted substring, quotes removed,
- * from str and saves it as an individual token to the arr.
+ * from str and saves it as an individual tempen to the arr.
  * 
  * @param i index that stops at the first ' ' that's not included in quotes 
  * @param len length of the extracted token.
@@ -140,6 +143,8 @@ void	parse_input(t_data *inp)
 	inp->cmd = ft_strdup(*inp->pipe.cmd);
 	parse_redir(inp);
 	expand_redir(inp);
+	print_data(*inp);
 	expansion(&inp->cmd, *inp);
+	print_data(*inp);
 	tokenization(&inp->cmd, &inp->tok);
 }

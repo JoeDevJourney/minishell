@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/07 18:12:33 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/08 18:19:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,28 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 static void	seg_expansion(char **str, t_data inp)
 {
 	char	*env_val;
+	char	*replacement;
 	int		dest_pos;
 	int		src_pos;
 
 	dest_pos = 0;
 	src_pos = 0;
-	env_val = safe_malloc((1023) * sizeof(char));
+	env_val = safe_malloc((1024) * sizeof(char));
 	while ((*str)[src_pos])
 	{
 		if ((*str)[src_pos] == '$')
 		{
-			ft_strlcpy(env_val + dest_pos,
-				repl_env_value(*str, &src_pos, inp), 1023 - dest_pos + 1);
-			dest_pos += ft_strlen(env_val);
+			replacement = repl_env_value(*str, &src_pos, inp);
+			ft_strlcpy(env_val + dest_pos, replacement, 1023 - dest_pos + 1);
+			dest_pos += ft_strlen(replacement);
 		}
-		else if ((*str)[src_pos] == '\\')
-			env_val[dest_pos++] = (*str)[++src_pos, src_pos++];
-		else
-			if (dest_pos < 1023)
-				env_val[dest_pos++] = (*str)[src_pos++];
+		else if (dest_pos < 1023)
+			env_val[dest_pos++] = (*str)[src_pos++];
 	}
 	env_val[dest_pos] = '\0';
-	free(*str);
-	*str = ft_strdup(env_val);
-	free(env_val);
+	return (free(*str), *str = ft_strdup(env_val), free(env_val));
 }
+
 
 /**
  * @brief Given a delimeter to mark the end of the segment, it checks for
