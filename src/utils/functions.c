@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 12:29:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:23:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,39 +51,40 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 /**
  * @brief Checks if there's a hanging command near an operator
  * 
- * @param str The address of the input as a str
- * @param dl The operator as a delimeter 
+ * @note It doesn't work for commands with mixed operators.
  */
-bool	valid_oper(char **str, char *dl)
+bool	valid_oper(char **cmd, char *del)
 {
-	char	**arr;
-	char	*ptr;
-	char	*cmd;
 	int		i;
 	int		size;
+	char	*input;
+	char	**arr;
+	char	*trimmed;
 
-	arr = ft_split2(*str, dl);
+	arr = ft_split2(*cmd, del);
 	size = count_array_size(arr);
+	i = -1;
+	while (arr[++i])
+	{
+		trimmed = ft_strtrim(arr[i], " ");
+		free(arr[i]);
+		arr[i] = trimmed;
+	}
 	i = -1;
 	while (++i < size)
 	{
-		ptr = ft_strtrim(arr[i], " ");
-		if (*ptr == '\0')
+		if (i < size - 1 && arr[i][0] == '\0')
+			return (
+				printf("bash: syntax error near unexpected token `%s'\n", del),
+				false);
+		if (i == size - 1 && arr[i][0] == '\0')
 		{
-			if (i < size - 1)
-				return (printf("syntax error near unexpected token `%s'\n", dl), 0);
-			cmd = readline("> ");
-			while (!*cmd)
-				cmd = readline("> ");
-			free(ptr);
-			ptr = ft_strjoin(*str, cmd);
-			free(*str);
-			*str = ft_strdup(ptr);
-			free(cmd);
+			input = readline("");
+			*cmd = ft_strjoin_free(*cmd, input);
+			free(input);
 		}
-		free(ptr);
 	}
-	return (free_array(arr), 1);
+	return (true);
 }
 
 void	update_shell_lvl(t_data *inp)

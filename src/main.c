@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 15:17:18 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:24:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,11 @@ int	main(int argc, char **argv, char **env)
 			printf("exit SHLVL %s\n", get_env_val(inp, "SHLVL"));
 			break ;
 		}
-		if (valid_oper(&inp.cmd, "&&") && valid_oper(&inp.cmd, "||"))
+		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
+			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);
+		else
+			inp.ret_val = 258;
 		free(inp.cmd);
 	}
 	// inp.cmd = ft_strdup("cat < Makefile > out");

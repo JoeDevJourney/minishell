@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/06 20:46:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/09 13:29:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	hdoc_oper(t_data *inp)
 	static size_t	i;
 	char			*hdoc;
 
-	hdoc = ft_strjoin(inp->home_dir, "/src/heredoc");
+	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
 	inp->hdoc_op.fd = safe_malloc(3 * sizeof(int *));
 	inp->hdoc_op.fd[0] = safe_malloc(sizeof(int));
 	*inp->hdoc_op.fd[0] = STDIN_FILENO;
