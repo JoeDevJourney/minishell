@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 21:43:22 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:36:14 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int	fork_command(t_data *inp)
 	{
 		if (is_heredoc)
 		{
-			setup_hdoc_signal();
+			setup_hdoc_signal(inp);
 			hdoc_prompt(inp, 0);
 		}
 		else

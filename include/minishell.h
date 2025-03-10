@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 21:39:20 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/10 17:32:34 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include <limits.h>
 # include <dirent.h>
 # include <signal.h>
+# include <sys/ioctl.h>
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -65,6 +66,7 @@ typedef struct s_data
 	t_redir_op		app_op;
 	t_redir_op		hdoc_op;
 	int				ret_val;
+	int				in_heredoc;
 }			t_data;
 
 //	Execution
@@ -120,7 +122,7 @@ char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
 void			parent_signal(int sig);
 void			child_signal(int sig);
-void			setup_hdoc_signal(void);
 void			hdoc_prompt(t_data *inp, int i);
+void			setup_hdoc_signal(t_data *data);
 
 #endif
