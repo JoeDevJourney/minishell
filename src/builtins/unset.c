@@ -12,79 +12,43 @@
 
 #include "../../include/minishell.h"
 
-/**
- * @brief Removes the index line from the array
- */
-static void	remove_line(char ***env, int index)
+static int remove_node(char *name, t_env **head)
 {
-	char	**new_arr;
-	int		size;
-	int		i;
-	int		j;
-
-	size = count_array_size(*env);
-	if (index < 0 || index >= size)
-		return ;
-	new_arr = safe_malloc(size * sizeof(char *));
-	free((*env)[index]);
-	i = -1;
-	j = 0;
-	while (++i < size)
-	{
-		if (i != index)
-		{
-			new_arr[j] = (*env)[i];
-			j++;
-		}
-	}
-	new_arr[j] = NULL;
-	free(*env);
-	*env = new_arr;
+    t_env *current;
+    t_env *prev;
+    
+    current = *head;
+    prev = NULL;
+    if (!head || !*head || !name)
+        return (1);
+    while (current)
+    {
+        if (strcmp(current->name, name) == 0)
+        {
+            if (prev)
+                prev->next = current->next;
+            else
+                *head = current->next;
+            free(current->name);
+            free(current->value);
+            free(current);
+            return (0);
+        }
+        prev = current;
+        current = current->next;
+    }
+    return (1);
 }
 
-/**
- * @brief Searches for *cmd in the **env
- * 
- * @returns The index of the variable found in **env (-1 if not found) 
- */
-static int	var_index(char *cmd, char **env)
-{
-	char	**tok;
-	int		len;
-	int		i;
-
-	i = -1;
-	while (env[++i])
-	{
-		tok = ft_split(env[i], '=');
-		len = ft_strlen(cmd);
-		if (!ft_strncmp(cmd, *tok, len) && tok[0][len] == '\0')
-			return (free_array(tok), i);
-		free_array(tok);
-	}
-	return (-1);
-}
-
-/**
- * @brief Removes an env var from the array
- * 
- * @note Argument is inp.tok starting from index 1.
- */
-int	exec_unset(char **cmd, char ***env)
+int exec_unset(char **cmd, t_env **head)
 {
 	int	i;
 
-	i = 0;
-	if (!cmd[i])
+	if (count_array_size(cmd) == 1)
 		return (0);
-	if (cmd[i][0] == '-')
-	{
-		if (ft_strncmp(cmd[i], "-v", ft_strlen(cmd[i]))
-			&& ft_strlen(cmd[i]) == 2)
-			return (printf("bash: unset: %s: invalid option\n", cmd[i]), 2);
-		i++;
-	}
-	while (cmd[i])
-		remove_line(env, var_index(cmd[i++], *env));
+	i = 0;
+	while (cmd[++i])
+		if (remove_node(cmd[i], head) == 1) 
+			return (perror("Error unset"), 1);
 	return (0);
 }

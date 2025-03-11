@@ -75,7 +75,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_export(inp));
 	else if (!ft_strncmp(*inp->tok, "unset", 5)
 		&& ft_strlen(*inp->tok) == 5)
-		return (exec_unset(inp->tok + 1, &inp->env));
+		return (exec_unset(inp->tok, &inp->env_node));
 	else if (!ft_strncmp(*inp->tok, "exit", 4)
 		&& ft_strlen(*inp->tok) == 4)
 		return (exec_exit(inp->tok));

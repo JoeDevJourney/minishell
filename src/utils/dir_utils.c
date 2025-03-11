@@ -37,30 +37,29 @@ static char	*get_oldpwd_dir(t_data inp)
 
 static char	*process_argument(t_data inp)
 {
-	char	*dir;
-	char	*home;
+	char	*trimmed;
+	char	*res;
 
 	if (!ft_strncmp(inp.tok[1], "-", 1) && ft_strlen(inp.tok[1]) == 1)
 	{
-		dir = get_oldpwd_dir(inp);
-		if (dir)
-		{
-			printf("%s\n", dir);
-			dir = ft_strdup(dir);
-		}
-		return (dir);
+		if (!get_oldpwd_dir(inp))
+			return (NULL);
+		printf("%s\n", get_oldpwd_dir(inp));
+		return (ft_strdup(get_oldpwd_dir(inp)));
 	}
 	if (inp.tok[1][0] == '~')
 	{
-		home = get_home_dir(inp);
-		if (!home)
+		if (!get_home_dir(inp))
 			return (NULL);
-		dir = ft_strjoin(home, inp.tok[1] + 1);
-		return (dir);
+		return (ft_strjoin3(get_home_dir(inp), "/", inp.tok[1] + 1));
 	}
 	if (inp.tok[1][0] == '\0')
 		return (NULL);
-	return (ft_strdup(inp.tok[1]));
+	if (inp.tok[1][0] == '/')
+		return (ft_strdup(inp.tok[1]));
+	trimmed = ft_strtrim(inp.tok[1], "/");
+	res = ft_strjoin3(get_env_val(inp.env_node, ("PWD")), "/", trimmed);
+	return (free(trimmed), res);
 }
 
 char	*get_target_dir(t_data inp)
@@ -69,23 +68,10 @@ char	*get_target_dir(t_data inp)
 
 	if (!inp.tok[1])
 	{
-		home = get_home_dir(inp);
-		if (home)
-			return (ft_strdup(home));
-		return (NULL);
+		home = ft_strdup(get_home_dir(inp));
+		if (!home)
+			return (NULL);
+		return (home);
 	}
 	return (process_argument(inp));
-}
-
-int	update_pwd_vars(char ***env, char *oldpwd)
-{
-	char	cwd[PATH_MAX];
-
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (1);
-	if (oldpwd && update_env_var(env, "OLDPWD", oldpwd) != 0)
-		return (1);
-	if (oldpwd && update_env_var(env, "PWD", cwd) != 0)
-		return (1);
-	return (0);
 }

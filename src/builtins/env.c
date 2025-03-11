@@ -12,27 +12,7 @@
 
 #include "../../include/minishell.h"
 
-void	dupl_env(char ***arr, char **env)
-{
-	int	i;
-	int	size;
-
-	size = count_array_size(env);
-	*arr = safe_malloc((size + 1) * sizeof(char *));
-	i = -1;
-	while (++i < size)
-	{
-		(*arr)[i] = ft_strdup(env[i]);
-		if (!(*arr)[i])
-		{
-			free_array(*arr);
-			return ;
-		}
-	}
-	(*arr)[i] = NULL;
-}
-
-static void	free_env_list(t_env *head)
+void	free_env_list(t_env *head)
 {
 	t_env	*temp;
 
@@ -46,56 +26,42 @@ static void	free_env_list(t_env *head)
 	}
 }
 
-static void	split_env_var(char *env_var, char **name, char **value)
-{
-	char *equal_sign;
-
-	equal_sign = strchr(env_var, '=');
-	if (!equal_sign)
-	{
-		*name = strdup(env_var);
-		*value = NULL;
-		return ;
-	}
-	*name = strndup(env_var, equal_sign - env_var);
-	*value = strdup(equal_sign + 1);
-}
-
-static t_env	*new_env_node(char *env_var)
+t_env	*new_env_node(char *env_var)
 {
 	t_env	*new_node;
+	char	*name;
+	char	*value;
 
 	new_node = safe_malloc(sizeof(t_env));
-	split_env_var(env_var, &new_node->name, &new_node->value);
-	if (!new_node->name)
-		return (free(new_node), NULL);
+	name = ft_strdup(env_var);
+	value = ft_strchr(name, '=');
+	if (!value)
+		return (perror("Error duplicating env"), NULL);
+	*value = '\0';
+	value++;
+	new_node->name = name;
+	new_node->value = ft_strdup(value);
 	new_node->next = NULL;
 	return (new_node);
 }
 
-t_env	*dupl_env2(char **env)
+void	dupl_env(t_env **head, char **env)
 {
-	t_env	*head;
-	t_env	*tail;
-	t_env	*new_node;
+	t_env	*current;
+	int		size;
 	int		i;
 
-	head = NULL;
-	tail = NULL;
+	if (!env || !*env)
+		return (perror("env list empty"));
+	size = count_array_size(env);	
 	i = 0;
-	while (env[i])
+	(*head) = new_env_node(env[i++]);
+	current = *head;
+	while (i < size)
 	{
-		new_node = new_env_node(env[i]);
-		if (!new_node)
-			return (free_env_list(head), NULL);
-		if (!head)
-			head = new_node;
-		else
-			tail->next = new_node;
-		tail = new_node;
-		i++;
+		current->next = new_env_node(env[i++]);
+		current = current->next;
 	}
-	return (head);
 }
 
 int	exec_env(t_env *env)

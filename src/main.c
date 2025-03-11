@@ -17,8 +17,15 @@ volatile sig_atomic_t	g_signal = 0;
 static void	init_data(t_data *inp, char **env)
 {
 	inp->pid = getpid();
-	inp->env_node = dupl_env2(env);
-	dupl_env(&inp->env, env);
+	inp->env_node = NULL;
+	dupl_env(&inp->env_node, env);
+	// // while (inp->env_node)
+	// // {
+	// // 	printf("env: '%s=%s'\n", inp->env_node->name, inp->env_node->value);
+	// // 	inp->env_node->next = inp->env_node;
+	// // }
+	// printf("he\n");
+	// pause();
 	update_shell_lvl(inp);
 	inp->home_dir = ft_strdup(get_env_val(inp->env_node, "PWD"));
 	inp->and.cmd = NULL;
@@ -139,7 +146,7 @@ int	main(int argc, char **argv, char **env)
 	// 	&& valid_oper(&inp.cmd, "||") && valid_oper(&inp.cmd, "|"))
 	// 	parse_n_tokenize(&inp);
 	free(inp.home_dir);
-	free_array(inp.env);
+	free_env_list(inp.env_node);
 	free(inp.cmd);
 	return (0);
 }

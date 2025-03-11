@@ -15,50 +15,36 @@
 /**
  * @brief Adds the new entry to the env list.
  */
-static void	add_env_var(char ***env, char *new_entry)
+static void	add_env_var(t_env **head, char *name, char *value)
 {
-	int		j;
-	int		size;
-	char	**new_environ;
+	t_env	*current;
 
-	size = count_array_size(*env);
-	new_environ = safe_malloc((size + 2) * sizeof(char *));
-	j = -1;
-	while ((*env)[++j])
-		new_environ[j] = ft_strdup((*env)[j]);
-	new_environ[j++] = ft_strdup(new_entry);
-	new_environ[j] = NULL;
-	free_array(*env);
-	*env = new_environ;
+	current = (*head);
+	while (current->next)
+		current = current->next;
+	current->next = safe_malloc(sizeof(t_env));
+	current->next->name = ft_strdup(name);
+	current->next->value = ft_strdup(value);
+	current->next->next = NULL;
+	
 }
 
-static char	*create_env_entry(const char *name, const char *value)
+static bool	replace_env_var(t_env **head, char *name, char *new_val)
 {
-	char	*new_entry;
-	size_t	len;
+	t_env	*current;
 
-	len = ft_strlen(name) + ft_strlen(value) + 1;
-	new_entry = safe_malloc(len + 1);
-	ft_strlcpy(new_entry, name, len + 1);
-	ft_strlcat(new_entry, "=", len + 1);
-	ft_strlcat(new_entry, value, len + 1);
-	return (new_entry);
-}
-
-static bool	replace_env_var(char ***env, const char *name, char *new_entry)
-{
-	int		i;
-
-	i = 0;
-	while ((*env)[i])
+	current = *head;
+	while (current)
 	{
-		if (ft_strncmp((*env)[i], name, ft_strlen(name)) == 0 \
-			&& (*env)[i][ft_strlen(name)] == '=')
+		if (!ft_strncmp(current->name, name, ft_strlen(name))
+			&& ft_strlen(name) == ft_strlen(current->name))
 		{
-			(*env)[i] = new_entry;
+			if (current->value)
+				free(current->value);
+			current->value = ft_strdup(new_val);
 			return (true);
 		}
-		i++;
+		current = current->next;
 	}
 	return (false);
 }
@@ -67,34 +53,29 @@ static bool	replace_env_var(char ***env, const char *name, char *new_entry)
  * @brief Adds a new element in the env list if it doesn't already exist,
  * otherwise it replaces its value.
  */
-int	update_env_var(char ***env, char *name, char *value)
+int	update_env_var(t_env **head, char *name, char *value)
 {
-	char	*new_entry;
-
-	new_entry = create_env_entry(name, value);
-	if (!new_entry)
-		return (1);
-	if (replace_env_var(env, name, new_entry))
-		return (0);
-	add_env_var(env, new_entry);
-	free(new_entry);
+	if (!replace_env_var(head, name, value))
+		add_env_var(head, name, value);
 	return (0);
 }
 
 int	exec_cd(t_data *inp)
 {
-	char	*dir;
-	char	*oldpwd;
+	char	*target_dir;
 
-	oldpwd = ft_strdup(get_env_val(inp->env_node, "PWD"));
-	dir = get_target_dir(*inp);
-	if (!dir || chdir(dir) != 0)
-		return (perror(dir), 1);
-	// if (oldpwd && update_env_var(&inp->env, "OLDPWD", oldpwd) != 0)
-	// 	return (1);
-	if (update_pwd_vars(&inp->env, oldpwd) != 0)
-		return (1);
-	free(dir);
-	free(oldpwd);
+	if(!get_env_val(inp->env_node, "PWD") || !*get_env_val(inp->env_node, "PWD")
+		|| *get_env_val(inp->env_node, "PWD") == ' ')
+		update_env_var(&inp->env_node, "PWD", getcwd(NULL, 0));
+	target_dir = get_target_dir(*inp);
+	if (!target_dir || chdir(target_dir) != 0)
+		return (perror(inp->tok[1]), 1);
+	if (update_env_var(&inp->env_node, "OLDPWD", get_env_val(inp->env_node, "PWD")) != 0)
+		return (perror("Error updating OLDPWD"), 1);
+	free(target_dir);
+	target_dir = getcwd(NULL, 0);
+	if (update_env_var(&inp->env_node, "PWD", target_dir) != 0)
+		return (perror("Error updating $PWD"), 1);
+	free(target_dir);
 	return (0);
 }

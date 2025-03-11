@@ -76,14 +76,15 @@ char	*join_cmd(char **arr, char *del)
 /**
  * @brief Extracts the env variable from the env list.
  */
-char	*get_env_val(t_env *head, char *name)
+char	*get_env_val(t_env *head, char *input)
 {
 	t_env	*current;
 
 	current = head;
 	while (current)
 	{
-		if (strcmp(current->name, name) == 0)
+		if (!ft_strncmp(current->name, input, ft_strlen(input))
+			&& ft_strlen(input) == ft_strlen(current->name))
 			return (current->value);
 		current = current->next;
 	}

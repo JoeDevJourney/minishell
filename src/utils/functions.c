@@ -61,7 +61,7 @@ void	update_shell_lvl(t_data *inp)
 	lvl_str = ft_itoa(lvl);
 	if (lvl_str)
 	{
-		update_env_var(&inp->env, "SHLVL", lvl_str);
+		update_env_var(&inp->env_node, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
 }

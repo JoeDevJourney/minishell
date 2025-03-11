@@ -98,21 +98,23 @@ void			expansion(char **str, t_data inp);
 bool			search_builtins(t_data inp);
 int				exec_builtin(t_data *inp);
 int				exec_env(t_env *env);
-int				exec_unset(char **cmd, char ***env);
+int exec_unset(char **cmd, t_env **head);
 int				exec_pwd(t_data inp);
 int				exec_exit(char **args);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
-int				update_env_var(char ***env, char *name, char *value);
+int	update_env_var(t_env **head, char *name, char *value);
+
 char			*get_env_val(t_env *head, char *name);
+char			*create_env_entry(char *name, char *value);
 
 char			*get_target_dir(t_data inp);
 
-void			dupl_env(char ***arr, char **env);
-t_env			*dupl_env2(char **env);
-
+void	dupl_env(t_env **head, char **env);
+t_env	*new_env_node(char *env_var);
 int				update_pwd_vars(char ***env, char *oldpwd);
+void	free_env_list(t_env *head);
 
 //	Utilities
 size_t			count_array_size(char **arr);
