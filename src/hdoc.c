@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/10 17:46:49 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:37:04 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	write_to_fd(char **input, t_data *inp, int i)
 void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
+	int		sig;
 
 	inp->in_heredoc = 1;
 	setup_hdoc_signal(inp);
@@ -79,6 +80,8 @@ void	hdoc_prompt(t_data *inp, int i)
 		free(input);
 		input = readline("> ");
 		if (!input)
+			break ;
+		if (!input && sig == SIGQUIT)
 		{
 			printf("> ");
 			break ;
