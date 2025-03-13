@@ -26,20 +26,18 @@ static bool	trim_delimeter(char **del)
 
 	check_open_quotes(del);
 	res = false;
-	while (ft_strchr(*del, '\''))
+	if (ft_strchr(*del, '\''))
 	{
 		trimmed = ft_strtrim(*del, "'");
 		free(*del);
-		*del = ft_strtrim(trimmed, "'");
-		free(trimmed);
+		*del = trimmed;
 		res = true;
 	}
-	while (ft_strchr(*del, '"'))
+	if (ft_strchr(*del, '"'))
 	{
 		trimmed = ft_strtrim(*del, "\"");
 		free(*del);
-		*del = ft_strtrim(trimmed, "\"");
-		free(trimmed);
+		*del = trimmed;
 		res = true;
 	}
 	return (res);

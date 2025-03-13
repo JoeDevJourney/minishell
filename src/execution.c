@@ -23,7 +23,7 @@ static char	*path_to_exec(t_data inp)
 	char			*res;
 	int				i;
 
-	path = ft_split(get_env_val(inp.env_node, "PATH"), ':');
+	path = ft_split(get_env_val(inp.env, "PATH"), ':');
 	res = NULL;
 	i = -1;
 	while (path && path[++i])
@@ -52,15 +52,18 @@ static int	fork_command(t_data inp)
 {
 	pid_t	pid;
 	int		status;
+	char	**env;
 
 	pid = fork();
 	g_signal = 1;
+	env = list_to_array(inp.env);
 	if (pid == 0)
-		execve(*inp.tok, inp.tok, inp.env);
+		execve(*inp.tok, inp.tok, env);
 	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
+		free_array(env);
 		g_signal = 0;
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
@@ -92,7 +95,7 @@ int	exec_command(t_data *inp, bool pipe_flag)
 
 	if (search_builtins(*inp))
 		return (exec_builtin(inp));
-	if (S_ISDIR(info.st_mode) && stat(*inp->tok, &info) == -1)
+	if (stat(*inp->tok, &info) == -1 && S_ISDIR(info.st_mode))
 		return (printf("%s: No such file or directory\n", *inp->tok), 127);
 	if (access(*inp->tok, F_OK) == -1)
 	{
@@ -103,7 +106,7 @@ int	exec_command(t_data *inp, bool pipe_flag)
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);
 	if (!access(*inp->tok, F_OK) && pipe_flag)
-		return (execve(*inp->tok, inp->tok, inp->env));
+		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));				//
 	if (!access(*inp->tok, F_OK) && !pipe_flag)
 		return (fork_command(*inp));
 	return (printf("%s: is a directory\n", *inp->tok), 126);

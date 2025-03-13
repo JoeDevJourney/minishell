@@ -17,17 +17,13 @@ volatile sig_atomic_t	g_signal = 0;
 static void	init_data(t_data *inp, char **env)
 {
 	inp->pid = getpid();
-	inp->env_node = NULL;
-	dupl_env(&inp->env_node, env);
-	// // while (inp->env_node)
-	// // {
-	// // 	printf("env: '%s=%s'\n", inp->env_node->name, inp->env_node->value);
-	// // 	inp->env_node->next = inp->env_node;
-	// // }
-	// printf("he\n");
-	// pause();
+	inp->env = NULL;
+	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	inp->home_dir = ft_strdup(get_env_val(inp->env_node, "PWD"));
+	if (get_env_val(inp->env, "PWD"))
+		inp->home_dir = ft_strdup(get_env_val(inp->env, "PWD"));
+	else
+		inp->home_dir = getcwd(NULL, 0);
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
 	inp->or.cmd = NULL;
@@ -47,11 +43,14 @@ static char	*read_input(t_data inp)
 	char	*user;
 	char	*pwd;
 
-	user = get_env_val(inp.env_node, "USER");
-	pwd = get_env_val(inp.env_node, "PWD");
+	user = get_env_val(inp.env, "USER");
+	if (!user)
+		user = "";
+	pwd = getcwd(NULL, 0);
 	prompt = ft_strjoin3(GRN, user, " @ ");
 	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
 	prompt = ft_strjoin_free(prompt, RST " % ");
+	free(pwd);
 	str = readline(prompt);
 	while (str && !*str)
 	{
@@ -69,14 +68,10 @@ static bool	trim_user_input(t_data *inp)
 	char	*trimmed;
 
 	if (!inp->cmd)
-		return (printf("exit SHLVL %s\n", get_env_val(inp->env_node, "SHLVL")), false);
-	while (*inp->cmd == ' ')
-	{
-		trimmed = ft_strtrim(inp->cmd, " ");
-		free(inp->cmd);
-		inp->cmd = ft_strdup(trimmed);
-		free(trimmed);
-	}
+		return (printf("exit SHLVL %s\n", get_env_val(inp->env, "SHLVL")), false);
+	trimmed = ft_strtrim(inp->cmd, " ");
+	free(inp->cmd);
+	inp->cmd = trimmed;
 	return (true);
 }
 
@@ -85,7 +80,7 @@ static bool	trim_user_input(t_data *inp)
  * 
  * @note It doesn't work for commands with mixed operators.
  */
-bool	valid_oper(char **cmd, char *del)
+static bool	valid_oper(char **cmd, char *del)
 {
 	int		i;
 	int		size;
@@ -96,15 +91,11 @@ bool	valid_oper(char **cmd, char *del)
 	arr = ft_split2(*cmd, del);
 	size = count_array_size(arr);
 	i = -1;
-	while (arr[++i])
+	while (++i < size)
 	{
 		trimmed = ft_strtrim(arr[i], " ");
 		free(arr[i]);
 		arr[i] = trimmed;
-	}
-	i = -1;
-	while (++i < size)
-	{
 		if (i < size - 1 && arr[i][0] == '\0')
 			return (
 				printf("bash: syntax error near unexpected token `%s'\n", del),
@@ -126,7 +117,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	printf("Welcome: SHLVL %s\n", get_env_val(inp.env_node, "SHLVL"));
+	printf("Welcome: SHLVL %s\n", get_env_val(inp.env, "SHLVL"));
 	while (1)
 	{
 		inp.cmd = read_input(inp);
@@ -141,12 +132,14 @@ int	main(int argc, char **argv, char **env)
 			inp.ret_val = 258;
 		free(inp.cmd);
 	}
-	// inp.cmd = ft_strdup("cd src/builtins");
+	// inp.cmd = ft_strdup("export VAR1= ");
 	// if (trim_user_input(&inp) && valid_oper(&inp.cmd, "&&")
 	// 	&& valid_oper(&inp.cmd, "||") && valid_oper(&inp.cmd, "|"))
 	// 	parse_n_tokenize(&inp);
+	// printf("'VAR1=%s'\n", get_env_val(inp.env, "VAR1"));
+	// printf("$?: %d\n", inp.ret_val);
 	free(inp.home_dir);
-	free_env_list(inp.env_node);
+	free_env_list(inp.env);
 	free(inp.cmd);
 	return (0);
 }

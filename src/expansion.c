@@ -29,7 +29,7 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 		(*src_i)++;
 	var_length = *src_i - var_i;
 	var_name = ft_substr(src, var_i, var_length);
-	value = get_env_val(inp.env_node, var_name);
+	value = get_env_val(inp.env, var_name);
 	return (free(var_name), value);
 }
 

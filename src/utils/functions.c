@@ -55,13 +55,40 @@ void	update_shell_lvl(t_data *inp)
 	char	*lvl_str;
 
 	lvl = 1;
-	shlvl_val = get_env_val(inp->env_node, "SHLVL");
+	shlvl_val = get_env_val(inp->env, "SHLVL");
 	if (shlvl_val)
 		lvl = ft_atoi(shlvl_val) + 1;
 	lvl_str = ft_itoa(lvl);
 	if (lvl_str)
 	{
-		update_env_var(&inp->env_node, "SHLVL", lvl_str);
+		update_env_var(&inp->env, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
+}
+
+char **list_to_array(t_env *head)
+{
+    int count = 0;
+    t_env *temp = head;
+    char **arr;
+    int i = 0;
+
+    while (temp)
+    {
+        count++;
+        temp = temp->next;
+    }
+    arr = safe_malloc((count + 1) * sizeof(char *));
+    while (head)
+    {
+        size_t len = strlen(head->name) + strlen(head->value) + 2;
+        arr[i] = safe_malloc(len);
+        if (!arr[i])
+            return (free_array(arr), NULL);
+        snprintf(arr[i], len, "%s=%s", head->name, head->value);
+        i++;
+        head = head->next;
+    }
+    arr[i] = NULL;
+    return (arr);
 }

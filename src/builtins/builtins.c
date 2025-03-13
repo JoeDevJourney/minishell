@@ -63,7 +63,7 @@ bool	search_builtins(t_data inp)
 int	exec_builtin(t_data *inp)
 {
 	if (!ft_strncmp(*inp->tok, "env", 3) && ft_strlen(*inp->tok) == 3)
-		return (exec_env(inp->env_node));
+		return (exec_env(inp->env));
 	else if (!ft_strncmp(*inp->tok, "pwd", 3)
 		&& ft_strlen(*inp->tok) == 3)
 		return (exec_pwd(*inp));
@@ -75,7 +75,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_export(inp));
 	else if (!ft_strncmp(*inp->tok, "unset", 5)
 		&& ft_strlen(*inp->tok) == 5)
-		return (exec_unset(inp->tok, &inp->env_node));
+		return (exec_unset(inp->tok, &inp->env));
 	else if (!ft_strncmp(*inp->tok, "exit", 4)
 		&& ft_strlen(*inp->tok) == 4)
 		return (exec_exit(inp->tok));

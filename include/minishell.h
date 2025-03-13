@@ -56,7 +56,7 @@ typedef struct s_env
 {
 	char			*name;
 	char			*value;
-	int				size;
+	size_t			size;
 	struct s_env	*next;
 }			t_env;
 
@@ -64,8 +64,7 @@ typedef struct s_data
 {
 	pid_t			pid;
 	char			*home_dir;
-	char			**env;
-	t_env			*env_node;
+	t_env			*env;
 	char			*cmd;
 	char			**tok;
 	t_logical_op	and;
@@ -98,28 +97,25 @@ void			expansion(char **str, t_data inp);
 bool			search_builtins(t_data inp);
 int				exec_builtin(t_data *inp);
 int				exec_env(t_env *env);
-int exec_unset(char **cmd, t_env **head);
+int				exec_unset(char **cmd, t_env **head);
 int				exec_pwd(t_data inp);
 int				exec_exit(char **args);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
-int	update_env_var(t_env **head, char *name, char *value);
 
+int				update_env_var(t_env **head, char *name, char *value);
 char			*get_env_val(t_env *head, char *name);
 char			*create_env_entry(char *name, char *value);
-
 char			*get_target_dir(t_data inp);
-
-void	dupl_env(t_env **head, char **env);
-t_env	*new_env_node(char *env_var);
+void			dupl_env(t_env **head, char **env);
+t_env			*new_env_node(char *env_var);
 int				update_pwd_vars(char ***env, char *oldpwd);
-void	free_env_list(t_env *head);
+void			free_env_list(t_env *head);
 
 //	Utilities
 size_t			count_array_size(char **arr);
 size_t			count_substr(const char *s, const char *delim);
-bool			valid_oper(char **str, char *del);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
 void			free_array(char **arr);
@@ -135,5 +131,6 @@ int				restart_minishell(t_data *inp);
 void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
+char			**list_to_array(t_env *head);
 
 #endif

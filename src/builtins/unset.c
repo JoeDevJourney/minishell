@@ -44,11 +44,8 @@ int exec_unset(char **cmd, t_env **head)
 {
 	int	i;
 
-	if (count_array_size(cmd) == 1)
-		return (0);
 	i = 0;
 	while (cmd[++i])
-		if (remove_node(cmd[i], head) == 1) 
-			return (perror("Error unset"), 1);
+		remove_node(cmd[i], head);
 	return (0);
 }

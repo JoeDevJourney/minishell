@@ -34,17 +34,18 @@ int	exec_export(t_data *inp)
 	int		i;
 
 	if (count_array_size(inp->tok) == 1)
-		return (print_env_copy(inp->env_node));
+		return (print_env_copy(inp->env));
 	i = 0;
 	while (inp->tok[++i])
 	{
 		name = ft_strdup(inp->tok[i]);
 		value = ft_strchr(name, '=');
-		if (!value)
-			continue ;
-		*(value)++ = '\0';
-		if (update_env_var(&inp->env_node, name, value) != 0)
-			return (perror(inp->tok[i]), errno);
+		if (value)
+		{
+			*(value)++ = '\0';
+			if (update_env_var(&inp->env, name, value) != 0)
+				return (perror(inp->tok[i]), errno);
+		}
 		free(name);
 	}
 	return (0);

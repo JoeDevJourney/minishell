@@ -14,28 +14,21 @@
 
 int	restart_minishell(t_data *inp)
 {
-	pid_t				pid;
-	int					status;
-	struct sigaction	sa_old;
-	struct sigaction	sa_new;
+	pid_t	pid;
+	int		status;
+	char	**env;
 
-	sa_new.sa_handler = SIG_IGN;
-	sigemptyset(&sa_new.sa_mask);
-	sa_new.sa_flags = 0;
-	sigaction(SIGINT, &sa_new, &sa_old);
 	pid = fork();
+	env = list_to_array(inp->env);
 	if (pid == 0)
 	{
-		sa_new.sa_handler = SIG_DFL;
-		sigaction(SIGINT, &sa_new, NULL);
-		// setup_signals(g_signal);
-		main(0, NULL, inp->env);
+		main(0, NULL, env);
 		exit(EXIT_SUCCESS);
 	}
 	if (waitpid(pid, &status, 0) == -1)
 		exit_with_error("Child process failed", EXIT_FAILURE);
 	g_signal = 0;
-	// setup_signals(g_signal);
+	free_array(env);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (-1);

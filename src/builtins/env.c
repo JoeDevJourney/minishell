@@ -37,8 +37,7 @@ t_env	*new_env_node(char *env_var)
 	value = ft_strchr(name, '=');
 	if (!value)
 		return (perror("Error duplicating env"), NULL);
-	*value = '\0';
-	value++;
+	*(value)++ = '\0';
 	new_node->name = name;
 	new_node->value = ft_strdup(value);
 	new_node->next = NULL;
