@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/13 17:37:04 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:08:05 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void	hdoc_signal_handler(int sig)
 	if (sig == SIGINT)
 	{
 		ioctl(0, TIOCSTI, "\4");
+		printf("test");
 	}
 }
 
@@ -66,9 +67,9 @@ static void	write_to_fd(char **input, t_data *inp, int i)
 void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
-	int		sig;
+	int		signal_d;
 
-	inp->in_heredoc = 1;
+	signal_d = 0;
 	setup_hdoc_signal(inp);
 	input = ft_strdup("\0");
 	while (1)
@@ -80,16 +81,19 @@ void	hdoc_prompt(t_data *inp, int i)
 		free(input);
 		input = readline("> ");
 		if (!input)
-			break ;
-		if (!input && sig == SIGQUIT)
 		{
-			printf("> ");
+			write(1, "\33[2K\r", 4);
+			signal_d = 1;
 			break ;
 		}
 		write_to_fd(&input, inp, i);
 	}
+	if (signal_d)
+	{
+		printf("control d pressed");
+		write(1, "\33[2K\r", 4);
+	}
 	free(input);
-	inp->in_heredoc = 0;
 }
 
 /**
@@ -122,4 +126,3 @@ bool	hdoc_oper(t_data *inp)
 	free(hdoc);
 	return (true);
 }
-
