@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/13 16:33:39 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/14 18:55:33 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,6 @@ void			update_shell_lvl(t_data *inp);
 void			parent_signal(int sig);
 void			child_signal(int sig);
 void			hdoc_prompt(t_data *inp, int i);
-void			setup_hdoc_signal(t_data *data);
+void			setup_hdoc_signal(void);
 
 #endif

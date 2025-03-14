@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/13 17:20:45 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/14 17:59:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	child_signal(int sig)
 	if (sig == SIGINT)
 	{
 		printf("\n");
-		g_signal = 0;
 	}
 	else if (sig == SIGQUIT)
 	{
@@ -52,9 +51,8 @@ void	setup_signals(bool is_child)
 	}
 	else
 	{
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
 		sa.sa_handler = parent_signal;
-		sigaction(SIGINT, &sa, NULL);
+		sigaction(SIGQUIT, &sa, NULL);
 	}
+	sigaction(SIGINT, &sa, NULL);
 }

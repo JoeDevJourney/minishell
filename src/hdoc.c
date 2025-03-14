@@ -6,30 +6,32 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/14 14:08:05 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/14 19:12:02 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+volatile sig_atomic_t	g_signal = 0;
+
 static void	hdoc_signal_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_signal = 1;
 		ioctl(0, TIOCSTI, "\4");
-		printf("test");
 	}
 }
 
-void	setup_hdoc_signal(t_data *inp)
+void	setup_hdoc_signal(void)
 {
 	struct sigaction	sa;
 
-	(void)inp;
+	g_signal = 0;
 	rl_catch_signals = 0;
-	sa.sa_handler = hdoc_signal_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
+	sa.sa_handler = hdoc_signal_handler;
 	sigaction(SIGINT, &sa, NULL);
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, NULL);
@@ -67,31 +69,29 @@ static void	write_to_fd(char **input, t_data *inp, int i)
 void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
-	int		signal_d;
 
-	signal_d = 0;
-	setup_hdoc_signal(inp);
-	input = ft_strdup("\0");
+	setup_hdoc_signal();
+	input = NULL;
 	while (1)
 	{
+		input = readline("> ");
+		if (g_signal == 1)
+		{
+			g_signal = 0;
+			break ;
+		}
+		if (!input)
+		{
+			break ;
+		}
 		if (*input != '\0'
 			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
 			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
-			break ;
-		free(input);
-		input = readline("> ");
-		if (!input)
 		{
-			write(1, "\33[2K\r", 4);
-			signal_d = 1;
+			free(input);
 			break ;
 		}
 		write_to_fd(&input, inp, i);
-	}
-	if (signal_d)
-	{
-		printf("control d pressed");
-		write(1, "\33[2K\r", 4);
 	}
 	free(input);
 }
@@ -113,7 +113,7 @@ bool	hdoc_oper(t_data *inp)
 	if (*inp->hdoc_op.fd[1] == -1)
 		return (perror(inp->hdoc_op.cmd[i]), false);
 	inp->hdoc_op.fd[2] = NULL;
-	setup_hdoc_signal(inp);
+	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
 	close(*inp->hdoc_op.fd[1]);
 	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);

@@ -6,13 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 18:10:45 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/14 19:05:51 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-volatile sig_atomic_t	g_signal = 0;
 
 /**
  * @brief Prompt
@@ -64,7 +62,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	setup_signals(g_signal);
+	setup_signals(false);
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
