@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/18 18:50:49 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 19:51:22 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ void	hdoc_prompt(t_data *inp, int i)
 		write_to_fd(&input, inp, i);
 		free(input);
 	}
+	setup_signals(false);
+	g_signal = 0;
 }
 
 /**
