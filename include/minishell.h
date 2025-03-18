@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/18 13:56:52 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 14:32:46 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef struct s_data
 	t_redir_op		hdoc_op;
 	int				ret_val;
 	int				in_heredoc;
-	bool			is_heredoc;
 }			t_data;
 
 //	Execution
