@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/16 18:28:55 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 12:59:16 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,7 @@ static int	fork_command(t_data *inp)
 	g_signal = 1;
 	setup_signals(g_signal);
 	if (pid == 0)
-	{
-		if (is_heredoc)
-		{
-			setup_hdoc_signal();
-			hdoc_prompt(inp, 0);
-		}
-		else
-			exec_external(*inp);
-	}
+		exec_external(*inp);
 	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)

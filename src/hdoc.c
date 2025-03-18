@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/16 18:30:59 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 14:19:24 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ void	hdoc_prompt(t_data *inp, int i)
 	while (1)
 	{
 		input = readline("> ");
-		if (g_signal == 0)
+		if (!input)
 		{
-			printf("> ");
-			break ;
-		}
-		else if (g_signal == 1)
-		{
-			g_signal = 0;
+			if (g_signal == 0)
+				printf("> ");
+			else if (g_signal == 1)
+			{
+				inp->ret_val = 1;
+				g_signal = 0;
+			}
 			break ;
 		}
 		if (*input != '\0'
@@ -116,6 +117,13 @@ bool	hdoc_oper(t_data *inp)
 	inp->hdoc_op.fd[2] = NULL;
 	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
+	if (inp->ret_val == 1)
+	{
+		close(*inp->hdoc_op.fd[1]);
+		free_array_fd(inp->hdoc_op.fd);
+		free(hdoc);
+		return (false);
+	}
 	close(*inp->hdoc_op.fd[1]);
 	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	if (!inp->hdoc_op.cmd[++i])
