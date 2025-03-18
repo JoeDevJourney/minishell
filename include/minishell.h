@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/18 14:32:46 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:51:44 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,5 +124,7 @@ void			parent_signal(int sig);
 void			child_signal(int sig);
 void			hdoc_prompt(t_data *inp, int i);
 void			setup_hdoc_signal(void);
+int				handle_signal_status(int status);
+bool			hdoc_read_input(t_data *inp, char **input);
 
 #endif

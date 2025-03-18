@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/18 12:59:16 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:15:44 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,7 @@ static int	fork_command(t_data *inp)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		g_signal = 0;
 		setup_signals(g_signal);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		return (130);
+		return (handle_signal_status(status));
 	}
 	return (perror("Fork failed"), -1);
 }

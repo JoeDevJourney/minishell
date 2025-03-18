@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/18 14:31:32 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 18:50:49 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,8 @@ void	hdoc_prompt(t_data *inp, int i)
 	input = NULL;
 	while (1)
 	{
-		input = readline("> ");
-		if (!input)
-		{
-			if (g_signal == 0)
-				printf("> ");
-			else if (g_signal == 1)
-			{
-				inp->ret_val = 1;
-				g_signal = 0;
-			}
+		if (!hdoc_read_input(inp, &input))
 			break ;
-		}
 		if (*input != '\0'
 			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
 			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
@@ -94,8 +84,8 @@ void	hdoc_prompt(t_data *inp, int i)
 			break ;
 		}
 		write_to_fd(&input, inp, i);
+		free(input);
 	}
-	free(input);
 }
 
 /**
@@ -118,20 +108,14 @@ bool	hdoc_oper(t_data *inp)
 	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
 	if (inp->ret_val == 1)
-	{
-		close(*inp->hdoc_op.fd[1]);
-		free_array_fd(inp->hdoc_op.fd);
-		free(hdoc);
-		return (false);
-	}
+		return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),
+			free(hdoc), false);
 	close(*inp->hdoc_op.fd[1]);
 	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	if (!inp->hdoc_op.cmd[++i])
 		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
 	if (i == count_array_size(inp->hdoc_op.cmd))
 		i = 0;
-	close(*inp->hdoc_op.fd[1]);
-	free_array_fd(inp->hdoc_op.fd);
-	free(hdoc);
-	return (true);
+	return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),
+		free(hdoc), true);
 }

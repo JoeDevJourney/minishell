@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:37:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/18 18:51:34 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,21 @@ void	update_shell_lvl(t_data *inp)
 		update_env_var(&inp->env, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
+}
+
+bool	hdoc_read_input(t_data *inp, char **input)
+{
+	*input = readline("> ");
+	if (!*input)
+	{
+		if (g_signal == 0)
+			printf("> ");
+		else if (g_signal == 1)
+		{
+			inp->ret_val = 1;
+			g_signal = 0;
+		}
+		return (false);
+	}
+	return (true);
 }

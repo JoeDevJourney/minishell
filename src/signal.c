@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/14 17:59:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/18 16:08:00 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,18 @@ void	setup_signals(bool is_child)
 		sigaction(SIGQUIT, &sa, NULL);
 	}
 	sigaction(SIGINT, &sa, NULL);
+}
+
+int	handle_signal_status(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGINT)
+			return (130);
+		else if (WTERMSIG(status) == SIGQUIT)
+			return (131);
+	}
+	return (1);
 }
