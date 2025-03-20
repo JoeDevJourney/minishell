@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/18 18:15:44 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/20 13:08:10 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,7 @@ static int	fork_command(t_data *inp)
 {
 	pid_t	pid;
 	int		status;
-	bool	is_heredoc;
 
-	is_heredoc = false;
 	pid = fork();
 	g_signal = 1;
 	setup_signals(g_signal);
