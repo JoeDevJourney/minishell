@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/20 20:17:11 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 20:26:37 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	wait_n_free(t_data *inp, int *pid)
 	// 	return (WEXITSTATUS(status));
 	// else
 	// 	return (-1);
+	setup_signals(g_signal);
 	return (handle_signal_status(status));
 }
 
