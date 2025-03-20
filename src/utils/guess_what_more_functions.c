@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/20 13:41:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:23:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	check_open_quotes(char **str)
 	open_sq = false;
 	open_dq = false;
 	i = -1;
-	while ((*str)[++i])
+	while (str && (*str)[++i])
 	{
 		if ((*str)[i] == '\'' && !open_dq)
 			open_sq = !open_sq;

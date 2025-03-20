@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:35:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 20:10:08 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	init_data(t_data *inp, char **env)
 /**
  * @brief Prompt
  */
-static inline char	*read_input(t_data inp)
+static char	*read_input(t_data inp)
 {
 	char	*str;
 	char	*prompt;
@@ -118,6 +118,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.cmd = read_input(inp);
+		// inp.cmd = ft_strdup("exit 53");
 		if (!trim_user_input(&inp))
 			break ;
 		if (!ft_strncmp(inp.cmd, " ", 1))

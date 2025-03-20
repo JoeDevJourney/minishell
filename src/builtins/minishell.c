@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 18:47:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 17:08:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:58:47 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,14 @@ int	restart_minishell(t_data *inp)
 	{
 		sa_new.sa_handler = SIG_DFL;
 		sigaction(SIGINT, &sa_new, NULL);
+		setup_signals(g_signal);
 		main(0, NULL, env);
 		exit(EXIT_SUCCESS);
 	}
 	if (waitpid(pid, &status, 0) == -1)
 		exit_with_error("Child process failed", EXIT_FAILURE);
 	g_signal = 0;
+	setup_signals(g_signal);
 	free_array(env);
 	return (handle_signal_status(status));
 }

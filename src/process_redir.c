@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 20:26:56 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/20 19:27:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ bool	process_fds(t_data *inp)
 	res = true;
 	open_sq = false;
 	open_dq = false;
-	while ((*inp->pipe.cmd)[++i] && res)
+	while (inp->pipe.cmd && (*inp->pipe.cmd)[++i] && res)
 	{
 		if ((*inp->pipe.cmd)[i] == '\'' && !open_dq)
 			open_sq = !open_sq;

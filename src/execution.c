@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/20 16:10:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 19:56:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	parse_n_exec(t_data *inp)
 	else
 	{
 		parse_input(inp);
-		if (process_fds(inp) && *inp->tok)
+		if (process_fds(inp) && inp->tok && *inp->tok)
 			inp->ret_val = exec_command(inp, false);
 		else
 			inp->ret_val = 1;
@@ -144,5 +144,6 @@ void	parse_n_exec(t_data *inp)
 	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
 	if (!access(hdoc, F_OK))
 		unlink(hdoc);
-	free(hdoc);
+	if (hdoc)
+		free(hdoc);
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/09 17:00:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 20:17:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ static int	wait_n_free(t_data *inp, int *pid)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 	free(pid);
 	free_array_fd(inp->pipe.fd);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	else
-		return (-1);
+	// if (WIFEXITED(status))
+	// 	return (WEXITSTATUS(status));
+	// else
+	// 	return (-1);
+	return (handle_signal_status(status));
 }
 
 static void	init_pipes(t_redir_op *oper)
@@ -91,6 +92,8 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	int	pid;
 
 	pid = fork();
+	g_signal = 1;
+	setup_signals(g_signal);
 	if (pid == 0)
 	{
 		if (inp->cmd)
@@ -101,6 +104,8 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 		process_pipe_fds(inp, old_fd, new_fd);
 		exec_exit((char *[]){ft_itoa(inp->ret_val), NULL});
 	}
+	g_signal = 0;
+	setup_signals(g_signal);
 	return (pid);
 }
 
@@ -117,6 +122,7 @@ int	exec_pipes(t_data *inp)
 	init_pipes(&inp->pipe);
 	ptr = *inp;
 	i = 0;
+
 	pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i + 1], &ptr.pipe.fd[0][1]);
 	while (++i < ptr.pipe.num_cmd)
 	{
