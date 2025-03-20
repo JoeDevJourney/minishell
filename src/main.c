@@ -20,8 +20,8 @@ static void	init_data(t_data *inp, char **env)
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	if (get_env_val(inp->env, "PWD"))
-		inp->home_dir = ft_strdup(get_env_val(inp->env, "PWD"));
+	if (get_env_val(*inp, "PWD"))
+		inp->home_dir = ft_strdup(get_env_val(*inp, "PWD"));
 	else
 		inp->home_dir = getcwd(NULL, 0);
 	inp->and.cmd = NULL;
@@ -36,14 +36,14 @@ static void	init_data(t_data *inp, char **env)
 /**
  * @brief Prompt
  */
-static char	*read_input(t_data inp)
+static inline char	*read_input(t_data inp)
 {
 	char	*str;
 	char	*prompt;
 	char	*user;
 	char	*pwd;
 
-	user = get_env_val(inp.env, "USER");
+	user = get_env_val(inp, "USER");
 	if (!user)
 		user = "";
 	pwd = getcwd(NULL, 0);
@@ -68,7 +68,7 @@ static bool	trim_user_input(t_data *inp)
 	char	*trimmed;
 
 	if (!inp->cmd)
-		return (printf("exit SHLVL %s\n", get_env_val(inp->env, "SHLVL")), false);
+		return (printf("exit SHLVL %s\n", get_env_val(*inp, "SHLVL")), false);
 	trimmed = ft_strtrim(inp->cmd, " ");
 	free(inp->cmd);
 	inp->cmd = trimmed;
@@ -113,31 +113,38 @@ static bool	valid_oper(char **cmd, char *del)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
+	char *line;
 
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	printf("Welcome: SHLVL %s\n", get_env_val(inp.env, "SHLVL"));
-	while (1)
+	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
+	if (isatty(fileno(stdin)))
+		while (1)
+		{
+			// inp.cmd = read_input(inp);
+			// if (!trim_user_input(&inp))
+			// 	break ;
+			// if (*inp.cmd == '\0')
+			// 	continue ;
+			inp.cmd = ft_strdup("/bin/echo '$USER' \"$USER\" \"text  ' text\"");
+			if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
+				&& valid_oper(&inp.cmd, "|"))
+				parse_n_tokenize(&inp);
+			else
+				inp.ret_val = 258;
+			break ;	
+			free(inp.cmd);
+		}
+	else
 	{
-		inp.cmd = read_input(inp);
-		if (!trim_user_input(&inp))
-			break ;
-		if (*inp.cmd == '\0')
-			continue ;
-		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
-			&& valid_oper(&inp.cmd, "|"))
+		line = get_next_line(fileno(stdin));
+		inp.cmd = ft_strtrim(line, "\n");
+		free(line);
+		if (trim_user_input(&inp) && valid_oper(&inp.cmd, "&&")
+			&& valid_oper(&inp.cmd, "||") && valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);
-		else
-			inp.ret_val = 258;
-		free(inp.cmd);
 	}
-	// inp.cmd = ft_strdup("export VAR1= ");
-	// if (trim_user_input(&inp) && valid_oper(&inp.cmd, "&&")
-	// 	&& valid_oper(&inp.cmd, "||") && valid_oper(&inp.cmd, "|"))
-	// 	parse_n_tokenize(&inp);
-	// printf("'VAR1=%s'\n", get_env_val(inp.env, "VAR1"));
-	// printf("$?: %d\n", inp.ret_val);
 	free(inp.home_dir);
 	free_env_list(inp.env);
 	free(inp.cmd);

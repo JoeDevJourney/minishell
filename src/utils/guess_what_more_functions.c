@@ -40,14 +40,14 @@ void	check_open_quotes(char **str)
 	open_dq = false;
 	i = -1;
 	while ((*str)[++i])
+	{
 		if ((*str)[i] == '\'' && !open_dq)
 			open_sq = !open_sq;
-	if (open_sq)
-		ask_for_quote(str, '\'');
-	i = -1;
-	while ((*str)[++i])
 		if ((*str)[i] == '"' && !open_sq)
 			open_dq = !open_dq;
+	}
+	if (open_sq)
+		ask_for_quote(str, '\'');
 	if (open_dq)
 		ask_for_quote(str, '"');
 }
@@ -76,11 +76,16 @@ char	*join_cmd(char **arr, char *del)
 /**
  * @brief Extracts the env variable from the env list.
  */
-char	*get_env_val(t_env *head, char *input)
+char	*get_env_val(t_data inp, char *input)
 {
 	t_env	*current;
 
-	current = head;
+	current = inp.env;
+
+	if (!ft_strncmp(input, "?", 1) && ft_strlen(input) == 1)
+		return (ft_itoa(inp.ret_val));
+	if (!ft_strncmp(input, "$", 1) && ft_strlen(input) == 1)
+		return (ft_itoa(inp.pid));
 	while (current)
 	{
 		if (!ft_strncmp(current->name, input, ft_strlen(input))

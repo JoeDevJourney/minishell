@@ -89,20 +89,28 @@ static bool	app_oper(t_data *inp)
 bool	process_fds(t_data *inp)
 {
 	int		i;
+	bool	open_sq;
+	bool	open_dq;
 	bool	res;
 
 	i = -1;
 	res = true;
+	open_sq = false;
+	open_dq = false;
 	while ((*inp->pipe.cmd)[++i] && res)
 	{
-		if ((*inp->pipe.cmd)[i] == '<')
+		if ((*inp->pipe.cmd)[i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+		if ((*inp->pipe.cmd)[i] == '"' && !open_sq)
+			open_dq = !open_dq;
+		if ((*inp->pipe.cmd)[i] == '<' && !open_dq && !open_sq)
 		{
 			if ((*inp->pipe.cmd)[++i] == '<')
 				res = hdoc_oper(inp);
 			else
 				res = inp_oper(inp);
 		}
-		else if ((*inp->pipe.cmd)[i] == '>')
+		else if ((*inp->pipe.cmd)[i] == '>' && !open_dq && !open_sq)
 		{
 			if ((*inp->pipe.cmd)[++i] == '>')
 				res = app_oper(inp);

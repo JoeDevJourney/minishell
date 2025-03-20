@@ -1,13 +1,14 @@
 #
 #
 CC = cc
-CFLAGS = -g -Wall -Werror -Wextra -I$(LIBFTDIR)/include -I$(INCDIR)
+CFLAGS = -g -Wall -Werror -Wextra -I$(INCDIR) -I$(LIBFTDIR)/include -I$(GNLDIR)
 MAKEFLAGS += -s
 
 SRCDIR = ./src
 OBJDIR = ./obj
 INCDIR = ./include
 LIBFTDIR = ./include/libft
+GNLDIR = ./include/getnextline
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c $(SRCDIR)/execution.c $(SRCDIR)/process_hdoc.c \
 		$(SRCDIR)/parse_command.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
@@ -19,6 +20,8 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c $(SRCDIR)/execut
 		\
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
 		$(SRCDIR)/utils/guess_what_more_functions.c $(SRCDIR)/utils/dir_utils.c \
+		\
+		$(GNLDIR)/get_next_line.c $(GNLDIR)/get_next_line_utils.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(notdir $(SRCS:.c=.o)))
 LIBFT = $(LIBFTDIR)/libft.a
@@ -32,6 +35,9 @@ $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	@echo "$(NAME) compiled \033[32msuccessfully\033[0m!"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(GNLDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/builtins/%.c | $(OBJDIR)

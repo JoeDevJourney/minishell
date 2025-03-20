@@ -13,7 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define WHITESPACE " /t/n/v/f/r"
 # define RED "\033[31m"
 # define GRN "\033[32m"
 # define YEL "\033[33m"
@@ -21,6 +20,7 @@
 # define RST "\033[0m"
 
 # include "libft/include/libft.h"
+# include "getnextline/get_next_line.h"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -105,12 +105,10 @@ int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
 
 int				update_env_var(t_env **head, char *name, char *value);
-char			*get_env_val(t_env *head, char *name);
-char			*create_env_entry(char *name, char *value);
+char			*get_env_val(t_data inp, char *name);
 char			*get_target_dir(t_data inp);
 void			dupl_env(t_env **head, char **env);
 t_env			*new_env_node(char *env_var);
-int				update_pwd_vars(char ***env, char *oldpwd);
 void			free_env_list(t_env *head);
 
 //	Utilities
@@ -132,5 +130,7 @@ void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
 char			**list_to_array(t_env *head);
+
+int count_delim(char *str, char *delim);
 
 #endif

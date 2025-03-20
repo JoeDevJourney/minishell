@@ -55,7 +55,7 @@ void	update_shell_lvl(t_data *inp)
 	char	*lvl_str;
 
 	lvl = 1;
-	shlvl_val = get_env_val(inp->env, "SHLVL");
+	shlvl_val = get_env_val(*inp, "SHLVL");
 	if (shlvl_val)
 		lvl = ft_atoi(shlvl_val) + 1;
 	lvl_str = ft_itoa(lvl);
@@ -91,4 +91,28 @@ char **list_to_array(t_env *head)
     }
     arr[i] = NULL;
     return (arr);
+}
+
+int count_delim(char *str, char *delim)
+{
+	int		count;
+	int		i;
+    bool	open_sq;
+    bool	open_dq;
+    
+	i = -1;
+	count = 1;
+    open_sq = false;
+    open_dq = false;
+	while (str[++i])
+	{
+		if (str[i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+		else if (str[i] == '"' && !open_sq)
+			open_dq = !open_dq;
+		
+		if (!open_sq && !open_dq && ft_strchr(delim, str[i]))
+			count++;
+	}
+	return (count);
 }

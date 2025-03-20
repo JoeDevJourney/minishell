@@ -23,7 +23,7 @@ static char	*path_to_exec(t_data inp)
 	char			*res;
 	int				i;
 
-	path = ft_split(get_env_val(inp.env, "PATH"), ':');
+	path = ft_split(get_env_val(inp, "PATH"), ':');
 	res = NULL;
 	i = -1;
 	while (path && path[++i])

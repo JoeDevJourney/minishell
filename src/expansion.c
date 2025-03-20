@@ -19,6 +19,8 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 	char		*var_name;
 	int			var_i;
 
+	if (src[*src_i] == '~')
+		return ((*src_i)++, get_env_val(inp, "HOME"));
 	var_i = ++(*src_i);
 	if (src[var_i] == '{')
 		var_i++;
@@ -29,7 +31,7 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 		(*src_i)++;
 	var_length = *src_i - var_i;
 	var_name = ft_substr(src, var_i, var_length);
-	value = get_env_val(inp.env, var_name);
+	value = get_env_val(inp, var_name);
 	return (free(var_name), value);
 }
 
@@ -48,10 +50,10 @@ static void	seg_expansion(char **str, t_data inp)
 	env_val = safe_malloc((1024) * sizeof(char));
 	while ((*str)[src_pos])
 	{
-		if ((*str)[src_pos] == '$')
+		if ((*str)[src_pos] == '$' || (*str)[src_pos] == '~')
 		{
 			replacement = repl_env_value(*str, &src_pos, inp);
-			ft_strlcpy(env_val + dest_pos, replacement, 1023 - dest_pos + 1);
+			ft_strlcpy(env_val + dest_pos, replacement, 1024 - dest_pos);
 			dest_pos += ft_strlen(replacement);
 		}
 		else if (dest_pos < 1023)

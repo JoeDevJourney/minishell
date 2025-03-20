@@ -64,14 +64,13 @@ int	exec_cd(t_data *inp)
 {
 	char	*target_dir;
 
-	if(!get_env_val(inp->env, "PWD") || !*get_env_val(inp->env, "PWD")
-		|| *get_env_val(inp->env, "PWD") == ' ')
+	if(!get_env_val(*inp, "PWD") || !*get_env_val(*inp, "PWD")
+		|| *get_env_val(*inp, "PWD") == ' ')
 		update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
 	target_dir = get_target_dir(*inp);
 	if (!target_dir || chdir(target_dir) != 0)
-		return (1);
-	pause();
-	if (update_env_var(&inp->env, "OLDPWD", get_env_val(inp->env, "PWD")) != 0)
+		return (perror(*inp->tok), 1);
+	if (update_env_var(&inp->env, "OLDPWD", get_env_val(*inp, "PWD")) != 0)
 		return (perror("Error updating OLDPWD"), 1);
 	free(target_dir);
 	target_dir = getcwd(NULL, 0);

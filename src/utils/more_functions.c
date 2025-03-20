@@ -54,7 +54,7 @@ size_t	count_substr(const char *s, const char *delim)
 	const char	*tmp;
 	size_t		delim_len;
 
-	if (!s || !delim || *delim == '\0')
+	if (!s || !delim || !*delim)
 		return (0);
 	count = 0;
 	tmp = s;
@@ -79,24 +79,33 @@ char	**ft_split2(const char *s, const char *delim)
 {
 	char		**result;
 	const char	*start;
-	const char	*end;
 	size_t		delim_len;
 	size_t		i;
-
+	bool		open_sq;
+	bool		open_dq;
+	
 	i = 0;
 	start = s;
 	delim_len = ft_strlen(delim);
-	end = ft_strnstr(start, delim, ft_strlen(start));
+	open_sq = false;
+	open_dq = false;
 	if (!s || !delim || *s == '\0')
 		return (NULL);
-	result = (char **)malloc((count_substr(s, delim) + 1) * sizeof(char *));
-	if (!result)
-		return (NULL);
-	while (end)
+	result = safe_malloc((count_substr(s, delim) + 1) * sizeof(char *));
+	while (*s)
 	{
-		result[i++] = substr_dup(start, end - start + 1);
-		start = end + delim_len;
-		end = ft_strnstr(start, delim, ft_strlen(start));
+		if (*s == '\'' && !open_dq)
+			open_sq = !open_sq;
+		else if (*s == '"' && !open_sq)
+			open_dq = !open_dq;
+		if (!open_sq && !open_dq && !ft_strncmp(s, delim, delim_len))
+		{
+			result[i++] = substr_dup(start, s - start);
+			s += delim_len;
+			start = s;
+			continue;
+		}
+		s++;
 	}
 	result[i++] = ft_strdup(start);
 	result[i] = NULL;

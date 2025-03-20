@@ -16,7 +16,7 @@ static char	*get_home_dir(t_data inp)
 {
 	char	*home;
 
-	home = get_env_val(inp.env, "HOME");
+	home = get_env_val(inp, "HOME");
 	if (home == NULL)
 	{
 		perror("cd: HOME not set\n");
@@ -29,7 +29,7 @@ static char	*get_oldpwd_dir(t_data inp)
 {
 	char	*oldpwd;
 
-	oldpwd = get_env_val(inp.env, "OLDPWD");
+	oldpwd = get_env_val(inp, "OLDPWD");
 	if (!oldpwd)
 		printf("bash: cd: OLDPWD not set\n");
 	return (oldpwd);
@@ -58,7 +58,7 @@ static char	*process_argument(t_data inp)
 	if (inp.tok[1][0] == '/')
 		return (ft_strdup(inp.tok[1]));
 	trimmed = ft_strtrim(inp.tok[1], "/");
-	res = ft_strjoin3(get_env_val(inp.env, ("PWD")), "/", trimmed);
+	res = ft_strjoin3(get_env_val(inp, ("PWD")), "/", trimmed);
 	return (free(trimmed), res);
 }
 
