@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/09 22:01:47 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 13:34:44 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	add_env_var(t_env **head, char *name, char *value)
 	current->next->name = ft_strdup(name);
 	current->next->value = ft_strdup(value);
 	current->next->next = NULL;
-	
 }
 
 static bool	replace_env_var(t_env **head, char *name, char *new_val)

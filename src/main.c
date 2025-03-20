@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 22:01:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 14:19:46 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,37 +113,35 @@ static bool	valid_oper(char **cmd, char *del)
 int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
-	char *line;
 
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
-	if (isatty(fileno(stdin)))
-		while (1)
-		{
-			// inp.cmd = read_input(inp);
-			// if (!trim_user_input(&inp))
-			// 	break ;
-			// if (*inp.cmd == '\0')
-			// 	continue ;
-			inp.cmd = ft_strdup("/bin/echo '$USER' \"$USER\" \"text  ' text\"");
-			if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
-				&& valid_oper(&inp.cmd, "|"))
-				parse_n_tokenize(&inp);
-			else
-				inp.ret_val = 258;
-			break ;	
-			free(inp.cmd);
-		}
-	else
+	while (1)
 	{
-		line = get_next_line(fileno(stdin));
-		inp.cmd = ft_strtrim(line, "\n");
-		free(line);
-		if (trim_user_input(&inp) && valid_oper(&inp.cmd, "&&")
-			&& valid_oper(&inp.cmd, "||") && valid_oper(&inp.cmd, "|"))
+		if (isatty(fileno(stdin)))
+			inp.cmd = read_input(inp);
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			inp.cmd = ft_strtrim(line, "\n");
+			free(line);
+		}
+		if (!trim_user_input(&inp))
+			break ;
+		if (*inp.cmd == '\0')
+			continue ;
+		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
+			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);
+		else
+		{
+			inp.ret_val = 258;
+			break ;
+		}
+		free(inp.cmd);
 	}
 	free(inp.home_dir);
 	free_env_list(inp.env);
