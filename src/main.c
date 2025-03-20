@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 14:19:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:28:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ static void	init_data(t_data *inp, char **env)
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	if (get_env_val(*inp, "PWD"))
-		inp->home_dir = ft_strdup(get_env_val(*inp, "PWD"));
-	else
-		inp->home_dir = getcwd(NULL, 0);
+	inp->home_dir = ft_strdup(getenv("PWD"));
 	inp->and.cmd = NULL;
 	inp->and.num_cmd = 0;
 	inp->or.cmd = NULL;
@@ -97,9 +94,8 @@ static bool	valid_oper(char **cmd, char *del)
 		free(arr[i]);
 		arr[i] = trimmed;
 		if (i < size - 1 && arr[i][0] == '\0')
-			return (
-				printf("bash: syntax error near unexpected token `%s'\n", del),
-				free_array(arr), false);
+			return (free_array(arr),
+				printf("bash: syntax error near unexpected token `%s'\n", del), false);
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");
@@ -117,30 +113,21 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
+	setup_signals(false);
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
-		if (isatty(fileno(stdin)))
-			inp.cmd = read_input(inp);
-		else
-		{
-			char *line;
-			line = get_next_line(fileno(stdin));
-			inp.cmd = ft_strtrim(line, "\n");
-			free(line);
-		}
+		inp.cmd = read_input(inp);
+		if (!ft_strncmp(inp.cmd, " ", 1))
+			continue ;
 		if (!trim_user_input(&inp))
 			break ;
-		if (*inp.cmd == '\0')
-			continue ;
+		// pause();
 		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
 			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);
 		else
-		{
 			inp.ret_val = 258;
-			break ;
-		}
 		free(inp.cmd);
 	}
 	free(inp.home_dir);
@@ -148,3 +135,13 @@ int	main(int argc, char **argv, char **env)
 	free(inp.cmd);
 	return (0);
 }
+
+// if (isatty(fileno(stdin)))
+// inp.cmd = read_input(inp);
+// else
+// {
+// char *line;
+// line = get_next_line(fileno(stdin));
+// inp.cmd = ft_strtrim(line, "\n");
+// free(line);
+// }

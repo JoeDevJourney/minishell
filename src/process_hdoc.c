@@ -1,16 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hdoc.c                                             :+:      :+:    :+:   */
+/*   process_hdoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 14:16:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:22:15 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static void	hdoc_signal_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signal = 1;
+		ioctl(0, TIOCSTI, "\4");
+	}
+}
+
+void	setup_hdoc_signal(void)
+{
+	struct sigaction	sa;
+
+	g_signal = 0;
+	rl_catch_signals = 0;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = hdoc_signal_handler;
+	sigaction(SIGINT, &sa, NULL);
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGQUIT, &sa, NULL);
+}
 
 /**
  * @brief Checks for quotes in the delimeter
@@ -19,53 +42,81 @@
  * 
  * @note return 1 if there were quotes in the first place, 0 otherwise
  */
-static bool	trim_delimeter(char **del)
+// static bool	trim_delimeter(char **del)
+// {
+// 	char	*trimmed;
+// 	bool	res;
+
+// 	check_open_quotes(del);
+// 	res = false;
+// 	if (ft_strchr(*del, '\''))
+// 	{
+// 		trimmed = ft_strtrim(*del, "'");
+// 		free(*del);
+// 		*del = trimmed;
+// 		res = true;
+// 	}
+// 	if (ft_strchr(*del, '"'))
+// 	{
+// 		trimmed = ft_strtrim(*del, "\"");
+// 		free(*del);
+// 		*del = trimmed;
+// 		res = true;
+// 	}
+// 	return (res);
+// }
+
+static void	write_to_fd(char **input, t_data *inp, int i)
 {
 	char	*trimmed;
-	bool	res;
 
-	check_open_quotes(del);
-	res = false;
-	if (ft_strchr(*del, '\''))
+	check_open_quotes(&inp->hdoc_op.cmd[i]);
+	while (ft_strchr(inp->hdoc_op.cmd[i], '\''))
 	{
-		trimmed = ft_strtrim(*del, "'");
-		free(*del);
-		*del = trimmed;
-		res = true;
+		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "'");
+		free(inp->hdoc_op.cmd[i]);
+		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "'");
+		free(trimmed);
 	}
-	if (ft_strchr(*del, '"'))
+	while (ft_strchr(inp->hdoc_op.cmd[i], '"'))
 	{
-		trimmed = ft_strtrim(*del, "\"");
-		free(*del);
-		*del = trimmed;
-		res = true;
+		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "\"");
+		free(inp->hdoc_op.cmd[i]);
+		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "\"");
+		free(trimmed);
 	}
-	return (res);
+	if (ft_strchr(inp->hdoc_op.cmd[i], '"')
+		|| ft_strchr(inp->hdoc_op.cmd[i], '\''))
+		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
+	else
+	{
+		expansion(input, *inp);
+		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
+	}
 }
 
-static void	hdoc_prompt(t_data *inp, int i)
+void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
-	bool	q_flag;
 
-	if (trim_delimeter(&inp->hdoc_op.cmd[i]))
-		q_flag = true;
-	else
-		q_flag = false;
+	setup_hdoc_signal();
 	input = NULL;
 	while (1)
 	{
-		if (input)
-			free(input);
-		input = readline("> ");
-		if (!ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
-			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
+		if (!hdoc_read_input(inp, &input))
 			break ;
-		if (!q_flag)
-			expansion(&input, *inp);
-		ft_putendl_fd(input, *inp->hdoc_op.fd[1]);
+		if (*input != '\0'
+			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
+			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
+		{
+			free(input);
+			break ;
+		}
+		write_to_fd(&input, inp, i);
+		free(input);
 	}
-	free(input);
+	setup_signals(false);
+	g_signal = 0;
 }
 
 /**
@@ -85,14 +136,17 @@ bool	hdoc_oper(t_data *inp)
 	if (*inp->hdoc_op.fd[1] == -1)
 		return (perror(inp->hdoc_op.cmd[i]), false);
 	inp->hdoc_op.fd[2] = NULL;
+	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
+	if (inp->ret_val == 1)
+		return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),
+			free(hdoc), false);
 	close(*inp->hdoc_op.fd[1]);
 	*inp->hdoc_op.fd[1] = open(hdoc, O_RDONLY);
 	if (!inp->hdoc_op.cmd[++i])
 		dup2(*inp->hdoc_op.fd[1], *inp->hdoc_op.fd[0]);
 	if (i == count_array_size(inp->hdoc_op.cmd))
 		i = 0;
-	return (close(*inp->hdoc_op.fd[1]),
-		free_array_fd(inp->hdoc_op.fd), free(hdoc), true);
+	return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),
+		free(hdoc), true);
 }
-

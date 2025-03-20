@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/09 21:57:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:19:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*path_to_exec(t_data inp)
 /**
  * @brief Creates the child process for a single command
  */
-static int	fork_command(t_data inp)
+static int	fork_command(t_data *inp)
 {
 	pid_t	pid;
 	int		status;
@@ -56,18 +56,18 @@ static int	fork_command(t_data inp)
 
 	pid = fork();
 	g_signal = 1;
-	env = list_to_array(inp.env);
+	setup_signals(g_signal);
+	env = list_to_array(inp->env);
 	if (pid == 0)
-		execve(*inp.tok, inp.tok, env);
+		execve(*inp->tok, inp->tok, env);
 	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		free_array(env);
 		g_signal = 0;
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		return (130);
+		setup_signals(g_signal);
+		return (handle_signal_status(status));
 	}
 	return (perror("Fork failed"), -1);
 }
@@ -106,9 +106,9 @@ int	exec_command(t_data *inp, bool pipe_flag)
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);
 	if (!access(*inp->tok, F_OK) && pipe_flag)
-		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));				//
+		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));
 	if (!access(*inp->tok, F_OK) && !pipe_flag)
-		return (fork_command(*inp));
+		return (fork_command(inp));
 	return (printf("%s: is a directory\n", *inp->tok), 126);
 }
 
@@ -117,7 +117,8 @@ int	exec_command(t_data *inp, bool pipe_flag)
  */
 void	parse_n_exec(t_data *inp)
 {
-	int	sfd[2];
+	int		sfd[2];
+	char	*hdoc;
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
@@ -138,4 +139,8 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
+	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
+	if (!access(hdoc, F_OK))
+		unlink(hdoc);
+	free(hdoc);
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 22:02:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:06:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,23 @@ void	update_shell_lvl(t_data *inp)
 		update_env_var(&inp->env, "SHLVL", lvl_str);
 		free(lvl_str);
 	}
+}
+
+bool	hdoc_read_input(t_data *inp, char **input)
+{
+	*input = readline("> ");
+	if (!*input)
+	{
+		if (g_signal == 0)
+			printf("> ");
+		else if (g_signal == 1)
+		{
+			inp->ret_val = 1;
+			g_signal = 0;
+		}
+		return (false);
+	}
+	return (true);
 }
 
 char **list_to_array(t_env *head)
