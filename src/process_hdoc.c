@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:22:15 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:59:50 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	hdoc_signal_handler(int sig)
 	}
 }
 
-void	setup_hdoc_signal(void)
+static void	setup_hdoc_signal(void)
 {
 	struct sigaction	sa;
 
@@ -44,7 +44,7 @@ void	setup_hdoc_signal(void)
  */
 // static bool	trim_delimeter(char **del)
 // {
-// 	char	*trimmed;
+// 	char	*trimmed; '"'
 // 	bool	res;
 
 // 	check_open_quotes(del);
@@ -56,7 +56,7 @@ void	setup_hdoc_signal(void)
 // 		*del = trimmed;
 // 		res = true;
 // 	}
-// 	if (ft_strchr(*del, '"'))
+// 	if (ft_strchr(*del,))
 // 	{
 // 		trimmed = ft_strtrim(*del, "\"");
 // 		free(*del);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:06:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:09:22 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	init_redir(t_data *inp)
 	inp->hdoc_op.num_cmd = 0;
 	inp->cmd = NULL;
 	inp->tok = NULL;
-	// errno = 0;
 }
 
 /**
@@ -68,7 +67,7 @@ void	update_shell_lvl(t_data *inp)
 
 bool	hdoc_read_input(t_data *inp, char **input)
 {
-	*input = readline("> ");
+	*input = readline("> ");								/////// <-----------
 	if (!*input)
 	{
 		if (g_signal == 0)
@@ -83,53 +82,29 @@ bool	hdoc_read_input(t_data *inp, char **input)
 	return (true);
 }
 
-char **list_to_array(t_env *head)
+char	**list_to_array(t_env *head)
 {
-    int count = 0;
-    t_env *temp = head;
-    char **arr;
-    int i = 0;
+	int count = 0;
+	t_env *temp = head;
+	char **arr;
+	int i = 0;
 
-    while (temp)
-    {
-        count++;
-        temp = temp->next;
-    }
-    arr = safe_malloc((count + 1) * sizeof(char *));
-    while (head)
-    {
-        size_t len = strlen(head->name) + strlen(head->value) + 2;
-        arr[i] = safe_malloc(len);
-        if (!arr[i])
-            return (free_array(arr), NULL);
-        snprintf(arr[i], len, "%s=%s", head->name, head->value);
-        i++;
-        head = head->next;
-    }
-    arr[i] = NULL;
-    return (arr);
-}
-
-int count_delim(char *str, char *delim)
-{
-	int		count;
-	int		i;
-    bool	open_sq;
-    bool	open_dq;
-    
-	i = -1;
-	count = 1;
-    open_sq = false;
-    open_dq = false;
-	while (str[++i])
+	while (temp)
 	{
-		if (str[i] == '\'' && !open_dq)
-			open_sq = !open_sq;
-		else if (str[i] == '"' && !open_sq)
-			open_dq = !open_dq;
-		
-		if (!open_sq && !open_dq && ft_strchr(delim, str[i]))
-			count++;
+		count++;
+		temp = temp->next;
 	}
-	return (count);
+	arr = safe_malloc((count + 1) * sizeof(char *));
+	while (head)
+	{
+		size_t len = strlen(head->name) + strlen(head->value) + 2;
+		arr[i] = safe_malloc(len);
+		if (!arr[i])
+			return (free_array(arr), NULL);
+		snprintf(arr[i], len, "%s=%s", head->name, head->value);
+		i++;
+		head = head->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }

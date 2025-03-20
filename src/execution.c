@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/20 15:19:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:10:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ static char	*path_to_exec(t_data inp)
 		}
 		closedir (dir);
 	}
-	return (free_array(path), res);
+	if (path)
+		free_array(path);
+	return (res);
 }
 
 /**
@@ -106,7 +108,7 @@ int	exec_command(t_data *inp, bool pipe_flag)
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);
 	if (!access(*inp->tok, F_OK) && pipe_flag)
-		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));
+		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));			// <--- leak
 	if (!access(*inp->tok, F_OK) && !pipe_flag)
 		return (fork_command(inp));
 	return (printf("%s: is a directory\n", *inp->tok), 126);

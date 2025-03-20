@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   more_functions.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 20:53:33 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/20 16:08:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	**ft_split2(const char *s, const char *delim)
 	size_t		i;
 	bool		open_sq;
 	bool		open_dq;
-	
+
 	i = 0;
 	start = s;
 	delim_len = ft_strlen(delim);
@@ -103,7 +103,7 @@ char	**ft_split2(const char *s, const char *delim)
 			result[i++] = substr_dup(start, s - start);
 			s += delim_len;
 			start = s;
-			continue;
+			continue ;
 		}
 		s++;
 	}

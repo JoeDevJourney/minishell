@@ -6,11 +6,34 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 21:09:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:06:35 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int	count_delim(char *str, char *delim)
+{
+	int		count;
+	int		i;
+	bool	open_sq;
+	bool	open_dq;
+
+	i = -1;
+	count = 1;
+	open_sq = false;
+	open_dq = false;
+	while (str[++i])
+	{
+		if (str[i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+		else if (str[i] == '"' && !open_sq)
+			open_dq = !open_dq;
+		if (!open_sq && !open_dq && ft_strchr(delim, str[i]))
+			count++;
+	}
+	return (count);
+}
 
 static void	tokenize_or(t_data *inp)
 {

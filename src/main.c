@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:28:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:35:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,11 +118,10 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		inp.cmd = read_input(inp);
-		if (!ft_strncmp(inp.cmd, " ", 1))
-			continue ;
 		if (!trim_user_input(&inp))
 			break ;
-		// pause();
+		if (!ft_strncmp(inp.cmd, " ", 1))
+			continue ;
 		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
 			&& valid_oper(&inp.cmd, "|"))
 			parse_n_tokenize(&inp);

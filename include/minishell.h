@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:02:46 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 16:05:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,8 @@ void			update_shell_lvl(t_data *inp);
 void			parent_signal(int sig);
 void			child_signal(int sig);
 void			hdoc_prompt(t_data *inp, int i);
-void			setup_hdoc_signal(void);
 int				handle_signal_status(int status);
 bool			hdoc_read_input(t_data *inp, char **input);
 char			**list_to_array(t_env *head);
-
-int count_delim(char *str, char *delim);
 
 #endif

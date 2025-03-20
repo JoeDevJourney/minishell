@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:02:02 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/02/12 12:53:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:48:38 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ static void	free_split(char **table, size_t size)
 	free(table);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_split(const char *s, char c)
 {
 	char	**res;
 	size_t	word_count;
 	size_t	i;
 
-	if (!s)
+	if (!s || !*s)
 		return (NULL);
 	word_count = str_count(s, c);
 	res = malloc(sizeof(char *) * (word_count + 1));

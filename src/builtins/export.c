@@ -6,25 +6,26 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:58:38 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/08 16:36:06 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:40:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int print_env_copy(t_env *head)
+static int	print_env_copy(t_env *head)
 {
-    t_env *current = head;
-    
-    while (current)
-    {
-        printf("declare -x %s", current->name);
-        if (current->value)
-            printf("=\"%s\"", current->value);
-        printf("\n");
-        current = current->next;
-    }
-    return (0);
+	t_env	*current;
+
+	current = head;
+	while (current)
+	{
+		printf("declare -x %s", current->name);
+		if (current->value)
+			printf("=\"%s\"", current->value);
+		printf("\n");
+		current = current->next;
+	}
+	return (0);
 }
 
 int	exec_export(t_data *inp)
