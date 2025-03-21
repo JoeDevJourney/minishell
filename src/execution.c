@@ -63,13 +63,23 @@ static int	fork_command(t_data *inp)
 		is_child = 1;
 		execve(*inp->tok, inp->tok, env);
 	}
-	if (pid > 0)
-	{
+	// if (pid > 0)
+	// {
 		if (waitpid(pid, &status, 0) == -1)
-			exit_with_error("Child process failed", EXIT_FAILURE);
-		free_array(env);
-	}
-	return (perror("Fork failed"), -1);
+		{
+			if (WIFEXITED(status))
+				return (free_array(env), WEXITSTATUS(status));
+			if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					return (free_array(env), 130);
+				else if (WTERMSIG(status) == SIGQUIT)
+					return (free_array(env), 131);
+			}
+		}
+		return (free_array(env), 1);
+	// }
+	// return (free_array(env), perror("Fork failed"), -1);
 }
 
 static void	set_full_path(t_data *inp)
