@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/20 19:23:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:57:05 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ char	*get_env_val(t_data inp, char *input)
 	t_env	*current;
 
 	current = inp.env;
-
 	if (!ft_strncmp(input, "?", 1) && ft_strlen(input) == 1)
 		return (ft_itoa(inp.ret_val));
 	if (!ft_strncmp(input, "$", 1) && ft_strlen(input) == 1)

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 15:59:50 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:39:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static void	setup_hdoc_signal(void)
 {
 	struct sigaction	sa;
 
-	g_signal = 0;
 	rl_catch_signals = 0;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
@@ -35,79 +34,41 @@ static void	setup_hdoc_signal(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-/**
- * @brief Checks for quotes in the delimeter
- * 
- * @returns the delimeter trimmed of quotes
- * 
- * @note return 1 if there were quotes in the first place, 0 otherwise
- */
-// static bool	trim_delimeter(char **del)
-// {
-// 	char	*trimmed; '"'
-// 	bool	res;
-
-// 	check_open_quotes(del);
-// 	res = false;
-// 	if (ft_strchr(*del, '\''))
-// 	{
-// 		trimmed = ft_strtrim(*del, "'");
-// 		free(*del);
-// 		*del = trimmed;
-// 		res = true;
-// 	}
-// 	if (ft_strchr(*del,))
-// 	{
-// 		trimmed = ft_strtrim(*del, "\"");
-// 		free(*del);
-// 		*del = trimmed;
-// 		res = true;
-// 	}
-// 	return (res);
-// }
-
-static void	write_to_fd(char **input, t_data *inp, int i)
+static bool	hdoc_read_input(t_data *inp, char **input)
 {
-	char	*trimmed;
-
-	check_open_quotes(&inp->hdoc_op.cmd[i]);
-	while (ft_strchr(inp->hdoc_op.cmd[i], '\''))
+	setup_hdoc_signal();
+	*input = readline("> ");
+	if (!*input)
 	{
-		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "'");
-		free(inp->hdoc_op.cmd[i]);
-		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "'");
-		free(trimmed);
+		if (g_signal == 0)
+			printf("> ");
+		else if (g_signal == 1)
+		{
+			inp->ret_val = 1;
+			g_signal = 0;
+		}
+		return (false);
 	}
-	while (ft_strchr(inp->hdoc_op.cmd[i], '"'))
-	{
-		trimmed = ft_strtrim(inp->hdoc_op.cmd[i], "\"");
-		free(inp->hdoc_op.cmd[i]);
-		inp->hdoc_op.cmd[i] = ft_strtrim(trimmed, "\"");
-		free(trimmed);
-	}
-	if (ft_strchr(inp->hdoc_op.cmd[i], '"')
-		|| ft_strchr(inp->hdoc_op.cmd[i], '\''))
-		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
-	else
-	{
-		expansion(input, *inp);
-		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
-	}
+	return (true);
 }
 
-void	hdoc_prompt(t_data *inp, int i)
+static void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
+	char	*del;
 
-	setup_hdoc_signal();
+	if (ft_strchr(inp->hdoc_op.cmd[i], '"'))
+		del = ft_strtrim(inp->hdoc_op.cmd[i], "\"");
+	else if (ft_strchr(inp->hdoc_op.cmd[i], '\''))
+		del = ft_strtrim(inp->hdoc_op.cmd[i], "'");
+	else
+		del = ft_strdup(inp->hdoc_op.cmd[i]);
 	input = NULL;
 	while (1)
 	{
-		if (!hdoc_read_input(inp, &input))
-			break ;
-		if (*input != '\0'
-			&& !ft_strncmp(input, inp->hdoc_op.cmd[i], ft_strlen(input))
-			&& ft_strlen(input) == ft_strlen(inp->hdoc_op.cmd[i]))
+		if (!hdoc_read_input(inp, &input) || (*input != '\0'
+				&& !ft_strncmp(input, del, ft_strlen(input))
+				&& ft_strlen(input) == ft_strlen(del)))
 		{
 			free(input);
 			break ;
@@ -116,7 +77,6 @@ void	hdoc_prompt(t_data *inp, int i)
 		free(input);
 	}
 	setup_signals(false);
-	g_signal = 0;
 }
 
 /**
@@ -136,7 +96,6 @@ bool	hdoc_oper(t_data *inp)
 	if (*inp->hdoc_op.fd[1] == -1)
 		return (perror(inp->hdoc_op.cmd[i]), false);
 	inp->hdoc_op.fd[2] = NULL;
-	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
 	if (inp->ret_val == 1)
 		return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),

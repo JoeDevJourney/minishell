@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/09 21:57:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:57:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static void	seg_expansion(char **str, t_data inp)
 	env_val[dest_pos] = '\0';
 	return (free(*str), *str = ft_strdup(env_val), free(env_val));
 }
-
 
 /**
  * @brief Given a delimeter to mark the end of the segment, it checks for

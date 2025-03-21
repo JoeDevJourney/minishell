@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/20 19:57:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 17:25:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	child_signal(int sig)
 	else if (sig == SIGQUIT)
 	{
 		printf("Quit: 3\n");
+		signal(SIGQUIT, SIG_IGN);
 	}
 }
 
@@ -42,7 +43,6 @@ void	setup_signals(bool is_child)
 	rl_catch_signals = 0;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
-
 	if (is_child)
 	{
 		sa.sa_handler = child_signal;
@@ -52,9 +52,9 @@ void	setup_signals(bool is_child)
 	else
 	{
 		sa.sa_handler = parent_signal;
+		sigaction(SIGINT, &sa, NULL);
 		sigaction(SIGQUIT, &sa, NULL);
 	}
-	sigaction(SIGINT, &sa, NULL);
 }
 
 int	handle_signal_status(int status)

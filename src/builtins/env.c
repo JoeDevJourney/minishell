@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 21:51:21 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:58:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	dupl_env(t_env **head, char **env)
 
 	if (!env || !*env)
 		return (perror("env list empty"));
-	size = count_array_size(env);	
+	size = count_array_size(env);
 	i = 0;
 	(*head) = new_env_node(env[i++]);
 	current = *head;

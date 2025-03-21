@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 19:57:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:18:51 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_data
 //	Execution
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
-int				exec_command(t_data *inp, bool pipe_flag);
+int				exec_command(t_data *inp, bool pipe_flag, char **env);
 int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
@@ -130,12 +130,10 @@ char			*join_cmd(char **arr, char *del);
 int				restart_minishell(t_data *inp);
 void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
-void			update_shell_lvl(t_data *inp);
 void			parent_signal(int sig);
 void			child_signal(int sig);
-void			hdoc_prompt(t_data *inp, int i);
 int				handle_signal_status(int status);
-bool			hdoc_read_input(t_data *inp, char **input);
 char			**list_to_array(t_env *head);
+void			write_to_fd(char **input, t_data *inp, int i);
 
 #endif

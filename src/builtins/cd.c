@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/20 13:34:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 18:58:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	exec_cd(t_data *inp)
 {
 	char	*target_dir;
 
-	if(!get_env_val(*inp, "PWD") || !*get_env_val(*inp, "PWD")
+	if (!get_env_val(*inp, "PWD") || !*get_env_val(*inp, "PWD")
 		|| *get_env_val(*inp, "PWD") == ' ')
 		update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
 	target_dir = get_target_dir(*inp);

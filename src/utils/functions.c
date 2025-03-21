@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 16:09:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/21 19:10:17 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,48 +47,32 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	return (result);
 }
 
-void	update_shell_lvl(t_data *inp)
+/**
+ * @brief Hdoc expansion and writing to the file based on quotes in the del
+ */
+void	write_to_fd(char **input, t_data *inp, int i)
 {
-	int		lvl;
-	char	*shlvl_val;
-	char	*lvl_str;
-
-	lvl = 1;
-	shlvl_val = get_env_val(*inp, "SHLVL");
-	if (shlvl_val)
-		lvl = ft_atoi(shlvl_val) + 1;
-	lvl_str = ft_itoa(lvl);
-	if (lvl_str)
+	check_open_quotes(&inp->hdoc_op.cmd[i]);
+	if (ft_strchr(inp->hdoc_op.cmd[i], '"')
+		|| ft_strchr(inp->hdoc_op.cmd[i], '\''))
+		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
+	else
 	{
-		update_env_var(&inp->env, "SHLVL", lvl_str);
-		free(lvl_str);
+		expansion(input, *inp);
+		ft_putendl_fd(*input, *inp->hdoc_op.fd[1]);
 	}
-}
-
-bool	hdoc_read_input(t_data *inp, char **input)
-{
-	*input = readline("> ");								/////// <-----------
-	if (!*input)
-	{
-		if (g_signal == 0)
-			printf("> ");
-		else if (g_signal == 1)
-		{
-			inp->ret_val = 1;
-			g_signal = 0;
-		}
-		return (false);
-	}
-	return (true);
 }
 
 char	**list_to_array(t_env *head)
 {
-	int count = 0;
-	t_env *temp = head;
-	char **arr;
-	int i = 0;
+	int		count;
+	t_env	*temp;
+	char	**arr;
+	int		i;
 
+	count = 0;
+	temp = head;
+	i = 0;
 	while (temp)
 	{
 		count++;
@@ -97,11 +81,7 @@ char	**list_to_array(t_env *head)
 	arr = safe_malloc((count + 1) * sizeof(char *));
 	while (head)
 	{
-		size_t len = strlen(head->name) + strlen(head->value) + 2;
-		arr[i] = safe_malloc(len);
-		if (!arr[i])
-			return (free_array(arr), NULL);
-		snprintf(arr[i], len, "%s=%s", head->name, head->value);
+		arr[i] = ft_strjoin3(head->name, "=", head->value);
 		i++;
 		head = head->next;
 	}

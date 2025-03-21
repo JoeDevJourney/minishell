@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/20 19:56:46 by dchrysov         ###   ########.fr       */
+/*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
+/*   Updated: 2025/03/21 19:22:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ static int	fork_command(t_data *inp)
 	char	**env;
 
 	pid = fork();
-	g_signal = 1;
-	setup_signals(g_signal);
+	setup_signals(true);
 	env = list_to_array(inp->env);
 	if (pid == 0)
 		execve(*inp->tok, inp->tok, env);
@@ -67,8 +66,7 @@ static int	fork_command(t_data *inp)
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		free_array(env);
-		g_signal = 0;
-		setup_signals(g_signal);
+		setup_signals(false);
 		return (handle_signal_status(status));
 	}
 	return (perror("Fork failed"), -1);
@@ -91,7 +89,7 @@ static void	set_full_path(t_data *inp)
 /**
  * @brief Checks the input if it's a valid command or a valid directory
  */
-int	exec_command(t_data *inp, bool pipe_flag)
+int	exec_command(t_data *inp, bool pipe_flag, char **env)
 {
 	struct stat	info;
 
@@ -108,7 +106,7 @@ int	exec_command(t_data *inp, bool pipe_flag)
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);
 	if (!access(*inp->tok, F_OK) && pipe_flag)
-		return (execve(*inp->tok, inp->tok, list_to_array(inp->env)));			// <--- leak
+		return (execve(*inp->tok, inp->tok, env));
 	if (!access(*inp->tok, F_OK) && !pipe_flag)
 		return (fork_command(inp));
 	return (printf("%s: is a directory\n", *inp->tok), 126);
@@ -120,30 +118,25 @@ int	exec_command(t_data *inp, bool pipe_flag)
 void	parse_n_exec(t_data *inp)
 {
 	int		sfd[2];
-	char	*hdoc;
+	char	**env;
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
+	env = list_to_array(inp->env);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = exec_pipes(inp);
 	else
 	{
 		parse_input(inp);
 		if (process_fds(inp) && inp->tok && *inp->tok)
-			inp->ret_val = exec_command(inp, false);
+			inp->ret_val = exec_command(inp, false, env);
 		else
 			inp->ret_val = 1;
 	}
-	free_redir(inp);
-	free_commands(inp);
-	init_redir(inp);
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
-	if (!access(hdoc, F_OK))
-		unlink(hdoc);
-	if (hdoc)
-		free(hdoc);
+	free_array(env);
+	return (free_redir(inp), free_commands(inp), init_redir(inp));
 }
