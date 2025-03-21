@@ -56,30 +56,24 @@ static int	fork_command(t_data *inp)
 	int		status;
 	char	**env;
 
-	pid = fork();
 	env = list_to_array(inp->env);
+	pid = fork();
 	if (pid == 0)
+		execve(*inp->tok, inp->tok, env);
+	if (pid > 0)
 	{
 		is_child = 1;
-		execve(*inp->tok, inp->tok, env);
-	}
-	// if (pid > 0)
-	// {
+		signal_handlers();
 		if (waitpid(pid, &status, 0) == -1)
 		{
-			if (WIFEXITED(status))
-				return (free_array(env), WEXITSTATUS(status));
-			if (WIFSIGNALED(status))
-			{
-				if (WTERMSIG(status) == SIGINT)
-					return (free_array(env), 130);
-				else if (WTERMSIG(status) == SIGQUIT)
-					return (free_array(env), 131);
-			}
+			if (WTERMSIG(status) == SIGINT)
+				return (free_array(env), 130);
+			else if (WTERMSIG(status) == SIGQUIT)
+				return (free_array(env), 131);
 		}
-		return (free_array(env), 1);
-	// }
-	// return (free_array(env), perror("Fork failed"), -1);
+		return (free_array(env), WEXITSTATUS(status));
+	}
+	return (free_array(env), perror("Fork failed"), -1);
 }
 
 static void	set_full_path(t_data *inp)

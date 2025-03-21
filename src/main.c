@@ -113,10 +113,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	signal_handlers();
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
+		is_child = 0;
+		signal_handlers();
 		inp.cmd = read_input(inp);
 		if (!trim_user_input(&inp))
 			break ;

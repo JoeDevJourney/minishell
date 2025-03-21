@@ -18,9 +18,16 @@ static int	wait_n_free(t_data *inp, int *pid)
 	int	i;
 
 	i = -1;
+	is_child = 1;
+	signal_handlers();
 	while (++i < inp->pipe.num_cmd)
 		if (waitpid(pid[i], &status, 0) == -1)
-			exit_with_error("Child process failed", EXIT_FAILURE);
+		{
+			if (WTERMSIG(status) == SIGINT)
+				return (free(pid), free_array_fd(inp->pipe.fd), 130);
+			else if (WTERMSIG(status) == SIGQUIT)
+				return (free(pid), free_array_fd(inp->pipe.fd), 131);
+		}
 	free(pid);
 	free_array_fd(inp->pipe.fd);
 	if (WIFEXITED(status))
