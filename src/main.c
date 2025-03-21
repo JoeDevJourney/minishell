@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-volatile sig_atomic_t	g_signal = 0;
+volatile sig_atomic_t	is_child = 0;
 
 static void	init_data(t_data *inp, char **env)
 {
@@ -33,7 +33,7 @@ static void	init_data(t_data *inp, char **env)
 /**
  * @brief Prompt
  */
-static char	*read_input(t_data inp)
+static inline char	*read_input(t_data inp)
 {
 	char	*str;
 	char	*prompt;
@@ -113,12 +113,11 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	init_data(&inp, env);
-	setup_signals(false);
+	signal_handlers();
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
 		inp.cmd = read_input(inp);
-		// inp.cmd = ft_strdup("exit 53");
 		if (!trim_user_input(&inp))
 			break ;
 		if (!ft_strncmp(inp.cmd, " ", 1))

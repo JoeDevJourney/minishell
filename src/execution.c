@@ -57,19 +57,17 @@ static int	fork_command(t_data *inp)
 	char	**env;
 
 	pid = fork();
-	g_signal = 1;
-	setup_signals(g_signal);
 	env = list_to_array(inp->env);
 	if (pid == 0)
+	{
+		is_child = 1;
 		execve(*inp->tok, inp->tok, env);
+	}
 	if (pid > 0)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 		free_array(env);
-		g_signal = 0;
-		setup_signals(g_signal);
-		return (handle_signal_status(status));
 	}
 	return (perror("Fork failed"), -1);
 }

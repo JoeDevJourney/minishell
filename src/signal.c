@@ -12,61 +12,37 @@
 
 #include "../include/minishell.h"
 
-void	child_signal(int sig)
+static void	parent_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
-	}
-	else if (sig == SIGQUIT)
-	{
-		printf("Quit: 3\n");
-	}
-}
-
-void	parent_signal(int sig)
-{
-	if (sig == SIGINT)
-	{
-		printf("\n");
-		rl_replace_line("", 0);
+		rl_replace_line("");
 		rl_on_new_line();
 		rl_redisplay();
 	}
+	// if (sig == SIGQUIT)
+		//do nothing
 }
 
-void	setup_signals(bool is_child)
+static void	child_signal(int sig)
+{
+	if (sig == SIGINT)
+		signal(SIGINT, SIG_DFL);
+	else if (sig == SIGQUIT)
+		signal(SIGQUIT, SIG_DFL);
+}
+
+int	signal_handlers()
 {
 	struct sigaction	sa;
 
-	rl_catch_signals = 0;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
 	if (is_child)
-	{
 		sa.sa_handler = child_signal;
-		sigaction(SIGQUIT, &sa, NULL);
-		sigaction(SIGINT, &sa, NULL);
-	}
 	else
-	{
-		sa.sa_handler = parent_signal;
-		sigaction(SIGQUIT, &sa, NULL);
-	}
-	sigaction(SIGINT, &sa, NULL);
-}
-
-int	handle_signal_status(int status)
-{
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == SIGINT)
-			return (130);
-		else if (WTERMSIG(status) == SIGQUIT)
-			return (131);
-	}
-	return (1);
+    	sa.sa_handler = parent_signal;
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGQUIT, &sa, NULL);
+	return (0);
 }

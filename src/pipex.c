@@ -23,12 +23,10 @@ static int	wait_n_free(t_data *inp, int *pid)
 			exit_with_error("Child process failed", EXIT_FAILURE);
 	free(pid);
 	free_array_fd(inp->pipe.fd);
-	// if (WIFEXITED(status))
-	// 	return (WEXITSTATUS(status));
-	// else
-	// 	return (-1);
-	setup_signals(g_signal);
-	return (handle_signal_status(status));
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (-1);
 }
 
 static void	init_pipes(t_redir_op *oper)
@@ -93,8 +91,6 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	int	pid;
 
 	pid = fork();
-	g_signal = 1;
-	setup_signals(g_signal);
 	if (pid == 0)
 	{
 		if (inp->cmd)
@@ -105,8 +101,6 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 		process_pipe_fds(inp, old_fd, new_fd);
 		exec_exit((char *[]){ft_itoa(inp->ret_val), NULL});
 	}
-	g_signal = 0;
-	setup_signals(g_signal);
 	return (pid);
 }
 

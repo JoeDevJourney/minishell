@@ -36,9 +36,8 @@
 # include <limits.h>
 # include <dirent.h>
 # include <signal.h>
-# include <sys/ioctl.h>
 
-extern volatile sig_atomic_t	g_signal;
+extern volatile sig_atomic_t	is_child;
 
 typedef struct s_logical_op
 {
@@ -128,14 +127,11 @@ char			**ft_split2(const char *s, const char *delim);
 char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
 int				restart_minishell(t_data *inp);
-void			setup_signals(bool is_child);
 char			*ft_strjoin_free(char *s1, char *s2);
 void			update_shell_lvl(t_data *inp);
-void			parent_signal(int sig);
-void			child_signal(int sig);
 void			hdoc_prompt(t_data *inp, int i);
-int				handle_signal_status(int status);
 bool			hdoc_read_input(t_data *inp, char **input);
 char			**list_to_array(t_env *head);
 
+int		signal_handlers();
 #endif

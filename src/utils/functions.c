@@ -70,12 +70,12 @@ bool	hdoc_read_input(t_data *inp, char **input)
 	*input = readline("> ");								/////// <-----------
 	if (!*input)
 	{
-		if (g_signal == 0)
+		if (is_child == 0)
 			printf("> ");
-		else if (g_signal == 1)
+		else if (is_child == 1)
 		{
 			inp->ret_val = 1;
-			g_signal = 0;
+			is_child = 0;
 		}
 		return (false);
 	}

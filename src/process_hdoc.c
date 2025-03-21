@@ -12,29 +12,6 @@
 
 #include "../include/minishell.h"
 
-static void	hdoc_signal_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_signal = 1;
-		ioctl(0, TIOCSTI, "\4");
-	}
-}
-
-static void	setup_hdoc_signal(void)
-{
-	struct sigaction	sa;
-
-	g_signal = 0;
-	rl_catch_signals = 0;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sa.sa_handler = hdoc_signal_handler;
-	sigaction(SIGINT, &sa, NULL);
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa, NULL);
-}
-
 /**
  * @brief Checks for quotes in the delimeter
  * 
@@ -99,7 +76,6 @@ void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
 
-	setup_hdoc_signal();
 	input = NULL;
 	while (1)
 	{
@@ -115,8 +91,6 @@ void	hdoc_prompt(t_data *inp, int i)
 		write_to_fd(&input, inp, i);
 		free(input);
 	}
-	setup_signals(false);
-	g_signal = 0;
 }
 
 /**
@@ -136,7 +110,6 @@ bool	hdoc_oper(t_data *inp)
 	if (*inp->hdoc_op.fd[1] == -1)
 		return (perror(inp->hdoc_op.cmd[i]), false);
 	inp->hdoc_op.fd[2] = NULL;
-	setup_hdoc_signal();
 	hdoc_prompt(inp, i);
 	if (inp->ret_val == 1)
 		return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),
