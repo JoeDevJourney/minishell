@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 17:17:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:46:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ int	exec_cd(t_data *inp)
 		|| *get_env_val(*inp, "PWD") == ' ')
 		update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
 	target_dir = get_target_dir(*inp);
-	if (!target_dir || chdir(target_dir) != 0)
+	if (!target_dir)
+		return (1);
+	if (chdir(target_dir) != 0)
 		return (perror(*inp->tok), 1);
 	if (update_env_var(&inp->env, "OLDPWD", get_env_val(*inp, "PWD")) != 0)
 		return (perror("Error updating OLDPWD"), 1);

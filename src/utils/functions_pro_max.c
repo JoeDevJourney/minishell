@@ -6,24 +6,11 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 17:17:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:49:13 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static char	*get_home_dir(t_data inp)
-{
-	char	*home;
-
-	home = get_env_val(inp, "HOME");
-	if (home == NULL)
-	{
-		perror("cd: HOME not set\n");
-		return (NULL);
-	}
-	return (home);
-}
 
 static char	*get_oldpwd_dir(t_data inp)
 {
@@ -48,11 +35,7 @@ static char	*process_argument(t_data inp)
 		return (ft_strdup(get_oldpwd_dir(inp)));
 	}
 	if (inp.tok[1][0] == '~')
-	{
-		if (!get_home_dir(inp))
-			return (NULL);
-		return (ft_strjoin3(get_home_dir(inp), "/", inp.tok[1] + 1));
-	}
+		return (ft_strjoin3(inp.home_dir, "/", inp.tok[1] + 1));
 	if (inp.tok[1][0] == '\0')
 		return (NULL);
 	if (inp.tok[1][0] == '/')
@@ -68,10 +51,13 @@ char	*get_target_dir(t_data inp)
 
 	if (!inp.tok[1])
 	{
-		home = ft_strdup(get_home_dir(inp));
+		home = get_env_val(inp, "HOME");
 		if (!home)
-			return (NULL);
-		return (home);
+		{
+			printf("cd: HOME not set\n");
+			home = "";
+		}
+		return (ft_strdup(home));
 	}
 	return (process_argument(inp));
 }
