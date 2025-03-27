@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 15:06:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 19:12:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 	inp->pipe.num_cmd = 0;
 	inp->cmd = NULL;
 	inp->ret_val = 0;
+	init_redir(inp);
 }
 
 /**
@@ -62,8 +63,10 @@ static bool	read_input(t_data *inp)
 	user = get_env_val(*inp, "USER");
 	if (!user)
 		user = "";
-	pwd = getcwd(NULL, 0);
 	prompt = ft_strjoin3(GRN, user, " @ ");
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		pwd = ft_strdup("/");
 	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
 	prompt = ft_strjoin_free(prompt, RST " % ");
 	while (true)
@@ -131,7 +134,6 @@ int	main(int argc, char **argv, char **env)
 		{
 			inp.pipe.cmd = ft_split2(inp.cmd, "|");
 			inp.pipe.num_cmd = count_delim(inp.cmd, "|");
-			init_redir(&inp);
 			parse_n_exec(&inp);
 		}
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");

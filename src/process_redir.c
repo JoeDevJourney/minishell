@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 15:43:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 19:22:14 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,7 @@ bool	process_fds(t_data *inp)
 		else if ((*inp->pipe.cmd)[i] == '>' && !open_dq && !open_sq)
 			res = redir_oper(inp, &i, '>');
 	}
+	if (!res)
+		inp->ret_val = 1;
 	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 16:35:09 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 19:18:53 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,15 @@ static bool	trim_spaces(t_data *inp)
 	i = -1;
 	while (++i < 5)
 	{
-		size = count_array_size(arr[i]);
-		while (size > 0)
+		size = count_array_size(arr[i]) + 1;
+		while (--size > 0)
 		{
 			if (*arr[i][0] == '\0')
-				return (inp->ret_val = 258, false);
+				return (printf("syntax error near unexpected token"
+						" `newline'\n"), inp->ret_val = 258, false);
 			trimmed = ft_strtrim(arr[i][size - 1], " ");
 			free(arr[i][size - 1]);
 			arr[i][size - 1] = trimmed;
-			size--;
 		}
 	}
 	return (true);
