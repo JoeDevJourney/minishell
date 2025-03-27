@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 11:45:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:55:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ size_t	count_array_size(char **arr)
  * @brief Counts the number of words in a str based on the number of occurences
  * of the delimeter
  */
-size_t	count_delim(const char *s, const char *delim)
+static size_t	count_substr(char *s, char *delim)
 {
 	size_t	count;
 
@@ -68,10 +68,10 @@ size_t	count_delim(const char *s, const char *delim)
  * @brief Works in the same way as the original split, with the diff now being
  * that the delimeter is a char* instead of a char.
  */
-char	**ft_split2(const char *s, const char *delim)
+char	**ft_split2(char *s, char *delim)
 {
 	char		**res;
-	const char	*start = s;
+	char		*start = s;
 	size_t		i;
 	bool		open_sq;
 	bool		open_dq;
@@ -79,7 +79,7 @@ char	**ft_split2(const char *s, const char *delim)
 	i = 0;
 	open_sq = false;
 	open_dq = false;
-	res = safe_malloc((count_delim(s, delim) + 1) * sizeof(char *));
+	res = safe_malloc((count_substr(s, delim) + 1) * sizeof(char *));
 	while (*s)
 	{
 		if (*s == '\'' && !open_dq)
