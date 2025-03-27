@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 11:05:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 12:59:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ static bool	valid_oper(t_data *inp, char *del)
 
 	arr = ft_split2(inp->cmd, del);
 	size = count_array_size(arr);
-	while (*arr)
-		printf("'%s'\n", *arr++);
-	pause();
+	// while (*arr)
+	// 	printf("'%s'\n", *arr++);
+	// pause();
 	i = -1;
 	while (++i < size)
 	{
@@ -136,7 +136,6 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		if (valid_oper(&inp, "|"))
 		{
-			printf("here\n"); pause();
 			inp.pipe.cmd = ft_split2(inp.cmd, "|");
 			inp.pipe.num_cmd = count_delim(inp.cmd, "|");
 			init_redir(&inp);
