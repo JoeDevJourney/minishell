@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 14:11:32 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:01:20 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ static void	seg_expansion(char **str, t_data inp)
 	env_val = safe_malloc((1024) * sizeof(char));
 	while ((*str)[src_pos])
 	{
-		if ((*str)[src_pos] == '$' || (*str)[src_pos] == '~')
+		if ((*str)[0] == '$' || (*str)[src_pos] == '~'
+			|| ((*str)[src_pos] == '$' && (*str)[src_pos - 1] != '\\'))
 		{
 			replacement = repl_env_value(*str, &src_pos, inp);
 			ft_strlcpy(env_val + dest_pos, replacement, 1024 - dest_pos);
@@ -67,9 +68,9 @@ static void	seg_expansion(char **str, t_data inp)
 
 /**
  * @brief Given a delimeter to mark the end of the segment, it checks for
- * xpansion operators and expands their values.
+ * expansion operators and expands their values.
  * 
- * @note When called i points to the del, when exits it points to the
+ * @note When called, i points to the del, when exits it points to the
  * last char before the closing del.  
  */
 static void	expand_segment(char **str, int *i, char del, t_data inp)

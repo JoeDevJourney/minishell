@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 15:11:46 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 14:08:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:49:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ size_t	count_array_size(char **arr)
  * @brief Works in the same way as the original split, with the diff now being
  * that the delimeter is a char* instead of a char.
  */
-static char	*ftstrndu(const char *start, size_t len)
+static char	*ftstrndp(const char *start, size_t len)
 {
 	char	*substr;
 
@@ -84,12 +84,12 @@ char	**ft_split2(const char *s, const char *del)
 			open_dq = !open_dq;
 		if (!open_sq && !open_dq && ft_strncmp(s, del, ft_strlen(del)) == 0)
 		{
-			res[i++] = ftstrndu(start, s - start);
+			res[i++] = ftstrndp(start, s - start);
 			s += ft_strlen(del);
 			start = s;
 			continue ;
 		}
 		s++;
 	}
-	return (res[i++] = ftstrndu(start, s - start), res[i] = NULL, (char **)res);
+	return (res[i++] = ftstrndp(start, s - start), res[i] = NULL, (char **)res);
 }
