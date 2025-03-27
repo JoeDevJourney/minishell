@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:22:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:15:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,33 @@
 /**
  * @brief Searches the $PATH directories for the exec
  */
-static char	*path_to_exec(t_data inp)
+static void	path_to_exec(t_data inp, char **path)
 {
 	struct dirent	*entry;
 	DIR				*dir;
-	char			**path;
-	char			*res;
+	char			**arr;
 	int				i;
 
-	path = ft_split(get_env_val(inp, "PATH"), ':');
-	res = NULL;
+	arr = ft_split(get_env_val(inp, "PATH"), ':');
 	i = -1;
-	while (path && path[++i])
+	while (arr && arr[++i])
 	{
-		dir = opendir(path[i]);
+		dir = opendir(arr[i]);
 		if (!dir)
-			return (free_array(path), perror(path[i]), NULL);
+			return (free_array(arr), perror(arr[i]));
 		entry = readdir(dir);
 		while (entry)
 		{
 			if (!ft_strncmp(*inp.tok, entry->d_name, ft_strlen(*inp.tok))
 				&& entry->d_name[ft_strlen(*inp.tok)] == '\0')
-				if (!res)
-					res = ft_strdup(path[i]);
+				if (!*path)
+					*path = ft_strdup(arr[i]);
 			entry = readdir(dir);
 		}
 		closedir (dir);
 	}
-	if (path)
-		free_array(path);
-	return (res);
+	if (arr)
+		free_array(arr);
 }
 
 /**
@@ -78,7 +75,8 @@ static void	set_full_path(t_data *inp)
 	char	*path;
 	char	*full_path;
 
-	path = path_to_exec(*inp);
+	path = NULL;
+	path_to_exec(*inp, &path);
 	dir = ft_strjoin_free(path, "/");
 	full_path = ft_strjoin_free(dir, *inp->tok);
 	free(*inp->tok);
