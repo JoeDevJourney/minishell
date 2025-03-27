@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 12:59:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:39:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ static bool	read_input(t_data *inp)
 	if (!user)
 		user = "";
 	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		perror("getcwd failed");
+		pwd = ft_strdup("?");
+	}
 	prompt = ft_strjoin3(GRN, user, " @ ");
 	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
 	prompt = ft_strjoin_free(prompt, RST " % ");

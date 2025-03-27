@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/21 18:58:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 17:34:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,16 @@ int	update_env_var(t_env **head, char *name, char *value)
 int	exec_cd(t_data *inp)
 {
 	char	*target_dir;
+	char	*cwd;
 
 	if (!get_env_val(*inp, "PWD") || !*get_env_val(*inp, "PWD")
 		|| *get_env_val(*inp, "PWD") == ' ')
-		update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
+	{
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+			return (perror("getcwd failed"), 1);
+	}
+	update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
 	target_dir = get_target_dir(*inp);
 	if (!target_dir || chdir(target_dir) != 0)
 		return (perror(*inp->tok), 1);
@@ -76,5 +82,6 @@ int	exec_cd(t_data *inp)
 	if (update_env_var(&inp->env, "PWD", target_dir) != 0)
 		return (perror("Error updating $PWD"), 1);
 	free(target_dir);
+	free(cwd);
 	return (0);
 }
