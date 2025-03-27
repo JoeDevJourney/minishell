@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:16:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 11:05:40 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ static void	update_shell_lvl(t_data *inp)
 	}
 }
 
-static void	init_data(t_data *inp, char **env)
+static void	init_data(t_data *inp, char **env, int argc, char **argv)
 {
+	(void)argc;
+	(void)argv;
 	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
@@ -59,7 +61,7 @@ static bool	read_input(t_data *inp)
 	char	*prompt;
 	char	*user;
 	char	*pwd;
-	char	*trimmed;
+	char	*trim;
 
 	user = get_env_val(*inp, "USER");
 	if (!user)
@@ -68,19 +70,19 @@ static bool	read_input(t_data *inp)
 	prompt = ft_strjoin3(GRN, user, " @ ");
 	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
 	prompt = ft_strjoin_free(prompt, RST " % ");
-	inp->cmd = readline(prompt);
-	trimmed = ft_strtrim(inp->cmd, " ");
-	free(inp->cmd);
-	inp->cmd = ft_strdup(trimmed);
-	if (!inp->cmd)
-		return (free(pwd), free(prompt), free(trimmed), false);
-	while ((inp->cmd && !*inp->cmd) || !ft_strncmp(inp->cmd, " ", 1))
+	while (true)
 	{
-		free(inp->cmd);
 		inp->cmd = readline(prompt);
+		if (!inp->cmd)
+			return (free(pwd), free(prompt), false);
+		trim = ft_strtrim(inp->cmd, " ");
+		free(inp->cmd);
+		inp->cmd = ft_strdup(trim);
+		if (*inp->cmd)
+			break ;
+		free(inp->cmd);
 	}
-	add_history(inp->cmd);
-	return (free(pwd), free(prompt), free(trimmed), true);
+	return (add_history(inp->cmd), free(pwd), free(prompt), free(trim), true);
 }
 
 /**
@@ -88,7 +90,7 @@ static bool	read_input(t_data *inp)
  * 
  * @note It doesn't work for commands with mixed operators.
  */
-static bool	valid_oper(char **cmd, char *del)
+static bool	valid_oper(t_data *inp, char *del)
 {
 	int		i;
 	int		size;
@@ -96,8 +98,11 @@ static bool	valid_oper(char **cmd, char *del)
 	char	**arr;
 	char	*trimmed;
 
-	arr = ft_split2(*cmd, del);
+	arr = ft_split2(inp->cmd, del);
 	size = count_array_size(arr);
+	while (*arr)
+		printf("'%s'\n", *arr++);
+	pause();
 	i = -1;
 	while (++i < size)
 	{
@@ -105,16 +110,16 @@ static bool	valid_oper(char **cmd, char *del)
 		free(arr[i]);
 		arr[i] = trimmed;
 		if (i < size - 1 && arr[i][0] == '\0')
-			return (free_array(arr), printf("bash: syntax error near \
+			return (inp->ret_val = 258, printf("bash: syntax error near \
 				unexpected token `%s'\n", del), false);
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");
-			*cmd = ft_strjoin_free(*cmd, input);
+			inp->cmd = ft_strjoin_free(inp->cmd, input);
 			free(input);
 		}
 	}
-	return (free_array(arr), true);
+	return (true);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -122,20 +127,21 @@ int	main(int argc, char **argv, char **env)
 	t_data	inp;
 	char	*hdoc;
 
-	(void)argc;
-	(void)argv;
-	init_data(&inp, env);
+	init_data(&inp, env, argc, argv);
 	setup_signals(false);
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
 		if (!read_input(&inp))
 			break ;
-		if ((valid_oper(&inp.cmd, "&&")) && valid_oper(&inp.cmd, "||")
-			&& valid_oper(&inp.cmd, "|"))
-			parse_n_tokenize(&inp);
-		else
-			inp.ret_val = 258;
+		if (valid_oper(&inp, "|"))
+		{
+			printf("here\n"); pause();
+			inp.pipe.cmd = ft_split2(inp.cmd, "|");
+			inp.pipe.num_cmd = count_delim(inp.cmd, "|");
+			init_redir(&inp);
+			parse_n_exec(&inp);
+		}
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);
@@ -145,13 +151,3 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (free(inp.home_dir), free_env_list(inp.env), free(inp.cmd), 0);
 }
-
-// if (isatty(fileno(stdin)))
-// inp.cmd = read_input(inp);
-// else
-// {
-// char *line;
-// line = get_next_line(fileno(stdin));
-// inp.cmd = ft_strtrim(line, "\n");
-// free(line);
-// }

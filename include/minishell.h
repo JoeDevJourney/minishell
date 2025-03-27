@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:18:51 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 10:59:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,7 @@ void			child_signal(int sig);
 int				handle_signal_status(int status);
 char			**list_to_array(t_env *head);
 void			write_to_fd(char **input, t_data *inp, int i);
+
+int	count_delim(char *str, char *delim);
 
 #endif

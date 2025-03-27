@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 11:17:03 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/20 19:30:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 10:59:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	count_delim(char *str, char *delim)
+int	count_delim(char *str, char *delim)
 {
 	int		count;
 	int		i;
