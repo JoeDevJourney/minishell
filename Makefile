@@ -11,8 +11,7 @@ LIBFTDIR = ./include/libft
 GNLDIR = ./include/getnextline
 
 SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c $(SRCDIR)/execution.c $(SRCDIR)/process_hdoc.c \
-		$(SRCDIR)/parse_command.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_logic.c $(SRCDIR)/parse_redir.c \
-		$(SRCDIR)/signal.c \
+		$(SRCDIR)/parse_command.c $(SRCDIR)/process_redir.c $(SRCDIR)/parse_redir.c	$(SRCDIR)/signal.c \
 		\
 		$(SRCDIR)/builtins/env.c $(SRCDIR)/builtins/builtins.c $(SRCDIR)/builtins/pwd.c $(SRCDIR)/builtins/exit.c \
 		$(SRCDIR)/builtins/echo.c $(SRCDIR)/builtins/cd.c $(SRCDIR)/builtins/unset.c $(SRCDIR)/builtins/export.c \

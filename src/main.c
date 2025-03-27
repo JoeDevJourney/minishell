@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 12:59:12 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:06:26 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,6 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
 	inp->home_dir = ft_strdup(getenv("PWD"));
-	inp->and.cmd = NULL;
-	inp->and.num_cmd = 0;
-	inp->or.cmd = NULL;
-	inp->or.num_cmd = 0;
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
 	inp->cmd = NULL;
@@ -110,8 +106,8 @@ static bool	valid_oper(t_data *inp, char *del)
 		free(arr[i]);
 		arr[i] = trimmed;
 		if (i < size - 1 && arr[i][0] == '\0')
-			return (inp->ret_val = 258, printf("bash: syntax error near \
-				unexpected token `%s'\n", del), false);
+			return (inp->ret_val = 258, printf("bash: syntax error near"
+					" unexpected token `%s'\n", del), false);
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");

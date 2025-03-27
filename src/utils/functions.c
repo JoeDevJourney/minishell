@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:10:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:08:52 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,27 @@ char	**list_to_array(t_env *head)
 	}
 	arr[i] = NULL;
 	return (arr);
+}
+
+int	count_delim(char *str, char *delim)
+{
+	int		count;
+	int		i;
+	bool	open_sq;
+	bool	open_dq;
+
+	i = -1;
+	count = 1;
+	open_sq = false;
+	open_dq = false;
+	while (str && str[++i])
+	{
+		if (str[i] == '\'' && !open_dq)
+			open_sq = !open_sq;
+		else if (str[i] == '"' && !open_sq)
+			open_dq = !open_dq;
+		if (!open_sq && !open_dq && ft_strchr(delim, str[i]))
+			count++;
+	}
+	return (count);
 }

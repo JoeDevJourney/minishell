@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 13:00:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:10:11 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,6 @@
 
 extern volatile sig_atomic_t	g_signal;
 
-typedef struct s_logical_op
-{
-	char	**cmd;
-	int		num_cmd;
-}			t_logical_op;
-
 typedef struct s_redir_op
 {
 	char	**cmd;
@@ -68,8 +62,6 @@ typedef struct s_data
 	t_env			*env;
 	char			*cmd;
 	char			**tok;
-	t_logical_op	and;
-	t_logical_op	or;
 	t_redir_op		pipe;
 	t_redir_op		inp_op;
 	t_redir_op		out_op;

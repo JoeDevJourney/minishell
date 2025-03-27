@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/21 18:57:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 14:11:32 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 
 /**
  * @brief Expands env values of the string keeping the quotes, 
+ * 
+ * @note || ((*str)[src_pos] == '$' && (*str)[src_pos - 1] == '\\')
  */
 static void	seg_expansion(char **str, t_data inp)
 {
