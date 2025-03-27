@@ -53,7 +53,7 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
  * 
  * @note Handles empty commands, or commands with only spaces
  */
-static bool	read_input(t_data *inp)
+static inline bool	read_input(t_data *inp)
 {
 	char	*prompt;
 	char	*user;
@@ -76,12 +76,13 @@ static bool	read_input(t_data *inp)
 			return (free(pwd), free(prompt), false);
 		trim = ft_strtrim(inp->cmd, " ");
 		free(inp->cmd);
-		inp->cmd = ft_strdup(trim);
+		inp->cmd = trim;
+		// free(trim);
 		if (*inp->cmd)
 			break ;
 		free(inp->cmd);
 	}
-	return (add_history(inp->cmd), free(pwd), free(prompt), free(trim), true);
+	return (add_history(inp->cmd), free(pwd), free(prompt), true);
 }
 
 /**
@@ -89,7 +90,7 @@ static bool	read_input(t_data *inp)
  * 
  * @note It doesn't work for commands with mixed operators.
  */
-static bool	valid_oper(t_data *inp, char *del)
+static inline bool	valid_oper(t_data *inp, char *del)
 {
 	int		i;
 	int		size;
@@ -107,7 +108,7 @@ static bool	valid_oper(t_data *inp, char *del)
 		arr[i] = trimmed;
 		if (i < size - 1 && arr[i][0] == '\0')
 			return (inp->ret_val = 258, printf("bash: syntax error near"
-					" unexpected token `%s'\n", del), false);
+					" unexpected token `%s'\n", del), free_array(arr), false);
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");
@@ -115,7 +116,7 @@ static bool	valid_oper(t_data *inp, char *del)
 			free(input);
 		}
 	}
-	return (true);
+	return (free_array(arr), true);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -135,13 +136,13 @@ int	main(int argc, char **argv, char **env)
 			inp.pipe.cmd = ft_split2(inp.cmd, "|");
 			inp.pipe.num_cmd = count_delim(inp.cmd, "|");
 			parse_n_exec(&inp);
+			free(inp.cmd);
 		}
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);
 		if (hdoc)
 			free(hdoc);
-		free(inp.cmd);
 	}
 	return (free(inp.home_dir), free_env_list(inp.env), free(inp.cmd), 0);
 }

@@ -78,7 +78,7 @@ int	exec_builtin(t_data *inp)
 		return (exec_unset(inp->tok, &inp->env));
 	else if (!ft_strncmp(*inp->tok, "exit", 4)
 		&& ft_strlen(*inp->tok) == 4)
-		return (exec_exit(inp->tok));
+		return (exec_exit(inp));
 	if (!ft_strncmp(inp->cmd, "./minishell", 11)
 		&& ((ft_strlen(inp->cmd) == 11) || ft_strlen(inp->cmd) == 12))
 		return (restart_minishell(inp));

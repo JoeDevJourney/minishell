@@ -54,10 +54,15 @@ void	free_array_fd(int **fd)
 
 void	free_commands(t_data *inp)
 {
+	if (inp->pipe.cmd && *inp->pipe.cmd)
+		free_array(inp->pipe.cmd);
+	inp->pipe.cmd = NULL;
 	if (inp->cmd && *inp->cmd)
 		free(inp->cmd);
+	inp->cmd = NULL;
 	if (inp->tok && *inp->tok)
 		free_array(inp->tok);
+	inp->tok = NULL;
 }
 
 void	free_redir(t_data *inp)

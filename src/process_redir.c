@@ -24,14 +24,14 @@ static bool	out_oper(t_data *inp)
 	*inp->out_op.fd[1] = open(inp->out_op.cmd[i],
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*inp->out_op.fd[1] == -1)
-		return (perror(inp->out_op.cmd[i]), false);
+		return (perror(inp->out_op.cmd[i]), close(*inp->out_op.fd[1]),
+		free_array_fd(inp->out_op.fd), false);
 	if (!inp->out_op.cmd[++i])
 		dup2(*inp->out_op.fd[1], *inp->out_op.fd[0]);
 	close(*inp->out_op.fd[1]);
-	free_array_fd(inp->out_op.fd);
 	if (i == count_array_size(inp->out_op.cmd))
 		i = 0;
-	return (true);
+	return (free_array_fd(inp->out_op.fd), true);
 }
 
 static bool	inp_oper(t_data *inp)
@@ -43,16 +43,16 @@ static bool	inp_oper(t_data *inp)
 	*inp->inp_op.fd[0] = STDIN_FILENO;
 	inp->inp_op.fd[1] = safe_malloc(sizeof(int));
 	*inp->inp_op.fd[1] = open(inp->inp_op.cmd[i], O_RDONLY);
-	if (*inp->inp_op.fd[1] == -1)
-		return (perror(inp->inp_op.cmd[i]), false);
 	inp->inp_op.fd[2] = NULL;
+	if (*inp->inp_op.fd[1] == -1)
+		return (perror(inp->inp_op.cmd[i]), close(*inp->inp_op.fd[1]),
+			free_array_fd(inp->inp_op.fd), false);
 	if (!inp->inp_op.cmd[++i])
 		dup2(*inp->inp_op.fd[1], *inp->inp_op.fd[0]);
 	close(*inp->inp_op.fd[1]);
-	free_array_fd(inp->inp_op.fd);
 	if (i == count_array_size(inp->inp_op.cmd))
 		i = 0;
-	return (true);
+	return (free_array_fd(inp->inp_op.fd), true);
 }
 
 static bool	app_oper(t_data *inp)
@@ -67,14 +67,14 @@ static bool	app_oper(t_data *inp)
 	*inp->app_op.fd[1] = open(inp->app_op.cmd[i],
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*inp->app_op.fd[1] == -1)
-		return (perror(inp->app_op.cmd[i]), false);
+		return (perror(inp->app_op.cmd[i]), close(*inp->app_op.fd[1]),
+			free_array_fd(inp->app_op.fd), false);
 	if (!inp->app_op.cmd[++i])
 		dup2(*inp->app_op.fd[1], *inp->app_op.fd[0]);
 	close(*inp->app_op.fd[1]);
-	free_array_fd(inp->app_op.fd);
 	if (i == count_array_size(inp->app_op.cmd))
 		i = 0;
-	return (true);
+	return (free_array_fd(inp->app_op.fd), true);
 }
 
 static bool	redir_oper(t_data *inp, int *i, char oper)

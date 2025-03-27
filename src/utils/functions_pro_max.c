@@ -41,7 +41,7 @@ static char	*process_argument(t_data inp)
 	if (inp.tok[1][0] == '/')
 		return (ft_strdup(inp.tok[1]));
 	trimmed = ft_strtrim(inp.tok[1], "/");
-	res = ft_strjoin3(get_env_val(inp, ("PWD")), "/", trimmed);
+	res = ft_strjoin3(get_env_val(inp, ("PWD")), "/", trimmed);		// <--- leak
 	return (free(trimmed), res);
 }
 

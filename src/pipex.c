@@ -100,9 +100,9 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 			free(inp->cmd);
 		parse_input(inp);
 		if (!process_fds(inp) || !*inp->tok)
-			inp->ret_val = exec_exit((char *[]){"1", NULL});
+			exit(1);
 		process_pipe_fds(inp, old_fd, new_fd);
-		exec_exit((char *[]){ft_itoa(inp->ret_val), NULL});
+		exit(inp->ret_val);
 	}
 	return (pid);
 }

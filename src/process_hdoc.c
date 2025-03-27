@@ -77,6 +77,7 @@ static void	hdoc_prompt(t_data *inp, int i)
 		free(input);
 	}
 	setup_signals(false);
+	free(del);
 }
 
 /**

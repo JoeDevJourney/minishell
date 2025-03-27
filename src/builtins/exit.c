@@ -33,27 +33,28 @@ static int	is_numeric(char *str)
 /**
  * @returns exit_code
  */
-int	exec_exit(char **args)
+int	exec_exit(t_data *inp)
 {
 	int	exit_code;
 
 	exit_code = 0;
-	if (args[1] && args[2])
+	if (inp->tok[1] && inp->tok[2])
 	{
 		printf("exit\n");
 		printf("bash: exit: too many arguments\n");
 		return (1);
 	}
-	if (args[1] && !is_numeric(args[1]))
+	if (inp->tok[1] && !is_numeric(inp->tok[1]))
 	{
 		printf("exit\n");
-		printf("bash: exit: %s: numeric argument required\n", args[1]);
+		printf("bash: exit: %s: numeric argument required\n", inp->tok[1]);
 		exit_code = 255;
 	}
-	else if (args[1])
+	else if (inp->tok[1])
 	{
 		printf("exit\n");
-		exit_code = ft_atoi(args[1]) % 256;
+		exit_code = ft_atoi(inp->tok[1]) % 256;
 	}
+	free_commands(inp);
 	exit(exit_code);
 }

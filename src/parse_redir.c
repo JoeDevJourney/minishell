@@ -112,7 +112,8 @@ static bool	trim_spaces(t_data *inp)
 						" `newline'\n"), inp->ret_val = 258, false);
 			trimmed = ft_strtrim(arr[i][size - 1], " ");
 			free(arr[i][size - 1]);
-			arr[i][size - 1] = trimmed;
+			arr[i][size - 1] = ft_strdup(trimmed);
+			free(trimmed);
 		}
 	}
 	return (true);

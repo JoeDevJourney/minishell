@@ -51,7 +51,6 @@ typedef struct s_env
 {
 	char			*name;
 	char			*value;
-	size_t			size;
 	struct s_env	*next;
 }			t_env;
 
@@ -81,7 +80,6 @@ int				main(int argc, char **argv, char **env);
 bool			process_fds(t_data *inp);
 bool			hdoc_oper(t_data *inp);
 bool			parse_redir(t_data *inp);
-void			parse_n_tokenize(t_data *inp);
 bool			parse_input(t_data *inp);
 void			check_open_quotes(char **str);
 void			expand_redir(t_data *inp);
@@ -93,17 +91,16 @@ int				exec_builtin(t_data *inp);
 int				exec_env(t_env *env);
 int				exec_unset(char **cmd, t_env **head);
 int				exec_pwd(t_data inp);
-int				exec_exit(char **args);
+int				exec_exit(t_data *inp);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);
-
 int				update_env_var(t_env **head, char *name, char *value);
 char			*get_env_val(t_data inp, char *name);
 char			*get_target_dir(t_data inp);
 void			dupl_env(t_env **head, char **env);
-t_env			*new_env_node(char *env_var);
 void			free_env_list(t_env *head);
+t_env			*new_env_node(char *env_var);
 
 //	Utilities
 size_t			count_array_size(char **arr);

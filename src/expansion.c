@@ -37,8 +37,6 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 
 /**
  * @brief Expands env values of the string keeping the quotes, 
- * 
- * @note || ((*str)[src_pos] == '$' && (*str)[src_pos - 1] == '\\')
  */
 static void	seg_expansion(char **str, t_data inp)
 {

@@ -63,9 +63,11 @@ int	exec_cd(t_data *inp)
 {
 	char	*target_dir;
 
+	target_dir = getcwd(NULL, 0);
 	if (!get_env_val(*inp, "PWD") || !*get_env_val(*inp, "PWD")
 		|| *get_env_val(*inp, "PWD") == ' ')
 		update_env_var(&inp->env, "PWD", getcwd(NULL, 0));
+	free(target_dir);
 	target_dir = get_target_dir(*inp);
 	if (!target_dir)
 		return (1);
