@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 13:53:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:35:09 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	init_lists_and_del(t_data *inp, char ****lists, char **del)
 /**
  * @brief Trims all the redirection oper arrays of any leading or ending spaces 
  */
-static void	trim_spaces(t_data *inp)
+static bool	trim_spaces(t_data *inp)
 {
 	char	**arr[5];
 	char	*trimmed;
@@ -107,15 +107,15 @@ static void	trim_spaces(t_data *inp)
 		size = count_array_size(arr[i]);
 		while (size > 0)
 		{
+			if (*arr[i][0] == '\0')
+				return (inp->ret_val = 258, false);
 			trimmed = ft_strtrim(arr[i][size - 1], " ");
-			if (trimmed)
-			{
-				free(arr[i][size - 1]);
-				arr[i][size - 1] = trimmed;
-			}
+			free(arr[i][size - 1]);
+			arr[i][size - 1] = trimmed;
 			size--;
 		}
 	}
+	return (true);
 }
 
 /**
@@ -125,7 +125,7 @@ static void	trim_spaces(t_data *inp)
  * @note (char *)inp->cmd: input command
  * @note (char **)inp->tok: output command
  */
-void	parse_redir(t_data *inp)
+bool	parse_redir(t_data *inp)
 {
 	char	***lists[4];
 	char	*del[4];
@@ -149,5 +149,5 @@ void	parse_redir(t_data *inp)
 			ptr++;
 		}
 	}
-	trim_spaces(inp);
+	return (trim_spaces(inp));
 }

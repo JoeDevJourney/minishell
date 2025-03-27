@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 15:15:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/27 16:35:36 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ void	parse_n_exec(t_data *inp)
 		inp->ret_val = exec_pipes(inp);
 	else
 	{
-		parse_input(inp);
-		if (process_fds(inp) && inp->tok && *inp->tok)
+		if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
 			inp->ret_val = exec_command(inp, false, env);
 		else
 			inp->ret_val = 1;
