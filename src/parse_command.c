@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 19:20:22 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:55:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,9 @@ bool	parse_input(t_data *inp)
 		if (!parse_redir(inp))
 			return (false);
 		expand_redir(inp);
-		expansion(&inp->cmd, *inp);
+		// expansion(&inp->cmd, *inp);
 		tokenization(&inp->cmd, &inp->tok);
 	}
+	print_data(*inp);
 	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 16:17:59 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:54:49 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void	free_commands(t_data *inp)
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 		free_array(inp->pipe.cmd);
 	inp->pipe.cmd = NULL;
-	if (inp->cmd && *inp->cmd)
-		free(inp->cmd);
-	inp->cmd = NULL;
+	// if (inp->cmd && *inp->cmd)
+	// 	free(inp->cmd);
+	// inp->cmd = NULL;
 	if (inp->tok && *inp->tok)
 		free_array(inp->tok);
 	inp->tok = NULL;
@@ -109,5 +109,5 @@ void	print_data(t_data inp)
 	while (inp.tok && *inp.tok)
 		printf("'%s', ", *inp.tok++);
 	printf("]\n\n");
-	pause();
+	// pause();
 }
