@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+	/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
@@ -33,13 +33,17 @@ t_env	*new_env_node(char *env_var)
 	char	*value;
 
 	new_node = safe_malloc(sizeof(t_env));
-	name = ft_strdup(env_var);
+	name = env_var;
 	value = ft_strchr(name, '=');
 	if (!value)
-		return (perror("Error duplicating env"), NULL);
+		return (printf("Error creating env var\n"),
+			free_env_list(new_node), NULL);
 	*(value)++ = '\0';
-	new_node->name = name;
+	new_node->name = ft_strdup(name);
 	new_node->value = ft_strdup(value);
+	if (!new_node->value)
+		return (printf("Error creating env value\n"),
+			free_env_list(new_node), NULL);
 	new_node->next = NULL;
 	return (new_node);
 }
@@ -54,11 +58,11 @@ void	dupl_env(t_env **head, char **env)
 		return (perror("env list empty"));
 	size = count_array_size(env);
 	i = 0;
-	(*head) = new_env_node(env[i++]);
+	(*head) = new_env_node(env[i]);
 	current = *head;
-	while (i < size)
+	while (++i < size)
 	{
-		current->next = new_env_node(env[i++]);
+		current->next = new_env_node(env[i]);
 		current = current->next;
 	}
 }

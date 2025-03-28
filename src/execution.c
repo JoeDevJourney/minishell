@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 19:31:37 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 12:11:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	exec_command(t_data *inp, bool pipe_flag, char **env)
 	struct stat	info;
 
 	if (search_builtins(*inp))
-		return (exec_builtin(inp));
+		return (exec_builtin(inp, env));
 	if (stat(*inp->tok, &info) == -1 && S_ISDIR(info.st_mode))
 		return (printf("%s: No such file or directory\n", *inp->tok), 127);
 	if (access(*inp->tok, F_OK) == -1)

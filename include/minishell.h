@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 17:17:16 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 12:12:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ void			expansion(char **str, t_data inp);
 
 //	Builtins
 bool			search_builtins(t_data inp);
-int				exec_builtin(t_data *inp);
+int				exec_builtin(t_data *inp, char **env);
 int				exec_env(t_env *env);
 int				exec_unset(char **cmd, t_env **head);
 int				exec_pwd(t_data inp);
-int				exec_exit(t_data *inp);
+int				exec_exit(t_data *inp, char **env);
 int				exec_echo(char **str);
 int				exec_export(t_data *inp);
 int				exec_cd(t_data *inp);

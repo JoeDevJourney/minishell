@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 18:45:36 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:56:19 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ static bool	replace_env_var(t_env **head, char *name, char *new_val)
 		if (!ft_strncmp(current->name, name, ft_strlen(name))
 			&& ft_strlen(name) == ft_strlen(current->name))
 		{
-			if (current->value)
-				free(current->value);
+			free(current->value);
 			current->value = ft_strdup(new_val);
 			return (true);
 		}

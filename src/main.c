@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 19:12:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:51:24 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,28 @@ static void	update_shell_lvl(t_data *inp)
 	if (shlvl_val)
 		lvl = ft_atoi(shlvl_val) + 1;
 	lvl_str = ft_itoa(lvl);
-	if (lvl_str)
-	{
-		update_env_var(&inp->env, "SHLVL", lvl_str);
-		free(lvl_str);
-	}
+	update_env_var(&inp->env, "SHLVL", lvl_str);
+	free(lvl_str);
+}
+
+static inline void check_leaks(void)
+{
+    printf("\nChecking for memory leaks...\n");
+    char command[256];
+    sprintf(command, "leaks %d", getpid());
+    system(command);
 }
 
 static void	init_data(t_data *inp, char **env, int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
+	// atexit(check_leaks);
 	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	inp->home_dir = ft_strdup(getenv("PWD"));
+	inp->home_dir = ft_strdup(get_env_val(*inp, "PWD"));
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
 	inp->cmd = NULL;
@@ -129,15 +135,28 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
 	while (1)
 	{
-		if (!read_input(&inp))
-			break ;
-		if (valid_oper(&inp, "|"))
-		{
-			inp.pipe.cmd = ft_split2(inp.cmd, "|");
-			inp.pipe.num_cmd = count_delim(inp.cmd, "|");
-			parse_n_exec(&inp);
-			free(inp.cmd);
-		}
+		// if (!isatty(fileno(stdin)))
+		// {
+		// 	char *line;
+		// 	line = get_next_line(fileno(stdin));
+		// 	inp.cmd = ft_strtrim(line, "\n");
+		// 	free(line);
+		// }
+		// else
+		// 	if (!read_input(&inp))
+		// 		break ;
+		// if (valid_oper(&inp, "|"))
+		// {
+		// 	inp.pipe.cmd = ft_split2(inp.cmd, "|");
+		// 	inp.pipe.num_cmd = count_delim(inp.cmd, "|");
+		// 	parse_n_exec(&inp);
+		// 	free(inp.cmd);
+		// }
+		inp.pipe.cmd = safe_malloc(2 * sizeof(char *));
+		inp.pipe.cmd[0] = ft_strdup("exit");
+		inp.pipe.cmd[1] = NULL;
+		inp.pipe.num_cmd = 1;
+		parse_n_exec(&inp);
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);

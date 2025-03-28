@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:31:49 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/09 14:04:42 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/28 12:12:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	is_numeric(char *str)
 /**
  * @returns exit_code
  */
-int	exec_exit(t_data *inp)
+int	exec_exit(t_data *inp, char **env)
 {
 	int	exit_code;
 
@@ -55,6 +55,9 @@ int	exec_exit(t_data *inp)
 		printf("exit\n");
 		exit_code = ft_atoi(inp->tok[1]) % 256;
 	}
+	free(inp->home_dir);
+	free_env_list(inp->env);
 	free_commands(inp);
+	free_array(env);
 	exit(exit_code);
 }
