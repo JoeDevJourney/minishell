@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:13:09 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:10:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:43:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 	char	*tmp;
 	char	*result;
 
+	if (!s1 || !s2 || !s3)
+		return (NULL);
 	tmp = ft_strjoin(s1, s2);
+	if (!tmp)
+		return (NULL);
 	result = ft_strjoin(tmp, s3);
 	free(tmp);
 	return (result);
@@ -87,4 +91,28 @@ char	**list_to_array(t_env *head)
 	}
 	arr[i] = NULL;
 	return (arr);
+}
+
+char	*build_prompt(t_data *inp, char *pwd)
+{
+	char	*user;
+	char	*prompt;
+	char	*slash;
+
+	user = get_env_val(*inp, "USER");
+	if (!user)
+		user = "";
+	prompt = ft_strjoin3(GRN, user, " @ ");
+	if (pwd)
+	{
+		slash = ft_strrchr(pwd, '/');
+		if (slash)
+			prompt = ft_strjoin_free(prompt, slash + 1);
+		else
+			prompt = ft_strjoin_free(prompt, pwd);
+	}
+	else
+		prompt = ft_strjoin_free(prompt, "PWD");
+	prompt = ft_strjoin_free(prompt, RST " % ");
+	return (prompt);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 19:22:41 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:46:39 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,12 @@ static void	set_full_path(t_data *inp)
 	char	*full_path;
 
 	path = path_to_exec(*inp);
+	if (!path)
+		return ;
 	dir = ft_strjoin_free(path, "/");
 	full_path = ft_strjoin_free(dir, *inp->tok);
+	if (!full_path)
+		return ;
 	free(*inp->tok);
 	*inp->tok = ft_strdup(full_path);
 	free(full_path);
@@ -100,8 +104,8 @@ int	exec_command(t_data *inp, bool pipe_flag, char **env)
 	if (access(*inp->tok, F_OK) == -1)
 	{
 		set_full_path(inp);
-		if (access(*inp->tok, F_OK) == -1)
-			return (printf("%s: command not found\n", *inp->tok + 1), 127);
+		if (!*inp->tok || access(*inp->tok, F_OK) == -1)
+			return (printf("%s: command not found\n", *inp->tok), 127);
 	}
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);

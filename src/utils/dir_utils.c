@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dir_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/09 21:58:57 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 14:18:42 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,28 @@ char	*get_target_dir(t_data inp)
 		return (home);
 	}
 	return (process_argument(inp));
+}
+
+char	*update_pwd_if_need(t_data *inp)
+{
+	char	*pwd;
+	char	*cwd;
+	char	*home;
+
+	pwd = get_env_val(*inp, "PWD");
+	if (!pwd || !*pwd)
+	{
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+		{
+			perror("getcwd failed");
+			home = get_env_val(*inp, "HOME");
+			if (home && chdir(home) == 0)
+				cwd = getcwd(NULL, 0);
+		}
+		update_env_var(&inp->env, "PWD", pwd);
+		return (cwd);
+	}
+	else
+		return (ft_strdup(pwd));
 }

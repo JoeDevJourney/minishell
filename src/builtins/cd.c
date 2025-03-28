@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 17:34:37 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/28 12:04:15 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ static void	add_env_var(t_env **head, char *name, char *value)
 		current = current->next;
 	current->next = safe_malloc(sizeof(t_env));
 	current->next->name = ft_strdup(name);
-	current->next->value = ft_strdup(value);
+	if (value)
+		current->next->value = ft_strdup(value);
+	else
+		current->next->value = NULL;
 	current->next->next = NULL;
 }
 
@@ -40,7 +43,10 @@ static bool	replace_env_var(t_env **head, char *name, char *new_val)
 		{
 			if (current->value)
 				free(current->value);
-			current->value = ft_strdup(new_val);
+			if (new_val)
+				current->value = ft_strdup(new_val);
+			else
+				current->value = NULL;
 			return (true);
 		}
 		current = current->next;

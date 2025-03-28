@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 13:00:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:52:00 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ void			child_signal(int sig);
 int				handle_signal_status(int status);
 char			**list_to_array(t_env *head);
 void			write_to_fd(char **input, t_data *inp, int i);
+char			*update_pwd_if_need(t_data *inp);
+char			*build_prompt(t_data *inp, char *pwd);
 
 int	count_delim(char *str, char *delim);
 
