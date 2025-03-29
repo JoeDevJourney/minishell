@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 16:34:37 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/29 19:51:34 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	path_to_exec(t_data inp, char **path)
 	DIR				*dir;
 	char			**arr;
 	int				i;
-	char			temp;
+	char			*temp;
 
 	temp = get_env_val(inp, "PATH");
 	arr = ft_split(temp, ':');
@@ -126,13 +126,20 @@ void	parse_n_exec(t_data *inp)
 	env = list_to_array(inp->env);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = exec_pipes(inp);
-	else
-		if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
-			inp->ret_val = exec_command(inp, false, env);
+	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
+		inp->ret_val = exec_command(inp, false, env);
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
 	free_array(env);
-	return (free_redir(inp), free_commands(inp), init_redir(inp));
+	if (inp->cmd)
+	{
+		printf("[free] inp.cmd = %p → %s\n", inp->cmd, inp->cmd);
+		free(inp->cmd);
+		inp->cmd = NULL;
+	}
+	free_redir(inp);
+	free_commands(inp);
+	init_redir(inp);
 }

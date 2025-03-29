@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/28 14:55:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/29 20:03:59 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,13 +142,12 @@ bool	parse_input(t_data *inp)
 	check_open_quotes(inp->pipe.cmd);
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 	{
-		inp->cmd = ft_strdup(*inp->pipe.cmd);
+		// inp->cmd = ft_strdup(*inp->pipe.cmd);
 		if (!parse_redir(inp))
 			return (false);
 		expand_redir(inp);
-		// expansion(&inp->cmd, *inp);
+		expansion(&inp->cmd, *inp);
 		tokenization(&inp->cmd, &inp->tok);
 	}
-	print_data(*inp);
 	return (true);
 }

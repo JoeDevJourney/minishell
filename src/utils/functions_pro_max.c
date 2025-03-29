@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/29 16:32:53 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/29 20:45:07 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,15 @@ static char	*process_argument(t_data inp)
 {
 	char	*trimmed;
 	char	*res;
-	char	temp;
+	char	*temp;
 
+	temp = get_oldpwd_dir(inp);
 	if (!ft_strncmp(inp.tok[1], "-", 1) && ft_strlen(inp.tok[1]) == 1)
 	{
-		if (!get_oldpwd_dir(inp))
-			return (NULL);
-		printf("%s\n", get_oldpwd_dir(inp));
-		return (ft_strdup(get_oldpwd_dir(inp)));
+		if (!temp)
+			return (free(temp), NULL);
+		printf("%s\n", temp);
+		return (temp);
 	}
 	if (inp.tok[1][0] == '~')
 		return (ft_strjoin3(inp.home_dir, "/", inp.tok[1] + 1));
@@ -42,8 +43,11 @@ static char	*process_argument(t_data inp)
 	if (inp.tok[1][0] == '/')
 		return (ft_strdup(inp.tok[1]));
 	trimmed = ft_strtrim(inp.tok[1], "/");
+	free(temp);
 	temp = get_env_val(inp, "PWD");
-	res = ft_strjoin3(temp, "/", trimmed);		// <--- leak
+	if (!temp)
+		temp = ft_strdup("");
+	res = ft_strjoin3(temp, "/", trimmed);
 	return (free(trimmed), free(temp), res);
 }
 
@@ -59,7 +63,7 @@ char	*get_target_dir(t_data inp)
 			printf("cd: HOME not set\n");
 			home = "";
 		}
-		return (ft_strdup(home));
+		return (home);
 	}
 	return (process_argument(inp));
 }

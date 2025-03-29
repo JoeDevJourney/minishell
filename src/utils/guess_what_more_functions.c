@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/29 15:05:08 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/29 18:15:34 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ char	*get_env_val(t_data inp, char *input)
 {
 	t_env	*current;
 
+	if (!input)
+		return (NULL);
 	current = inp.env;
 	if (!ft_strncmp(input, "?", 1) && ft_strlen(input) == 1)
 		return (ft_itoa(inp.ret_val));
@@ -87,7 +89,8 @@ char	*get_env_val(t_data inp, char *input)
 		return (ft_itoa(inp.pid));
 	while (current)
 	{
-		if (!ft_strncmp(current->name, input, ft_strlen(input))
+		if (current->name && current->value
+			&& !ft_strncmp(current->name, input, ft_strlen(input))
 			&& ft_strlen(input) == ft_strlen(current->name))
 			return (ft_strdup(current->value));
 		current = current->next;

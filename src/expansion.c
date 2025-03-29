@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/29 16:05:23 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/29 18:59:53 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static void	seg_expansion(char **str, t_data inp)
 			replacement = repl_env_value(*str, &src_pos, inp);
 			ft_strlcpy(env_val + dest_pos, replacement, 1024 - dest_pos);
 			dest_pos += ft_strlen(replacement);
+			free(replacement);
 		}
 		else if (dest_pos < 1023)
 			env_val[dest_pos++] = (*str)[src_pos++];
@@ -84,6 +85,7 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 	char	*prefix;
 	char	*seg;
 	char	*remainder;
+	char	*joined;
 
 	prefix = safe_malloc(*i + 1);
 	ft_strlcpy(prefix, *str, *i + 1);
@@ -97,8 +99,9 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 	seg_expansion(&seg, inp);
 	remainder = ft_strdup(*str + *i + len);
 	*i += ft_strlen(seg);
+	joined = ft_strjoin3(prefix, seg, remainder);
 	free(*str);
-	*str = ft_strjoin3(prefix, seg, remainder);
+	*str = joined;
 	free(prefix);
 	free(remainder);
 	free(seg);

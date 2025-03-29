@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 16:58:56 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/29 20:45:25 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,24 @@ static void	update_shell_lvl(t_data *inp)
 
 static void	init_data(t_data *inp, char **env, int argc, char **argv)
 {
-	char	*temp;
+	char	*home;
 
-	temp = get_env_val(*inp, "PWD");
 	(void)argc;
 	(void)argv;
-	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
+	inp->pid = getpid();
 	update_shell_lvl(inp);
-	inp->home_dir = ft_strdup(temp);
+	home = get_env_val(*inp, "PWD");
+	if (home)
+		inp->home_dir = home;
+	else
+		inp->home_dir = ft_strdup("/");
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
 	inp->cmd = NULL;
 	inp->ret_val = 0;
 	init_redir(inp);
-	free(temp);
 }
 
 /**
@@ -63,12 +65,15 @@ static inline bool	read_input(t_data *inp)
 	char	*user;
 	char	*pwd;
 	char	*trim;
-	// char	*temp;
+	char	*temp;
 
-	user = get_env_val(*inp, "USER");
-	if (!user)
-		user = "";
+	temp = get_env_val(*inp, "USER");
+	if (temp)
+		user = temp;
+	else
+		user = ft_strdup("");
 	prompt = ft_strjoin3(GRN, user, " @ ");
+	free(user);
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		pwd = ft_strdup("/");
@@ -128,10 +133,13 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
 	char	*hdoc;
+	char	*shlvl;
 
 	init_data(&inp, env, argc, argv);
+	shlvl = get_env_val(inp, "SHLVL");
 	setup_signals(false);
-	printf("Welcome: SHLVL %s\n", get_env_val(inp, "SHLVL"));
+	printf("Welcome: SHLVL %s\n", shlvl);
+	free(shlvl);
 	// while (1)
 	// {
 	// 	if (!isatty(fileno(stdin)))
@@ -151,15 +159,17 @@ int	main(int argc, char **argv, char **env)
 	// 		parse_n_exec(&inp);
 	// 		free(inp.cmd);
 	// 	}
-		inp.cmd = ft_strdup("exit");
+		inp.cmd = ft_strdup("cd src");
+		printf("[malloc] inp.cmd = %p → %s\n", inp.cmd, inp.cmd);
 		inp.pipe.cmd = ft_split2(inp.cmd, "|");
 		inp.pipe.num_cmd = count_delim(inp.cmd, "|");
-		print_data(inp);
 		parse_n_exec(&inp);
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);
 		free(hdoc);
+		free_commands(&inp);
+		free_redir(&inp);
 	// }
 	return (free(inp.home_dir), free_env_list(inp.env), 0);
 }

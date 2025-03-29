@@ -51,19 +51,27 @@ t_env	*new_env_node(char *env_var)
 void	dupl_env(t_env **head, char **env)
 {
 	t_env	*current;
-	int		size;
+	t_env	*new_node;
 	int		i;
 
 	if (!env || !*env)
 		return (perror("env list empty"));
-	size = count_array_size(env);
-	i = 0;
-	(*head) = new_env_node(env[i]);
+	new_node = new_env_node(env[0]);
+	if (!new_node)
+		return (perror("malloc failed in new_env_node"));
+	*head = new_node;
 	current = *head;
-	while (++i < size)
+	i = 0;
+	while (env[++i])
 	{
-		current->next = new_env_node(env[i]);
-		current = current->next;
+		new_node = new_env_node(env[i]);
+		if (!new_node)
+		{
+			perror("malloc failed in new_env_node");
+			continue ;
+		}
+		current->next = new_node;
+		current = current-> next;
 	}
 }
 
