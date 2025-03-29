@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/28 14:58:03 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/29 16:58:56 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ static void	update_shell_lvl(t_data *inp)
 	lvl = 1;
 	shlvl_val = get_env_val(*inp, "SHLVL");
 	if (shlvl_val)
+	{
 		lvl = ft_atoi(shlvl_val) + 1;
+		free(shlvl_val);
+	}
 	lvl_str = ft_itoa(lvl);
 	update_env_var(&inp->env, "SHLVL", lvl_str);
 	free(lvl_str);
@@ -31,18 +34,22 @@ static void	update_shell_lvl(t_data *inp)
 
 static void	init_data(t_data *inp, char **env, int argc, char **argv)
 {
+	char	*temp;
+
+	temp = get_env_val(*inp, "PWD");
 	(void)argc;
 	(void)argv;
 	inp->pid = getpid();
 	inp->env = NULL;
 	dupl_env(&inp->env, env);
 	update_shell_lvl(inp);
-	inp->home_dir = ft_strdup(get_env_val(*inp, "PWD"));
+	inp->home_dir = ft_strdup(temp);
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
 	inp->cmd = NULL;
 	inp->ret_val = 0;
 	init_redir(inp);
+	free(temp);
 }
 
 /**
@@ -56,6 +63,7 @@ static inline bool	read_input(t_data *inp)
 	char	*user;
 	char	*pwd;
 	char	*trim;
+	// char	*temp;
 
 	user = get_env_val(*inp, "USER");
 	if (!user)

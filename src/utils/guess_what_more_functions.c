@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   guess_what_more_functions.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:38:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/27 15:19:40 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/29 15:05:08 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*get_env_val(t_data inp, char *input)
 	{
 		if (!ft_strncmp(current->name, input, ft_strlen(input))
 			&& ft_strlen(input) == ft_strlen(current->name))
-			return (current->value);
+			return (ft_strdup(current->value));
 		current = current->next;
 	}
 	return (NULL);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/28 14:10:48 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/29 16:05:23 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,14 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 	char		*value;
 	char		*var_name;
 	int			var_i;
+	char		*temp;
 
 	if (src[*src_i] == '~')
-		return ((*src_i)++, get_env_val(inp, "HOME"));
+	{
+		(*src_i)++;
+		temp = get_env_val(inp, "HOME");
+		return (temp);
+	}
 	var_i = ++(*src_i);
 	if (src[var_i] == '{')
 		var_i++;

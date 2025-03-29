@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/28 13:54:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/29 16:34:37 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ static void	path_to_exec(t_data inp, char **path)
 	DIR				*dir;
 	char			**arr;
 	int				i;
+	char			temp;
 
-	arr = ft_split(get_env_val(inp, "PATH"), ':');
+	temp = get_env_val(inp, "PATH");
+	arr = ft_split(temp, ':');
 	i = -1;
 	while (arr && arr[++i])
 	{
@@ -40,6 +42,7 @@ static void	path_to_exec(t_data inp, char **path)
 		}
 		closedir (dir);
 	}
+	free(temp);
 	if (arr)
 		free_array(arr);
 }
