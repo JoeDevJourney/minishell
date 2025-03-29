@@ -31,7 +31,8 @@ void	free_array(char ***arr, int size)
 	i = -1;
 	if (!arr || !*arr)
 		return;
-	while (++i < size)
+	(void)size;
+	while ((*arr)[++i])
 		free((*arr)[i]);
 	free (*arr);
 	*arr = NULL;
