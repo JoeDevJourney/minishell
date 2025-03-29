@@ -73,7 +73,7 @@ char	*get_target_dir(t_data inp)
  * Instead they are trimmed for both single and double quotes.
  * Hdoc is handled speacially.
  */
-void	expand_redir(t_data *inp)
+bool	expand_redir(t_data *inp)
 {
 	int		arr_i;
 	int		str_i;
@@ -99,4 +99,5 @@ void	expand_redir(t_data *inp)
 			arr[arr_i][str_i] = trimmed;
 		}
 	}
+	return(check_inv_filename(inp));
 }

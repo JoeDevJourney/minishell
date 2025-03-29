@@ -49,6 +49,7 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 		inp->home_dir = ft_strdup("/");
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
+	inp->input = NULL;
 	inp->cmd = NULL;
 	inp->ret_val = 0;
 	init_redir(inp);
@@ -81,17 +82,17 @@ static inline bool	read_input(t_data *inp)
 	prompt = ft_strjoin_free(prompt, RST " % ");
 	while (true)
 	{
-		inp->cmd = readline(prompt);
-		if (!inp->cmd)
+		inp->input = readline(prompt);
+		if (!inp->input)
 			return (free(pwd), free(prompt), false);
-		trim = ft_strtrim(inp->cmd, " ");
-		free(inp->cmd);
-		inp->cmd = trim;
-		if (*inp->cmd)
+		trim = ft_strtrim(inp->input, " ");
+		free(inp->input);
+		inp->input = trim;
+		if (*inp->input)
 			break ;
-		free(inp->cmd);
+		free(inp->input);
 	}
-	return (add_history(inp->cmd), free(pwd), free(prompt), true);
+	return (add_history(inp->input), free(pwd), free(prompt), true);
 }
 
 /**
@@ -107,7 +108,7 @@ static inline bool	valid_oper(t_data *inp, char *del)
 	char	**arr;
 	char	*trimmed;
 
-	arr = ft_split2(inp->cmd, del);
+	arr = ft_split2(inp->input, del);
 	size = count_array_size(arr);
 	i = -1;
 	while (++i < size)
@@ -117,15 +118,15 @@ static inline bool	valid_oper(t_data *inp, char *del)
 		arr[i] = trimmed;
 		if (i < size - 1 && arr[i][0] == '\0')
 			return (inp->ret_val = 258, printf("bash: syntax error near"
-					" unexpected token `%s'\n", del), free_array(arr), false);
+					" unexpected token `%s'\n", del), free_array(&arr, size), false);
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");
-			inp->cmd = ft_strjoin_free(inp->cmd, input);
+			inp->input = ft_strjoin_free(inp->input, input);
 			free(input);
 		}
 	}
-	return (free_array(arr), true);
+	return (free_array(&arr, size), true);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -135,36 +136,33 @@ int	main(int argc, char **argv, char **env)
 
 	init_data(&inp, env, argc, argv);
 	setup_signals(false);
-	printf("Welcome");
-	// while (1)
-	// {
-	// 	if (!isatty(fileno(stdin)))
-	// 	{
-	// 		char *line;
-	// 		line = get_next_line(fileno(stdin));
-	// 		inp.cmd = ft_strtrim(line, "\n");
-	// 		free(line);
-	// 	}
-	// 	else
-	// 		if (!read_input(&inp))
-	// 			break ;
-	// 	if (valid_oper(&inp, "|"))
-	// 	{
-	// 		inp.pipe.cmd = ft_split2(inp.cmd, "|");
-	// 		inp.pipe.num_cmd = count_delim(inp.cmd, "|");
-	// 		parse_n_exec(&inp);
-	// 		free(inp.cmd);
-	// 	}
-		inp.cmd = ft_strdup("cd src");
-		inp.pipe.cmd = ft_split2(inp.cmd, "|");
-		inp.pipe.num_cmd = count_delim(inp.cmd, "|");
-		parse_n_exec(&inp);
+	printf("Welcome\n");
+	while (1)
+	{
+		if (!isatty(fileno(stdin)))
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			inp.input = ft_strtrim(line, "\n");
+			free(line);
+		}
+		else
+			if (!read_input(&inp))
+				break ;
+		if (valid_oper(&inp, "|"))
+		{
+			inp.pipe.cmd = ft_split2(inp.input, "|");
+			inp.pipe.num_cmd = count_delim(inp.input, "|");
+			parse_n_exec(&inp);
+		}
+		// inp.input = ft_strdup("echo Hello my name is : $USER and my pwd is $PWD");
+		// inp.pipe.cmd = ft_split2(inp.input, "|");
+		// inp.pipe.num_cmd = count_delim(inp.input, "|");
+		// parse_n_exec(&inp);
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);
 		free(hdoc);
-		free_commands(&inp);
-		free_redir(&inp);
-	// }
+	}
 	return (free(inp.home_dir), free_env_list(inp.env), 0);
 }

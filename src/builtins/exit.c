@@ -58,6 +58,6 @@ int	exec_exit(t_data *inp, char **env)
 	free(inp->home_dir);
 	free_env_list(inp->env);
 	free_commands(inp);
-	free_array(env);
+	free_array(&env, count_array_size(env));
 	exit(exit_code);
 }

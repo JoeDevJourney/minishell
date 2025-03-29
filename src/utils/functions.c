@@ -29,8 +29,6 @@ void	init_redir(t_data *inp)
 	inp->hdoc_op.cmd = NULL;
 	inp->hdoc_op.fd = NULL;
 	inp->hdoc_op.num_cmd = 0;
-	inp->cmd = NULL;
-	inp->tok = NULL;
 }
 
 /**

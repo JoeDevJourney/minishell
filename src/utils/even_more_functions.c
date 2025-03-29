@@ -24,15 +24,17 @@ void	*safe_malloc(size_t size)
 	return (ptr);
 }
 
-void	free_array(char **arr)
+void	free_array(char ***arr, int size)
 {
-	char	**temp;
+	int	i;
 
-	temp = arr;
-	while (*temp)
-		free(*temp++);
-	free (arr);
-	arr = NULL;
+	i = -1;
+	if (!arr || !*arr)
+		return;
+	while (++i < size)
+		free((*arr)[i]);
+	free (*arr);
+	*arr = NULL;
 }
 
 /**
@@ -45,23 +47,25 @@ void	free_array_fd(int **fd)
 	if (!fd)
 		return ;
 	i = 0;
-	while (fd && fd[i])
+	while (fd[i])
 		i++;
 	while (i-- > 0)
 		free(fd[i]);
 	free(fd);
+	fd = NULL;
 }
 
 void	free_commands(t_data *inp)
 {
-	if (inp->cmd && *inp->cmd)
+	if (inp->input)
+		free(inp->input);
+	inp->input = NULL;
+	if (inp->cmd)
 		free(inp->cmd);
 	inp->cmd = NULL;
-	if (inp->pipe.cmd && *inp->pipe.cmd)
-		free_array(inp->pipe.cmd);
+	free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
 	inp->pipe.cmd = NULL;
-	if (inp->tok && *inp->tok)
-		free_array(inp->tok);
+	free_array(&inp->tok, count_array_size(inp->tok));
 	inp->tok = NULL;
 }
 
@@ -77,13 +81,14 @@ void	free_redir(t_data *inp)
 	i = -1;
 	while (++i < 4)
 	{
-		if (oper_arr[i]->cmd && *oper_arr[i]->cmd)
-			free_array(oper_arr[i]->cmd);
+		free_array(&oper_arr[i]->cmd, oper_arr[i]->num_cmd);
+		oper_arr[i]->cmd = NULL;
 	}
 }
 
 void	print_data(t_data inp)
 {
+	printf("input: '%s'\n", inp.input);
 	printf("pipe[%d]: [", inp.pipe.num_cmd);
 	while (inp.pipe.cmd && *inp.pipe.cmd)
 		printf("'%s', ", *inp.pipe.cmd++);
@@ -109,5 +114,5 @@ void	print_data(t_data inp)
 	while (inp.tok && *inp.tok)
 		printf("'%s', ", *inp.tok++);
 	printf("]\n\n");
-	// pause();
+	pause();
 }

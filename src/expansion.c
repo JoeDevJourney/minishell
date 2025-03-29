@@ -142,11 +142,11 @@ void	expansion(char **str, t_data inp)
 // 	(void)argc;
 // 	(void)argv;
 // 	dupl_env(&inp.env, env);
-// 	inp.cmd = ft_strdup("echo Hello my name is -> $USER and my pwd is $PWD");
-// 	expansion(&inp.cmd, inp);
-// 	printf("res: '%s'\n", inp.cmd);
+// 	inp.input = ft_strdup("echo Hello my name is -> $USER and my pwd is $PWD");
+// 	expansion(&inp.input, inp);
+// 	printf("res: '%s'\n", inp.input);
 // 	free_env_list(inp.env);
-// 	free(inp.cmd);
+// 	free(inp.input);
 // }
 
 // cc expansion.c -o expansion ../include/libft/src/*.c utils/*.c builtins/env.c -g -Wall -Werror -Wextra -lreadline

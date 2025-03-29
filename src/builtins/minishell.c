@@ -37,6 +37,6 @@ int	restart_minishell(t_data *inp)
 	if (waitpid(pid, &status, 0) == -1)
 		exit_with_error("Child process failed", EXIT_FAILURE);
 	setup_signals(false);
-	free_array(env);
+	free_array(&env, count_array_size(env));
 	return (handle_signal_status(status));
 }

@@ -59,6 +59,7 @@ typedef struct s_data
 	pid_t			pid;
 	char			*home_dir;
 	t_env			*env;
+	char			*input;
 	char			*cmd;
 	char			**tok;
 	t_redir_op		pipe;
@@ -67,22 +68,21 @@ typedef struct s_data
 	t_redir_op		app_op;
 	t_redir_op		hdoc_op;
 	int				ret_val;
-	int				in_heredoc;
 }			t_data;
 
 //	Execution
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 int				exec_command(t_data *inp, bool pipe_flag, char **env);
-// int				main(int argc, char **argv, char **env);
+int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
 bool			process_fds(t_data *inp);
 bool			hdoc_oper(t_data *inp);
-bool			parse_redir(t_data *inp);
 bool			parse_input(t_data *inp);
+bool			expand_redir(t_data *inp);
+void			parse_redir(t_data *inp);
 void			check_open_quotes(char **str);
-void			expand_redir(t_data *inp);
 void			expansion(char **str, t_data inp);
 
 //	Builtins
@@ -106,7 +106,7 @@ t_env			*new_env_node(char *env_var);
 size_t			count_array_size(char **arr);
 void			*safe_malloc(size_t size);
 void			init_redir(t_data *inp);
-void			free_array(char **arr);
+void			free_array(char ***arr, int size);
 void			free_redir(t_data *inp);
 void			free_commands(t_data *inp);
 void			free_array_fd(int **fd);
@@ -124,5 +124,6 @@ int				handle_signal_status(int status);
 char			**list_to_array(t_env *head);
 void			write_to_fd(char **input, t_data *inp, int i);
 int				count_delim(char *str, char *delim);
+bool			check_inv_filename(t_data *inp);
 
 #endif

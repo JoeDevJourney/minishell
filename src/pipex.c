@@ -81,7 +81,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 	}
 	close(old_fd[0]);
 	inp->ret_val = exec_command(inp, true, env);
-	free_array(env);
+	free_array(&env, count_array_size(env));
 }
 
 /**
@@ -98,8 +98,7 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	{
 		if (inp->cmd)
 			free(inp->cmd);
-		parse_input(inp);
-		if (!process_fds(inp) || !*inp->tok)
+		if (!parse_input(inp) || !process_fds(inp) || !*inp->tok)
 			exit(1);
 		process_pipe_fds(inp, old_fd, new_fd);
 		exit(inp->ret_val);

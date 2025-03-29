@@ -30,7 +30,7 @@ static void	path_to_exec(t_data inp, char **path)
 	{
 		dir = opendir(arr[i]);
 		if (!dir)
-			return (free_array(arr), perror(arr[i]));
+			return (free_array(&arr, count_array_size(arr)), perror(arr[i]));
 		entry = readdir(dir);
 		while (entry)
 		{
@@ -44,7 +44,7 @@ static void	path_to_exec(t_data inp, char **path)
 	}
 	free(temp);
 	if (arr)
-		free_array(arr);
+		free_array(&arr, count_array_size(arr));
 }
 
 /**
@@ -65,7 +65,7 @@ static int	fork_command(t_data *inp)
 	{
 		if (waitpid(pid, &status, 0) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
-		free_array(env);
+		free_array(&env, count_array_size(env));
 		setup_signals(false);
 		return (handle_signal_status(status));
 	}
@@ -132,6 +132,6 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	return (free_array(env), free_redir(inp),
+	return (free_array(&env, count_array_size(env)), free_redir(inp),
 		free_commands(inp), init_redir(inp));
 }

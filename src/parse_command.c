@@ -142,16 +142,16 @@ bool	parse_input(t_data *inp)
 	check_open_quotes(inp->pipe.cmd);
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 	{
-		if (!parse_redir(inp))
+		parse_redir(inp);
+		if (!expand_redir(inp))
 			return (false);
-		expand_redir(inp);
 		expansion(&inp->cmd, *inp);
 		tokenization(&inp->cmd, &inp->tok);
 	}
 	return (true);
 }
 
-int main (void)
-{
+// int main (void)
+// {
 
-}
+// }
