@@ -70,7 +70,7 @@ int	exec_cd(t_data *inp)
 	free(target_dir);
 	target_dir = get_target_dir(*inp);
 	if (!target_dir)
-		return (free(target_dir), free(pwd), 1);
+		return (free(pwd), 1);
 	if (chdir(target_dir) != 0)
 		return (perror(*inp->tok), free(target_dir), free(pwd), 1);
 	if (update_env_var(&inp->env, "OLDPWD", pwd) != 0)
@@ -79,7 +79,6 @@ int	exec_cd(t_data *inp)
 	target_dir = getcwd(NULL, 0);
 	if (update_env_var(&inp->env, "PWD", target_dir) != 0)
 		return (printf("Error with $PWD"), free(target_dir), free(pwd), 1);
-	printf("%s \n %s", pwd, target_dir);
 	free(target_dir);
 	free(pwd);
 	return (0);

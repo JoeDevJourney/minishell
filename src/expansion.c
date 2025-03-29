@@ -134,3 +134,19 @@ void	expansion(char **str, t_data inp)
 			break ;
 	}
 }
+
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_data	inp;
+
+// 	(void)argc;
+// 	(void)argv;
+// 	dupl_env(&inp.env, env);
+// 	inp.cmd = ft_strdup("echo Hello my name is -> $USER and my pwd is $PWD");
+// 	expansion(&inp.cmd, inp);
+// 	printf("res: '%s'\n", inp.cmd);
+// 	free_env_list(inp.env);
+// 	free(inp.cmd);
+// }
+
+// cc expansion.c -o expansion ../include/libft/src/*.c utils/*.c builtins/env.c -g -Wall -Werror -Wextra -lreadline

@@ -132,14 +132,6 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	free_array(env);
-	if (inp->cmd)
-	{
-		printf("[free] inp.cmd = %p → %s\n", inp->cmd, inp->cmd);
-		free(inp->cmd);
-		inp->cmd = NULL;
-	}
-	free_redir(inp);
-	free_commands(inp);
-	init_redir(inp);
+	return (free_array(env), free_redir(inp),
+		free_commands(inp), init_redir(inp));
 }

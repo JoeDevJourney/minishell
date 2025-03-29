@@ -142,7 +142,6 @@ bool	parse_input(t_data *inp)
 	check_open_quotes(inp->pipe.cmd);
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 	{
-		// inp->cmd = ft_strdup(*inp->pipe.cmd);
 		if (!parse_redir(inp))
 			return (false);
 		expand_redir(inp);
@@ -150,4 +149,9 @@ bool	parse_input(t_data *inp)
 		tokenization(&inp->cmd, &inp->tok);
 	}
 	return (true);
+}
+
+int main (void)
+{
+
 }

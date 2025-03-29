@@ -74,7 +74,7 @@ typedef struct s_data
 int				exec_pipes(t_data *inp);
 void			parse_n_exec(t_data *inp);
 int				exec_command(t_data *inp, bool pipe_flag, char **env);
-int				main(int argc, char **argv, char **env);
+// int				main(int argc, char **argv, char **env);
 
 //	Parsing/expansion
 bool			process_fds(t_data *inp);

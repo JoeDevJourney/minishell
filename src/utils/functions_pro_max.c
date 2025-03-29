@@ -26,15 +26,14 @@ static char	*process_argument(t_data inp)
 {
 	char	*trimmed;
 	char	*res;
-	char	*temp;
+	char	*pwd;
 
-	temp = get_oldpwd_dir(inp);
 	if (!ft_strncmp(inp.tok[1], "-", 1) && ft_strlen(inp.tok[1]) == 1)
 	{
-		if (!temp)
-			return (free(temp), NULL);
-		printf("%s\n", temp);
-		return (temp);
+		pwd = get_oldpwd_dir(inp);
+		if (!pwd)
+			return (free(pwd), NULL);
+		return (printf("%s\n", pwd), pwd);
 	}
 	if (inp.tok[1][0] == '~')
 		return (ft_strjoin3(inp.home_dir, "/", inp.tok[1] + 1));
@@ -43,12 +42,11 @@ static char	*process_argument(t_data inp)
 	if (inp.tok[1][0] == '/')
 		return (ft_strdup(inp.tok[1]));
 	trimmed = ft_strtrim(inp.tok[1], "/");
-	free(temp);
-	temp = get_env_val(inp, "PWD");
-	if (!temp)
-		temp = ft_strdup("");
-	res = ft_strjoin3(temp, "/", trimmed);
-	return (free(trimmed), free(temp), res);
+	pwd = get_env_val(inp, "PWD");
+	if (!pwd)
+		pwd = ft_strdup("");
+	res = ft_strjoin3(pwd, "/", trimmed);
+	return (free(trimmed), free(pwd), res);
 }
 
 char	*get_target_dir(t_data inp)

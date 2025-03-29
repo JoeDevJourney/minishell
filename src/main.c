@@ -87,7 +87,6 @@ static inline bool	read_input(t_data *inp)
 		trim = ft_strtrim(inp->cmd, " ");
 		free(inp->cmd);
 		inp->cmd = trim;
-		// free(trim);
 		if (*inp->cmd)
 			break ;
 		free(inp->cmd);
@@ -133,13 +132,10 @@ int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
 	char	*hdoc;
-	char	*shlvl;
 
 	init_data(&inp, env, argc, argv);
-	shlvl = get_env_val(inp, "SHLVL");
 	setup_signals(false);
-	printf("Welcome: SHLVL %s\n", shlvl);
-	free(shlvl);
+	printf("Welcome");
 	// while (1)
 	// {
 	// 	if (!isatty(fileno(stdin)))
@@ -160,7 +156,6 @@ int	main(int argc, char **argv, char **env)
 	// 		free(inp.cmd);
 	// 	}
 		inp.cmd = ft_strdup("cd src");
-		printf("[malloc] inp.cmd = %p → %s\n", inp.cmd, inp.cmd);
 		inp.pipe.cmd = ft_split2(inp.cmd, "|");
 		inp.pipe.num_cmd = count_delim(inp.cmd, "|");
 		parse_n_exec(&inp);
