@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 14:30:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 22:36:25 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,19 @@ int	exec_command(t_data *inp, bool pipe_flag, char **env)
 
 	if (search_builtins(*inp))
 		return (exec_builtin(inp, env));
-	if (stat(*inp->tok, &info) == -1 && S_ISDIR(info.st_mode))
-		return (printf("%s: No such file or directory\n", *inp->tok), 127);
 	if (access(*inp->tok, F_OK) == -1)
 	{
-		set_full_path(inp);
-		if (access(*inp->tok, F_OK) == -1)
-			return (printf("%s: command not found\n", *inp->tok + 1), 127);
+		if (!ft_strchr(*inp->tok, '/'))
+		{
+			set_full_path(inp);
+			if (access(*inp->tok, F_OK) == -1)
+				return (printf("%s: command not found\n", *inp->tok), 127);
+		}
 	}
+	if (stat(*inp->tok, &info) == -1)
+		return (printf("%s: No such file or directory\n", *inp->tok), 127);
+	if (S_ISDIR(info.st_mode))
+		return (printf("%s: is a directory\n", *inp->tok), 126);
 	if (access(*inp->tok, X_OK) == -1)
 		return (perror(*inp->tok), errno);
 	if (!access(*inp->tok, F_OK) && pipe_flag)
@@ -128,7 +133,7 @@ void	parse_n_exec(t_data *inp)
 	sfd[1] = dup(STDOUT_FILENO);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = exec_pipes(inp);
-	else if (parse_input(inp, inp->input) && process_fds(inp) && inp->tok && *inp->tok)
+	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
 	{
 		env = list_to_array(inp->env);
 		inp->ret_val = exec_command(inp, false, env);

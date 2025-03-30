@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/08 16:22:49 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/30 22:03:39 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	upper_echo(char **arr)
 	bool	nl_flag;
 	char	*res;
 
+	pause();
 	if (!arr || !*arr)
 		return (printf("\n"), 0);
 	nl_flag = false;
@@ -54,6 +55,8 @@ static int	lower_echo(char **arr)
 		i++;
 		nl_flag = true;
 	}
+	if (!arr[i])
+		return (0);
 	res = join_cmd(&arr[i], " ");
 	printf("%s", res);
 	if (!nl_flag)
@@ -64,12 +67,19 @@ static int	lower_echo(char **arr)
 int	exec_echo(char **cmd)
 {
 	int		i;
+	bool	flag;
 
 	i = -1;
+	flag = false;
 	while (cmd[0][++i])
 	{
 		if (cmd[0][i] >= 'A' && cmd[0][i] <= 'Z')
-			return (upper_echo(&cmd[1]));
+		{
+			flag = true;
+			break ;
+		}
 	}
+	if (flag)
+		return (upper_echo(&cmd[1]));
 	return (lower_echo(&cmd[1]));
 }

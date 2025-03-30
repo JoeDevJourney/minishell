@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/27 19:22:14 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 20:54:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static bool	out_oper(t_data *inp)
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*inp->out_op.fd[1] == -1)
 		return (perror(inp->out_op.cmd[i]), close(*inp->out_op.fd[1]),
-		free_array_fd(inp->out_op.fd), false);
+			free_array_fd(inp->out_op.fd), false);
 	if (!inp->out_op.cmd[++i])
 		dup2(*inp->out_op.fd[1], *inp->out_op.fd[0]);
 	close(*inp->out_op.fd[1]);

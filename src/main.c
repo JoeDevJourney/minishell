@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 13:28:10 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 21:28:28 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,30 +104,26 @@ static inline bool	read_input(t_data *inp)
 static inline bool	valid_oper(t_data *inp, char *del)
 {
 	int		i;
-	int		size;
-	char	*input;
 	char	**arr;
 	char	*trimmed;
 
 	arr = ft_split2(inp->input, del);
-	size = count_array_size(arr);
 	i = -1;
-	while (++i < size)
+	while (arr[++i])
 	{
 		trimmed = ft_strtrim(arr[i], " ");
 		free(arr[i]);
 		arr[i] = trimmed;
-		if (i < size - 1 && arr[i][0] == '\0')
-			return (inp->ret_val = 258, printf("bash: syntax error near"
-					" unexpected token `%s'\n", del), free_array(&arr, size), false);
-		if (i == size - 1 && arr[i][0] == '\0')
+		if (arr[i] && arr[i][0] == '\0')
 		{
-			input = readline("");
-			inp->input = ft_strjoin_free(&inp->input, input);
-			free(input);
+			inp->ret_val = 258;
+			printf("bash: syntax error near unexpected token `%s'\n", del);
+			free(inp->input);
+			free_array(&arr, count_array_size(arr));
+			return (false);
 		}
 	}
-	return (free_array(&arr, size), true);
+	return (free_array(&arr, count_array_size(arr)), true);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -150,7 +146,8 @@ int	main(int argc, char **argv, char **env)
 		else
 			if (!read_input(&inp))
 				break ;
-		if (valid_oper(&inp, "|"))
+		if (valid_oper(&inp, "|") && (valid_oper(&inp, ">>")
+			|| valid_oper(&inp, ">") || valid_oper(&inp, "<<") || valid_oper(&inp, "<")))
 		{
 			inp.pipe.cmd = ft_split2(inp.input, "|");
 			inp.pipe.num_cmd = count_delim(inp.input, "|");

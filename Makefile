@@ -1,7 +1,7 @@
 #
 #
 CC = cc
-CFLAGS = -g -Wall -Werror -Wextra -I$(INCDIR) -I$(LIBFTDIR)/include -I$(GNLDIR) #-fsanitize=address
+CFLAGS = -g -Wall -Werror -Wextra -I$(INCDIR) -I$(LIBFTDIR)/include -I$(GNLDIR)
 MAKEFLAGS += -s
 
 SRCDIR = ./src

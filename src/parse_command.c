@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 11:56:36 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 14:30:58 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 20:02:16 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,12 @@ static void	tokenization(char **str, char ***arr)
 	(*arr)[++word_i] = NULL;
 }
 
-bool	parse_input(t_data *inp, char *str)
+bool	parse_input(t_data *inp)
 {
 	check_open_quotes(inp->pipe.cmd);
 	if (inp->pipe.cmd && *inp->pipe.cmd)
 	{
-		parse_redir(inp, str);
+		parse_redir(inp);
 		if (!expand_redir(inp))
 			return (false);
 		expansion(&inp->cmd, *inp);
@@ -150,8 +150,3 @@ bool	parse_input(t_data *inp, char *str)
 	}
 	return (true);
 }
-
-// int main (void)
-// {
-
-// }

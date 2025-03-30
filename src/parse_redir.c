@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 14:29:29 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 20:31:55 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,27 @@ static int	count_oper(char *str, char oper, bool next)
 	bool	open_sq;
 	bool	open_dq;
 	int		count;
+	int		i;
 
 	open_sq = false;
 	open_dq = false;
 	count = 0;
-	while (*str)
+	i = -1;
+	while (str[++i])
 	{
-		check_quote(*str, &open_sq, &open_dq);
+		check_quote(str[i], &open_sq, &open_dq);
 		if (!open_sq && !open_dq)
 		{
-			if (*str == oper)
+			if (str[i] == oper)
 			{
-				if (next && *(str + 1) == oper)
+				if (next && str[i + 1] == oper)
 					count++;
-				if (!next && *(str + 1) != oper && *(str - 1) != oper)
+				if (i > 0 && !next && str[i + 1] && str[i + 1] != oper)
+					count++;
+				if (i == 0 && !next && str[i + 1] && str[i + 1] != oper)
 					count++;
 			}
 		}
-		str++;
 	}
 	return (count);
 }
@@ -61,7 +64,7 @@ static char	*add_redir_filename(char *str)
 	while (str[i])
 	{
 		if (ft_isalnum(str[i]) != 1 && str[i] != '_' && str[i] != '-'
-			&& str[i] != '.' && str[i] != '$')
+			&& str[i] != '.' && str[i] != '$' && str[i] != '/')
 			break ;
 		len++;
 		i++;
@@ -69,7 +72,7 @@ static char	*add_redir_filename(char *str)
 	return (ft_substr(str, start, len));
 }
 
-static void	create_redir_array(char *str, t_redir_op *op, char del, bool next)
+static void	create_redir_array(char *str, t_redir_op *op, char c, bool n)
 {
 	int		j;
 	int		i;
@@ -78,18 +81,20 @@ static void	create_redir_array(char *str, t_redir_op *op, char del, bool next)
 
 	open_sq = false;
 	open_dq = false;
-	op->num_cmd = count_oper(str, del, next);
+	op->num_cmd = count_oper(str, c, n);
 	op->cmd = safe_malloc((op->num_cmd + 1) * sizeof(char *));
 	j = 0;
 	i = -1;
 	while (str[++i])
 	{
 		check_quote(str[i], &open_sq, &open_dq);
-		if (!open_sq && !open_dq && str[i] == del)
+		if (!open_sq && !open_dq && str[i] == c)
 		{
-			if (next && str[i + 1] && str[i + 1] == del)
+			if (n && str[i + 1] && str[i + 1] == c)
 				op->cmd[j++] = add_redir_filename(&str[i + 2]);
-			if (!next && str[i + 1] && str[i + 1] != del && str[i - 1] != del)
+			if (i > 0 && !n && str[i + 1] && str[i + 1] != c && str[i - 1] != c)
+				op->cmd[j++] = add_redir_filename(&str[i + 1]);
+			if (i == 0 && !n && str[i + 1] && str[i + 1] != c)
 				op->cmd[j++] = add_redir_filename(&str[i + 1]);
 		}
 	}
@@ -123,7 +128,7 @@ bool	check_inv_filename(t_data *inp)
 	return (true);
 }
 
-void	parse_redir(t_data *inp, char *input)
+void	parse_redir(t_data *inp)
 {
 	int		i;
 	bool	open_sq;
@@ -132,18 +137,21 @@ void	parse_redir(t_data *inp, char *input)
 	i = -1;
 	open_sq = false;
 	open_dq = false;
-	while (inp->input[++i])
+	while ((*inp->pipe.cmd)[++i])
 	{
-		check_quote(input[i], &open_sq, &open_dq);
-		if (!open_sq && !open_dq && (input[i] == '>'
-				|| input[i] == '<'))
+		check_quote((*inp->pipe.cmd)[i], &open_sq, &open_dq);
+		if (!open_sq && !open_dq && ((*inp->pipe.cmd)[i] == '>'
+			|| (*inp->pipe.cmd)[i] == '<'))
 			break ;
 	}
-	inp->cmd = ft_substr(input, 0, i);
-	create_redir_array(input, &inp->inp_op, '<', false);
-	create_redir_array(input, &inp->out_op, '>', false);
-	create_redir_array(input, &inp->hdoc_op, '<', true);
-	create_redir_array(input, &inp->app_op, '>', true);
+	if (i == 0)
+		inp->cmd = ft_strdup("");
+	else
+		inp->cmd = ft_substr(*inp->pipe.cmd, 0, i);
+	create_redir_array(*inp->pipe.cmd, &inp->inp_op, '<', false);
+	create_redir_array(*inp->pipe.cmd, &inp->out_op, '>', false);
+	create_redir_array(*inp->pipe.cmd, &inp->hdoc_op, '<', true);
+	create_redir_array(*inp->pipe.cmd, &inp->app_op, '>', true);
 }
 
 // int	main(void)
