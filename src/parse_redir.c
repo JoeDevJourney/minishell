@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 19:41:27 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:29:29 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ bool	check_inv_filename(t_data *inp)
 	return (true);
 }
 
-void	parse_redir(t_data *inp)
+void	parse_redir(t_data *inp, char *input)
 {
 	int		i;
 	bool	open_sq;
@@ -134,16 +134,16 @@ void	parse_redir(t_data *inp)
 	open_dq = false;
 	while (inp->input[++i])
 	{
-		check_quote(inp->input[i], &open_sq, &open_dq);
-		if (!open_sq && !open_dq && (inp->input[i] == '>'
-				|| inp->input[i] == '<'))
+		check_quote(input[i], &open_sq, &open_dq);
+		if (!open_sq && !open_dq && (input[i] == '>'
+				|| input[i] == '<'))
 			break ;
 	}
-	inp->cmd = ft_substr(inp->input, 0, i);
-	create_redir_array(inp->input, &inp->inp_op, '<', false);
-	create_redir_array(inp->input, &inp->out_op, '>', false);
-	create_redir_array(inp->input, &inp->hdoc_op, '<', true);
-	create_redir_array(inp->input, &inp->app_op, '>', true);
+	inp->cmd = ft_substr(input, 0, i);
+	create_redir_array(input, &inp->inp_op, '<', false);
+	create_redir_array(input, &inp->out_op, '>', false);
+	create_redir_array(input, &inp->hdoc_op, '<', true);
+	create_redir_array(input, &inp->app_op, '>', true);
 }
 
 // int	main(void)

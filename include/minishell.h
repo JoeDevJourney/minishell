@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 12:32:54 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:30:23 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int				main(int argc, char **argv, char **env);
 //	Parsing/expansion
 bool			process_fds(t_data *inp);
 bool			hdoc_oper(t_data *inp);
-bool			parse_input(t_data *inp);
+bool			parse_input(t_data *inp, char *str);
 bool			expand_redir(t_data *inp);
-void			parse_redir(t_data *inp);
+void			parse_redir(t_data *inp, char *input);
 void			check_open_quotes(char **str);
 void			expansion(char **str, t_data inp);
 

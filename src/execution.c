@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 13:40:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:30:58 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	parse_n_exec(t_data *inp)
 	sfd[1] = dup(STDOUT_FILENO);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = exec_pipes(inp);
-	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
+	else if (parse_input(inp, inp->input) && process_fds(inp) && inp->tok && *inp->tok)
 	{
 		env = list_to_array(inp->env);
 		inp->ret_val = exec_command(inp, false, env);

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 13:21:54 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:35:41 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	free_array(char ***arr, int size)
 
 	i = -1;
 	if (!arr || !*arr)
-		return;
+		return ;
 	while (++i < size)
 		free((*arr)[i]);
 	free (*arr);

@@ -6,22 +6,21 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/30 14:06:04 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:38:00 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	wait_n_free(t_data *inp, int *pid)
+static int	wait_n_free(t_data *inp)
 {
 	int	status;
 	int	i;
 
 	i = -1;
 	while (++i < inp->pipe.num_cmd)
-		if (waitpid(pid[i], &status, 0) == -1)
+		if (wait(&status) == -1)
 			exit_with_error("Child process failed", EXIT_FAILURE);
-	free(pid);
 	free_array_fd(inp->pipe.fd);
 	setup_signals(false);
 	return (handle_signal_status(status));
@@ -96,9 +95,9 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	setup_signals(true);
 	if (pid == 0)
 	{
-		if (inp->cmd)
-			free(inp->cmd);
-		if (!parse_input(inp) || !process_fds(inp) || !*inp->tok)
+		// if (inp->cmd)
+		// 	free(inp->cmd);
+		if (!parse_input(inp, *inp->pipe.cmd) || !process_fds(inp) || !*inp->tok)
 			exit(1);
 		process_pipe_fds(inp, old_fd, new_fd);
 		free_redir(inp);
@@ -118,25 +117,25 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 int	exec_pipes(t_data *inp)
 {
 	t_data	ptr;
-	pid_t	*pid;
+	// pid_t	*pid;
 	int		i;
 
-	pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
+	// pid = (pid_t *)safe_malloc(inp->pipe.num_cmd * sizeof(pid_t));
 	init_pipes(&inp->pipe);
 	ptr = *inp;
 	i = 0;
-	pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i + 1], &ptr.pipe.fd[0][1]);
+	fork_pipe(&ptr, ptr.pipe.fd[i + 1], &ptr.pipe.fd[0][1]);
 	while (++i < ptr.pipe.num_cmd)
 	{
 		close(ptr.pipe.fd[i][1]);
-		// free (*ptr.pipe.cmd);
-		// *ptr.pipe.cmd = NULL;
+		free (*ptr.pipe.cmd);
+		*ptr.pipe.cmd = NULL;
 		ptr.pipe.cmd++;
 		if (i != ptr.pipe.num_cmd - 1)
-			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], ptr.pipe.fd[i + 1]);
+			fork_pipe(&ptr, ptr.pipe.fd[i], ptr.pipe.fd[i + 1]);
 		else
-			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], &ptr.pipe.fd[0][0]);
+			fork_pipe(&ptr, ptr.pipe.fd[i], &ptr.pipe.fd[0][0]);
 		close(ptr.pipe.fd[i][0]);
 	}
-	return (wait_n_free(&ptr, pid));
+	return (wait_n_free(&ptr));
 }
