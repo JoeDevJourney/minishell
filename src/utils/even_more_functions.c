@@ -31,8 +31,7 @@ void	free_array(char ***arr, int size)
 	i = -1;
 	if (!arr || !*arr)
 		return;
-	(void)size;
-	while ((*arr)[++i])
+	while (++i < size)
 		free((*arr)[i]);
 	free (*arr);
 	*arr = NULL;
@@ -66,7 +65,8 @@ void	free_commands(t_data *inp)
 	inp->cmd = NULL;
 	free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
 	inp->pipe.cmd = NULL;
-	free_array(&inp->tok, count_array_size(inp->tok));
+	// if (inp->tok)
+		free_array(&inp->tok, count_array_size(inp->tok));
 	inp->tok = NULL;
 }
 
@@ -115,5 +115,5 @@ void	print_data(t_data inp)
 	while (inp.tok && *inp.tok)
 		printf("'%s', ", *inp.tok++);
 	printf("]\n\n");
-	pause();
+	// pause();
 }

@@ -47,10 +47,11 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 		inp->home_dir = home;
 	else
 		inp->home_dir = ft_strdup("/");
+	inp->input = NULL;
 	inp->pipe.cmd = NULL;
 	inp->pipe.num_cmd = 0;
-	inp->input = NULL;
 	inp->cmd = NULL;
+	inp->tok = NULL;
 	inp->ret_val = 0;
 	init_redir(inp);
 }

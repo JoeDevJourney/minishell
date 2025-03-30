@@ -96,6 +96,7 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	setup_signals(true);
 	if (pid == 0)
 	{
+		print_data(*inp);
 		if (inp->cmd)
 			free(inp->cmd);
 		if (!parse_input(inp) || !process_fds(inp) || !*inp->tok)
