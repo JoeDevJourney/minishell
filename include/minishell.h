@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/28 14:51:08 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 12:32:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char			*ft_strjoin3(const char *s1, const char *s2, const char *s3);
 char			*join_cmd(char **arr, char *del);
 int				restart_minishell(t_data *inp);
 void			setup_signals(bool is_child);
-char			*ft_strjoin_free(char *s1, char *s2);
+char			*ft_strjoin_free(char **s1, char *s2);
 void			parent_signal(int sig);
 void			child_signal(int sig);
 int				handle_signal_status(int status);

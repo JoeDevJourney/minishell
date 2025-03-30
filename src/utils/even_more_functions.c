@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   even_more_functions.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 19:52:33 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/30 13:21:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,5 @@ void	print_data(t_data inp)
 	while (inp.tok && *inp.tok)
 		printf("'%s', ", *inp.tok++);
 	printf("]\n\n");
-	// pause();
+	pause();
 }

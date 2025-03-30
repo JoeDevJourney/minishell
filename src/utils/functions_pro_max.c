@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   functions_pro_max.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/29 20:45:07 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/30 12:56:07 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ char	*get_target_dir(t_data inp)
 	{
 		home = get_env_val(inp, "HOME");
 		if (!home)
-		{
 			printf("cd: HOME not set\n");
-			home = "";
-		}
 		return (home);
 	}
 	return (process_argument(inp));

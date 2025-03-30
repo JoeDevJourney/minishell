@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 19:51:34 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/30 13:40:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,14 @@ static void	set_full_path(t_data *inp)
 
 	path = NULL;
 	path_to_exec(*inp, &path);
-	dir = ft_strjoin_free(path, "/");
-	full_path = ft_strjoin_free(dir, *inp->tok);
+	if (!path)
+		path = ft_strdup("");
+	dir = ft_strjoin(path, "/");
+	free(path);
+	full_path = ft_strjoin(dir, *inp->tok);
+	free(dir);
 	free(*inp->tok);
-	*inp->tok = ft_strdup(full_path);
-	free(full_path);
+	*inp->tok = full_path;
 }
 
 /**
@@ -123,15 +126,17 @@ void	parse_n_exec(t_data *inp)
 
 	sfd[0] = dup(STDIN_FILENO);
 	sfd[1] = dup(STDOUT_FILENO);
-	env = list_to_array(inp->env);
 	if (inp->pipe.num_cmd != 1)
 		inp->ret_val = exec_pipes(inp);
 	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
+	{
+		env = list_to_array(inp->env);
 		inp->ret_val = exec_command(inp, false, env);
+		free_array(&env, count_array_size(env));
+	}
 	dup2(sfd[0], STDIN_FILENO);
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	return (free_array(&env, count_array_size(env)), free_redir(inp),
-		free_commands(inp), init_redir(inp));
+	return (free_redir(inp), free_commands(inp), init_redir(inp));
 }

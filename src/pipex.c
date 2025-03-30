@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/21 19:20:24 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/30 14:06:04 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,17 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	setup_signals(true);
 	if (pid == 0)
 	{
-		print_data(*inp);
 		if (inp->cmd)
 			free(inp->cmd);
 		if (!parse_input(inp) || !process_fds(inp) || !*inp->tok)
 			exit(1);
 		process_pipe_fds(inp, old_fd, new_fd);
+		free_redir(inp);
+		free(inp->input);
+		free(inp->cmd);
+		free(inp->home_dir);
+		free_array(&inp->tok, count_array_size(inp->tok));
+		free_env_list(inp->env);
 		exit(inp->ret_val);
 	}
 	return (pid);
@@ -124,6 +129,8 @@ int	exec_pipes(t_data *inp)
 	while (++i < ptr.pipe.num_cmd)
 	{
 		close(ptr.pipe.fd[i][1]);
+		// free (*ptr.pipe.cmd);
+		// *ptr.pipe.cmd = NULL;
 		ptr.pipe.cmd++;
 		if (i != ptr.pipe.num_cmd - 1)
 			pid[i] = fork_pipe(&ptr, ptr.pipe.fd[i], ptr.pipe.fd[i + 1]);

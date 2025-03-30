@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/29 20:45:25 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/30 13:28:10 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ static inline bool	read_input(t_data *inp)
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
 		pwd = ft_strdup("/");
-	prompt = ft_strjoin_free(prompt, ft_strrchr(pwd, '/') + 1);
-	prompt = ft_strjoin_free(prompt, RST " % ");
+	prompt = ft_strjoin_free(&prompt, ft_strrchr(pwd, '/') + 1);
+	prompt = ft_strjoin_free(&prompt, RST " % ");
 	while (true)
 	{
 		inp->input = readline(prompt);
@@ -123,7 +123,7 @@ static inline bool	valid_oper(t_data *inp, char *del)
 		if (i == size - 1 && arr[i][0] == '\0')
 		{
 			input = readline("");
-			inp->input = ft_strjoin_free(inp->input, input);
+			inp->input = ft_strjoin_free(&inp->input, input);
 			free(input);
 		}
 	}
