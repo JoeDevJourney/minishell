@@ -65,8 +65,7 @@ void	free_commands(t_data *inp)
 	inp->cmd = NULL;
 	free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
 	inp->pipe.cmd = NULL;
-	// if (inp->tok)
-		free_array(&inp->tok, count_array_size(inp->tok));
+	free_array(&inp->tok, count_array_size(inp->tok));
 	inp->tok = NULL;
 }
 
@@ -81,10 +80,7 @@ void	free_redir(t_data *inp)
 	oper_arr[3] = &inp->hdoc_op;
 	i = -1;
 	while (++i < 4)
-	{
 		free_array(&oper_arr[i]->cmd, oper_arr[i]->num_cmd);
-		oper_arr[i]->cmd = NULL;
-	}
 }
 
 void	print_data(t_data inp)
