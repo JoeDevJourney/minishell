@@ -156,10 +156,6 @@ int	main(int argc, char **argv, char **env)
 			inp.pipe.num_cmd = count_delim(inp.input, "|");
 			parse_n_exec(&inp);
 		}
-		// inp.input = ft_strdup("echo Hello my name is : $USER and my pwd is $PWD");
-		// inp.pipe.cmd = ft_split2(inp.input, "|");
-		// inp.pipe.num_cmd = count_delim(inp.input, "|");
-		// parse_n_exec(&inp);
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);
