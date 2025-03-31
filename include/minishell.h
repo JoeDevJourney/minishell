@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 19:05:49 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:03:27 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,5 @@ void			exit_free(t_data *inp);
 void			find_dir_exec(const char *dirpath, const char *exec, \
 				char **path);
 int				parse_n_flag(char **arr, bool *nl_flag);
-
-
 
 #endif

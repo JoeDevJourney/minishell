@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:12:47 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 19:38:30 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 19:54:20 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,21 @@ void	exit_free(t_data *inp)
 
 void	find_dir_exec(const char *dirpath, const char *exec, char **path)
 {
-	char			**arr;
 	DIR				*dir;
 	struct dirent	*entry;
 
 	dir = opendir(dirpath);
 	if (!dir)
-	{
-		free_array(&arr, count_array_size(arr));
-		perror(dirpath);
-		return ;
-	}
+		return (perror(dirpath));
 	entry = readdir(dir);
 	while (entry)
 	{
 		if (!ft_strncmp(exec, entry->d_name, ft_strlen(exec))
-			&& entry->d_name[ft_strlen(exec)] == '\0' && !*path)
+			&& entry->d_name[ft_strlen(exec)] == '\0')
+		{
 			*path = ft_strdup(dirpath);
+			break ;
+		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
@@ -92,7 +90,6 @@ int	parse_n_flag(char **arr, bool *nl_flag)
 	int	j;
 
 	i = 0;
-	*nl_flag = false;
 	while (arr[i] && arr[i][0] == '-')
 	{
 		j = 1;
@@ -101,7 +98,7 @@ int	parse_n_flag(char **arr, bool *nl_flag)
 		if (arr[i][j] != '\0')
 			break ;
 		i++;
-		*nl_flag = true;
+		*nl_flag = false;
 	}
 	return (i);
 }

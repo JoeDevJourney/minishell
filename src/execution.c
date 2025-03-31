@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 18:38:28 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 19:46:53 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ static void	path_to_exec(t_data inp, char **path)
 	i = -1;
 	while (arr && arr[++i])
 		find_dir_exec(arr[i], *inp.tok, path);
-	free(temp);
+	if (temp)
+		free(temp);
 	if (arr)
 		free_array(&arr, count_array_size(arr));
 }

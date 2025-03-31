@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 18:51:12 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:02:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static int	lower_echo(char **arr)
 	char	*res;
 	int		start;
 
+	nl_flag = true;
 	if (!arr || !*arr)
 		return (printf("\n"), 0);
 	start = parse_n_flag(arr, &nl_flag);
@@ -47,7 +48,7 @@ static int	lower_echo(char **arr)
 		return (0);
 	res = join_cmd(&arr[start], " ");
 	printf("%s", res);
-	if (!nl_flag)
+	if (nl_flag)
 		printf("\n");
 	return (free(res), 0);
 }
