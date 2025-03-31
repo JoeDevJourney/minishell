@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:12:47 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 18:39:35 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 18:51:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,24 @@ void	find_dir_exec(const char *dirpath, const char *exec, char **path)
 		entry = readdir(dir);
 	}
 	closedir(dir);
+}
+
+int	parse_n_flag(char **arr, bool *nl_flag)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	*nl_flag = false;
+	while (arr[i] && arr[i][0] == '-')
+	{
+		j = 1;
+		while (arr[i][j] == 'n')
+			j++;
+		if (arr[i][j] != '\0')
+			break ;
+		i++;
+		*nl_flag = true;
+	}
+	return (i);
 }

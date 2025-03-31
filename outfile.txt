@@ -1,0 +1,20 @@
+export VAR=value
+export PATH=/bin:/usr/bin
+export EMPTY=
+export MULTI="a b c d"
+export NUM=42
+export VAR1=foo VAR2=bar VAR3=hello
+export ONLYNAME
+export =value
+export =   
+export VAR=this is bad
+export VAR="this is fine"
+export VAR=foo=bar=baz
+export S='!@#$%^&*()_+'
+export STR="some;thing:weird"
+export UNICODE="测试"
+export VAR=first
+export VAR=second
+export VAR
+env | grep VAR
+exit

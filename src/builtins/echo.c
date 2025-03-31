@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 14:39:07 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 18:51:12 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,17 @@ static int	lower_echo(char **arr)
 {
 	bool	nl_flag;
 	char	*res;
-	int		i;
-	int		j;
+	int		start;
 
 	if (!arr || !*arr)
 		return (printf("\n"), 0);
-	nl_flag = false;
-	i = 0;
-	while (arr[i] && arr[i][0] == '-')
-	{
-		j = 1;
-		while (arr[i][j] == 'n')
-			j++;
-		if (arr[i][j] != '\0')
-			break ;
-		i++;
-		nl_flag = true;
-	}
-	if (!arr[i])
+	start = parse_n_flag(arr, &nl_flag);
+	if (!arr[start])
 		return (0);
-	res = join_cmd(&arr[i], " ");
+	res = join_cmd(&arr[start], " ");
 	printf("%s", res);
-	!nl_flag && printf("\n");
+	if (!nl_flag)
+		printf("\n");
 	return (free(res), 0);
 }
 
