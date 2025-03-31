@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 11:21:52 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:18:45 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,6 @@ void			write_to_fd(char **input, t_data *inp, int i);
 int				count_delim(char *str, char *delim);
 bool			check_inv_filename(t_data *inp);
 int				count_oper(char *str, char oper, bool next);
+void			check_quote(char c, bool *open_sq, bool *open_dq);
 
 #endif

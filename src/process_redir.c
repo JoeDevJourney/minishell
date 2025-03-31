@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:42:19 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 20:54:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:24:18 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ static bool	out_oper(t_data *inp)
 	inp->out_op.fd[1] = safe_malloc(sizeof(int));
 	inp->out_op.fd[2] = NULL;
 	*inp->out_op.fd[0] = STDOUT_FILENO;
+	if (!inp->out_op.cmd[i])
+		return (printf("bash: syntax error near unexpected token `>'\n"),
+			inp->ret_val = 258, free_array_fd(inp->out_op.fd), false);
 	*inp->out_op.fd[1] = open(inp->out_op.cmd[i],
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*inp->out_op.fd[1] == -1)
@@ -42,8 +45,11 @@ static bool	inp_oper(t_data *inp)
 	inp->inp_op.fd[0] = safe_malloc(sizeof(int));
 	*inp->inp_op.fd[0] = STDIN_FILENO;
 	inp->inp_op.fd[1] = safe_malloc(sizeof(int));
-	*inp->inp_op.fd[1] = open(inp->inp_op.cmd[i], O_RDONLY);
 	inp->inp_op.fd[2] = NULL;
+	if (!inp->inp_op.cmd[i])
+		return (printf("bash: syntax error near unexpected token `<'\n"),
+			inp->ret_val = 258, free_array_fd(inp->inp_op.fd), false);
+	*inp->inp_op.fd[1] = open(inp->inp_op.cmd[i], O_RDONLY);
 	if (*inp->inp_op.fd[1] == -1)
 		return (perror(inp->inp_op.cmd[i]), close(*inp->inp_op.fd[1]),
 			free_array_fd(inp->inp_op.fd), false);
@@ -64,6 +70,9 @@ static bool	app_oper(t_data *inp)
 	inp->app_op.fd[1] = safe_malloc(sizeof(int));
 	inp->app_op.fd[2] = NULL;
 	*inp->app_op.fd[0] = STDOUT_FILENO;
+	if (!inp->app_op.cmd[i])
+		return (printf("bash: syntax error near unexpected token `>'\n"),
+			inp->ret_val = 258, free_array_fd(inp->app_op.fd), false);
 	*inp->app_op.fd[1] = open(inp->app_op.cmd[i],
 			O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*inp->app_op.fd[1] == -1)
@@ -110,12 +119,9 @@ bool	process_fds(t_data *inp)
 	res = true;
 	open_sq = false;
 	open_dq = false;
-	while (inp->pipe.cmd && (*inp->pipe.cmd)[++i] && res)
+	while (res && inp->pipe.cmd && (*inp->pipe.cmd)[++i])
 	{
-		if ((*inp->pipe.cmd)[i] == '\'' && !open_dq)
-			open_sq = !open_sq;
-		if ((*inp->pipe.cmd)[i] == '"' && !open_sq)
-			open_dq = !open_dq;
+		check_quote((*inp->pipe.cmd)[i], &open_sq, &open_dq);
 		if ((*inp->pipe.cmd)[i] == '<' && !open_dq && !open_sq)
 			res = redir_oper(inp, &i, '<');
 		else if ((*inp->pipe.cmd)[i] == '>' && !open_dq && !open_sq)

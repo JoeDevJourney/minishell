@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 12:09:30 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:16:02 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,28 +101,28 @@ static bool	read_input(t_data *inp)
  * 
  * @note It doesn't work for commands with mixed operators.
  */
-static bool	valid_op(t_data *inp, char *del)
+static bool	valid_pipe(t_data *inp)
 {
-	char	**arr;
-	int		num_del;
+	char	*trim;
+	int		i;
 
-	if (ft_strlen(del) == 1)
-		num_del = count_oper(inp->input, *del, false);
-	else
-		num_del = count_oper(inp->input, *del, true);
-	arr = ft_split2(inp->input, del);
-	int i = -1;
-	while (arr[++i])
-		printf("'%s'\n", arr[i]);
-	if ((int)count_array_size(arr) != num_del + 1 || arr[0][0] == '\0')
+	i = -1;
+	while (inp->pipe.cmd[++i])
 	{
-		inp->ret_val = 258;
-		printf("bash: syntax error near unexpected token `%s'\n", del);
-		free(inp->input);
-		free_array(&arr, count_array_size(arr));
-		return (false);
+		if (inp->pipe.cmd[i])
+		{
+			trim = ft_strtrim(inp->pipe.cmd[i], " ");
+			free(inp->pipe.cmd[i]);
+			inp->pipe.cmd[i] = trim;
+		}
+		if (inp->pipe.cmd[i][0] == '\0')
+		{
+			free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
+			printf("bash: syntax error near unexpected token `|'\n");
+			return (free(inp->input), inp->ret_val = 258, false);
+		}
 	}
-	return (free_array(&arr, count_array_size(arr)), true);
+	return (true);
 }
 
 int	main(int argc, char **argv, char **env)
@@ -137,14 +137,10 @@ int	main(int argc, char **argv, char **env)
 	{
 		if (!read_input(&inp))
 			break ;
-		if (valid_op(&inp, "|") && valid_op(&inp, ">>") && valid_op(&inp, ">")
-			&& valid_op(&inp, "<<") && valid_op(&inp, "<"))
-		{
-			exit(0);
-			inp.pipe.cmd = ft_split2(inp.input, "|");
-			inp.pipe.num_cmd = count_delim(inp.input, "|");
+		inp.pipe.cmd = ft_split2(inp.input, "|");
+		inp.pipe.num_cmd = count_delim(inp.input, "|");
+		if (valid_pipe(&inp))
 			parse_n_exec(&inp);
-		}
 		hdoc = ft_strjoin(inp.home_dir, "/obj/heredoc");
 		if (!access(hdoc, F_OK))
 			unlink(hdoc);

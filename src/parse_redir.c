@@ -6,13 +6,13 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 11:21:42 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 13:18:38 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void	check_quote(char c, bool *open_sq, bool *open_dq)
+void	check_quote(char c, bool *open_sq, bool *open_dq)
 {
 	if (c == '\'' && !*open_dq)
 		*open_sq = !*open_sq;
