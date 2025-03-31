@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 13:16:02 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:30:21 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,28 +64,14 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 static bool	read_input(t_data *inp)
 {
 	char	*prompt;
-	char	*user;
-	char	*pwd;
 	char	*trim;
-	char	*temp;
 
-	temp = get_env_val(*inp, "USER");
-	if (temp)
-		user = temp;
-	else
-		user = ft_strdup("");
-	prompt = ft_strjoin3(GRN, user, " @ ");
-	free(user);
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		pwd = ft_strdup("/");
-	prompt = ft_strjoin_free(&prompt, ft_strrchr(pwd, '/') + 1);
-	prompt = ft_strjoin_free(&prompt, RST " % ");
+	prompt = build_prompt(inp);
 	while (true)
 	{
 		inp->input = readline(prompt);
 		if (!inp->input)
-			return (free(pwd), free(prompt), false);
+			return (free(prompt), false);
 		trim = ft_strtrim(inp->input, " ");
 		free(inp->input);
 		inp->input = trim;
@@ -93,7 +79,7 @@ static bool	read_input(t_data *inp)
 			break ;
 		free(inp->input);
 	}
-	return (add_history(inp->input), free(pwd), free(prompt), true);
+	return (add_history(inp->input), free(prompt), true);
 }
 
 /**

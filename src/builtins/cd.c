@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:33:43 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/30 12:56:20 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:32:00 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	exec_cd(t_data *inp)
 	if (!target_dir)
 		return (free(pwd), 1);
 	if (chdir(target_dir) != 0)
-		return (perror(*inp->tok), free(target_dir), free(pwd), 1);			// free(target_dir),
+		return (perror(*inp->tok), free(target_dir), free(pwd), 1);
 	if (update_env_var(&inp->env, "OLDPWD", pwd) != 0)
 		return (printf("Error with OLDPWD"), free(target_dir), free(pwd), 1);
 	free(target_dir);

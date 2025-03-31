@@ -1,12 +1,12 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 16:43:54 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/21 18:58:23 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:42:23 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	free_env_list(t_env *head)
 	}
 }
 
-t_env *new_env_node(char *env_var)
+t_env	*new_env_node(char *env_var)
 {
-	t_env *new_node;
-	char *equal_sign;
-	char *name;
-	char *value;
+	t_env	*new_node;
+	char	*equal_sign;
+	char	*name;
+	char	*value;
 
 	if (!env_var)
 		return (printf("Error: NULL env_var\n"), NULL);
@@ -42,17 +42,16 @@ t_env *new_env_node(char *env_var)
 	name = ft_substr(env_var, 0, equal_sign - env_var);
 	if (!name)
 		return (printf("Error: substr failed for name\n"),
-				free_env_list(new_node), NULL);
+			free_env_list(new_node), NULL);
 	value = ft_strdup(equal_sign + 1);
 	if (!value)
 		return (printf("Error: strdup failed for value\n"),
-				free(name), free_env_list(new_node), NULL);
+			free(name), free_env_list(new_node), NULL);
 	new_node->name = name;
 	new_node->value = value;
 	new_node->next = NULL;
 	return (new_node);
 }
-
 
 void	dupl_env(t_env **head, char **env)
 {

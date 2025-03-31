@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_hdoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 19:07:25 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 13:14:26 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 16:13:39 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,8 @@ bool	hdoc_oper(t_data *inp)
 	static size_t	i;
 	char			*hdoc;
 
-	hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
-	inp->hdoc_op.fd = safe_malloc(3 * sizeof(int *));
-	inp->hdoc_op.fd[0] = safe_malloc(sizeof(int));
-	*inp->hdoc_op.fd[0] = STDIN_FILENO;
-	inp->hdoc_op.fd[1] = safe_malloc(sizeof(int));
-	inp->hdoc_op.fd[2] = NULL;
-	if (!inp->hdoc_op.cmd[i])
-		return (printf("bash: syntax error near unexpected token `<<'\n"),
-			inp->ret_val = 258, free_array_fd(inp->hdoc_op.fd), false);
-	*inp->hdoc_op.fd[1] = open(hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*inp->hdoc_op.fd[1] == -1)
-		return (perror(inp->hdoc_op.cmd[i]), false);
+	if (!setup_heredoc_fd(inp, &hdoc, i))
+		return (false);
 	hdoc_prompt(inp, i);
 	if (inp->ret_val == 1)
 		return (close(*inp->hdoc_op.fd[1]), free_array_fd(inp->hdoc_op.fd),

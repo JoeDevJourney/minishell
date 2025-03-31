@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 13:18:38 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 15:40:33 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ int	count_oper(char *str, char oper, bool next)
 			{
 				if (next && str[i + 1] == oper)
 					count++;
-				if (i > 0 && !next && str[i + 1] && str[i + 1] != oper)
-					count++;
-				if (i == 0 && !next && str[i + 1] && str[i + 1] != oper)
+				else if (!next && str[i + 1] && str[i + 1] != oper)
 					count++;
 			}
 		}

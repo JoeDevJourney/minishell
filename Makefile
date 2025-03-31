@@ -18,7 +18,7 @@ SRCS = $(SRCDIR)/main.c $(SRCDIR)/pipex.c $(SRCDIR)/expansion.c $(SRCDIR)/execut
 		$(SRCDIR)/builtins/minishell.c \
 		\
 		$(SRCDIR)/utils/functions.c $(SRCDIR)/utils/more_functions.c $(SRCDIR)/utils/even_more_functions.c \
-		$(SRCDIR)/utils/guess_what_more_functions.c $(SRCDIR)/utils/functions_pro_max.c \
+		$(SRCDIR)/utils/guess_what_more_functions.c $(SRCDIR)/utils/functions_pro_max.c $(SRCDIR)/utils/helper_functions.c \
 		\
 		$(GNLDIR)/get_next_line.c $(GNLDIR)/get_next_line_utils.c
 

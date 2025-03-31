@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:45:20 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 22:03:39 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 14:39:07 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ static int	lower_echo(char **arr)
 		return (0);
 	res = join_cmd(&arr[i], " ");
 	printf("%s", res);
-	if (!nl_flag)
-		printf("\n");
+	!nl_flag && printf("\n");
 	return (free(res), 0);
 }
 

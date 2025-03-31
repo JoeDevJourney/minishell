@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:31:49 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/28 12:12:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 18:05:13 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ int	exec_exit(t_data *inp, char **env)
 		printf("exit\n");
 		exit_code = ft_atoi(inp->tok[1]) % 256;
 	}
-	free(inp->home_dir);
-	free_env_list(inp->env);
-	free_commands(inp);
-	free_redir(inp);
+	exit_free(inp);
 	free_array(&env, count_array_size(env));
 	exit(exit_code);
 }

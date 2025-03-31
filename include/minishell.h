@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 13:18:45 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 18:16:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,11 @@ int				count_delim(char *str, char *delim);
 bool			check_inv_filename(t_data *inp);
 int				count_oper(char *str, char oper, bool next);
 void			check_quote(char c, bool *open_sq, bool *open_dq);
+char			*build_prompt(t_data *inp);
+bool			setup_heredoc_fd(t_data *inp, char **hdoc, size_t i);
+void			exit_free(t_data *inp);
+void			find_dir_exec(const char *dirpath, const char *exec, \
+				char **path);
+
 
 #endif
