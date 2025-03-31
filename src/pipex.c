@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 13:40:17 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:29:12 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
  * @brief Creates the child process for executing the command and makes
  * the parent wait for it to finish, before returning its value
  */
-static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
+static int	fork_pipe(t_data *inp, int j, int *old_fd, int *new_fd)
 {
 	int	pid;
 
@@ -95,30 +95,16 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 	setup_signals(true);
 	if (pid == 0)
 	{
+		inp->pipe.cmd += j;
 		if (!parse_input(inp) || !process_fds(inp) || !*inp->tok)
 		{
-			free_redir(inp);
-			free(inp->input);
-			free(inp->cmd);
-			free(inp->home_dir);
-			free_array(&inp->tok, count_array_size(inp->tok));
-			free_env_list(inp->env);
-			free_array_fd(inp->pipe.fd);
-			if (inp->ret_val == 0)
-				free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
+			inp->pipe.cmd -= j;
+			free_struct(inp, true);
 			exit(1);
 		}
 		process_pipe_fds(inp, old_fd, new_fd);
-
-		free_redir(inp);
-		free(inp->input);
-		free(inp->cmd);
-		free(inp->home_dir);
-		free_array(&inp->tok, count_array_size(inp->tok));
-		free_env_list(inp->env);
-		if (inp->ret_val == 0)
-			free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
-		free_array_fd(inp->pipe.fd);
+		inp->pipe.cmd -= j;
+		free_struct(inp, true);
 		exit(inp->ret_val);
 	}
 	return (pid);
@@ -129,22 +115,19 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
  */
 int	exec_pipes(t_data *inp)
 {
-	t_data	ptr;
 	int		i;
 
 	init_pipes(&inp->pipe);
-	ptr = *inp;
 	i = 0;
-	fork_pipe(&ptr, ptr.pipe.fd[i + 1], &ptr.pipe.fd[0][1]);
-	while (++i < ptr.pipe.num_cmd)
+	fork_pipe(inp, i, inp->pipe.fd[i + 1], &inp->pipe.fd[0][1]);
+	while (++i < inp->pipe.num_cmd)
 	{
-		close(ptr.pipe.fd[i][1]);
-		ptr.pipe.cmd++;
-		if (i != ptr.pipe.num_cmd - 1)
-			fork_pipe(&ptr, ptr.pipe.fd[i], ptr.pipe.fd[i + 1]);
+		close(inp->pipe.fd[i][1]);
+		if (i != inp->pipe.num_cmd - 1)
+			fork_pipe(inp, i, inp->pipe.fd[i], inp->pipe.fd[i + 1]);
 		else
-			fork_pipe(&ptr, ptr.pipe.fd[i], &ptr.pipe.fd[0][0]);
-		close(ptr.pipe.fd[i][0]);
+			fork_pipe(inp, i, inp->pipe.fd[i], &inp->pipe.fd[0][0]);
+		close(inp->pipe.fd[i][0]);
 	}
-	return (wait_n_free(&ptr));
+	return (wait_n_free(inp));
 }

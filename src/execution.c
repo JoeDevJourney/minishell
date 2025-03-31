@@ -6,20 +6,20 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 19:46:53 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:23:33 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 /**
- * @brief Searches the $PATH directories for the exec
- */
+* @brief Searches the $PATH directories for the exec
+*/
 static void	path_to_exec(t_data inp, char **path)
 {
-	char			**arr;
-	int				i;
-	char			*temp;
+	char	**arr;
+	int		i;
+	char	*temp;
 
 	temp = get_env_val(inp, "PATH");
 	arr = ft_split(temp, ':');
@@ -128,5 +128,5 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	return (free_redir(inp), free_commands(inp), init_redir(inp));
+	return (free_commands(inp), free_redir(inp));
 }

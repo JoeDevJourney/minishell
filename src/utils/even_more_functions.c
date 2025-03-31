@@ -6,23 +6,11 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 17:56:55 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:24:36 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	*safe_malloc(size_t size)
-{
-	void	*ptr;
-
-	if (size == 0)
-		return (perror("0 bytes"), NULL);
-	ptr = malloc(size);
-	if (!ptr)
-		exit_with_error("Memory allocation failed", EXIT_FAILURE);
-	return (ptr);
-}
 
 void	free_array(char ***arr, int size)
 {
@@ -37,9 +25,6 @@ void	free_array(char ***arr, int size)
 	*arr = NULL;
 }
 
-/**
- * @brief Frees an array of fds of any size
- */
 void	free_array_fd(int **fd)
 {
 	int	i;
@@ -81,6 +66,20 @@ void	free_redir(t_data *inp)
 	i = -1;
 	while (++i < 4)
 		free_array(&oper_arr[i]->cmd, oper_arr[i]->num_cmd);
+	init_redir(inp);
+}
+
+void	free_struct(t_data *inp, bool pipe_flag)
+{
+	free_commands(inp);
+	if (pipe_flag)
+	{
+		if (inp->pipe.fd)
+			free_array_fd(inp->pipe.fd);
+		free(inp->home_dir);
+		free_env_list(inp->env);
+	}
+	free_redir(inp);
 }
 
 // void	print_data(t_data inp)
@@ -111,5 +110,4 @@ void	free_redir(t_data *inp)
 // 	while (inp.tok && *inp.tok)
 // 		printf("'%s', ", *inp.tok++);
 // 	printf("]\n\n");
-// 	pause();
 // }

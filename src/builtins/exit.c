@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 12:31:49 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 18:05:13 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 15:46:06 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	exec_exit(t_data *inp, char **env)
 		printf("exit\n");
 		exit_code = ft_atoi(inp->tok[1]) % 256;
 	}
-	exit_free(inp);
-	free_array(&env, count_array_size(env));
-	exit(exit_code);
+	return (free_struct(inp, false), free_array(&env, count_array_size(env)),
+		free(inp->home_dir), free_env_list(inp->env), exit(exit_code), 0);
 }
