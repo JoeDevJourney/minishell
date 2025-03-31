@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 10:19:43 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 21:28:28 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 12:09:30 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
  * 
  * @note Handles empty commands, or commands with only spaces
  */
-static inline bool	read_input(t_data *inp)
+static bool	read_input(t_data *inp)
 {
 	char	*prompt;
 	char	*user;
@@ -101,27 +101,26 @@ static inline bool	read_input(t_data *inp)
  * 
  * @note It doesn't work for commands with mixed operators.
  */
-static inline bool	valid_oper(t_data *inp, char *del)
+static bool	valid_op(t_data *inp, char *del)
 {
-	int		i;
 	char	**arr;
-	char	*trimmed;
+	int		num_del;
 
+	if (ft_strlen(del) == 1)
+		num_del = count_oper(inp->input, *del, false);
+	else
+		num_del = count_oper(inp->input, *del, true);
 	arr = ft_split2(inp->input, del);
-	i = -1;
+	int i = -1;
 	while (arr[++i])
+		printf("'%s'\n", arr[i]);
+	if ((int)count_array_size(arr) != num_del + 1 || arr[0][0] == '\0')
 	{
-		trimmed = ft_strtrim(arr[i], " ");
-		free(arr[i]);
-		arr[i] = trimmed;
-		if (arr[i] && arr[i][0] == '\0')
-		{
-			inp->ret_val = 258;
-			printf("bash: syntax error near unexpected token `%s'\n", del);
-			free(inp->input);
-			free_array(&arr, count_array_size(arr));
-			return (false);
-		}
+		inp->ret_val = 258;
+		printf("bash: syntax error near unexpected token `%s'\n", del);
+		free(inp->input);
+		free_array(&arr, count_array_size(arr));
+		return (false);
 	}
 	return (free_array(&arr, count_array_size(arr)), true);
 }
@@ -136,19 +135,12 @@ int	main(int argc, char **argv, char **env)
 	printf("Welcome\n");
 	while (1)
 	{
-		if (!isatty(fileno(stdin)))
+		if (!read_input(&inp))
+			break ;
+		if (valid_op(&inp, "|") && valid_op(&inp, ">>") && valid_op(&inp, ">")
+			&& valid_op(&inp, "<<") && valid_op(&inp, "<"))
 		{
-			char *line;
-			line = get_next_line(fileno(stdin));
-			inp.input = ft_strtrim(line, "\n");
-			free(line);
-		}
-		else
-			if (!read_input(&inp))
-				break ;
-		if (valid_oper(&inp, "|") && (valid_oper(&inp, ">>")
-			|| valid_oper(&inp, ">") || valid_oper(&inp, "<<") || valid_oper(&inp, "<")))
-		{
+			exit(0);
 			inp.pipe.cmd = ft_split2(inp.input, "|");
 			inp.pipe.num_cmd = count_delim(inp.input, "|");
 			parse_n_exec(&inp);
@@ -160,3 +152,12 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (free(inp.home_dir), free_env_list(inp.env), 0);
 }
+
+// if (!isatty(fileno(stdin)))
+// {
+// 	char *line;
+// 	line = get_next_line(fileno(stdin));
+// 	inp.input = ft_strtrim(line, "\n");
+// 	free(line);
+// }
+// else

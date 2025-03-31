@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 14:31:11 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/29 18:59:53 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 10:28:54 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,19 +134,3 @@ void	expansion(char **str, t_data inp)
 			break ;
 	}
 }
-
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_data	inp;
-
-// 	(void)argc;
-// 	(void)argv;
-// 	dupl_env(&inp.env, env);
-// 	inp.input = ft_strdup("echo Hello my name is -> $USER and my pwd is $PWD");
-// 	expansion(&inp.input, inp);
-// 	printf("res: '%s'\n", inp.input);
-// 	free_env_list(inp.env);
-// 	free(inp.input);
-// }
-
-// cc expansion.c -o expansion ../include/libft/src/*.c utils/*.c builtins/env.c -g -Wall -Werror -Wextra -lreadline

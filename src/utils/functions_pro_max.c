@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:35:31 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/30 12:56:07 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 10:50:03 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,34 @@ bool	expand_redir(t_data *inp)
 			arr[arr_i][str_i] = trimmed;
 		}
 	}
-	return(check_inv_filename(inp));
+	return (check_inv_filename(inp));
+}
+
+bool	check_inv_filename(t_data *inp)
+{
+	int			i;
+	int			j;
+	char		**arr[4];
+	const char	*del[4] = {"<", ">", ">>", "<<"};
+
+	arr[0] = inp->inp_op.cmd;
+	arr[1] = inp->out_op.cmd;
+	arr[2] = inp->app_op.cmd;
+	arr[3] = inp->hdoc_op.cmd;
+	i = -1;
+	j = -1;
+	if (arr[++i])
+	{
+		while (arr[i][++j])
+		{
+			if (arr[i][j][0] == '\0')
+			{
+				printf("bash: syntax error near unexpected token `%s'\n",
+					del[i]);
+				return (inp->ret_val = 258, false);
+			}
+		}
+		j = -1;
+	}
+	return (true);
 }

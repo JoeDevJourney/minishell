@@ -1,0 +1,9 @@
+Makefile
+include
+minishell
+o
+obj
+outfile
+protected_dir
+src
+tests

@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 13:39:12 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/30 18:38:19 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 10:57:56 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int	fork_pipe(t_data *inp, int *old_fd, int *new_fd)
 		free(inp->home_dir);
 		free_array(&inp->tok, count_array_size(inp->tok));
 		free_env_list(inp->env);
-		if (inp->pipe.cmd)
+		if (inp->ret_val == 0)
 			free_array(&inp->pipe.cmd, inp->pipe.num_cmd);
 		free_array_fd(inp->pipe.fd);
 		exit(inp->ret_val);

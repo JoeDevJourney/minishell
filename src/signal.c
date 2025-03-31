@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/30 22:43:44 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 10:53:34 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,8 @@ void	setup_signals(bool is_child)
 
 int	handle_signal_status(int status)
 {
-	int	code;
-
 	if (WIFEXITED(status))
-	{
-		code = WEXITSTATUS(status);
-		if (!code)
-			return (1);
-	}
+		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)

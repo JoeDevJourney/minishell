@@ -6,7 +6,7 @@
 /*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/30 20:31:55 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 11:21:42 by dchrysov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	check_quote(char c, bool *open_sq, bool *open_dq)
 		*open_dq = !*open_dq;
 }
 
-static int	count_oper(char *str, char oper, bool next)
+int	count_oper(char *str, char oper, bool next)
 {
 	bool	open_sq;
 	bool	open_dq;
@@ -99,33 +99,6 @@ static void	create_redir_array(char *str, t_redir_op *op, char c, bool n)
 		}
 	}
 	op->cmd[j] = NULL;
-}
-
-bool	check_inv_filename(t_data *inp)
-{
-	int	i;
-
-	i = -1;
-	if (inp->inp_op.cmd)
-		while (inp->inp_op.cmd[++i])
-			if (inp->inp_op.cmd[i][0] == '\0')
-				return (printf("inafans\n"), inp->ret_val = 258, false);
-	i = -1;
-	if (inp->out_op.cmd)
-		while (inp->out_op.cmd[++i])
-			if (inp->out_op.cmd[i][0] == '\0')
-				return (printf("inafans\n"), inp->ret_val = 258, false);
-	i = -1;
-	if (inp->inp_op.cmd)
-		while (inp->inp_op.cmd[++i])
-			if (inp->inp_op.cmd[i][0] == '\0')
-				return (printf("inafans\n"), inp->ret_val = 258, false);
-	i = -1;
-	if (inp->inp_op.cmd)
-		while (inp->inp_op.cmd[++i])
-			if (inp->inp_op.cmd[i][0] == '\0')
-				return (printf("inafans\n"), inp->ret_val = 258, false);
-	return (true);
 }
 
 void	parse_redir(t_data *inp)
