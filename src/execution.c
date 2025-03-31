@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 21:55:35 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 21:59:25 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void	parse_n_exec(t_data *inp)
 		inp->ret_val = exec_pipes(inp);
 	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
 	{
+		env = list_to_array(inp->env);
 		inp->ret_val = exec_command(inp, false, env);
 		free_array(&env, count_array_size(env));
 	}

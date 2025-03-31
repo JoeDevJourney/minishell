@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:12:47 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 21:56:17 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 21:57:20 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,8 @@ void	find_dir_exec(const char *dirpath, const char *exec, char **path)
 	while (entry)
 	{
 		if (!ft_strncmp(exec, entry->d_name, ft_strlen(exec))
-			&& entry->d_name[ft_strlen(exec)] == '\0')
-		{
+			&& entry->d_name[ft_strlen(exec)] == '\0' && !*path)
 			*path = ft_strdup(dirpath);
-			break ;
-		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
