@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 18:48:31 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 20:23:33 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 21:55:35 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,24 @@
 /**
 * @brief Searches the $PATH directories for the exec
 */
-static void	path_to_exec(t_data inp, char **path)
+static char	*path_to_exec(t_data inp)
 {
 	char	**arr;
 	int		i;
 	char	*temp;
+	char	*path;
 
 	temp = get_env_val(inp, "PATH");
 	arr = ft_split(temp, ':');
 	i = -1;
+	path = NULL;
 	while (arr && arr[++i])
-		find_dir_exec(arr[i], *inp.tok, path);
+		find_dir_exec(arr[i], *inp.tok, &path);
 	if (temp)
 		free(temp);
 	if (arr)
 		free_array(&arr, count_array_size(arr));
+	return (path);
 }
 
 /**
@@ -63,8 +66,7 @@ static void	set_full_path(t_data *inp)
 	char	*path;
 	char	*full_path;
 
-	path = NULL;
-	path_to_exec(*inp, &path);
+	path = path_to_exec(*inp);
 	if (!path)
 		path = ft_strdup("");
 	dir = ft_strjoin(path, "/");
@@ -120,7 +122,6 @@ void	parse_n_exec(t_data *inp)
 		inp->ret_val = exec_pipes(inp);
 	else if (parse_input(inp) && process_fds(inp) && inp->tok && *inp->tok)
 	{
-		env = list_to_array(inp->env);
 		inp->ret_val = exec_command(inp, false, env);
 		free_array(&env, count_array_size(env));
 	}
@@ -128,5 +129,5 @@ void	parse_n_exec(t_data *inp)
 	dup2(sfd[1], STDOUT_FILENO);
 	close(sfd[0]);
 	close(sfd[1]);
-	return (free_commands(inp), free_redir(inp));
+	return (free_commands(inp), free_redir(inp), print_data(*inp));
 }

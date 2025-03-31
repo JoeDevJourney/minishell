@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dchrysov <dchrysov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 15:39:16 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 10:53:34 by dchrysov         ###   ########.fr       */
+/*   Updated: 2025/03/31 21:17:01 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,11 @@ void	setup_signals(bool is_child)
 int	handle_signal_status(int status)
 {
 	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	{
+		if (WEXITSTATUS(status) != 0)
+			return (1);
+		return (WEXITSTATUS(status));	
+	}
 	else if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGINT)

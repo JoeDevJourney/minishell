@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 17:47:35 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 20:24:36 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 21:52:16 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,32 +82,32 @@ void	free_struct(t_data *inp, bool pipe_flag)
 	free_redir(inp);
 }
 
-// void	print_data(t_data inp)
-// {
-// 	printf("input: '%s'\n", inp.input);
-// 	printf("pipe[%d]: [", inp.pipe.num_cmd);
-// 	while (inp.pipe.cmd && *inp.pipe.cmd)
-// 		printf("'%s', ", *inp.pipe.cmd++);
-// 	printf("]\n");
-// 	printf("hdoc[%d]: [", inp.hdoc_op.num_cmd);
-// 	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
-// 		printf("'%s', ", *inp.hdoc_op.cmd++);
-// 	printf("]\n");
-// 	printf("inp[%d]: [", inp.hdoc_op.num_cmd);
-// 	while (inp.inp_op.cmd && *inp.inp_op.cmd)
-// 		printf("'%s', ", *inp.inp_op.cmd++);
-// 	printf("]\n");
-// 	printf("out[%d]: [", inp.out_op.num_cmd);
-// 	while (inp.out_op.cmd && *inp.out_op.cmd)
-// 		printf("'%s', ", *inp.out_op.cmd++);
-// 	printf("]\n");
-// 	printf("app[%d]: [", inp.app_op.num_cmd);
-// 	while (inp.app_op.cmd && *inp.app_op.cmd)
-// 		printf("'%s', ", *inp.app_op.cmd++);
-// 	printf("]\n");
-// 	printf("cmd: '%s'\n", inp.cmd);
-// 	printf("tok[%zu]: [", count_array_size(inp.tok));
-// 	while (inp.tok && *inp.tok)
-// 		printf("'%s', ", *inp.tok++);
-// 	printf("]\n\n");
-// }
+void	print_data(t_data inp)
+{
+	printf("input: '%s'\n", inp.input);
+	printf("pipe[%d]: [", inp.pipe.num_cmd);
+	while (inp.pipe.cmd && *inp.pipe.cmd)
+		printf("'%s', ", *inp.pipe.cmd++);
+	printf("]\n");
+	printf("hdoc[%d]: [", inp.hdoc_op.num_cmd);
+	while (inp.hdoc_op.cmd && *inp.hdoc_op.cmd)
+		printf("'%s', ", *inp.hdoc_op.cmd++);
+	printf("]\n");
+	printf("inp[%d]: [", inp.hdoc_op.num_cmd);
+	while (inp.inp_op.cmd && *inp.inp_op.cmd)
+		printf("'%s', ", *inp.inp_op.cmd++);
+	printf("]\n");
+	printf("out[%d]: [", inp.out_op.num_cmd);
+	while (inp.out_op.cmd && *inp.out_op.cmd)
+		printf("'%s', ", *inp.out_op.cmd++);
+	printf("]\n");
+	printf("app[%d]: [", inp.app_op.num_cmd);
+	while (inp.app_op.cmd && *inp.app_op.cmd)
+		printf("'%s', ", *inp.app_op.cmd++);
+	printf("]\n");
+	printf("cmd: '%s'\n", inp.cmd);
+	printf("tok[%zu]: [", count_array_size(inp.tok));
+	while (inp.tok && *inp.tok)
+		printf("'%s', ", *inp.tok++);
+	printf("]\n\n");
+}
