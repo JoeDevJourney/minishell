@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 15:12:47 by jbrandt           #+#    #+#             */
-/*   Updated: 2025/03/31 18:51:38 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 19:38:30 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ bool	setup_heredoc_fd(t_data *inp, char **hdoc, size_t i)
 	inp->hdoc_op.fd[2] = NULL;
 	if (!inp->hdoc_op.cmd[i])
 		return (printf("bash: syntax error near unexpected token `<<'\n"),
-			inp->ret_val = 258, free_array_fd(inp->hdoc_op.fd), false);
+			inp->ret_val = 258, free_array_fd(inp->hdoc_op.fd),
+			free(*hdoc), false);
 	*inp->hdoc_op.fd[1] = open(*hdoc, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*inp->hdoc_op.fd[1] == -1)
-		return (perror(inp->hdoc_op.cmd[i]), false);
+		return (perror(inp->hdoc_op.cmd[i]),
+			free_array_fd(inp->hdoc_op.fd), free(*hdoc), false);
 	return (true);
 }
 
