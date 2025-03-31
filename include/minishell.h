@@ -6,7 +6,7 @@
 /*   By: jbrandt <jbrandt@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 17:38:05 by dchrysov          #+#    #+#             */
-/*   Updated: 2025/03/31 20:24:34 by jbrandt          ###   ########.fr       */
+/*   Updated: 2025/03/31 20:54:38 by jbrandt          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@
 # include <dirent.h>
 # include <signal.h>
 # include <sys/ioctl.h>
-# include <libc.h>
 
 extern volatile sig_atomic_t	g_signal;
 
