@@ -133,5 +133,5 @@ Feel free to experiment with pipes, redirections, environment variables, and bui
 
 ## Authors
 
-This project was a collaboration with [dchrysov](https://github.com/chrisov), as part of the 42 Programming School Core curriculum.<br>
+This project was a collaboration with [dchrysov](https://github.com/chrisov), as part of the 42 Programming School's Core curriculum.<br>
 Thanks for the awesome work!
