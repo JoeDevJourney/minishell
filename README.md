@@ -112,5 +112,5 @@ Central structure holding the shell's runtime state.
 
 ## Authors
 
-- jbrandt
-- dchrysov
+This project was a collaboration with [dchrysov](https://github.com/chrisov), as part of the 42 Programming School Core curriculum.<br>
+Thanks for the awesome work!
