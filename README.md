@@ -80,30 +80,30 @@ make
 
 Minishell uses several custom structs to organize its internal state and operations. Below is an overview of the main structures:
 
-### `t_env`: Represents an environment variable as a node in a linked list.
+### `t_env`
+Represents an environment variable as a node in a linked list.
 
-**Purpose:**  
-Allows dynamic management of environment variables, supporting efficient updates, lookups, and deletions.
+**Purpose:**  Allows dynamic management of environment variables, supporting efficient updates, lookups, and deletions.
 
 | <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/b4df8802-b8eb-4196-8312-2b130729bb32" /> | <div align="left">- `char *name` — The name of the environment variable.<br>- `char *value` — The value of the environment variable.<br>- `struct s_env *next` — Pointer to the next environment variable node.</div>|
 |-------------------------------|----------------------------------|
 
 ---
 
-### `t_redir_op` : Handles redirection and piping operations.
+### `t_redir_op`
+Handles redirection and piping operations.
 
-**Purpose:**  
-Encapsulates all data needed for handling pipes and redirections, making parsing and execution modular and manageable.
+**Purpose:** Encapsulates all data needed for handling pipes and redirections, making parsing and execution modular and manageable.
 
 | <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/8e282bf7-87e0-4fae-9ff9-737bac01aab2" /> | <div align="left">- `char **cmd` — Array of commands split by a delimeter (e.g., '\|').<br>- `int num_cmd` — Number of commands in the array.<br>- `int **fd` — Array of file descriptors for managing input/output redirections.</div>|
 |-------------------------------|----------------------------------|
 
 ---
 
-### `t_data`: Central structure holding the shell's runtime state.
+### `t_data`
+Central structure holding the shell's runtime state.
 
-**Purpose:**  
-Acts as the main context for the shell, storing all relevant information for parsing, execution, environment management, and error handling.
+**Purpose:** Acts as the main context for the shell, storing all relevant information for parsing, execution, environment management, and error handling.
 
 | <img width="400" height="500" alt="image" src="https://github.com/user-attachments/assets/06e6a463-87f3-4d70-be51-7d95038a1914" /> | <div align="left">- `pid_t pid` — Process ID of the shell.<br>- `char *home_dir` — Path to the home directory.<br>- `t_env *env` — Linked list of environment variables.<br>- `char *input` — Raw user input string.<br>- `char *cmd` — Current command being processed.<br>- `char **tok` — Tokenized command arguments.<br>- `t_redir_op pipe` — Pipe operation data.<br>- `t_redir_op inp_op` — Input redirection data.<br>- `t_redir_op out_op` — Output redirection data.<br>- `t_redir_op app_op` — Append redirection data.<br>- `t_redir_op hdoc_op` — Heredoc operation data.<br>- `int ret_val` — Return value/status of the last executed command.<br></div>|
 |-------------------------------|----------------------------------|
