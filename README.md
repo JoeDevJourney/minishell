@@ -95,7 +95,7 @@ Allows dynamic management of environment variables, supporting efficient updates
 **Purpose:**  
 Encapsulates all data needed for handling pipes and redirections, making parsing and execution modular and manageable.
 
-| <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/8e282bf7-87e0-4fae-9ff9-737bac01aab2" /> | <div align="left">- `char **cmd` — Array of commands split by a specific operator (e.g., pipe).<br>- `int num_cmd` — Number of commands in the array.<br>- `int **fd` — Array of file descriptors for managing input/output redirections.</div>|
+| <img width="400" height="400" alt="image" src="https://github.com/user-attachments/assets/8e282bf7-87e0-4fae-9ff9-737bac01aab2" /> | <div align="left">- `char **cmd` — Array of commands split by a delimeter (e.g., '\|').<br>- `int num_cmd` — Number of commands in the array.<br>- `int **fd` — Array of file descriptors for managing input/output redirections.</div>|
 |-------------------------------|----------------------------------|
 
 ---
