@@ -12,6 +12,12 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Waits for all child processes to finish and frees pipe fds.
+ * 
+ * @param inp Pointer to the main data structure.
+ * @return int The exit status after handling signals.
+ */
 static int	wait_n_free(t_data *inp)
 {
 	int	status;
@@ -26,6 +32,11 @@ static int	wait_n_free(t_data *inp)
 	return (handle_signal_status(status));
 }
 
+/**
+ * @brief Initializes the pipe file descriptors for all commands.
+ * 
+ * @param oper Pointer to the redirection operator structure.
+ */
 static void	init_pipes(t_redir_op *oper)
 {
 	int	i;
@@ -54,7 +65,11 @@ static void	init_pipes(t_redir_op *oper)
 }
 
 /**
- * @brief Redirection of the pipes' fds
+ * @brief Handles redirection of file descriptors for a pipe segment.
+ * 
+ * @param inp Pointer to the main data structure.
+ * @param old_fd File descriptors from the previous pipe.
+ * @param new_fd File descriptors for the current pipe.
  */
 static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 {
@@ -84,8 +99,13 @@ static void	process_pipe_fds(t_data *inp, int *old_fd, int *new_fd)
 }
 
 /**
- * @brief Creates the child process for executing the command and makes
- * the parent wait for it to finish, before returning its value
+ * @brief Forks a child process to execute a command in the pipeline.
+ * 
+ * @param inp Pointer to the main data structure.
+ * @param j Index of the command in the pipeline.
+ * @param old_fd File descriptors from the previous pipe.
+ * @param new_fd File descriptors for the current pipe.
+ * @return int PID of the forked child process.
  */
 static int	fork_pipe(t_data *inp, int j, int *old_fd, int *new_fd)
 {
@@ -111,7 +131,10 @@ static int	fork_pipe(t_data *inp, int j, int *old_fd, int *new_fd)
 }
 
 /**
- * @brief Executes pipe(s) given in (char **) cmds.
+ * @brief Executes a series of piped commands.
+ * 
+ * @param inp Pointer to the main data structure.
+ * @return int The exit status of the pipeline execution.
  */
 int	exec_pipes(t_data *inp)
 {

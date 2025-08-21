@@ -13,7 +13,9 @@
 #include "../../include/minishell.h"
 
 /**
- * @brief Initializes redir struct variables
+ * @brief Initializes redirection operator struct variables.
+ * 
+ * @param inp Pointer to main data structure.
  */
 void	init_redir(t_data *inp)
 {
@@ -32,7 +34,12 @@ void	init_redir(t_data *inp)
 }
 
 /**
- * @brief Joins 3 str together
+ * @brief Joins three strings together.
+ * 
+ * @param s1 First string.
+ * @param s2 Second string.
+ * @param s3 Third string.
+ * @return char* Joined string (allocated).
  */
 char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 {
@@ -46,7 +53,12 @@ char	*ft_strjoin3(const char *s1, const char *s2, const char *s3)
 }
 
 /**
- * @brief Hdoc expansion and writing to the file based on quotes in the del
+ * @brief Handles heredoc expansion and writes to file based on quotes 
+ * in delimiter.
+ * 
+ * @param input Pointer to input string.
+ * @param inp Pointer to main data structure.
+ * @param i Index of heredoc command.
  */
 void	write_to_fd(char **input, t_data *inp, int i)
 {
@@ -61,6 +73,12 @@ void	write_to_fd(char **input, t_data *inp, int i)
 	}
 }
 
+/**
+ * @brief Converts environment list to array of strings.
+ * 
+ * @param head Head of environment list.
+ * @return char** Array of environment strings.
+ */
 char	**list_to_array(t_env *head)
 {
 	int		count;
@@ -87,6 +105,13 @@ char	**list_to_array(t_env *head)
 	return (arr);
 }
 
+/**
+ * @brief Counts the number of delimiters in a string, respecting quotes.
+ * 
+ * @param str Input string.
+ * @param delim Delimiter string.
+ * @return int Number of delimiters found.
+ */
 int	count_delim(char *str, char *delim)
 {
 	int		count;

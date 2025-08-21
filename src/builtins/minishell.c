@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Restarts the minishell in a child process.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return int Exit status.
+ */
 int	restart_minishell(t_data *inp)
 {
 	pid_t				pid;

@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Handles uppercase 'echo', supports -n flag.
+ * 
+ * @param arr Array of arguments.
+ * @return int Exit status.
+ */
 static int	upper_echo(char **arr)
 {
 	bool	nl_flag;
@@ -34,6 +40,12 @@ static int	upper_echo(char **arr)
 	return (free(res), 0);
 }
 
+/**
+ * @brief Handles lowercase 'echo', supports multiple -n flags.
+ * 
+ * @param arr Array of arguments.
+ * @return int Exit status.
+ */
 static int	lower_echo(char **arr)
 {
 	bool	nl_flag;
@@ -53,6 +65,12 @@ static int	lower_echo(char **arr)
 	return (free(res), 0);
 }
 
+/**
+ * @brief Executes the echo builtin, dispatching to upper/lower echo.
+ * 
+ * @param cmd Array of command arguments.
+ * @return int Exit status.
+ */
 int	exec_echo(char **cmd)
 {
 	int		i;

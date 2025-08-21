@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Prompts user to close an open quote in the input string.
+ * 
+ * @param str Pointer to input string.
+ * @param quote Quote character to close.
+ */
 static void	ask_for_quote(char **str, char quote)
 {
 	char	*temp;
@@ -30,6 +36,11 @@ static void	ask_for_quote(char **str, char quote)
 	}
 }
 
+/**
+ * @brief Checks for open quotes in the input string and prompts user if needed.
+ * 
+ * @param str Pointer to input string.
+ */
 void	check_open_quotes(char **str)
 {
 	int		i;
@@ -53,7 +64,12 @@ void	check_open_quotes(char **str)
 }
 
 /**
- * @brief Merges the strings of an arr back together, separated by the del
+ * @brief Merges the strings of an array back together, separated by
+ * the delimiter.
+ * 
+ * @param arr Array of strings.
+ * @param del Delimiter string.
+ * @return char* Merged string (allocated).
  */
 char	*join_cmd(char **arr, char *del)
 {
@@ -74,7 +90,11 @@ char	*join_cmd(char **arr, char *del)
 }
 
 /**
- * @brief Extracts the env variable from the env list.
+ * @brief Extracts the environment variable value from the environment list.
+ * 
+ * @param inp Data structure containing environment.
+ * @param input Variable name.
+ * @return char* Value string (allocated) or NULL.
  */
 char	*get_env_val(t_data inp, char *input)
 {
@@ -98,6 +118,13 @@ char	*get_env_val(t_data inp, char *input)
 	return (NULL);
 }
 
+/**
+ * @brief Joins two strings and frees the first one.
+ * 
+ * @param s1 Pointer to first string (will be freed).
+ * @param s2 Second string.
+ * @return char* Joined string (allocated).
+ */
 char	*ft_strjoin_free(char **s1, char *s2)
 {
 	char	*result;

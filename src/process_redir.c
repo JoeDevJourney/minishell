@@ -12,6 +12,12 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Handles output redirection ('>') for the current command.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return true if redirection succeeded, false otherwise.
+ */
 static bool	out_oper(t_data *inp)
 {
 	static size_t	i;
@@ -37,6 +43,12 @@ static bool	out_oper(t_data *inp)
 	return (free_array_fd(inp->out_op.fd), true);
 }
 
+/**
+ * @brief Handles input redirection ('<') for the current command.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return true if redirection succeeded, false otherwise.
+ */
 static bool	inp_oper(t_data *inp)
 {
 	static size_t	i;
@@ -61,6 +73,12 @@ static bool	inp_oper(t_data *inp)
 	return (free_array_fd(inp->inp_op.fd), true);
 }
 
+/**
+ * @brief Handles append redirection ('>>') for the current command.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return true if redirection succeeded, false otherwise.
+ */
 static bool	app_oper(t_data *inp)
 {
 	static size_t	i;
@@ -86,6 +104,14 @@ static bool	app_oper(t_data *inp)
 	return (free_array_fd(inp->app_op.fd), true);
 }
 
+/**
+ * @brief Selects and executes the appropriate redirection operation.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param i Pointer to current index in command string.
+ * @param oper Redirection operator character ('<' or '>').
+ * @return true if operation succeeded, false otherwise.
+ */
 static bool	redir_oper(t_data *inp, int *i, char oper)
 {
 	if (oper == '<')
@@ -100,13 +126,15 @@ static bool	redir_oper(t_data *inp, int *i, char oper)
 }
 
 /**
- * @brief Takes the (char *)inp->cmd and executes the appropriate redirection
- * based on the (char **)inp->tok 
+ * @brief Processes all redirections in the command string.
+ * 
+ * Takes the (char *)inp->cmd and executes the appropriate redirection
+ * based on the (char **)inp->tok.
  * 
  * @note In all the individual redir functions, fd[0] is for the std fd and
- * fd[1] is the one to be redirected to. 
+ * fd[1] is the one to be redirected to.
  * 
- * @returns 1 in case of valid redir, 0 otherwise 
+ * @returns true in case of valid redir, false otherwise.
  */
 bool	process_fds(t_data *inp)
 {

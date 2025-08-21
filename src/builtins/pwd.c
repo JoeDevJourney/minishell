@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Executes the pwd builtin, printing the current working directory.
+ * 
+ * @param inp Main data structure.
+ * @return int Exit status.
+ */
 int	exec_pwd(t_data inp)
 {
 	char	*temp;

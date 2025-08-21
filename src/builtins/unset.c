@@ -12,6 +12,13 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Removes a node from the environment list by name.
+ * 
+ * @param name Variable name to remove.
+ * @param head Pointer to head of environment list.
+ * @return int 0 if removed, 1 if not found.
+ */
 static int	remove_node(char *name, t_env **head)
 {
 	t_env	*current;
@@ -41,6 +48,13 @@ static int	remove_node(char *name, t_env **head)
 	return (1);
 }
 
+/**
+ * @brief Executes the unset builtin, removing variables from environment.
+ * 
+ * @param cmd Array of command arguments.
+ * @param head Pointer to head of environment list.
+ * @return int Always 0.
+ */
 int	exec_unset(char **cmd, t_env **head)
 {
 	int	i;

@@ -12,6 +12,11 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Frees the environment variable linked list.
+ * 
+ * @param head Head of the environment list.
+ */
 void	free_env_list(t_env *head)
 {
 	t_env	*temp;
@@ -26,6 +31,12 @@ void	free_env_list(t_env *head)
 	}
 }
 
+/**
+ * @brief Creates a new environment variable node from a string.
+ * 
+ * @param env_var Environment variable string (NAME=VALUE).
+ * @return t_env* Pointer to new node or NULL.
+ */
 t_env	*new_env_node(char *env_var)
 {
 	t_env	*new_node;
@@ -53,6 +64,12 @@ t_env	*new_env_node(char *env_var)
 	return (new_node);
 }
 
+/**
+ * @brief Duplicates the environment array into a linked list.
+ * 
+ * @param head Pointer to head of environment list.
+ * @param env Array of environment strings.
+ */
 void	dupl_env(t_env **head, char **env)
 {
 	t_env	*current;
@@ -78,6 +95,12 @@ void	dupl_env(t_env **head, char **env)
 	}
 }
 
+/**
+ * @brief Prints all environment variables.
+ * 
+ * @param env Head of environment list.
+ * @return int Always 0.
+ */
 int	exec_env(t_env *env)
 {
 	t_env	*ptr;

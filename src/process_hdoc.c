@@ -12,6 +12,11 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Signal handler for heredoc input (handles SIGINT).
+ * 
+ * @param sig Signal number.
+ */
 static void	hdoc_signal_handler(int sig)
 {
 	if (sig == SIGINT)
@@ -21,6 +26,9 @@ static void	hdoc_signal_handler(int sig)
 	}
 }
 
+/**
+ * @brief Sets up custom signal handling for heredoc input.
+ */
 static void	setup_hdoc_signal(void)
 {
 	struct sigaction	sa;
@@ -34,6 +42,13 @@ static void	setup_hdoc_signal(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
+/**
+ * @brief Reads user input for heredoc, handling signals and EOF.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param input Pointer to store the input string.
+ * @return true if input was read, false otherwise.
+ */
 static bool	hdoc_read_input(t_data *inp, char **input)
 {
 	setup_hdoc_signal();
@@ -52,6 +67,12 @@ static bool	hdoc_read_input(t_data *inp, char **input)
 	return (true);
 }
 
+/**
+ * @brief Prompts the user for heredoc input until delimiter is reached.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param i Index of the heredoc command.
+ */
 static void	hdoc_prompt(t_data *inp, int i)
 {
 	char	*input;
@@ -81,7 +102,11 @@ static void	hdoc_prompt(t_data *inp, int i)
 }
 
 /**
+ * @brief Processes heredoc operation for the current command.
+ * 
  * @note Need to add the expansion functionality in the user input
+ * @param inp Pointer to main data structure.
+ * @return true if heredoc was processed successfully, false otherwise.
  */
 bool	hdoc_oper(t_data *inp)
 {

@@ -12,6 +12,12 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Builds the shell prompt string using user and current directory.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return char* Prompt string (allocated).
+ */
 char	*build_prompt(t_data *inp)
 {
 	char	*prompt;
@@ -35,6 +41,14 @@ char	*build_prompt(t_data *inp)
 	return (prompt);
 }
 
+/**
+ * @brief Sets up file descriptors for heredoc operation.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param hdoc Pointer to heredoc filename.
+ * @param i Index of heredoc command.
+ * @return true if setup succeeded, false otherwise.
+ */
 bool	setup_heredoc_fd(t_data *inp, char **hdoc, size_t i)
 {
 	*hdoc = ft_strjoin(inp->home_dir, "/obj/heredoc");
@@ -54,6 +68,11 @@ bool	setup_heredoc_fd(t_data *inp, char **hdoc, size_t i)
 	return (true);
 }
 
+/**
+ * @brief Frees resources and exits the shell.
+ * 
+ * @param inp Pointer to main data structure.
+ */
 void	exit_free(t_data *inp)
 {
 	free(inp->home_dir);
@@ -62,6 +81,13 @@ void	exit_free(t_data *inp)
 	free_redir(inp);
 }
 
+/**
+ * @brief Finds the directory containing the given executable.
+ * 
+ * @param dirpath Directory path to search.
+ * @param exec Executable name.
+ * @param path Pointer to store found path.
+ */
 void	find_dir_exec(const char *dirpath, const char *exec, char **path)
 {
 	DIR				*dir;
@@ -81,6 +107,13 @@ void	find_dir_exec(const char *dirpath, const char *exec, char **path)
 	closedir(dir);
 }
 
+/**
+ * @brief Parses the -n flag for echo command.
+ * 
+ * @param arr Array of arguments.
+ * @param nl_flag Pointer to newline flag.
+ * @return int Index after last -n flag.
+ */
 int	parse_n_flag(char **arr, bool *nl_flag)
 {
 	int	i;

@@ -12,6 +12,13 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Checks and toggles quote states for single and double quotes.
+ * 
+ * @param c Current character.
+ * @param open_sq Pointer to single quote state.
+ * @param open_dq Pointer to double quote state.
+ */
 void	check_quote(char c, bool *open_sq, bool *open_dq)
 {
 	if (c == '\'' && !*open_dq)
@@ -20,6 +27,14 @@ void	check_quote(char c, bool *open_sq, bool *open_dq)
 		*open_dq = !*open_dq;
 }
 
+/**
+ * @brief Counts the number of redirection operators in a string.
+ * 
+ * @param str Input string.
+ * @param oper Operator character to count ('<' or '>').
+ * @param next If true, counts double operators (e.g., '<<' or '>>').
+ * @return int Number of operators found.
+ */
 int	count_oper(char *str, char oper, bool next)
 {
 	bool	open_sq;
@@ -48,6 +63,12 @@ int	count_oper(char *str, char oper, bool next)
 	return (count);
 }
 
+/**
+ * @brief Extracts the filename following a redirection operator.
+ * 
+ * @param str Input string starting after the operator.
+ * @return char* Extracted filename (allocated).
+ */
 static char	*add_redir_filename(char *str)
 {
 	int		i;
@@ -70,6 +91,14 @@ static char	*add_redir_filename(char *str)
 	return (ft_substr(str, start, len));
 }
 
+/**
+ * @brief Creates an array of filenames for redirection operators.
+ * 
+ * @param str Input string.
+ * @param op Pointer to redirection operator structure.
+ * @param c Operator character ('<' or '>').
+ * @param n If true, handles double operators.
+ */
 static void	create_redir_array(char *str, t_redir_op *op, char c, bool n)
 {
 	int		j;
@@ -99,6 +128,11 @@ static void	create_redir_array(char *str, t_redir_op *op, char c, bool n)
 	op->cmd[j] = NULL;
 }
 
+/**
+ * @brief Parses redirection operators and filenames from the command string.
+ * 
+ * @param inp Pointer to main data structure.
+ */
 void	parse_redir(t_data *inp)
 {
 	int		i;
@@ -124,31 +158,3 @@ void	parse_redir(t_data *inp)
 	create_redir_array(*inp->pipe.cmd, &inp->hdoc_op, '<', true);
 	create_redir_array(*inp->pipe.cmd, &inp->app_op, '>', true);
 }
-
-// int	main(void)
-// {
-// 	t_data	inp;
-
-// 	inp.input = ft_strdup("cat -e <$var");
-// 	parse_redir(&inp);
-// 	printf("input: '%s'\n", inp.input);
-// 	printf("cmd: '%s'\n", inp.cmd);
-// 	int i = -1;
-// 	while (inp.inp_op.cmd[++i])
-// 		printf("inp[%d]: '%s'\n", inp.inp_op.num_cmd, inp.inp_op.cmd[i]);
-// 	i = -1;
-// 	while (inp.out_op.cmd[++i])
-// 		printf("out[%d]: '%s'\n", inp.out_op.num_cmd, inp.out_op.cmd[i]);
-// 	i = -1;
-// 	while (inp.app_op.cmd[++i])
-// 		printf("app[%d]: '%s'\n", inp.app_op.num_cmd, inp.app_op.cmd[i]);
-// 	i = -1;
-// 	while (inp.hdoc_op.cmd[++i])
-// 		printf("hdoc[%d]: '%s'\n", inp.hdoc_op.num_cmd, inp.hdoc_op.cmd[i]);
-// 	free_array(inp.inp_op.cmd);
-// 	free_array(inp.app_op.cmd);
-// 	free_array(inp.out_op.cmd);
-// 	free_array(inp.hdoc_op.cmd);
-// 	free(inp.input);
-// 	free(inp.cmd);
-// }

@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Prints all environment variables in export format.
+ * 
+ * @param head Head of environment list.
+ * @return int Always 0.
+ */
 static int	print_env_copy(t_env *head)
 {
 	t_env	*current;
@@ -28,6 +34,12 @@ static int	print_env_copy(t_env *head)
 	return (0);
 }
 
+/**
+ * @brief Executes the export builtin, updating environment variables.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return int Exit status.
+ */
 int	exec_export(t_data *inp)
 {
 	char	*name;

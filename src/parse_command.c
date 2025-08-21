@@ -13,8 +13,10 @@
 #include "../include/minishell.h"
 
 /**
- * @brief Tokens are everything in betweem two whotespaces. 
- * Spaces inside quotes don't count.  
+ * @brief Counts the number of tokens in a string, ignoring spaces inside quotes.
+ * 
+ * @param str Input string.
+ * @return int Number of tokens.
  */
 static int	count_tokens(char *str)
 {
@@ -44,10 +46,12 @@ static int	count_tokens(char *str)
 }
 
 /**
- * @brief Copies the content of the the quoted string passed as input to the tok
+ * @brief Copies the content of a quoted string to a token, removing quotes.
  * 
- * @param start is the starting index of the string
- * @param end is the ending index of the string
+ * @param str Input string.
+ * @param tok Output token buffer.
+ * @param start Starting index.
+ * @param end Ending index.
  */
 static void	copy_to_token(char *str, char *tok, int start, int end)
 {
@@ -79,13 +83,11 @@ static void	copy_to_token(char *str, char *tok, int start, int end)
 }
 
 /**
- * @brief It uses ' ' or '\0' to extract the quoted substring, quotes removed,
- * from str and saves it as an individual tempen to the arr.
+ * @brief Extracts a token from the input string, handling quotes.
  * 
- * @param i index that stops at the first ' ' that's not included in quotes 
- * @param len length of the extracted token.
- * 
- * @note i and len don't always match
+ * @param str Pointer to input string.
+ * @param arr Pointer to output token array.
+ * @param i Pointer to current index in input string.
  */
 static void	extract_token(char **str, char **arr, int *i)
 {
@@ -113,10 +115,10 @@ static void	extract_token(char **str, char **arr, int *i)
 }
 
 /**
- * @brief It breaks the str into tokens, removing the quotes if encountered.
+ * @brief Tokenizes the input string into an array, removing quotes.
  * 
- * @param str the address of the string to be scanned.
- * @param arr the address of the arr of strings for the tokens to be saved.
+ * @param str Pointer to input string.
+ * @param arr Pointer to output array of tokens.
  */
 static void	tokenization(char **str, char ***arr)
 {
@@ -137,6 +139,12 @@ static void	tokenization(char **str, char ***arr)
 	(*arr)[++word_i] = NULL;
 }
 
+/**
+ * @brief Parses the input command, handling redirections and expansions.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return true if parsing succeeded, false otherwise.
+ */
 bool	parse_input(t_data *inp)
 {
 	check_open_quotes(inp->pipe.cmd);

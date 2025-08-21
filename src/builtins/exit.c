@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Checks if a string is a valid numeric value.
+ * 
+ * @param str Input string.
+ * @return int 1 if numeric, 0 otherwise.
+ */
 static int	is_numeric(char *str)
 {
 	int	i;
@@ -31,7 +37,11 @@ static int	is_numeric(char *str)
 }
 
 /**
- * @returns exit_code
+ * @brief Executes the exit builtin, handling exit codes and cleanup.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param env Array of environment strings.
+ * @return int Exit code (never reached).
  */
 int	exec_exit(t_data *inp, char **env)
 {

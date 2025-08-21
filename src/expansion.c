@@ -12,6 +12,17 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Replaces an environment variable or tilde with its value.
+ * 
+ * Handles expansion for '~' (HOME) and variables like $VAR, ${VAR}, $? and $$.
+ * 
+ * @param src Source string.
+ * @param src_i Pointer to current index in src.
+ * @param inp Data structure containing environment.
+ * 
+ * @return char* Replacement value (allocated).
+ */
 static char	*repl_env_value(char *src, int *src_i, t_data inp)
 {
 	int			var_length;
@@ -41,7 +52,10 @@ static char	*repl_env_value(char *src, int *src_i, t_data inp)
 }
 
 /**
- * @brief Expands env values of the string keeping the quotes, 
+ * @brief Expands environment variables in a segment, keeping quotes.
+ * 
+ * @param str Pointer to string segment to expand.
+ * @param inp Data structure containing environment.
  */
 static void	seg_expansion(char **str, t_data inp)
 {
@@ -73,11 +87,12 @@ static void	seg_expansion(char **str, t_data inp)
 }
 
 /**
- * @brief Given a delimeter to mark the end of the segment, it checks for
- * expansion operators and expands their values.
+ * @brief Expands environment variables in a quoted or unquoted segment.
  * 
- * @note When called, i points to the del, when exits it points to the
- * last char before the closing del.  
+ * @param str Pointer to input string.
+ * @param i Pointer to current index in string.
+ * @param del Delimiter character marking segment end.
+ * @param inp Data structure containing environment.
  */
 static void	expand_segment(char **str, int *i, char del, t_data inp)
 {
@@ -108,7 +123,10 @@ static void	expand_segment(char **str, int *i, char del, t_data inp)
 }
 
 /**
- * @brief Expands the input str if necessary based on each quote's functionality
+ * @brief Expands the input string based on quote context and environment.
+ * 
+ * @param str Pointer to input string.
+ * @param inp Data structure containing environment.
  */
 void	expansion(char **str, t_data inp)
 {

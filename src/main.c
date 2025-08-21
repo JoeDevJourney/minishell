@@ -14,6 +14,11 @@
 
 volatile sig_atomic_t	g_signal = 0;
 
+/**
+ * @brief Updates the shell level (SHLVL) environment variable.
+ * 
+ * @param inp Pointer to main data structure.
+ */
 static void	update_shell_lvl(t_data *inp)
 {
 	int		lvl;
@@ -32,6 +37,14 @@ static void	update_shell_lvl(t_data *inp)
 	free(lvl_str);
 }
 
+/**
+ * @brief Initializes the main data structure with environment and defaults.
+ * 
+ * @param inp Pointer to main data structure.
+ * @param env Environment array.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ */
 static void	init_data(t_data *inp, char **env, int argc, char **argv)
 {
 	char	*home;
@@ -57,9 +70,12 @@ static void	init_data(t_data *inp, char **env, int argc, char **argv)
 }
 
 /**
- * @brief Generates the prompt
+ * @brief Generates the prompt and reads user input.
  * 
- * @note Handles empty commands, or commands with only spaces
+ * Handles empty commands, or commands with only spaces.
+ * 
+ * @param inp Pointer to main data structure.
+ * @return true if input was read, false otherwise.
  */
 static bool	read_input(t_data *inp)
 {
@@ -83,9 +99,11 @@ static bool	read_input(t_data *inp)
 }
 
 /**
- * @brief Checks if there's a hanging command near an operator
+ * @brief Checks if there's a hanging command near an operator.
  * 
  * @note It doesn't work for commands with mixed operators.
+ * @param inp Pointer to main data structure.
+ * @return true if pipe is valid, false otherwise.
  */
 static bool	valid_pipe(t_data *inp)
 {
@@ -111,6 +129,16 @@ static bool	valid_pipe(t_data *inp)
 	return (true);
 }
 
+/**
+ * @brief Entry point for minishell.
+ * 
+ * Initializes data, sets up signals, runs main shell loop.
+ * 
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @param env Environment array.
+ * @return int Exit status.
+ */
 int	main(int argc, char **argv, char **env)
 {
 	t_data	inp;
@@ -134,12 +162,3 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (free(inp.home_dir), free_env_list(inp.env), 0);
 }
-
-// if (!isatty(fileno(stdin)))
-// {
-// 	char *line;
-// 	line = get_next_line(fileno(stdin));
-// 	inp.input = ft_strtrim(line, "\n");
-// 	free(line);
-// }
-// else

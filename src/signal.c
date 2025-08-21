@@ -12,6 +12,12 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Signal handler for child processes.
+ * 
+ * Handles SIGINT and SIGQUIT signals in child processes.
+ * @param sig Signal number.
+ */
 void	child_signal(int sig)
 {
 	if (sig == SIGINT)
@@ -25,6 +31,12 @@ void	child_signal(int sig)
 	}
 }
 
+/**
+ * @brief Signal handler for parent process.
+ * 
+ * Handles SIGINT signal in parent process, resets readline.
+ * @param sig Signal number.
+ */
 void	parent_signal(int sig)
 {
 	if (sig == SIGINT)
@@ -36,6 +48,11 @@ void	parent_signal(int sig)
 	}
 }
 
+/**
+ * @brief Sets up signal handlers for parent or child process.
+ * 
+ * @param is_child If true, sets child handlers; otherwise parent handlers.
+ */
 void	setup_signals(bool is_child)
 {
 	struct sigaction	sa;
@@ -57,13 +74,19 @@ void	setup_signals(bool is_child)
 	}
 }
 
+/**
+ * @brief Handles the exit status of a process, including signal termination.
+ * 
+ * @param status Status value returned by wait().
+ * @return int Normalized exit code.
+ */
 int	handle_signal_status(int status)
 {
 	if (WIFEXITED(status))
 	{
 		if (WEXITSTATUS(status) != 0)
 			return (1);
-		return (WEXITSTATUS(status));	
+		return (WEXITSTATUS(status));
 	}
 	else if (WIFSIGNALED(status))
 	{

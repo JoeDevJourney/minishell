@@ -12,6 +12,12 @@
 
 #include "../../include/minishell.h"
 
+/**
+ * @brief Allocates memory safely, exits on failure.
+ * 
+ * @param size Number of bytes to allocate.
+ * @return void* Pointer to allocated memory.
+ */
 void	*safe_malloc(size_t size)
 {
 	void	*ptr;
@@ -25,8 +31,12 @@ void	*safe_malloc(size_t size)
 }
 
 /**
- * @brief Counts the number of words in a str based on the number of occurences
- * of the delimeter
+ * @brief Counts the number of substrings separated by a delimiter, 
+ * respecting quotes.
+ * 
+ * @param s Input string.
+ * @param delim Delimiter string.
+ * @return size_t Number of substrings.
  */
 static size_t	num_substr(const char *s, const char *delim)
 {
@@ -48,6 +58,12 @@ static size_t	num_substr(const char *s, const char *delim)
 	return (count);
 }
 
+/**
+ * @brief Prints an error message and exits with the given return value.
+ * 
+ * @param msg Error message.
+ * @param ret_val Exit code.
+ */
 void	exit_with_error(char *msg, int ret_val)
 {
 	perror(msg);
@@ -55,7 +71,10 @@ void	exit_with_error(char *msg, int ret_val)
 }
 
 /**
- * @brief Returns the size of an array of strings 
+ * @brief Returns the size of an array of strings.
+ * 
+ * @param arr Array of strings.
+ * @return size_t Number of elements.
  */
 size_t	count_array_size(char **arr)
 {
@@ -70,8 +89,12 @@ size_t	count_array_size(char **arr)
 }
 
 /**
- * @brief Works in the same way as the original split, with the diff now being
- * that the delimeter is a char* instead of a char.
+ * @brief Splits a string into an array using a string delimiter,
+ * respecting quotes.
+ * 
+ * @param s Input string.
+ * @param del Delimiter string.
+ * @return char** Array of substrings.
  */
 char	**ft_split2(const char *s, const char *del)
 {
