@@ -110,6 +110,27 @@ Central structure holding the shell's runtime state.
 
 ---
 
+## Example Commands
+
+Below are some example commands you can run in Minishell, ranging from simple to more complex:
+
+| Command | Description |
+|---------|-------------|
+| `echo Hello, world!` | Prints "Hello, world!" to the terminal. |
+| `pwd` | Displays the current working directory. |
+| `ls -l` | Lists files in the current directory with details. |
+| `export MYVAR=42` | Sets an environment variable named `MYVAR`. |
+| `echo $MYVAR` | Prints the value of `MYVAR`. |
+| `cat file.txt \| grep error` | Shows lines containing "error" from `file.txt` using a pipe. |
+| `ls > files.txt` | Redirects the output of `ls` to a file named `files.txt`. |
+| `cat < files.txt \| sort \| uniq > sorted.txt` | Reads from `files.txt`, sorts lines, removes duplicates, and writes to `sorted.txt`. |
+| `echo "multi\nline" > multiline.txt` | Writes multi-line text to a file. |
+| `cat << EOF`<br>`Hello minishell!`<br>`EOF` | Uses heredoc to pass input to `cat`. |
+
+Feel free to experiment with pipes, redirections, environment variables, and built-in commands!
+
+---
+
 ## Authors
 
 This project was a collaboration with [dchrysov](https://github.com/chrisov), as part of the 42 Programming School Core curriculum.<br>
